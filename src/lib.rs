@@ -1,8 +1,32 @@
-//
-// This is a low-level libR binding library which is kept deliberately
-// minimal.
-//
-// In particular, it has no external dependencies
+//! A low-level libR binding library which is kept deliberately
+//! minimal.
+//! 
+//! In particular, it has no external dependencies other that libR
+//! installed on the target.
+//!
+//! ## Synopsis
+//!
+//! The `libR-sys` crate is a low level bindgen wrapper for the R
+//! programming language. The intention is to allow one or more extension
+//! mechanisms to be implemented for rust.
+//! 
+//! Effort to make the extension libraries platform-independent can be
+//! concentrated here.
+//! 
+//! # Examples
+//! 
+//! ```no_run
+//! use libR_sys::{Rf_initialize_R, R_CStackLimit, setup_Rmainloop};
+//! use std::os::raw;
+//! 
+//! unsafe {
+//!   std::env::set_var("R_HOME", "/usr/lib/R");
+//!   let arg0 = "R\0".as_ptr() as *mut raw::c_char;
+//!   Rf_initialize_R(1, [arg0].as_mut_ptr());
+//!   R_CStackLimit = usize::max_value();
+//!   setup_Rmainloop();
+//! }
+//! ```
 
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
@@ -13,7 +37,6 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 #[cfg(test)]
 mod tests {
-    //use super::{Rf_initialize_R, R_CStackLimit};
     use super::*;
     use std::os::raw;
 

@@ -19,11 +19,6 @@ fn main() {
         .blacklist_item("FP_SUBNORMAL")
         .blacklist_item("FP_NORMAL")
 
-        // Wishful thinking. Sadly this does not work.
-        // Rummage in libR-sys-<hex>/out for the bindings
-        // and format them manually.
-        .rustfmt_bindings(true)
-
         // The input header we would like to generate
         // bindings for.
         .header("wrapper.h")
