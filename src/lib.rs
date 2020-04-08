@@ -39,7 +39,7 @@ mod tests {
     fn start_R() {
         unsafe {
             // TODO: This has only been tested on the debian package
-            // r-base-core.
+            // r-base-dev.
             if cfg!(unix) {
                 if std::env::var("R_HOME").is_err() {
                     std::env::set_var("R_HOME", "/usr/lib/R");
@@ -65,12 +65,22 @@ mod tests {
 
     // Run some R code. Check the result.
     #[test]
-    fn eval() {
+    fn test_eval() {
         start_R();
         unsafe {
-            let res = R_ParseEvalString(cstr!("1"), R_NilValue);
-            assert_eq!(TYPEOF(res) as u32, REALSXP);
-            assert_eq!(*REAL(res), 1.);
+            // In an ideal world, we would do the following.
+            //   let res = R_ParseEvalString(cstr!("1"), R_NilValue);
+            // But R_ParseEvalString is only in recent packages.
+
+            let s = Rf_protect(Rf_mkString(cstr!("1")));
+            let mut status : ParseStatus = 0;
+            let status_ptr = &mut status as *mut ParseStatus;
+            let ps = Rf_protect(R_ParseVector(s, -1, status_ptr, R_NilValue));
+            let val = Rf_eval(VECTOR_ELT(ps, 0), R_GlobalEnv);
+            Rf_PrintValue(val);
+            assert_eq!(TYPEOF(val) as u32, REALSXP);
+            assert_eq!(*REAL(val), 1.);
+            Rf_unprotect(2);
         }
     }
 }
