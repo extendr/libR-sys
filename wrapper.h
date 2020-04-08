@@ -1,7 +1,7 @@
 
 
 // Define this for R_CStackLimit
-#define HAVE_UINTPTR_T
+//#define HAVE_UINTPTR_T
 #define CSTACK_DEFNS
 
 // Currently, I'm adding these on as-needed basis

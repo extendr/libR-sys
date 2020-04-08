@@ -24,3 +24,4 @@ env: # specify the clang path for rust-bindgen
 
 script:
   - cargo build
+  - cargo test
