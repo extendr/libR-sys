@@ -4,8 +4,11 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
+    pkg_config::probe_library("libR").unwrap();
+    let r_home = pkg_config::get_variable("libR", "rhome").unwrap();
+    println!("cargo:rustc-env=R_HOME={}", r_home);
+
     println!("cargo:rerun-if-changed=build.rs");
-    println!("cargo:rustc-link-lib=R");
 
     println!("cargo:rerun-if-changed=wrapper.h");
 

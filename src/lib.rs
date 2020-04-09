@@ -65,7 +65,8 @@ mod tests {
             // r-base-dev.
             if cfg!(unix) {
                 if std::env::var("R_HOME").is_err() {
-                    std::env::set_var("R_HOME", "/usr/lib/R");
+                    // env! gets the build-time R_HOME made in build.rs
+                    std::env::set_var("R_HOME", env!("R_HOME"));
                 }
             }
 

@@ -6,6 +6,7 @@ edition = "2018"
 description = "Low level bindings to the R programming language."
 license = "Apache-2.0"
 links = "R"
+documentation = "https://extendr.github.io/libR-sys/master/libR_sys/index.html"
 
 [dependencies]
 
