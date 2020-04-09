@@ -107,6 +107,7 @@
 <span id="107">107</span>
 <span id="108">108</span>
 <span id="109">109</span>
+<span id="110">110</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! A low-level libR binding library which is kept deliberately</span>
 <span class="doccomment">//! minimal.</span>
@@ -175,7 +176,8 @@
             <span class="comment">// r-base-dev.</span>
             <span class="kw">if</span> <span class="macro">cfg</span><span class="macro">!</span>(<span class="ident">unix</span>) {
                 <span class="kw">if</span> <span class="ident">std</span>::<span class="ident">env</span>::<span class="ident">var</span>(<span class="string">&quot;R_HOME&quot;</span>).<span class="ident">is_err</span>() {
-                    <span class="ident">std</span>::<span class="ident">env</span>::<span class="ident">set_var</span>(<span class="string">&quot;R_HOME&quot;</span>, <span class="string">&quot;/usr/lib/R&quot;</span>);
+                    <span class="comment">// env! gets the build-time R_HOME made in build.rs</span>
+                    <span class="ident">std</span>::<span class="ident">env</span>::<span class="ident">set_var</span>(<span class="string">&quot;R_HOME&quot;</span>, <span class="macro">env</span><span class="macro">!</span>(<span class="string">&quot;R_HOME&quot;</span>));
                 }
             }
 
