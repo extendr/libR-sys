@@ -1,10 +1,11 @@
 [package]
 name = "libR-sys"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["andy-thomason <andy@andythomason.com>"]
 edition = "2018"
 description = "Low level bindings to the R programming language."
 license = "Apache-2.0"
+links = "R"
 
 [dependencies]
 
