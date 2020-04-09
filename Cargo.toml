@@ -11,4 +11,5 @@ links = "R"
 
 [build-dependencies]
 bindgen = "0.53.2"
+pkg-config = "0.3.17"
 
