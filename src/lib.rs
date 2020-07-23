@@ -1,6 +1,6 @@
 //! A low-level libR binding library which is kept deliberately
 //! minimal.
-//! 
+//!
 //! In particular, it has no external dependencies other that libR
 //! installed on the target.
 //!
@@ -9,16 +9,16 @@
 //! The `libR-sys` crate is a low level bindgen wrapper for the R
 //! programming language. The intention is to allow one or more extension
 //! mechanisms to be implemented for rust.
-//! 
+//!
 //! Effort to make the extension libraries platform-independent can be
 //! concentrated here.
-//! 
+//!
 //! # Examples
-//! 
+//!
 //! ```no_run
 //! use libR_sys::{Rf_initialize_R, R_CStackLimit, setup_Rmainloop};
 //! use std::os::raw;
-//! 
+//!
 //! unsafe {
 //!   std::env::set_var("R_HOME", "/usr/lib/R");
 //!   let arg0 = "R\0".as_ptr() as *mut raw::c_char;
@@ -97,7 +97,7 @@ mod tests {
             // But R_ParseEvalString is only in recent packages.
 
             let s = Rf_protect(Rf_mkString(cstr!("1")));
-            let mut status : ParseStatus = 0;
+            let mut status: ParseStatus = 0;
             let status_ptr = &mut status as *mut ParseStatus;
             let ps = Rf_protect(R_ParseVector(s, -1, status_ptr, R_NilValue));
             let val = Rf_eval(VECTOR_ELT(ps, 0), R_GlobalEnv);

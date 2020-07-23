@@ -3,7 +3,39 @@ extern crate bindgen;
 use std::env;
 use std::path::PathBuf;
 
+struct InstallationPaths {
+    config: Option<String>,
+    library: Option<String>,
+    include: String,
+}
+
+fn paths() -> InstallationPaths {
+    if let Ok(r_home) = env::var("R_HOME") {
+        InstallationPaths {
+            config: Some(format!("{}/../pkgconfig", r_home)),
+            library: Some(format!("{}/lib", r_home)),
+            include: format!("{}/include", r_home),
+        }
+    } else {
+        InstallationPaths {
+            config: None,
+            library: None,
+            include: String::from("/usr/share/R/include"),
+        }
+    }
+}
+
 fn main() {
+    let details = paths();
+
+    if let Some(v) = details.config {
+        env::set_var("PKG_CONFIG_PATH", v);
+    }
+
+    if let Some(v) = details.library {
+        env::set_var("LD_LIBRARY_PATH", v);
+    }
+
     pkg_config::probe_library("libR").unwrap();
     let r_home = pkg_config::get_variable("libR", "rhome").unwrap();
     println!("cargo:rustc-env=R_HOME={}", r_home);
@@ -22,14 +54,11 @@ fn main() {
         .blacklist_item("FP_ZERO")
         .blacklist_item("FP_SUBNORMAL")
         .blacklist_item("FP_NORMAL")
-
         // The input header we would like to generate
         // bindings for.
         .header("wrapper.h")
-
-        // TODO: Change this depending on version
-        .clang_arg("-I/usr/share/R/include")
-
+        // Point to the correct headers
+        .clang_arg(format!("-I{}", details.include))
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
