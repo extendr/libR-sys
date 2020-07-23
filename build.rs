@@ -30,6 +30,7 @@ fn main() {
 
     if let Some(v) = details.config {
         env::set_var("PKG_CONFIG_PATH", v);
+        env::set_var("PKG_CONFIG_ALLOW_CROSS", "1");
     }
 
     if let Some(v) = details.library {
