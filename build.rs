@@ -5,22 +5,19 @@ use std::path::PathBuf;
 
 struct InstallationPaths {
     config: Option<String>,
-    library: Option<String>,
-    include: String,
+    library: Option<String>
 }
 
 fn paths() -> InstallationPaths {
     if let Ok(r_home) = env::var("R_HOME") {
         InstallationPaths {
             config: Some(format!("{}/../pkgconfig", r_home)),
-            library: Some(format!("{}/lib", r_home)),
-            include: format!("{}/include", r_home),
+            library: Some(format!("{}/lib", r_home))
         }
     } else {
         InstallationPaths {
             config: None,
-            library: None,
-            include: String::from("/usr/share/R/include"),
+            library: None
         }
     }
 }
@@ -37,9 +34,10 @@ fn main() {
         env::set_var("LD_LIBRARY_PATH", v);
     }
 
-    pkg_config::probe_library("libR").unwrap();
+    let r_lib = pkg_config::probe_library("libR").unwrap();
     let r_home = pkg_config::get_variable("libR", "rhome").unwrap();
     println!("cargo:rustc-env=R_HOME={}", r_home);
+    println!("cargo:r_home={}", r_home); // Becomes DEP_R_R_HOME for clients
 
     println!("cargo:rerun-if-changed=build.rs");
 
@@ -48,7 +46,7 @@ fn main() {
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
-    let bindings = bindgen::Builder::default()
+    let bindgen_builder = bindgen::Builder::default()
         // These constants from libm break bindgen.
         .blacklist_item("FP_NAN")
         .blacklist_item("FP_INFINITE")
@@ -58,12 +56,17 @@ fn main() {
         // The input header we would like to generate
         // bindings for.
         .header("wrapper.h")
-        // Point to the correct headers
-        .clang_arg(format!("-I{}", details.include))
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
-        // Finish the builder and generate the bindings.
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks));
+
+    // Point to the correct headers
+    let bindgen_builder = r_lib.include_paths
+        .iter()
+        .fold(bindgen_builder, |bb, path| bb.clang_arg(format!("-I{}", path.to_str().unwrap())));
+
+    // Finish the builder and generate the bindings.
+    let bindings = bindgen_builder
         .generate()
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
