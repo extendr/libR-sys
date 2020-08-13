@@ -10,3 +10,4 @@
 #include <Rinternals.h>
 #include <Rembedded.h>
 #include <R_ext/Parse.h>
+#include <R_ext/Error.h>
