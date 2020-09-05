@@ -9,5 +9,6 @@
 #include <Rinterface.h>
 #include <Rinternals.h>
 #include <Rembedded.h>
+#include <R/Rversion.h>
 #include <R_ext/Parse.h>
 #include <R_ext/Error.h>
