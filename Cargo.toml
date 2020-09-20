@@ -13,4 +13,4 @@ documentation = "https://extendr.github.io/libR-sys/master/libR_sys/index.html"
 [build-dependencies]
 bindgen = "0.53.2"
 pkg-config = "0.3.17"
-
+regex = "1"

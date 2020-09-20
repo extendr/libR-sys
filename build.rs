@@ -2,6 +2,7 @@ extern crate bindgen;
 
 use std::env;
 use std::path::PathBuf;
+use regex::Regex;
 
 struct InstallationPaths {
     config: Option<String>,
@@ -70,6 +71,18 @@ fn main() {
         .generate()
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
+
+    // Extract the version number from the R headers.
+    // We could get this from pkgconfig instead, but there
+    // is less ambiguity about the format this way, and will
+    // still work if we allow builds without pkgconfig in the
+    // future.
+    let version_matcher = Regex::new(r"pub const R_VERSION : u32 = (\d+)").unwrap();
+    let version = version_matcher.captures(bindings.to_string().as_str())
+        .expect("Failed to find R_VERSION")
+        .get(1).unwrap().as_str()
+        .parse::<u32>().unwrap();
+    println!("cargo:r_version={}", version);
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
