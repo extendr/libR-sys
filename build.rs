@@ -77,12 +77,15 @@ fn main() {
     // is less ambiguity about the format this way, and will
     // still work if we allow builds without pkgconfig in the
     // future.
-    let version_matcher = Regex::new(r"pub const R_VERSION : u32 = (\d+)").unwrap();
-    let version = version_matcher.captures(bindings.to_string().as_str())
-        .expect("Failed to find R_VERSION")
-        .get(1).unwrap().as_str()
-        .parse::<u32>().unwrap();
-    println!("cargo:r_version={}", version);
+    let version_matcher = Regex::new(r"pub const R_VERSION ?: ?u32 = (\d+)").unwrap();
+    if let Some(version) = version_matcher.captures(bindings.to_string().as_str()) {
+        let version = version
+            .get(1).unwrap().as_str()
+            .parse::<u32>().unwrap();
+        println!("cargo:r_version={}", version);
+    } else {
+        panic!("failed to find R_VERSION");
+    }
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());

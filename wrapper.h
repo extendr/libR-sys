@@ -9,6 +9,11 @@
 #include <Rinterface.h>
 #include <Rinternals.h>
 #include <Rembedded.h>
-#include <R/Rversion.h>
+// todo: what is this #define?
+#ifdef MAC_STUFF
+  #include <R/Rversion.h>
+#else
+  #include <Rversion.h>
+#endif
 #include <R_ext/Parse.h>
 #include <R_ext/Error.h>
