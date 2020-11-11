@@ -1,47 +1,65 @@
 extern crate bindgen;
 
-use std::env;
-use std::path::PathBuf;
+use std::{env, io, io::Error, io::ErrorKind, process::Command, process::exit, path::PathBuf};
 use regex::Regex;
 
 struct InstallationPaths {
-    config: Option<String>,
-    library: Option<String>
+    r_home: String,
+    include: String,
+    library: String
 }
 
-fn paths() -> InstallationPaths {
-    if let Ok(r_home) = env::var("R_HOME") {
-        InstallationPaths {
-            config: Some(format!("{}/../pkgconfig", r_home)),
-            library: Some(format!("{}/lib", r_home))
-        }
-    } else {
-        InstallationPaths {
-            config: None,
-            library: None
-        }
-    }
+fn probe_r_paths() -> io::Result<InstallationPaths> {
+    let rout = Command::new("R")
+        .args(&["-s", "-e", r#"cat(R.home(), R.home('include'), R.home('lib'), sep = '\n')"#])
+        .output()?;
+
+    let rout = String::from_utf8_lossy(&rout.stdout);
+    let mut lines = rout.lines();
+
+    let r_home = match lines.next() {
+        Some(line) => line.to_string(),
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R home"))
+    };
+
+    let include = match lines.next() {
+        Some(line) => line.to_string(),
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R include"))
+    };
+
+    let library = match lines.next() {
+        Some(line) => line.to_string(),
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R library"))
+    };
+
+    Ok(InstallationPaths {
+        r_home: r_home,
+        include: include,
+        library: library,
+    })
 }
 
 fn main() {
-    let details = paths();
+    let details = probe_r_paths();
 
-    if let Some(v) = details.config {
-        env::set_var("PKG_CONFIG_PATH", v);
-        env::set_var("PKG_CONFIG_ALLOW_CROSS", "1");
-    }
+    let details = match details {
+        Ok(result) => result,
+        Err(error) => {
+            println!("Problem locating local R instal: {:?}", error);
+            exit(1);
+        }
+    };
 
-    if let Some(v) = details.library {
-        env::set_var("LD_LIBRARY_PATH", v);
-    }
+    // is this required?
+    //env::set_var("LD_LIBRARY_PATH", &details.library);
 
-    let r_lib = pkg_config::probe_library("libR").unwrap();
-    let r_home = pkg_config::get_variable("libR", "rhome").unwrap();
-    println!("cargo:rustc-env=R_HOME={}", r_home);
-    println!("cargo:r_home={}", r_home); // Becomes DEP_R_R_HOME for clients
+    println!("cargo:rustc-env=R_HOME={}", &details.r_home);
+    println!("cargo:r_home={}", &details.r_home); // Becomes DEP_R_R_HOME for clients
+    // make sure cargo links properly against library
+    println!("cargo:rustc-link-search={}", &details.library);
+    println!("cargo:rustc-link-lib=dylib=R");
 
     println!("cargo:rerun-if-changed=build.rs");
-
     println!("cargo:rerun-if-changed=wrapper.h");
 
     // The bindgen::Builder is the main entry point
@@ -62,9 +80,7 @@ fn main() {
         .parse_callbacks(Box::new(bindgen::CargoCallbacks));
 
     // Point to the correct headers
-    let bindgen_builder = r_lib.include_paths
-        .iter()
-        .fold(bindgen_builder, |bb, path| bb.clang_arg(format!("-I{}", path.to_str().unwrap())));
+    let bindgen_builder = bindgen_builder.clang_arg(format!("-I{}", &details.include));
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
@@ -73,10 +89,6 @@ fn main() {
         .expect("Unable to generate bindings");
 
     // Extract the version number from the R headers.
-    // We could get this from pkgconfig instead, but there
-    // is less ambiguity about the format this way, and will
-    // still work if we allow builds without pkgconfig in the
-    // future.
     let version_matcher = Regex::new(r"pub const R_VERSION ?: ?u32 = (\d+)").unwrap();
     if let Some(version) = version_matcher.captures(bindings.to_string().as_str()) {
         let version = version
