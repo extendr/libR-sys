@@ -1,17 +1,25 @@
 extern crate bindgen;
 
-use std::{env, io, io::Error, io::ErrorKind, process::Command, process::exit, path::PathBuf};
 use regex::Regex;
+use std::{env, io, io::Error, io::ErrorKind, path::PathBuf, process::exit, process::Command};
 
 struct InstallationPaths {
     r_home: String,
     include: String,
-    library: String
+    library: String,
 }
 
 fn probe_r_paths() -> io::Result<InstallationPaths> {
     let rout = Command::new("R")
-        .args(&["-s", "-e", r#"cat(R.home(), R.home('include'), R.home('lib'), sep = '\n')"#])
+        .args(&[
+            "-s",
+            "-e",
+            if cfg!(target_os = "windows") {
+                r#"cat(R.home(), R.home('include'), R.home('bin'), sep = '\n')"#
+            } else {
+                r#"cat(R.home(), R.home('include'), R.home('lib'), sep = '\n')"#
+            }
+        ])
         .output()?;
 
     let rout = String::from_utf8_lossy(&rout.stdout);
@@ -19,23 +27,23 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
     let r_home = match lines.next() {
         Some(line) => line.to_string(),
-        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R home"))
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R home")),
     };
 
     let include = match lines.next() {
         Some(line) => line.to_string(),
-        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R include"))
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R include")),
     };
 
     let library = match lines.next() {
         Some(line) => line.to_string(),
-        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R library"))
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R library")),
     };
 
     Ok(InstallationPaths {
-        r_home: r_home,
-        include: include,
-        library: library,
+        r_home,
+        include,
+        library,
     })
 }
 
@@ -79,8 +87,12 @@ fn main() {
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks));
 
+        // println!("TARGET: {}",cargo_env("TARGET"));
     // Point to the correct headers
-    let bindgen_builder = bindgen_builder.clang_arg(format!("-I{}", &details.include));
+    let bindgen_builder = bindgen_builder.clang_args(&[
+        format!("-I{}", &details.include),
+        format!("--target={}", std::env::var("TARGET").expect("Could not get the target triple"))
+    ]);
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
@@ -91,9 +103,7 @@ fn main() {
     // Extract the version number from the R headers.
     let version_matcher = Regex::new(r"pub const R_VERSION ?: ?u32 = (\d+)").unwrap();
     if let Some(version) = version_matcher.captures(bindings.to_string().as_str()) {
-        let version = version
-            .get(1).unwrap().as_str()
-            .parse::<u32>().unwrap();
+        let version = version.get(1).unwrap().as_str().parse::<u32>().unwrap();
         println!("cargo:r_version={}", version);
     } else {
         panic!("failed to find R_VERSION");
