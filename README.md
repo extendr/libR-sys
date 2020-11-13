@@ -20,8 +20,8 @@ cargo test
 
 The build script has the following two dependencies:
 
-1. [R.](https://cran.r-project.org/) It needs to be installed and available in the search path.
-2. [libclang.](https://clang.llvm.org/docs/Tooling.html) Depending on your operating system, you may need to set the `LIBCLANG_PATH` environment variable or add `llvm-config` to your search path.
+1. [R](https://cran.r-project.org/): It needs to be installed and available in the search path.
+2. [libclang](https://clang.llvm.org/docs/Tooling.html): Depending on your operating system, you may need to set the `LIBCLANG_PATH` environment variable or add `llvm-config` to your search path.
 
 ## Linux-specific instructions
 
