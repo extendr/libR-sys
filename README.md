@@ -78,8 +78,6 @@ paths to `PATH`:
 %USERPROFILE%\scoop\apps\msys2\current\mingw64\bin # change this to mingw32
 ```
 
-Ensure that `rustc` has the target toolchain that matches R's by:
-
 ### Mac-specific instructions
 
 Install `llvm-config` via [homebrew](https://brew.sh/) with:
