@@ -30,7 +30,9 @@ Set `LIBCLANG_PATH` to the `lib` directory of your `llvm` installation. E.g.,
 ### Windows-specific instructions
 
 Ensure the preferred R binaries, are part of the `PATH`, e.g. `C:/R/R-4.0.2/bin/x64`.
-For information on how to add environment variables on windows, [see here](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables?view=powershell-7.1#saving-changes-to-environment-variables).
+For information on how to add environment variables on Windows, [see here](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables?view=powershell-7.1#saving-changes-to-environment-variables).
+
+Add the mingw toolchains that are used to build R:
 
 ```bash
 rustup target add x86_64-pc-windows-gnu
@@ -60,7 +62,8 @@ pacman -S --noconfirm mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain
 ```
 
 Add environment variable `LIBCLANG_PATH` with the value pointing to where the
-clang binaries are placed, e.g. with scoop: `%USERPROFILE%\scoop\apps\msys2\current\mingw64\bin`.
+clang binaries are placed. If scoop was used then the path would be:
+`%USERPROFILE%\scoop\apps\msys2\current\mingw64\bin`.
 
 Then from now on, in order to build this, use:
 
@@ -70,7 +73,7 @@ cargo build
 cargo test
 ```
 
-In order to build it without having to enter a `mingw64`/`mingw32` add these
+In order to build it without having to enter a `mingw64`/`mingw32` shell, then add these
 paths to `PATH`:
 
 ```bash
