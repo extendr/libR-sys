@@ -3,9 +3,9 @@
 Low-level R library bindings
 
 [![Travis Build Status](https://api.travis-ci.org/extendr/libR-sys.svg?branch=master)](https://travis-ci.org/extendr/libR-sys)
-[![crates.io](http://meritbadge.herokuapp.com/libR-sys)](#Download)
-[![Documentation](https://docs.rs/libR-sys/badge.svg)](#Documentation)
-[![License: Apache-2.0](https://img.shields.io/crates/l/rustr.svg)](#License)
+[![crates.io](http://meritbadge.herokuapp.com/libR-sys)](https://crates.io/crates/libR-sys)
+[![Documentation](https://docs.rs/libR-sys/badge.svg)](https://docs.rs/libR-sys)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Installation
 
