@@ -29,8 +29,8 @@ Set `LIBCLANG_PATH` to the `lib` directory of your `llvm` installation. E.g.,
 
 ### Windows-specific instructions
 
-Ensure that `R_HOME` is an environment variable pointing to the preferred R
-binaries, e.g. `C:/R/R-4.0.2/bin/x64`. Then add `%R_HOME%` to the `PATH`.
+Ensure the preferred R binaries, are part of the `PATH`, e.g. `C:/R/R-4.0.2/bin/x64`.
+For information on how to add environment variables on windows, [see here](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables?view=powershell-7.1#saving-changes-to-environment-variables).
 
 ```bash
 rustup target add x86_64-pc-windows-gnu
@@ -59,7 +59,7 @@ pacman -S --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain
 pacman -S --noconfirm mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain
 ```
 
-Add enivornment variable `LIBCLANG_PATH` with the value pointing to where the
+Add environment variable `LIBCLANG_PATH` with the value pointing to where the
 clang binaries are placed, e.g. with scoop: `%USERPROFILE%\scoop\apps\msys2\current\mingw64\bin`.
 
 Then from now on, in order to build this, use:
