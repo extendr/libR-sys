@@ -2,7 +2,7 @@
 
 Low-level R library bindings
 
-[![Travis Build Status](https://api.travis-ci.org/extendr/libR-sys.svg?branch=master)](https://travis-ci.org/extendr/libR-sys)
+[![Build Status](https://travis-ci.org/extendr/libR-sys.svg?branch=master)](https://travis-ci.org/extendr/libR-sys)
 [![crates.io](http://meritbadge.herokuapp.com/libR-sys)](https://crates.io/crates/libR-sys)
 [![Documentation](https://docs.rs/libR-sys/badge.svg)](https://docs.rs/libR-sys)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
