@@ -1,6 +1,6 @@
 [package]
 name = "libR-sys"
-version = "0.1.8"
+version = "0.1.9"
 authors = ["andy-thomason <andy@andythomason.com>"]
 edition = "2018"
 description = "Low level bindings to the R programming language."
@@ -12,5 +12,4 @@ documentation = "https://extendr.github.io/libR-sys/master/libR_sys/index.html"
 
 [build-dependencies]
 bindgen = "0.53.2"
-pkg-config = "0.3.17"
 regex = "1"
