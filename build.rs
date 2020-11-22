@@ -114,5 +114,16 @@ fn main() {
 
     bindings
         .write_to_file(out_path.join("bindings.rs"))
-        .expect("Couldn't write bindings!");
+        .expect("Couldn't write bindings to default output path!");
+
+    // Also write the bindings to a folder specified by $LIBRSYS_BINDINGS_DIR, if it exists
+
+    if let Ok(alt_target) = env::var("LIBRSYS_BINDINGS_DIR") {
+        let out_path = PathBuf::from(alt_target);
+
+        bindings
+            .write_to_file(out_path.join("bindings.rs"))
+            .expect("Couldn't write bindings to output path specified by $LIBRSYS_BINDINGS_DIR!");
+
+    }
 }
