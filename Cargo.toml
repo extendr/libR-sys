@@ -6,7 +6,7 @@ edition = "2018"
 description = "Low level bindings to the R programming language."
 license = "MIT"
 links = "R"
-documentation = "https://extendr.github.io/libR-sys/master/libR_sys/index.html"
+documentation = "https://docs.rs/libR-sys/latest/libR_sys/"
 
 [dependencies]
 
