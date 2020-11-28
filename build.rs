@@ -14,7 +14,21 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
         // When R_HOME is set, we assume a standard path layout
         let include:String = Path::new(&r_home).join("include").to_str().unwrap().to_string();
         let library:String = if cfg!(target_os = "windows") {
-            Path::new(&r_home).join("bin").to_str().unwrap().to_string()
+            if cfg!(target_arch = "x86_64") {
+                Path::new(&r_home)
+                    .join("bin")
+                    .join("x64")
+                    .to_str()
+                    .unwrap()
+                    .to_string()
+            } else {
+                Path::new(&r_home)
+                    .join("bin")
+                    .join("i386")
+                    .to_str()
+                    .unwrap()
+                    .to_string()
+            }
         } else {
             Path::new(&r_home).join("lib").to_str().unwrap().to_string()
         };
