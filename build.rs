@@ -53,7 +53,7 @@ fn main() {
     let details = match details {
         Ok(result) => result,
         Err(error) => {
-            println!("Problem locating local R instal: {:?}", error);
+            println!("Problem locating local R install: {:?}", error);
             exit(1);
         }
     };
