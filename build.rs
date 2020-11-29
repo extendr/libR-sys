@@ -13,21 +13,24 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     if let Ok(r_home) = env::var("R_HOME") {
         // When R_HOME is set, we assume a standard path layout
         let include:String = Path::new(&r_home).join("include").to_str().unwrap().to_string();
+        let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
         let library:String = if cfg!(target_os = "windows") {
-            if cfg!(target_arch = "x86_64") {
+            if pkg_target_arch == "x86_64" {
                 Path::new(&r_home)
                     .join("bin")
                     .join("x64")
                     .to_str()
                     .unwrap()
                     .to_string()
-            } else {
+            } else if pkg_target_arch == "x86" {
                 Path::new(&r_home)
                     .join("bin")
                     .join("i386")
                     .to_str()
                     .unwrap()
                     .to_string()
+            } else {
+                panic!("Unknown architecture")
             }
         } else {
             Path::new(&r_home).join("lib").to_str().unwrap().to_string()
