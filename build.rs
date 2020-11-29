@@ -1,7 +1,10 @@
 extern crate bindgen;
 
 use regex::Regex;
-use std::{env, io, io::Error, io::ErrorKind, path::PathBuf, process::exit, process::Command};
+use std::{
+    env, fmt::Debug, io, io::Error, io::ErrorKind, path::PathBuf, process::exit, process::Command,
+    str::FromStr,
+};
 
 struct InstallationPaths {
     r_home: String,
@@ -18,7 +21,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                 r#"cat(R.home(), R.home('include'), R.home('bin'), sep = '\n')"#
             } else {
                 r#"cat(R.home(), R.home('include'), R.home('lib'), sep = '\n')"#
-            }
+            },
         ])
         .output()?;
 
@@ -47,10 +50,42 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     })
 }
 
-fn main() {
-    let details = probe_r_paths();
+fn match_regex<T>(bindings: &str, regex_expr: &str) -> T
+where
+    T: FromStr + Debug,
+    <T as FromStr>::Err: Debug,
+{
+    let version_matcher = Regex::new(regex_expr).unwrap();
+    if let Some(version) = version_matcher.captures(bindings) {
+        version.get(1).unwrap().as_str().parse::<T>().unwrap()
+    } else {
+        panic!(
+            "Failed to find version using {} in {}",
+            regex_expr, bindings
+        );
+    }
+}
 
-    let details = match details {
+struct VersionInfo {
+    major: u32,
+    minor: u32,
+    patch: u32,
+}
+
+fn extract_version(bindings: &str) -> VersionInfo {
+    let major_version: u32 = match_regex(bindings, r#"pub const R_MAJOR.*b"(\d+)\\0"#);
+    let minor_version: u32 = match_regex(bindings, r#"pub const R_MINOR.*b"(\d+)\."#);
+    let patch_version: u32 = match_regex(bindings, r#"pub const R_MINOR.*\.(\d+)\\0"#);
+
+    VersionInfo {
+        major: major_version,
+        minor: minor_version,
+        patch: patch_version,
+    }
+}
+
+fn main() {
+    let details = match probe_r_paths() {
         Ok(result) => result,
         Err(error) => {
             println!("Problem locating local R install: {:?}", error);
@@ -62,7 +97,10 @@ fn main() {
     //env::set_var("LD_LIBRARY_PATH", &details.library);
 
     println!("cargo:rustc-env=R_HOME={}", &details.r_home);
-    println!("cargo:r_home={}", &details.r_home); // Becomes DEP_R_R_HOME for clients
+
+    // Becomes DEP_R_R_HOME for clients
+    println!("cargo:r_home={}", &details.r_home);
+
     // make sure cargo links properly against library
     println!("cargo:rustc-link-search={}", &details.library);
     println!("cargo:rustc-link-lib=dylib=R");
@@ -87,11 +125,14 @@ fn main() {
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks));
 
-        // println!("TARGET: {}",cargo_env("TARGET"));
+    // println!("TARGET: {}",cargo_env("TARGET"));
     // Point to the correct headers
     let bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", &details.include),
-        format!("--target={}", std::env::var("TARGET").expect("Could not get the target triple"))
+        format!(
+            "--target={}",
+            std::env::var("TARGET").expect("Could not get the target triple")
+        ),
     ]);
 
     // Finish the builder and generate the bindings.
@@ -100,14 +141,22 @@ fn main() {
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
 
-    // Extract the version number from the R headers.
-    let version_matcher = Regex::new(r"pub const R_VERSION ?: ?u32 = (\d+)").unwrap();
-    if let Some(version) = version_matcher.captures(bindings.to_string().as_str()) {
-        let version = version.get(1).unwrap().as_str().parse::<u32>().unwrap();
-        println!("cargo:r_version={}", version);
-    } else {
-        panic!("failed to find R_VERSION");
-    }
+    let version = extract_version(bindings.to_string().as_str());
+
+    // Becomes DEP_R_R_VERSION_MAJOR_MINOR_PATCH for clients
+    println!(
+        "cargo:r_version_major_minor_patch=r_{}_{}_{}",
+        version.major, version.minor, version.patch
+    );
+
+    // Becomes DEP_R_R_VERSION_MAJOR_MINOR for clients
+    println!(
+        "cargo:r_version_major_minor=r_{}_{}_x",
+        version.major, version.minor
+    );
+
+    // Becomes DEP_R_R_VERSION_MAJOR for clients
+    println!("cargo:r_version_major=r_{}_x_x", version.major);
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
@@ -124,6 +173,5 @@ fn main() {
         bindings
             .write_to_file(out_path.join("bindings.rs"))
             .expect("Couldn't write bindings to output path specified by $LIBRSYS_BINDINGS_DIR!");
-
     }
 }
