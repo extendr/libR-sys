@@ -1,7 +1,7 @@
 extern crate bindgen;
 
 use regex::Regex;
-use std::{env, io, io::Error, io::ErrorKind, path::PathBuf, process::exit, process::Command};
+use std::{env, io, io::Error, io::ErrorKind, path::Path, path::PathBuf, process::exit, process::Command};
 
 struct InstallationPaths {
     r_home: String,
@@ -10,6 +10,42 @@ struct InstallationPaths {
 }
 
 fn probe_r_paths() -> io::Result<InstallationPaths> {
+    if let Ok(r_home) = env::var("R_HOME") {
+        // When R_HOME is set, we assume a standard path layout
+        let include:String = Path::new(&r_home).join("include").to_str().unwrap().to_string();
+        let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+        let library:String = if cfg!(target_os = "windows") {
+            if pkg_target_arch == "x86_64" {
+                Path::new(&r_home)
+                    .join("bin")
+                    .join("x64")
+                    .to_str()
+                    .unwrap()
+                    .to_string()
+            } else if pkg_target_arch == "x86" {
+                Path::new(&r_home)
+                    .join("bin")
+                    .join("i386")
+                    .to_str()
+                    .unwrap()
+                    .to_string()
+            } else {
+                panic!("Unknown architecture")
+            }
+        } else {
+            Path::new(&r_home).join("lib").to_str().unwrap().to_string()
+        };
+
+        return Ok(InstallationPaths {
+            r_home,
+            include,
+            library,
+        })
+    }
+
+    // If R_HOME is not set, we try to execute `R` to find `R_HOME`. Note that this is
+    // discouraged, see Section 1.6 of "Writing R Extensions"
+    // https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Writing-portable-packages
     let rout = Command::new("R")
         .args(&[
             "-s",
@@ -57,9 +93,6 @@ fn main() {
             exit(1);
         }
     };
-
-    // is this required?
-    //env::set_var("LD_LIBRARY_PATH", &details.library);
 
     println!("cargo:rustc-env=R_HOME={}", &details.r_home);
     println!("cargo:r_home={}", &details.r_home); // Becomes DEP_R_R_HOME for clients
