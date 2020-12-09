@@ -92,10 +92,11 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                 .args(&[
                     "-s",
                     "-e",
-                    r#"cat(normalizePath(R.home("include")), sep = '\n')"#
+                    r#"cat(normalizePath(R.home('include')), sep = '\n')"#
                 ])
                 .output()?;
 
+            // if there are any errors we print them out, helps with debugging
             for errln in String::from_utf8_lossy(&out.stderr).lines() {
                 println!("> {}", errln);
             }
