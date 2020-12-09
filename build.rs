@@ -39,7 +39,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
     // Now the library location. On Windows, it depends on the target architecture
     let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-    let library:String = if cfg!(target_os = "windows") {
+    let library = if cfg!(target_os = "windows") {
         if pkg_target_arch == "x86_64" {
             Path::new(&r_home)
                 .join("bin")
@@ -61,6 +61,12 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
         Path::new(&r_home).join("lib").to_str().unwrap().to_string()
     };
 
+    let bin = if cfg!(target_os = "windows") {
+        library.clone()
+    } else {
+        Path::new(&r_home).join("bin").to_str().unwrap().to_string()
+    };
+
     // Finally the include location. It may or may not be located under R home
     let include = match env::var("R_INCLUDE_DIR") {
         // If the environment variable R_INCLUDE_DIR is set we use it
@@ -68,7 +74,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
         // Otherwise, we try to execute `R` to find the include dir.
         _ => {
-            let r_binary= Path::new(&r_home)
+            let r_binary= Path::new(&bin)
                 .join("R").to_str().unwrap().to_string();
 
             let rout = Command::new(&r_binary)
