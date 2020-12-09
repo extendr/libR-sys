@@ -1,0 +1,91 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test_linux:
+    name: Run tests (Linux)
+    runs-on: ubuntu-20.04
+    continue-on-error: ${{ matrix.allow-failure }}
+    strategy:
+      matrix:
+        rust-version: [stable, beta]
+        allow-failure: [false]
+        include:
+          - rust-version: nightly
+            allow-failure: true
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust-version }}
+      - name: Build
+        run: cargo build
+      - name: Run tests
+        run: cargo test -- --nocapture --test-threads=1
+
+  test_macos:
+    name: Run tests (macOS)
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        rust-version: [stable]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust-version }}
+      - name: Install dependencies
+        run: brew install llvm r
+      - name: Set dynamic environment variables
+        run: echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" >> $GITHUB_ENV
+      - name: Build
+        run: cargo build
+      - name: Run tests
+        run: cargo test -- --nocapture --test-threads=1
+
+  test_windows:
+    name: Run tests (Windows)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    strategy:
+      matrix:
+        rust-version: [stable-gnu]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          path-type: inherit
+          release: false
+          update: false
+          install: >-
+            mingw-w64-x86_64-clang
+            mingw-w64-x86_64-headers-git
+            mingw-w64-x86_64-make
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 'release'
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust-version }}
+          target: x86_64-pc-windows-gnu
+          default: true
+          components: rustfmt, clippy
+      - name: Build
+        run: |
+          echo "C:/msys64/usr/bin" >> $GITHUB_PATH
+          echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
+          cargo build
+        env:
+          LIBCLANG_PATH: C:/msys64/mingw64/bin
+      - name: Run tests
+        run: |
+          echo "C:/msys64/usr/bin" >> $GITHUB_PATH
+          echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
+          cargo test -- --nocapture --test-threads=1
+        env:
+          LIBCLANG_PATH: C:/msys64/mingw64/bin
