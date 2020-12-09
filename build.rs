@@ -66,21 +66,22 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
         // If the environment variable R_INCLUDE_DIR is set we use it
         Ok(s) => s,
 
-        // Otherwise, we try to execute `R` to find the include dir.
+        // Otherwise, we try to execute `R` to find the include dir. Here,
+        // we're using the R home we found earlier, to make sure we're consistent.
         _ => {
             let r_binary = if cfg!(target_os = "windows") {
                 Path::new(&library)
                     .join("R.exe")
                     .to_str()
                     .unwrap()
-                    .to_string();
+                    .to_string()
             } else {
                 Path::new(&r_home)
                     .join("bin")
                     .join("R")
                     .to_str()
                     .unwrap()
-                    .to_string();
+                    .to_string()
             };
 
             let rout = Command::new(&r_binary)
