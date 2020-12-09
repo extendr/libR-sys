@@ -84,6 +84,10 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                     .to_string()
             };
 
+            println!("R home: {}", r_home);
+            println!("R library: {}", library);
+            println!("R binary: {}", r_binary);
+
             let rout = Command::new(&r_binary)
                 .args(&[
                     "-s",
