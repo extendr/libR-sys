@@ -99,6 +99,8 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
             let rout = String::from_utf8_lossy(&rout.stdout);
             let mut lines = rout.lines();
 
+            println!("R output: {:?}", lines);
+
             match lines.next() {
                 Some(line) => line.to_string(),
                 _ => return Err(Error::new(ErrorKind::Other, "Cannot find R include.")),
