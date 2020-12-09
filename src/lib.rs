@@ -75,8 +75,10 @@ mod tests {
             // Instead we must follow rustr's example and call the parts.
 
             //let res = unsafe { Rf_initEmbeddedR(1, args.as_mut_ptr()) };
-            Rf_initialize_R(1, [cstr_mut!("R")].as_mut_ptr());
-
+            Rf_initialize_R(
+                3,
+                [cstr_mut!("R"), cstr_mut!("--slave"), cstr_mut!("--no-save")].as_mut_ptr(),
+            );
             // In case you are curious.
             // Maybe 8MB is a bit small.
             // eprintln!("R_CStackLimit={:016x}", R_CStackLimit);
