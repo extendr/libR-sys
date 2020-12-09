@@ -88,7 +88,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
             println!("R library: {}", library);
             println!("R binary: {}", r_binary);
 
-            let rout = Command::new(&r_binary)
+            let out = Command::new(&r_binary)
                 .args(&[
                     "-s",
                     "-e",
@@ -96,11 +96,12 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                 ])
                 .output()?;
 
-            let rout = String::from_utf8_lossy(&rout.stdout);
+            for errln in String::from_utf8_lossy(&out.stderr).lines() {
+                println!("> {}", errln);
+            }
+
+            let rout = String::from_utf8_lossy(&out.stdout);
             let mut lines = rout.lines();
-
-            println!("R output: {:?}", lines);
-
             match lines.next() {
                 Some(line) => line.to_string(),
                 _ => return Err(Error::new(ErrorKind::Other, "Cannot find R include.")),
