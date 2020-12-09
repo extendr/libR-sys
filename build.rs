@@ -36,6 +36,18 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
         }
     };
 
+    let rout = Command::new("R")
+        .args(&[
+            "-s",
+            "-e",
+            r#"cat(normalizePath(R.home()), normalizePath(R.home("include")), normalizePath(R.home("lib")), sep = '\n')"#
+        ])
+        .output()?;
+    println!("{}", String::from_utf8_lossy(&rout.stdout));
+    println!("{}", env::var("R_HOME").unwrap_or_default());
+    println!("{}", env::var("R_INCLUDE_DIR").unwrap_or_default());
+
+
     // For include and lib, assume a standard path layout
     // Note that on Windows, this depends on the target architecture
     let include:String = Path::new(&r_home).join("include").to_str().unwrap().to_string();
