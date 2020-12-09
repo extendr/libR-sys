@@ -61,11 +61,11 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
         Path::new(&r_home).join("lib").to_str().unwrap().to_string()
     };
 
-    let bin = if cfg!(target_os = "windows") {
+    let bin = /*if cfg!(target_os = "windows") {
         library.clone()
-    } else {
-        Path::new(&r_home).join("bin").to_str().unwrap().to_string()
-    };
+    } else {*/
+        Path::new(&r_home).join("bin").to_str().unwrap().to_string();
+    //};
 
     // Finally the include location. It may or may not be located under R home
     let include = match env::var("R_INCLUDE_DIR") {
