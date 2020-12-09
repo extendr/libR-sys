@@ -10,70 +10,56 @@ struct InstallationPaths {
 }
 
 fn probe_r_paths() -> io::Result<InstallationPaths> {
-    if let Ok(r_home) = env::var("R_HOME") {
-        // When R_HOME is set, we assume a standard path layout
-        let include:String = Path::new(&r_home).join("include").to_str().unwrap().to_string();
-        let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-        let library:String = if cfg!(target_os = "windows") {
-            if pkg_target_arch == "x86_64" {
-                Path::new(&r_home)
-                    .join("bin")
-                    .join("x64")
-                    .to_str()
-                    .unwrap()
-                    .to_string()
-            } else if pkg_target_arch == "x86" {
-                Path::new(&r_home)
-                    .join("bin")
-                    .join("i386")
-                    .to_str()
-                    .unwrap()
-                    .to_string()
-            } else {
-                panic!("Unknown architecture")
+    let r_home = match env::var("R_HOME") {
+        // If the environment variable R_HOME is set we use it
+        Ok(s) => s,
+
+        // Otherwise, we try to execute `R` to find `R_HOME`. Note that this is
+        // discouraged, see Section 1.6 of "Writing R Extensions"
+        // https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Writing-portable-packages
+        _ => {
+            let rout = Command::new("R")
+                .args(&[
+                    "-s",
+                    "-e",
+                    r#"cat(normalizePath(R.home()), sep = '\n')"#
+                ])
+                .output()?;
+
+            let rout = String::from_utf8_lossy(&rout.stdout);
+            let mut lines = rout.lines();
+
+            match lines.next() {
+                Some(line) => line.to_string(),
+                _ => return Err(Error::new(ErrorKind::Other, "Cannot find R home")),
             }
+        }
+    };
+
+    // For include and lib, assume a standard path layout
+    // Note that on Windows, this depends on the target architecture
+    let include:String = Path::new(&r_home).join("include").to_str().unwrap().to_string();
+    let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+    let library:String = if cfg!(target_os = "windows") {
+        if pkg_target_arch == "x86_64" {
+            Path::new(&r_home)
+                .join("bin")
+                .join("x64")
+                .to_str()
+                .unwrap()
+                .to_string()
+        } else if pkg_target_arch == "x86" {
+            Path::new(&r_home)
+                .join("bin")
+                .join("i386")
+                .to_str()
+                .unwrap()
+                .to_string()
         } else {
-            Path::new(&r_home).join("lib").to_str().unwrap().to_string()
-        };
-
-        return Ok(InstallationPaths {
-            r_home,
-            include,
-            library,
-        })
-    }
-
-    // If R_HOME is not set, we try to execute `R` to find `R_HOME`. Note that this is
-    // discouraged, see Section 1.6 of "Writing R Extensions"
-    // https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Writing-portable-packages
-    let rout = Command::new("R")
-        .args(&[
-            "-s",
-            "-e",
-            if cfg!(target_os = "windows") {
-                r#"cat(R.home(), R.home('include'), R.home('bin'), sep = '\n')"#
-            } else {
-                r#"cat(R.home(), R.home('include'), R.home('lib'), sep = '\n')"#
-            }
-        ])
-        .output()?;
-
-    let rout = String::from_utf8_lossy(&rout.stdout);
-    let mut lines = rout.lines();
-
-    let r_home = match lines.next() {
-        Some(line) => line.to_string(),
-        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R home")),
-    };
-
-    let include = match lines.next() {
-        Some(line) => line.to_string(),
-        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R include")),
-    };
-
-    let library = match lines.next() {
-        Some(line) => line.to_string(),
-        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R library")),
+            panic!("Unknown architecture")
+        }
+    } else {
+        Path::new(&r_home).join("lib").to_str().unwrap().to_string()
     };
 
     Ok(InstallationPaths {
