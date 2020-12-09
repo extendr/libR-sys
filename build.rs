@@ -10,6 +10,7 @@ struct InstallationPaths {
 }
 
 fn probe_r_paths() -> io::Result<InstallationPaths> {
+    // First we locate the R home
     let r_home = match env::var("R_HOME") {
         // If the environment variable R_HOME is set we use it
         Ok(s) => s,
@@ -31,26 +32,12 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
             match lines.next() {
                 Some(line) => line.to_string(),
-                _ => return Err(Error::new(ErrorKind::Other, "Cannot find R home")),
+                _ => return Err(Error::new(ErrorKind::Other, "Cannot find R home.")),
             }
         }
     };
 
-    let rout = Command::new("R")
-        .args(&[
-            "-s",
-            "-e",
-            r#"cat(normalizePath(R.home()), normalizePath(R.home("include")), normalizePath(R.home("lib")), sep = '\n')"#
-        ])
-        .output()?;
-    println!("{}", String::from_utf8_lossy(&rout.stdout));
-    println!("{}", env::var("R_HOME").unwrap_or_default());
-    println!("{}", env::var("R_INCLUDE_DIR").unwrap_or_default());
-
-
-    // For include and lib, assume a standard path layout
-    // Note that on Windows, this depends on the target architecture
-    let include:String = Path::new(&r_home).join("include").to_str().unwrap().to_string();
+    // Now the library location. On Windows, it depends on the target architecture
     let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
     let library:String = if cfg!(target_os = "windows") {
         if pkg_target_arch == "x86_64" {
@@ -72,6 +59,34 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
         }
     } else {
         Path::new(&r_home).join("lib").to_str().unwrap().to_string()
+    };
+
+    // Finally the include location. It may or may not be located under R home
+    let include = match env::var("R_INCLUDE_DIR") {
+        // If the environment variable R_INCLUDE_DIR is set we use it
+        Ok(s) => s,
+
+        // Otherwise, we try to execute `R` to find the include dir.
+        _ => {
+            let r_binary= Path::new(&r_home)
+                .join("R").to_str().unwrap().to_string();
+
+            let rout = Command::new(&r_binary)
+                .args(&[
+                    "-s",
+                    "-e",
+                    r#"cat(normalizePath(R.home("include")), sep = '\n')"#
+                ])
+                .output()?;
+
+            let rout = String::from_utf8_lossy(&rout.stdout);
+            let mut lines = rout.lines();
+
+            match lines.next() {
+                Some(line) => line.to_string(),
+                _ => return Err(Error::new(ErrorKind::Other, "Cannot find R include.")),
+            }
+        }
     };
 
     Ok(InstallationPaths {
