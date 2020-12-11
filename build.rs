@@ -43,7 +43,8 @@ fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
     os_str.to_os_string()
 }
 
-// convert bytes to wide encoded characters
+// convert bytes to wide-encoded characters on Windows
+// from: https://stackoverflow.com/a/40456495/4975218
 #[cfg(target_family = "windows")]
 fn wide_from_console_string(bytes: &[u8]) -> Vec<u16> {
     assert!(bytes.len() < std::i32::MAX as usize);
@@ -65,32 +66,23 @@ fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
     // https://doc.rust-lang.org/stable/std/os/windows/ffi/trait.OsStringExt.html
     // To convert &[u8] into wide, maybe use the approach shown here:
     // https://stackoverflow.com/a/40456495/4975218
+    /*
     let lossy = OsString::from(
         String::from_utf8_lossy(bytes).into_owned()
     );
-
-    // Reinterpret bytes as wide-encoded u16. Assumes little-endian.
-    // (This does not work. Apparently the input is not in wide format after all.)
-    /*
-    let wide:Vec<u16> = bytes.chunks(2)
-        .map( |x| {
-            if x.len() > 1 {
-                ((x[1] as u16) << 8) | x[0] as u16
-            } else {
-                x[0] as u16
-            }
-        } )
-        .collect();
     */
 
     // Use Windows API to convert to wide encoded
     let wide = wide_from_console_string(bytes);
+    OsString::from_wide(&wide)
+    /*
     let lossless = OsString::from_wide(&wide);
 
     println!("lossy: {:?}", lossy);
     println!("lossless: {:?}", lossless);
 
-    lossy
+    lossless
+     */
 }
 
 fn probe_r_paths() -> io::Result<InstallationPaths> {
