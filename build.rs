@@ -47,9 +47,25 @@ fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
 fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
     // FIXME: This should be based on OsString::from_wide(&source[..]);
     // https://doc.rust-lang.org/stable/std/os/windows/ffi/trait.OsStringExt.html
+    // To convert &[u8] into wide, maybe use the approach shown here:
+    // https://stackoverflow.com/a/40456495/4975218
+    /*
     OsString::from(
         String::from_utf8_lossy(bytes).into_owned()
     )
+    */
+
+    // reinterpret bytes as wide-encoded u16. Assumes little-endian (correct for Windows)
+    let wide:Vec<u16> = bytes.chunks(2)
+        .map( |x| {
+            if x.len() > 1 {
+                ((x[1] as u16) << 8) | x[0] as u16
+            } else {
+                x[0] as u16
+            }
+        } )
+        .collect();
+    OsString::from_wide(&wide)
 }
 
 fn probe_r_paths() -> io::Result<InstallationPaths> {
