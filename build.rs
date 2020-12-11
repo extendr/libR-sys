@@ -4,7 +4,8 @@ use regex::Regex;
 use std::{
     env,
     ffi::{
-        OsString
+        OsString,
+        OsStr
     },
     io,
     io::{
@@ -21,10 +22,34 @@ use std::{
     }
 };
 
+#[cfg(target_family = "unix")]
+use std::os::unix::ffi::OsStrExt;
+
+#[cfg(target_family = "windows")]
+use std::os::windows::ffi::OsStringExt;
+
 struct InstallationPaths {
-    r_home: OsString,
-    include: OsString,
-    library: OsString,
+    r_home: PathBuf,
+    include: PathBuf,
+    library: PathBuf,
+}
+
+
+// frustratingly, something like the following does not exist in an
+// OS-independent way in Rust
+#[cfg(target_family = "unix")]
+fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
+    let os_str = OsStr::from_bytes(bytes);
+    os_str.to_os_string()
+}
+
+#[cfg(target_family = "windows")]
+fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
+    // FIXME: This should be based on OsString::from_wide(&source[..]);
+    // https://doc.rust-lang.org/stable/std/os/windows/ffi/trait.OsStringExt.html
+    OsString::from(
+        String::from_utf8_lossy(bytes).into_owned()
+    )
 }
 
 fn probe_r_paths() -> io::Result<InstallationPaths> {
@@ -45,14 +70,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                 ])
                 .output()?;
 
-            // this conversion is problematic, because it uses uf8_lossy() which can
-            // break on Windows for certain locales
-            // For a possible way to fix this, see:
-            // https://doc.rust-lang.org/stable/std/ffi/index.html#conversions
-            // FIXME: don't use `from_utf8_lossy()`
-            let rout = OsString::from(
-                String::from_utf8_lossy(&rout.stdout).into_owned()
-            );
+            let rout = byte_array_to_os_string(&rout.stdout);
             if !rout.is_empty() {
                 rout
             } else {
@@ -111,12 +129,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
             // if there are any errors we print them out, helps with debugging
             println!("> {}", String::from_utf8_lossy(&out.stderr));
 
-            // this conversion is problematic, because it uses uf8_lossy() which can
-            // break on Windows for certain locale
-            // FIXME: don't use `from_utf8_lossy()`
-            let rout = OsString::from(
-                &String::from_utf8_lossy(&out.stdout).into_owned()
-            );
+            let rout = byte_array_to_os_string(&out.stdout);
             if !rout.is_empty() {
                 rout
             } else {
@@ -126,9 +139,9 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     };
 
     Ok(InstallationPaths {
-        r_home,
-        include,
-        library,
+        r_home: r_home.into(),
+        include: include.into(),
+        library: library.into(),
     })
 }
 
@@ -143,11 +156,8 @@ fn main() {
         }
     };
 
-    // OsStrings lack Format trait, thus can't be printed directly, and we need
-    // to use `to_string_lossy()` to print them
-    // FIXME: don't use `to_string_lossy()`
-    println!("cargo:rustc-env=R_HOME={}", details.r_home.to_string_lossy());
-    println!("cargo:r_home={}", details.r_home.to_string_lossy()); // Becomes DEP_R_R_HOME for clients
+    println!("cargo:rustc-env=R_HOME={}", details.r_home.display());
+    println!("cargo:r_home={}", details.r_home.display()); // Becomes DEP_R_R_HOME for clients
     // make sure cargo links properly against library
     println!("cargo:rustc-link-search={}", details.library.to_string_lossy());
     println!("cargo:rustc-link-lib=dylib=R");
@@ -175,8 +185,7 @@ fn main() {
         // println!("TARGET: {}",cargo_env("TARGET"));
     // Point to the correct headers
     let bindgen_builder = bindgen_builder.clang_args(&[
-        // FIXME: don't use `to_string_lossy()`
-        format!("-I{}", details.include.to_string_lossy()),
+        format!("-I{}", details.include.display()),
         format!("--target={}", std::env::var("TARGET").expect("Could not get the target triple"))
     ]);
 
