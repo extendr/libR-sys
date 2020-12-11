@@ -51,7 +51,7 @@ fn wide_from_console_string(bytes: &[u8]) -> Vec<u16> {
     let mut len;
     unsafe {
         let cp = kernel32::GetConsoleCP();
-        len = kernel32::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, ptr::null_mut(), 0);
+        len = kernel32::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, std::ptr::null_mut(), 0);
         wide = Vec::with_capacity(len as usize);
         len = kernel32::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, wide.as_mut_ptr(), len);
         wide.set_len(len as usize);
@@ -164,7 +164,9 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                 .output()?;
 
             // if there are any errors we print them out, helps with debugging
-            println!("> {}", String::from_utf8_lossy(&out.stderr));
+            if !out.stderr.is_empty() {
+                println!("> {}", String::from_utf8_lossy(&out.stderr));
+            }
 
             let rout = byte_array_to_os_string(&out.stdout);
             if !rout.is_empty() {
