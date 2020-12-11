@@ -5,18 +5,9 @@ use std::{
     env,
     ffi::OsString,
     io,
-    io::{
-        Error,
-        ErrorKind
-    },
-    path::{
-        Path,
-        PathBuf
-    },
-    process::{
-        exit,
-        Command
-    }
+    io::{ Error, ErrorKind },
+    path::{ Path, PathBuf },
+    process::{ exit, Command },
 };
 
 #[cfg(target_family = "unix")]
@@ -173,7 +164,7 @@ fn main() {
     println!("cargo:rustc-env=R_HOME={}", details.r_home.display());
     println!("cargo:r_home={}", details.r_home.display()); // Becomes DEP_R_R_HOME for clients
     // make sure cargo links properly against library
-    println!("cargo:rustc-link-search={}", details.library.to_string_lossy());
+    println!("cargo:rustc-link-search={}", details.library.display());
     println!("cargo:rustc-link-lib=dylib=R");
 
     println!("cargo:rerun-if-changed=build.rs");
