@@ -56,7 +56,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     // First we locate the R home
     let r_home = match env::var_os("R_HOME") {
         // If the environment variable R_HOME is set we use it
-        Some(s) => s,
+        Some(s) => PathBuf::from(s),
 
         // Otherwise, we try to execute `R` to find `R_HOME`. Note that this is
         // discouraged, see Section 1.6 of "Writing R Extensions"
@@ -72,7 +72,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
             let rout = byte_array_to_os_string(&rout.stdout);
             if !rout.is_empty() {
-                rout
+                PathBuf::from(rout)
             } else {
                 return Err(Error::new(ErrorKind::Other, "Cannot find R home."));
             }
@@ -81,41 +81,37 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
     // Now the library location. On Windows, it depends on the target architecture
     let pkg_target_arch = env::var_os("CARGO_CFG_TARGET_ARCH").unwrap();
-    let library:OsString = if cfg!(target_os = "windows") {
+    let library = if cfg!(target_os = "windows") {
         if pkg_target_arch == "x86_64" {
             Path::new(&r_home)
                 .join("bin")
                 .join("x64")
-                .into()
         } else if pkg_target_arch == "x86" {
             Path::new(&r_home)
                 .join("bin")
                 .join("i386")
-                .into()
         } else {
             panic!("Unknown architecture")
         }
     } else {
-        Path::new(&r_home).join("lib").into()
+        Path::new(&r_home).join("lib")
     };
 
     // Finally the include location. It may or may not be located under R home
     let include = match env::var_os("R_INCLUDE_DIR") {
         // If the environment variable R_INCLUDE_DIR is set we use it
-        Some(s) => s,
+        Some(s) => PathBuf::from(s),
 
         // Otherwise, we try to execute `R` to find the include dir. Here,
         // we're using the R home we found earlier, to make sure we're consistent.
         _ => {
-            let r_binary:OsString = if cfg!(target_os = "windows") {
+            let r_binary = if cfg!(target_os = "windows") {
                 Path::new(&library)
                     .join("R.exe")
-                    .into()
             } else {
                 Path::new(&r_home)
                     .join("bin")
                     .join("R")
-                    .into()
             };
 
             let out = Command::new(&r_binary)
@@ -131,7 +127,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
             let rout = byte_array_to_os_string(&out.stdout);
             if !rout.is_empty() {
-                rout
+                PathBuf::from(rout)
             } else {
                 return Err(Error::new(ErrorKind::Other, "Cannot find R include."));
             }
@@ -139,9 +135,9 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     };
 
     Ok(InstallationPaths {
-        r_home: r_home.into(),
-        include: include.into(),
-        library: library.into(),
+        r_home,
+        include,
+        library,
     })
 }
 
