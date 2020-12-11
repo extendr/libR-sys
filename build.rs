@@ -236,4 +236,9 @@ fn main() {
             .expect("Couldn't write bindings to output path specified by $LIBRSYS_BINDINGS_DIR!");
 
     }
+
+    if cfg!(target_family = "windows") {
+        panic!();
+    }
+    
 }
