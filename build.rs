@@ -3,10 +3,7 @@ extern crate bindgen;
 use regex::Regex;
 use std::{
     env,
-    ffi::{
-        OsString,
-        OsStr
-    },
+    ffi::OsString,
     io,
     io::{
         Error,
@@ -23,7 +20,10 @@ use std::{
 };
 
 #[cfg(target_family = "unix")]
-use std::os::unix::ffi::OsStrExt;
+use std::{
+    os::unix::ffi::OsStrExt,
+    ffi::OsStr,
+};
 
 #[cfg(target_family = "windows")]
 use std::os::windows::ffi::OsStringExt;
@@ -62,27 +62,10 @@ fn wide_from_console_string(bytes: &[u8]) -> Vec<u16> {
 
 #[cfg(target_family = "windows")]
 fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
-    // FIXME: This should be based on OsString::from_wide(&source[..]);
-    // https://doc.rust-lang.org/stable/std/os/windows/ffi/trait.OsStringExt.html
-    // To convert &[u8] into wide, maybe use the approach shown here:
-    // https://stackoverflow.com/a/40456495/4975218
-    /*
-    let lossy = OsString::from(
-        String::from_utf8_lossy(bytes).into_owned()
-    );
-    */
-
-    // Use Windows API to convert to wide encoded
+    // first, use Windows API to convert to wide encoded
     let wide = wide_from_console_string(bytes);
+    // then, use `std::os::windows::ffi::OsStringExt::from_wide()`
     OsString::from_wide(&wide)
-    /*
-    let lossless = OsString::from_wide(&wide);
-
-    println!("lossy: {:?}", lossy);
-    println!("lossless: {:?}", lossless);
-
-    lossless
-     */
 }
 
 fn probe_r_paths() -> io::Result<InstallationPaths> {
