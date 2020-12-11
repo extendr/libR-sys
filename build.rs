@@ -1,19 +1,37 @@
 extern crate bindgen;
 
 use regex::Regex;
-use std::{env, io, io::Error, io::ErrorKind, path::Path, path::PathBuf, process::exit, process::Command};
+use std::{
+    env,
+    ffi::{
+        OsString
+    },
+    io,
+    io::{
+        Error,
+        ErrorKind
+    },
+    path::{
+        Path,
+        PathBuf
+    },
+    process::{
+        exit,
+        Command
+    }
+};
 
 struct InstallationPaths {
-    r_home: String,
-    include: String,
-    library: String,
+    r_home: OsString,
+    include: OsString,
+    library: OsString,
 }
 
 fn probe_r_paths() -> io::Result<InstallationPaths> {
     // First we locate the R home
-    let r_home = match env::var("R_HOME") {
+    let r_home = match env::var_os("R_HOME") {
         // If the environment variable R_HOME is set we use it
-        Ok(s) => s,
+        Some(s) => s,
 
         // Otherwise, we try to execute `R` to find `R_HOME`. Note that this is
         // discouraged, see Section 1.6 of "Writing R Extensions"
@@ -23,85 +41,86 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                 .args(&[
                     "-s",
                     "-e",
-                    r#"cat(normalizePath(R.home()), sep = '\n')"#
+                    r#"cat(normalizePath(R.home()))"#
                 ])
                 .output()?;
 
-            let rout = String::from_utf8_lossy(&rout.stdout);
-            let mut lines = rout.lines();
-
-            match lines.next() {
-                Some(line) => line.to_string(),
-                _ => return Err(Error::new(ErrorKind::Other, "Cannot find R home.")),
+            // this conversion is problematic, because it uses uf8_lossy() which can
+            // break on Windows for certain locales
+            // For a possible way to fix this, see:
+            // https://doc.rust-lang.org/stable/std/ffi/index.html#conversions
+            // FIXME: don't use `from_utf8_lossy()`
+            let rout = OsString::from(
+                String::from_utf8_lossy(&rout.stdout).into_owned()
+            );
+            if !rout.is_empty() {
+                rout
+            } else {
+                return Err(Error::new(ErrorKind::Other, "Cannot find R home."));
             }
         }
     };
 
     // Now the library location. On Windows, it depends on the target architecture
-    let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-    let library = if cfg!(target_os = "windows") {
+    let pkg_target_arch = env::var_os("CARGO_CFG_TARGET_ARCH").unwrap();
+    let library:OsString = if cfg!(target_os = "windows") {
         if pkg_target_arch == "x86_64" {
             Path::new(&r_home)
                 .join("bin")
                 .join("x64")
-                .to_str()
-                .unwrap()
-                .to_string()
+                .into()
         } else if pkg_target_arch == "x86" {
             Path::new(&r_home)
                 .join("bin")
                 .join("i386")
-                .to_str()
-                .unwrap()
-                .to_string()
+                .into()
         } else {
             panic!("Unknown architecture")
         }
     } else {
-        Path::new(&r_home).join("lib").to_str().unwrap().to_string()
+        Path::new(&r_home).join("lib").into()
     };
 
     // Finally the include location. It may or may not be located under R home
-    let include = match env::var("R_INCLUDE_DIR") {
+    let include = match env::var_os("R_INCLUDE_DIR") {
         // If the environment variable R_INCLUDE_DIR is set we use it
-        Ok(s) => s,
+        Some(s) => s,
 
         // Otherwise, we try to execute `R` to find the include dir. Here,
         // we're using the R home we found earlier, to make sure we're consistent.
         _ => {
-            let r_binary = if cfg!(target_os = "windows") {
+            let r_binary:OsString = if cfg!(target_os = "windows") {
                 Path::new(&library)
                     .join("R.exe")
-                    .to_str()
-                    .unwrap()
-                    .to_string()
+                    .into()
             } else {
                 Path::new(&r_home)
                     .join("bin")
                     .join("R")
-                    .to_str()
-                    .unwrap()
-                    .to_string()
+                    .into()
             };
 
             let out = Command::new(&r_binary)
                 .args(&[
                     "-s",
                     "-e",
-                    r#"cat(normalizePath(R.home('include')), sep = '\n')"#
+                    r#"cat(normalizePath(R.home('include')))"#
                 ])
                 .output()?;
 
             // if there are any errors we print them out, helps with debugging
-            for errln in String::from_utf8_lossy(&out.stderr).lines() {
-                println!("> {}", errln);
-            }
+            println!("> {}", String::from_utf8_lossy(&out.stderr));
 
-            let rout = String::from_utf8_lossy(&out.stdout);
-            let mut lines = rout.lines();
-            match lines.next() {
-                Some(line) => line.to_string(),
-                _ => return Err(Error::new(ErrorKind::Other, "Cannot find R include.")),
+            // this conversion is problematic, because it uses uf8_lossy() which can
+            // break on Windows for certain locale
+            // FIXME: don't use `from_utf8_lossy()`
+            let rout = OsString::from(
+                &String::from_utf8_lossy(&out.stdout).into_owned()
+            );
+            if !rout.is_empty() {
+                rout
+            } else {
+                return Err(Error::new(ErrorKind::Other, "Cannot find R include."));
             }
         }
     };
@@ -124,10 +143,13 @@ fn main() {
         }
     };
 
-    println!("cargo:rustc-env=R_HOME={}", &details.r_home);
-    println!("cargo:r_home={}", &details.r_home); // Becomes DEP_R_R_HOME for clients
+    // OsStrings lack Format trait, thus can't be printed directly, and we need
+    // to use `to_string_lossy()` to print them
+    // FIXME: don't use `to_string_lossy()`
+    println!("cargo:rustc-env=R_HOME={}", details.r_home.to_string_lossy());
+    println!("cargo:r_home={}", details.r_home.to_string_lossy()); // Becomes DEP_R_R_HOME for clients
     // make sure cargo links properly against library
-    println!("cargo:rustc-link-search={}", &details.library);
+    println!("cargo:rustc-link-search={}", details.library.to_string_lossy());
     println!("cargo:rustc-link-lib=dylib=R");
 
     println!("cargo:rerun-if-changed=build.rs");
@@ -153,7 +175,8 @@ fn main() {
         // println!("TARGET: {}",cargo_env("TARGET"));
     // Point to the correct headers
     let bindgen_builder = bindgen_builder.clang_args(&[
-        format!("-I{}", &details.include),
+        // FIXME: don't use `to_string_lossy()`
+        format!("-I{}", details.include.to_string_lossy()),
         format!("--target={}", std::env::var("TARGET").expect("Could not get the target triple"))
     ]);
 
