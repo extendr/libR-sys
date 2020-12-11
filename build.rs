@@ -43,6 +43,22 @@ fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
     os_str.to_os_string()
 }
 
+// convert bytes to wide encoded characters
+#[cfg(target_family = "windows")]
+fn wide_from_console_string(bytes: &[u8]) -> Vec<u16> {
+    assert!(bytes.len() < std::i32::MAX as usize);
+    let mut wide;
+    let mut len;
+    unsafe {
+        let cp = kernel32::GetConsoleCP();
+        len = kernel32::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, ptr::null_mut(), 0);
+        wide = Vec::with_capacity(len as usize);
+        len = kernel32::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, wide.as_mut_ptr(), len);
+        wide.set_len(len as usize);
+    }
+    wide
+}
+
 #[cfg(target_family = "windows")]
 fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
     // FIXME: This should be based on OsString::from_wide(&source[..]);
@@ -53,8 +69,9 @@ fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
         String::from_utf8_lossy(bytes).into_owned()
     );
 
-    // reinterpret bytes as wide-encoded u16. Assumes little-endian
-    // (should be correct for Windows)
+    // Reinterpret bytes as wide-encoded u16. Assumes little-endian.
+    // (This does not work. Apparently the input is not in wide format after all.)
+    /*
     let wide:Vec<u16> = bytes.chunks(2)
         .map( |x| {
             if x.len() > 1 {
@@ -64,7 +81,12 @@ fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
             }
         } )
         .collect();
+    */
+
+    // Use Windows API to convert to wide encoded
+    let wide = wide_from_console_string(bytes);
     let lossless = OsString::from_wide(&wide);
+
     println!("lossy: {:?}", lossy);
     println!("lossless: {:?}", lossless);
 
@@ -236,9 +258,4 @@ fn main() {
             .expect("Couldn't write bindings to output path specified by $LIBRSYS_BINDINGS_DIR!");
 
     }
-
-    if cfg!(target_family = "windows") {
-        panic!();
-    }
-    
 }

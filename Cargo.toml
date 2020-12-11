@@ -13,3 +13,7 @@ documentation = "https://docs.rs/libR-sys/latest/libR_sys/"
 [build-dependencies]
 bindgen = "0.53.2"
 regex = "1"
+
+[target.'cfg(windows)'.build-dependencies]
+winapi = "0.3"
+kernel32-sys = "0.2.2"
