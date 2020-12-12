@@ -1,19 +1,69 @@
 extern crate bindgen;
 
 use regex::Regex;
-use std::{env, io, io::Error, io::ErrorKind, path::Path, path::PathBuf, process::exit, process::Command};
+use std::{
+    env,
+    ffi::OsString,
+    io,
+    io::{ Error, ErrorKind },
+    path::{ Path, PathBuf },
+    process::{ exit, Command },
+};
+
+#[cfg(target_family = "unix")]
+use std::{
+    os::unix::ffi::OsStrExt,
+    ffi::OsStr,
+};
+
+#[cfg(target_family = "windows")]
+use std::os::windows::ffi::OsStringExt;
 
 struct InstallationPaths {
-    r_home: String,
-    include: String,
-    library: String,
+    r_home: PathBuf,
+    include: PathBuf,
+    library: PathBuf,
+}
+
+
+// frustratingly, something like the following does not exist in an
+// OS-independent way in Rust
+#[cfg(target_family = "unix")]
+fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
+    let os_str = OsStr::from_bytes(bytes);
+    os_str.to_os_string()
+}
+
+// convert bytes to wide-encoded characters on Windows
+// from: https://stackoverflow.com/a/40456495/4975218
+#[cfg(target_family = "windows")]
+fn wide_from_console_string(bytes: &[u8]) -> Vec<u16> {
+    assert!(bytes.len() < std::i32::MAX as usize);
+    let mut wide;
+    let mut len;
+    unsafe {
+        let cp = kernel32::GetConsoleCP();
+        len = kernel32::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, std::ptr::null_mut(), 0);
+        wide = Vec::with_capacity(len as usize);
+        len = kernel32::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, wide.as_mut_ptr(), len);
+        wide.set_len(len as usize);
+    }
+    wide
+}
+
+#[cfg(target_family = "windows")]
+fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
+    // first, use Windows API to convert to wide encoded
+    let wide = wide_from_console_string(bytes);
+    // then, use `std::os::windows::ffi::OsStringExt::from_wide()`
+    OsString::from_wide(&wide)
 }
 
 fn probe_r_paths() -> io::Result<InstallationPaths> {
     // First we locate the R home
-    let r_home = match env::var("R_HOME") {
+    let r_home = match env::var_os("R_HOME") {
         // If the environment variable R_HOME is set we use it
-        Ok(s) => s,
+        Some(s) => PathBuf::from(s),
 
         // Otherwise, we try to execute `R` to find `R_HOME`. Note that this is
         // discouraged, see Section 1.6 of "Writing R Extensions"
@@ -23,48 +73,41 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                 .args(&[
                     "-s",
                     "-e",
-                    r#"cat(normalizePath(R.home()), sep = '\n')"#
+                    r#"cat(normalizePath(R.home()))"#
                 ])
                 .output()?;
 
-            let rout = String::from_utf8_lossy(&rout.stdout);
-            let mut lines = rout.lines();
-
-            match lines.next() {
-                Some(line) => line.to_string(),
-                _ => return Err(Error::new(ErrorKind::Other, "Cannot find R home.")),
+            let rout = byte_array_to_os_string(&rout.stdout);
+            if !rout.is_empty() {
+                PathBuf::from(rout)
+            } else {
+                return Err(Error::new(ErrorKind::Other, "Cannot find R home."));
             }
         }
     };
 
     // Now the library location. On Windows, it depends on the target architecture
-    let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+    let pkg_target_arch = env::var_os("CARGO_CFG_TARGET_ARCH").unwrap();
     let library = if cfg!(target_os = "windows") {
         if pkg_target_arch == "x86_64" {
             Path::new(&r_home)
                 .join("bin")
                 .join("x64")
-                .to_str()
-                .unwrap()
-                .to_string()
         } else if pkg_target_arch == "x86" {
             Path::new(&r_home)
                 .join("bin")
                 .join("i386")
-                .to_str()
-                .unwrap()
-                .to_string()
         } else {
             panic!("Unknown architecture")
         }
     } else {
-        Path::new(&r_home).join("lib").to_str().unwrap().to_string()
+        Path::new(&r_home).join("lib")
     };
 
     // Finally the include location. It may or may not be located under R home
-    let include = match env::var("R_INCLUDE_DIR") {
+    let include = match env::var_os("R_INCLUDE_DIR") {
         // If the environment variable R_INCLUDE_DIR is set we use it
-        Ok(s) => s,
+        Some(s) => PathBuf::from(s),
 
         // Otherwise, we try to execute `R` to find the include dir. Here,
         // we're using the R home we found earlier, to make sure we're consistent.
@@ -72,36 +115,34 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
             let r_binary = if cfg!(target_os = "windows") {
                 Path::new(&library)
                     .join("R.exe")
-                    .to_str()
-                    .unwrap()
-                    .to_string()
             } else {
                 Path::new(&r_home)
                     .join("bin")
                     .join("R")
-                    .to_str()
-                    .unwrap()
-                    .to_string()
             };
 
             let out = Command::new(&r_binary)
                 .args(&[
                     "-s",
                     "-e",
-                    r#"cat(normalizePath(R.home('include')), sep = '\n')"#
+                    r#"cat(normalizePath(R.home('include')))"#
                 ])
                 .output()?;
 
             // if there are any errors we print them out, helps with debugging
-            for errln in String::from_utf8_lossy(&out.stderr).lines() {
-                println!("> {}", errln);
+            if !out.stderr.is_empty() {
+                println!("> {}",
+                    byte_array_to_os_string(&out.stderr)
+                    .as_os_str()
+                    .to_string_lossy()
+                );
             }
 
-            let rout = String::from_utf8_lossy(&out.stdout);
-            let mut lines = rout.lines();
-            match lines.next() {
-                Some(line) => line.to_string(),
-                _ => return Err(Error::new(ErrorKind::Other, "Cannot find R include.")),
+            let rout = byte_array_to_os_string(&out.stdout);
+            if !rout.is_empty() {
+                PathBuf::from(rout)
+            } else {
+                return Err(Error::new(ErrorKind::Other, "Cannot find R include."));
             }
         }
     };
@@ -124,10 +165,10 @@ fn main() {
         }
     };
 
-    println!("cargo:rustc-env=R_HOME={}", &details.r_home);
-    println!("cargo:r_home={}", &details.r_home); // Becomes DEP_R_R_HOME for clients
+    println!("cargo:rustc-env=R_HOME={}", details.r_home.display());
+    println!("cargo:r_home={}", details.r_home.display()); // Becomes DEP_R_R_HOME for clients
     // make sure cargo links properly against library
-    println!("cargo:rustc-link-search={}", &details.library);
+    println!("cargo:rustc-link-search={}", details.library.display());
     println!("cargo:rustc-link-lib=dylib=R");
 
     println!("cargo:rerun-if-changed=build.rs");
@@ -153,7 +194,7 @@ fn main() {
         // println!("TARGET: {}",cargo_env("TARGET"));
     // Point to the correct headers
     let bindgen_builder = bindgen_builder.clang_args(&[
-        format!("-I{}", &details.include),
+        format!("-I{}", details.include.display()),
         format!("--target={}", std::env::var("TARGET").expect("Could not get the target triple"))
     ]);
 
