@@ -160,7 +160,7 @@ fn main() {
         format!("--target={}", pkg_target_arch)
     ]);
 
-    let bindgen_builder = if cfg!(target_os = "windows") && pkg_target_arch == "x86_64" {
+    let bindgen_builder = if cfg!(target_os = "windows") && pkg_target_arch == "x86" {
         bindgen_builder.clang_arg(format!("-IC:/msys64/mingw32/i686-w64-mingw32/include/"))
     } else {
         bindgen_builder
