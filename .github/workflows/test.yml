@@ -112,9 +112,11 @@ jobs:
           target: i686-pc-windows-gnu
           default: true
           components: rustfmt, clippy
+      - name: Switch toolchain default
+        run: rustup rustup target remove x86_64-pc-windows-gnu
       - name: Build
         run: |
-          cargo build --target i686-pc-windows-gnu
+          cargo build -vv --target i686-pc-windows-gnu
         env:
           LIBCLANG_PATH: C:/msys64/mingw32/bin
       - name: Run tests
