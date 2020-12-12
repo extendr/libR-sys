@@ -53,8 +53,8 @@ jobs:
       - name: Run tests
         run: cargo test -- --nocapture --test-threads=1
 
-  test_windows:
-    name: Run tests (Windows)
+  test_windows_x86:
+    name: Run tests (Windows x86)
     runs-on: windows-latest
     defaults:
       run:
@@ -72,10 +72,10 @@ jobs:
           update: false
           install: >-
             mingw-w64-x86_64-clang
-            mingw-w64-x86_64-headers-git
-            mingw-w64-x86_64-make
-            mingw-w64-i686-gcc
-            mingw-w64-i686-headers-git
+            #mingw-w64-x86_64-headers-git
+            #mingw-w64-x86_64-make
+            #mingw-w64-i686-gcc
+            #mingw-w64-i686-headers-git
       - uses: r-lib/actions/setup-r@v1
         with:
           r-version: 'release'
@@ -85,27 +85,54 @@ jobs:
           target: x86_64-pc-windows-gnu
           default: true
           components: rustfmt, clippy
-      - name: Add i686 target, set up paths
-        run: |
-          rustup target add i686-pc-windows-gnu
-          #echo "C:/msys64/usr/bin" >> $GITHUB_PATH
-          #echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
-          echo "C:/msys64/mingw32/bin" >> $GITHUB_PATH
       - name: Build
         run: |
           cargo build -vv
         env:
           LIBCLANG_PATH: C:/msys64/mingw64/bin
-      - name: Build i686 version
-        run: |
-          #set MSYSTEM=MINGW32
-          cargo build -vv --target i686-pc-windows-gnu
-        env:
-          LIBCLANG_PATH: C:/msys64/mingw64/bin
       - name: Run tests
         run: |
-          cargo test --target x86_64-pc-windows-gnu -- --nocapture --test-threads=1
-          #set MSYSTEM=MINGW32
-          cargo test --target i686-pc-windows-gnu -- --nocapture --test-threads=1
+          cargo test -- --nocapture --test-threads=1
         env:
           LIBCLANG_PATH: C:/msys64/mingw64/bin
+
+  test_windows_i686:
+    name: Run tests (Windows i686)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    strategy:
+      matrix:
+        rust-version: [stable-gnu]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW32
+          path-type: inherit
+          release: false
+          update: false
+          install: >-
+            mingw-w64-i686-clang
+            #mingw-w64-i686-gcc
+            #mingw-w64-i686-headers-git
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 'release'
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust-version }}
+          target: x86_i686-pc-windows-gnu
+          default: true
+          components: rustfmt, clippy
+      - name: Build
+        run: |
+          cargo build -vv
+        env:
+          LIBCLANG_PATH: C:/msys64/mingw32/bin
+      - name: Run tests
+        run: |
+          cargo test -- --nocapture --test-threads=1
+        env:
+          LIBCLANG_PATH: C:/msys64/mingw32/bin
