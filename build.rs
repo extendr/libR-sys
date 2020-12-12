@@ -39,6 +39,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
     // Now the library location. On Windows, it depends on the target architecture
     let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+
     let library = if cfg!(target_os = "windows") {
         if pkg_target_arch == "x86_64" {
             Path::new(&r_home)
@@ -152,19 +153,25 @@ fn main() {
 
         // println!("TARGET: {}",cargo_env("TARGET"));
     // Point to the correct headers
-    let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").expect("Could not get the target triple");
+    let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").expect("Could not get the target architecture");
+    let mut target = env::var("TARGET").expect("Could not get the target triple");
+    if cfg!(target_os = "windows") && pkg_target_arch == "x86" {
+        target = "i686-pc-windows-gnu".to_string();
+    }
 
     let bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", &details.include),
         //format!("-IC:/msys64/mingw32/i686-w64-mingw32/include/"),
-        format!("--target={}", pkg_target_arch)
+        format!("--target={}", target)
     ]);
 
+    /*
     let bindgen_builder = if cfg!(target_os = "windows") && pkg_target_arch == "x86" {
         bindgen_builder.clang_arg(format!("-IC:/msys64/mingw32/i686-w64-mingw32/include/"))
     } else {
         bindgen_builder
     };
+     */
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
