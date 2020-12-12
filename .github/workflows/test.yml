@@ -96,6 +96,7 @@ jobs:
         run: |
           echo "C:/msys64/usr/bin" >> $GITHUB_PATH
           echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
-          cargo test -- --nocapture --test-threads=1
+          cargo test -- --target x86_64-pc-windows-gnu --nocapture --test-threads=1
+          cargo test -- --target i686-pc-windows-gnu --nocapture --test-threads=1
         env:
           LIBCLANG_PATH: C:/msys64/mingw64/bin
