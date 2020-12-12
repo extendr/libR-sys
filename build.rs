@@ -155,26 +155,19 @@ fn main() {
     // Point to the correct headers
     let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").expect("Could not get the target architecture");
     let mut target = env::var("TARGET").expect("Could not get the target triple");
-    println!("Original pkg arch: {}", pkg_target_arch);
-    println!("Original target: {}", target);
-    if cfg!(target_os = "windows") && pkg_target_arch == "x86" {
-        target = "i686-pc-windows-gnu".to_string();
-        println!("Switching target to: {}", target);
-    }
 
     let bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", &details.include),
-        format!("-IC:/msys64/mingw32/i686-w64-mingw32/include/"),
+        //format!("-IC:/msys64/mingw32/i686-w64-mingw32/include/"),
         format!("--target={}", target)
     ]);
 
-    /*
     let bindgen_builder = if cfg!(target_os = "windows") && pkg_target_arch == "x86" {
+        println!("Building for Windows i686, adding special include option.");
         bindgen_builder.clang_arg(format!("-IC:/msys64/mingw32/i686-w64-mingw32/include/"))
     } else {
         bindgen_builder
     };
-     */
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
