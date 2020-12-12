@@ -152,11 +152,19 @@ fn main() {
 
         // println!("TARGET: {}",cargo_env("TARGET"));
     // Point to the correct headers
+    let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").expect("Could not get the target triple");
+
     let bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", &details.include),
         //format!("-IC:/msys64/mingw32/i686-w64-mingw32/include/"),
-        format!("--target={}", std::env::var("CARGO_CFG_TARGET_ARCH").expect("Could not get the target triple"))
+        format!("--target={}", pkg_target_arch)
     ]);
+
+    let bindgen_builder = if cfg!(target_os = "windows") && pkg_target_arch == "x86_64" {
+        bindgen_builder.clang_arg(format!("-IC:/msys64/mingw32/i686-w64-mingw32/include/"))
+    } else {
+        bindgen_builder
+    };
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
