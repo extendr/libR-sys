@@ -151,14 +151,12 @@ fn main() {
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks));
 
-        // println!("TARGET: {}",cargo_env("TARGET"));
     // Point to the correct headers
     let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").expect("Could not get the target architecture");
     let mut target = env::var("TARGET").expect("Could not get the target triple");
 
     let bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", &details.include),
-        //format!("-IC:/msys64/mingw32/i686-w64-mingw32/include/"),
         format!("--target={}", target)
     ]);
 
