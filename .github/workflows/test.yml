@@ -122,7 +122,7 @@ jobs:
           components: rustfmt, clippy
       - name: Build
         run: |
-          cargo build -vv --target i686-pc-windows-gnu
+          cargo build --target i686-pc-windows-gnu
         env:
           LIBCLANG_PATH: C:/msys64/mingw32/bin
       - name: Run tests
