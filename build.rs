@@ -154,6 +154,7 @@ fn main() {
     // Point to the correct headers
     let bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", &details.include),
+        format!("-IC:/msys64/mingw32/i686-w64-mingw32/include/"),
         format!("--target={}", std::env::var("TARGET").expect("Could not get the target triple"))
     ]);
 
