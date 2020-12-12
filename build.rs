@@ -153,7 +153,7 @@ fn main() {
 
     // Point to the correct headers
     let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").expect("Could not get the target architecture");
-    let mut target = env::var("TARGET").expect("Could not get the target triple");
+    let target = env::var("TARGET").expect("Could not get the target triple");
 
     let bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", &details.include),
