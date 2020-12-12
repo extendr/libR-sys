@@ -53,7 +53,7 @@ jobs:
         shell: msys2 {0}
     strategy:
       matrix:
-        rust-version: [stable-gnu]
+        rust-version: [stable-x86_64-pc-windows-gnu]
     steps:
       - uses: actions/checkout@v2
       - uses: msys2/setup-msys2@v2
@@ -70,7 +70,7 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ matrix.rust-version }}
-          target: x86_64-pc-windows-gnu
+          #target: x86_64-pc-windows-gnu
           default: true
           components: rustfmt, clippy
       - name: Build
@@ -92,7 +92,7 @@ jobs:
         shell: msys2 {0}
     strategy:
       matrix:
-        rust-version: [stable-gnu]
+        rust-version: [stable-gnu-i686-pc-windows-gnu]
     steps:
       - uses: actions/checkout@v2
       - uses: msys2/setup-msys2@v2
@@ -109,11 +109,11 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ matrix.rust-version }}
-          target: i686-pc-windows-gnu
+          #target: i686-pc-windows-gnu
           default: true
           components: rustfmt, clippy
-      - name: Switch toolchain default
-        run: rustup target remove x86_64-pc-windows-gnu
+      #- name: Switch toolchain default
+      #  run: rustup target remove x86_64-pc-windows-gnu
       - name: Build
         run: |
           cargo build -vv --target i686-pc-windows-gnu
