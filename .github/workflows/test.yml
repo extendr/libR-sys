@@ -106,6 +106,8 @@ jobs:
           path-type: inherit
           release: false
           update: false
+          install: >-
+            mingw-w64-i686-clang
       - uses: r-lib/actions/setup-r@v1
         with:
           r-version: 'release'
