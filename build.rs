@@ -131,7 +131,11 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
             // if there are any errors we print them out, helps with debugging
             if !out.stderr.is_empty() {
-                println!("> {}", String::from_utf8_lossy(&out.stderr));
+                println!("> {}",
+                    byte_array_to_os_string(&out.stderr)
+                    .as_os_str()
+                    .to_string_lossy()
+                );
             }
 
             let rout = byte_array_to_os_string(&out.stdout);
