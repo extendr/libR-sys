@@ -155,8 +155,11 @@ fn main() {
     // Point to the correct headers
     let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").expect("Could not get the target architecture");
     let mut target = env::var("TARGET").expect("Could not get the target triple");
+    println!("Original pkg arch: {}", pkg_target_arch);
+    println!("Original target: {}", target);
     if cfg!(target_os = "windows") && pkg_target_arch == "x86" {
         target = "i686-pc-windows-gnu".to_string();
+        println!("Switching target to: {}", target);
     }
 
     let bindgen_builder = bindgen_builder.clang_args(&[
