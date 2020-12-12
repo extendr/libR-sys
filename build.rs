@@ -161,7 +161,6 @@ fn main() {
     ]);
 
     let bindgen_builder = if cfg!(target_os = "windows") && pkg_target_arch == "x86" {
-        println!("Building for Windows i686, adding special include option.");
         bindgen_builder.clang_arg(format!("-IC:/msys64/mingw32/i686-w64-mingw32/include/"))
     } else {
         bindgen_builder
