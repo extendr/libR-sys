@@ -118,10 +118,10 @@ jobs:
           components: rustfmt, clippy
       - name: Build
         run: |
-          cargo build -vv
-        env:
           C:/msys64/mingw32/bin/llvm-config.exe --includedir
           llvm-config --includedir
+          cargo build -vv
+        env:
           #LIBCLANG_PATH: C:/msys64/mingw32/bin
           LLVM_CONFIG_PATH: C:/msys64/mingw32/bin/llvm-config.exe
       - name: Run tests
