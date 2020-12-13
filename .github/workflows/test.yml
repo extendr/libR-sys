@@ -123,6 +123,10 @@ jobs:
           components: rustfmt, clippy
       - name: Build
         run: |
+          ls C:/rtools40/mingw64/bin
+          ls -al C:/msys64/mingw64/bin/libclang.dll
+          rm -rf C:/msys64/mingw64/bin/libclang.dll
+          ls -al C:/msys64/mingw64/bin/libclang.dll
           cargo build --release -vv
         env:
           R_HOME: C:\\R
