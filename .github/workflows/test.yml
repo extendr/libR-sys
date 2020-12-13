@@ -120,6 +120,8 @@ jobs:
         run: |
           cargo build -vv
         env:
+          C:/msys64/mingw32/bin/llvm-config.exe --includedir
+          llvm-config --includedir
           #LIBCLANG_PATH: C:/msys64/mingw32/bin
           LLVM_CONFIG_PATH: C:/msys64/mingw32/bin/llvm-config.exe
       - name: Run tests
