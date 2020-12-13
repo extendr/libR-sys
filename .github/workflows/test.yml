@@ -100,14 +100,6 @@ jobs:
         rust-version: [stable-i686-pc-windows-gnu]
     steps:
       - uses: actions/checkout@v2
-#      - name: Install R
-#        run: |
-#          curl.exe -o D:/a/_temp/Rinstall.exe https://cran.r-project.org/bin/windows/base/R-4.0.3-win.exe
-#          ls -al D:/a/_temp/Rinstall.exe 
-#          D:/a/_temp/Rinstall.exe /SILENT /SUPPRESSMSGBOXES /DIR=C:\\R
-      - uses: r-lib/actions/setup-r@v1
-        with:
-          r-version: 'release'
       - uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW32
@@ -116,6 +108,9 @@ jobs:
           update: false
           install: >-
             mingw-w64-i686-clang
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 'release'
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ matrix.rust-version }}
@@ -123,8 +118,6 @@ jobs:
           components: rustfmt, clippy
       - name: Build
         run: |
-          ls -al C:/msys64/mingw64/bin/libclang.dll
-          rm -rf C:/msys64/mingw64/bin/libclang.dll
           cargo build --release -vv
         env:
           R_HOME: C:\\R
