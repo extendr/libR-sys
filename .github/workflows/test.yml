@@ -120,7 +120,8 @@ jobs:
         run: |
           cargo build -vv
         env:
-          LIBCLANG_PATH: C:/msys64/mingw32/bin
+          #LIBCLANG_PATH: C:/msys64/mingw32/bin
+          LLVM_CONFIG_PATH: C:/msys64/mingw32/bin/llvm-config.exe
       - name: Run tests
         run: |
           cargo test -- --nocapture --test-threads=1
