@@ -111,7 +111,7 @@ jobs:
       - uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW32
-          path-type: minimal
+          path-type: inherit
           release: false
           update: false
           install: >-
