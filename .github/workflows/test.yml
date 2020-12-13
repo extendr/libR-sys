@@ -100,6 +100,14 @@ jobs:
         rust-version: [stable-i686-pc-windows-gnu]
     steps:
       - uses: actions/checkout@v2
+#      - name: Install R
+#        run: |
+#          curl.exe -o D:/a/_temp/Rinstall.exe https://cran.r-project.org/bin/windows/base/R-4.0.3-win.exe
+#          ls -al D:/a/_temp/Rinstall.exe 
+#          D:/a/_temp/Rinstall.exe /SILENT /SUPPRESSMSGBOXES /DIR=C:\\R
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 'release'
       - uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW32
@@ -108,14 +116,6 @@ jobs:
           update: false
           install: >-
             mingw-w64-i686-clang
-      - name: Install R
-        run: |
-          curl.exe -o D:/a/_temp/Rinstall.exe https://cran.r-project.org/bin/windows/base/R-4.0.3-win.exe
-          ls -al D:/a/_temp/Rinstall.exe 
-          D:/a/_temp/Rinstall.exe /SILENT /SUPPRESSMSGBOXES /DIR=C:\\R
-#      - uses: r-lib/actions/setup-r@v1
-#        with:
-#          r-version: 'release'
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ matrix.rust-version }}
@@ -125,7 +125,7 @@ jobs:
         run: |
           cargo build -vv
         env:
-          R_HOME: C:\R
+          R_HOME: C:\\R
           LLVM_CONFIG_PATH: C:/msys64/mingw32/bin/llvm-config.exe
       - name: Run tests
         run: |
