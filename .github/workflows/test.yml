@@ -111,7 +111,7 @@ jobs:
       - name: Install R
         run: |
           curl.exe -o D:/a/_temp/Rinstall.exe https://cran.r-project.org/bin/windows/base/R-4.0.3-win.exe
-          D:/a/_temp/Rinstall.exe /SUPPRESSMSGBOXES /DIR=C:\R
+          D:/a/_temp/Rinstall.exe /SUPPRESSMSGBOXES /DIR=C:\\R
 #      - uses: r-lib/actions/setup-r@v1
 #        with:
 #          r-version: 'release'
