@@ -50,8 +50,16 @@ jobs:
         run: echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" >> $GITHUB_ENV
       - name: Build
         run: cargo build -vv
+        env:
+          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
       - name: Run tests
         run: cargo test -- --nocapture --test-threads=1
+      - name: Upload generated bindings
+        if: success()
+        uses: actions/upload-artifact@main
+        with:
+          name: macOS generated bindings
+          path: generated_bindings
 
   test_windows:
     name: Run tests (Windows x86_64)
@@ -83,8 +91,16 @@ jobs:
           cargo build -vv
         env:
           LIBCLANG_PATH: C:/msys64/mingw64/bin
+          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
       - name: Run tests
         run: |
           cargo test -- --nocapture --test-threads=1
         env:
           LIBCLANG_PATH: C:/msys64/mingw64/bin
+      - name: Upload generated bindings
+        if: success()
+        uses: actions/upload-artifact@main
+        with:
+          name: Windows generated bindings
+          path: generated_bindings
+

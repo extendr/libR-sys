@@ -1,6 +1,7 @@
 use std::{
     env,
     ffi::OsString,
+    fs,
     io,
     io::{ Error, ErrorKind },
     path::{ Path, PathBuf },
@@ -267,14 +268,19 @@ fn generate_bindings(r_paths: &InstallationPaths) {
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings to default output path!");
 
-    // Also write the bindings to a folder specified by $LIBRSYS_BINDINGS_DIR, if it exists
-
+    // Also write the bindings to a folder specified by LIBRSYS_BINDINGS_OUTPUT_PATH, if defined
     if let Some(alt_target) = env::var_os("LIBRSYS_BINDINGS_OUTPUT_PATH") {
+        let out_path = PathBuf::from(alt_target);
+        // if folder doesn't exist, try to create it
+        if !out_path.exists() {
+            fs::create_dir(&out_path)
+                .expect(&format!("Couldn't create output directory for bindings: {}", out_path.display()));
+        }
+
         let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
         let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
         let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-        let out_path = PathBuf::from(alt_target)
-            .join(
+        let out_file = out_path.join(
                 format!(
                     "bindings-{}-{}-R{}.{}{}.rs",
                     target_os, target_arch, version_info.major, version_info.minor, version_info.devel
@@ -282,12 +288,8 @@ fn generate_bindings(r_paths: &InstallationPaths) {
             );
 
         bindings
-            .write_to_file(&out_path)
-            .expect(
-                &format!(
-                    "Couldn't write bindings to output path specified by LIBRSYS_BINDINGS_OUTPUT_PATH: {}", out_path.display()
-                )
-            );
+            .write_to_file(&out_file)
+            .expect(&format!("Couldn't write bindings: {}", out_file.display()));
     }
 }
 
@@ -298,23 +300,25 @@ fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
     let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-    let path_str = env::var_os("LIBRSYS_BINDINGS_PATH")
-        .unwrap_or(OsString::from("bindings"));
-    let bindings_path = Path::new(&path_str);
+    let bindings_path = PathBuf::from(
+        env::var_os("LIBRSYS_BINDINGS_PATH")
+        .unwrap_or(OsString::from("bindings"))
+    );
     
     // we try a few different file names, from more specific to less specific
-    let file_str = format!(
-        "bindings-{}-{}-R{}.{}{}.rs",
-        target_os, target_arch, version_info.major, version_info.minor, version_info.devel
+    let bindings_file_full = PathBuf::from(
+        format!(
+            "bindings-{}-{}-R{}.{}{}.rs",
+            target_os, target_arch, version_info.major, version_info.minor, version_info.devel
+        )
     );
-    let bindings_file_full = Path::new(&file_str);
-    let file_str = format!(
-        "bindings-{}-R{}.{}{}.rs",
-        target_os, version_info.major, version_info.minor, version_info.devel
+    let bindings_file_noarch = PathBuf::from(
+        format!(
+            "bindings-{}-R{}.{}{}.rs",
+            target_os, version_info.major, version_info.minor, version_info.devel
+        )
     );
-    let bindings_file_noarch = Path::new(&file_str);
-    let file_str = format!("bindings-{}.rs", target_os);
-    let bindings_file_novers = Path::new(&file_str);
+    let bindings_file_novers = PathBuf::from(format!("bindings-{}.rs", target_os));
 
     let mut from = bindings_path.join(bindings_file_full);
     if !from.exists() {
@@ -337,7 +341,7 @@ fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
         }
     }
 
-    std::fs::copy(
+    fs::copy(
         from,
         PathBuf::from(env::var_os("OUT_DIR").unwrap())
             .join("bindings.rs")
