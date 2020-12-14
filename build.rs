@@ -298,23 +298,43 @@ fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
     let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-    let from = Path::new(
-            &env::var_os("LIBRSYS_BINDINGS_PATH")
-                .unwrap_or(OsString::from("bindings"))
-        )
-        .join(
-            format!(
-                "bindings-{}-{}-R{}.{}{}.rs",
-                target_os, target_arch, version_info.major, version_info.minor, version_info.devel
-            )
-        );
+    let path_str = env::var_os("LIBRSYS_BINDINGS_PATH")
+        .unwrap_or(OsString::from("bindings"));
+    let bindings_path = Path::new(&path_str);
+    
+    // we try a few different file names, from more specific to less specific
+    let file_str = format!(
+        "bindings-{}-{}-R{}.{}{}.rs",
+        target_os, target_arch, version_info.major, version_info.minor, version_info.devel
+    );
+    let bindings_file_full = Path::new(&file_str);
+    let file_str = format!(
+        "bindings-{}-R{}.{}{}.rs",
+        target_os, version_info.major, version_info.minor, version_info.devel
+    );
+    let bindings_file_noarch = Path::new(&file_str);
+    let file_str = format!("bindings-{}.rs", target_os);
+    let bindings_file_novers = Path::new(&file_str);
+
+    let mut from = bindings_path.join(bindings_file_full);
     if !from.exists() {
-        panic!(
-            format!(
-               "Cannot find libR-sys bindings file '{}'. Consider compiling with default features enabled.",
-               from.display()
-            )
-        )
+        from = bindings_path.join(bindings_file_noarch);
+        if !from.exists() {
+            from = bindings_path.join(bindings_file_novers);
+            if !from.exists() {
+                panic!(
+                    format!(
+                        "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with default features enabled.",
+                        version_info.major, version_info.minor, version_info.patch, version_info.devel, target_os, bindings_path.display()
+                    )
+                )
+            } else {
+                println!(
+                    "Warning: using generic libR-sys bindings. These may not work for R {}.{}.{}{}.",
+                    version_info.major, version_info.minor, version_info.patch, version_info.devel
+                );
+            }
+        }
     }
 
     std::fs::copy(
@@ -348,6 +368,4 @@ fn main() {
         generate_bindings(&r_paths);
     #[cfg(not(feature = "default"))]
         retrieve_prebuild_bindings(&r_paths);
-
-    println!("package version: {}", env::var("CARGO_PKG_VERSION").unwrap());
 }

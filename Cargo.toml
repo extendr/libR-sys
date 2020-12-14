@@ -1,7 +1,10 @@
 [package]
 name = "libR-sys"
-version = "0.1.10"
-authors = ["andy-thomason <andy@andythomason.com>"]
+version = "0.2.0"
+authors = [
+    "andy-thomason <andy@andythomason.com>",
+    "Claus O. Wilke <wilke@austin.utexas.edu>"
+]
 edition = "2018"
 description = "Low level bindings to the R programming language."
 license = "MIT"
