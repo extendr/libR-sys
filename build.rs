@@ -259,7 +259,7 @@ fn generate_bindings(r_paths: &InstallationPaths) {
 
     // Also write the bindings to a folder specified by $LIBRSYS_BINDINGS_DIR, if it exists
 
-    if let Some(alt_target) = env::var_os("LIBRSYS_BINDINGS_DIR") {
+    if let Some(alt_target) = env::var_os("LIBRSYS_BINDINGS_OUTPUT_PATH") {
         let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
         let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
         let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
@@ -275,7 +275,7 @@ fn generate_bindings(r_paths: &InstallationPaths) {
             .write_to_file(&out_path)
             .expect(
                 &format!(
-                    "Couldn't write bindings to output path specified by $LIBRSYS_BINDINGS_DIR: {}", out_path.display()
+                    "Couldn't write bindings to output path specified by LIBRSYS_BINDINGS_OUTPUT_PATH: {}", out_path.display()
                 )
             );
     }
@@ -288,7 +288,10 @@ fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
     let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-    let from = Path::new("bindings")
+    let from = Path::new(
+            &env::var_os("LIBRSYS_BINDINGS_PATH")
+                .unwrap_or(OsString::from("bindings"))
+        )
         .join(
             format!(
                 "bindings-{}-{}-R{}.{}.rs",
@@ -298,10 +301,8 @@ fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
     if !from.exists() {
         panic!(
             format!(
-                "No suitable rust bindings found for libR-sys {} R {}.{}. Consider compiling with default features enabled.",
-                target_os,
-                version_info.major,
-                version_info.minor
+               "Cannot find libR-sys bindings file '{}'. Consider compiling with default features enabled.",
+               from.display()
             )
         )
     }
