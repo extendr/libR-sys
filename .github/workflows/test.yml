@@ -32,8 +32,17 @@ jobs:
           toolchain: ${{ matrix.rust-version }}
       - name: Build
         run: cargo build -vv
+        env:
+          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
       - name: Run tests
         run: cargo test -- --nocapture --test-threads=1
+      - name: Upload generated bindings
+        if: success()
+        uses: actions/upload-artifact@main
+        with:
+          name: Linux ${{ matrix.rust-version }} generated bindings
+          path: generated_bindings
+
 
   test_macos:
     name: Run tests (macOS)
