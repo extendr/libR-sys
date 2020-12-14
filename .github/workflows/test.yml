@@ -29,6 +29,7 @@ jobs:
         with:
           toolchain: ${{ matrix.rust-version }}
       - name: Build
+        id: build
         run: cargo build -vv
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
