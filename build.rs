@@ -80,7 +80,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                 .args(&[
                     "-s",
                     "-e",
-                    r#"cat(normalizePath(R.home()))"#
+                    "cat(normalizePath(R.home()))"
                 ])
                 .output()?;
 
@@ -132,7 +132,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                 .args(&[
                     "-s",
                     "-e",
-                    r#"cat(normalizePath(R.home('include')))"#
+                    "cat(normalizePath(R.home('include')))"
                 ])
                 .output()?;
 
@@ -176,11 +176,7 @@ fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo
         .args(&[
             "-s",
             "-e",
-            r#"
-v <- strsplit(R.version$minor, ".", fixed = TRUE)[[1]]
-devel <- isTRUE(grepl("devel", R.version$status, fixed = TRUE))
-cat(R.version$major, v[1], paste0(v[2:length(v)], collapse = "."), devel, sep = "\n")
-"#
+            "v <- strsplit(R.version$minor, '.', fixed = TRUE)[[1]];devel <- isTRUE(grepl('devel', R.version$status, fixed = TRUE));cat(R.version$major, v[1], paste0(v[2:length(v)], collapse = '.'), devel, sep = '\n')"
         ])
         .output()?;
 
