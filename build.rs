@@ -80,7 +80,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                 .args(&[
                     "-s",
                     "-e",
-                    "cat(normalizePath(R.home()))"
+                    r#"cat(normalizePath(R.home()))"#
                 ])
                 .output()?;
 
@@ -132,7 +132,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
                 .args(&[
                     "-s",
                     "-e",
-                    "cat(normalizePath(R.home('include')))"
+                    r#"cat(normalizePath(R.home('include')))"#
                 ])
                 .output()?;
 
