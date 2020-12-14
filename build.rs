@@ -334,8 +334,8 @@ fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
                 )
             } else {
                 println!(
-                    "Warning: using generic libR-sys bindings. These may not work for R {}.{}.{}{}.",
-                    version_info.major, version_info.minor, version_info.patch, version_info.devel
+                    "Warning: using generic {} libR-sys bindings. These may not work for R {}.{}.{}{}.",
+                    target_os, version_info.major, version_info.minor, version_info.patch, version_info.devel
                 );
             }
         }
