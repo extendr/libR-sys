@@ -61,6 +61,7 @@ jobs:
       - name: Set dynamic environment variables
         run: echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" >> $GITHUB_ENV
       - name: Build
+        id: build
         run: cargo build -vv
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
@@ -69,7 +70,7 @@ jobs:
       - name: Run tests on precomputed bindings
         run: cargo test --no-default-features -- --nocapture --test-threads=1
       - name: Upload generated bindings
-        if: success()
+        if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@main
         with:
           name: macOS generated bindings
@@ -101,6 +102,7 @@ jobs:
           default: true
           components: rustfmt, clippy
       - name: Build
+        id: build
         run: |
           cargo build -vv
         env:
@@ -111,7 +113,7 @@ jobs:
       - name: Run tests on precomputed bindings
         run: cargo test --no-default-features -- --nocapture --test-threads=1
       - name: Upload generated bindings
-        if: success()
+        if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@main
         with:
           name: Windows generated bindings
