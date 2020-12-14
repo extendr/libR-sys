@@ -63,6 +63,8 @@ jobs:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
       - name: Run tests
         run: cargo test -- --nocapture --test-threads=1
+      - name: Run tests on precomputed bindings
+        run: cargo test --no-default-features -- --nocapture --test-threads=1
       - name: Upload generated bindings
         if: success()
         uses: actions/upload-artifact@main
@@ -102,14 +104,43 @@ jobs:
           LIBCLANG_PATH: C:/msys64/mingw64/bin
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
       - name: Run tests
-        run: |
-          cargo test -- --nocapture --test-threads=1
-        env:
-          LIBCLANG_PATH: C:/msys64/mingw64/bin
+        run: cargo test -- --nocapture --test-threads=1
+      - name: Run tests on precomputed bindings
+        run: cargo test --no-default-features -- --nocapture --test-threads=1
       - name: Upload generated bindings
         if: success()
         uses: actions/upload-artifact@main
         with:
           name: Windows generated bindings
           path: generated_bindings
+
+  test_windows_32bit:
+    name: Run tests (Windows i686)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    strategy:
+      matrix:
+        rust-version: [stable-i686-pc-windows-gnu]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW32
+          path-type: inherit
+          release: false
+          update: false
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 'release'
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust-version }}
+          default: true
+          components: rustfmt, clippy
+      - name: Build with precomputed bindings
+        run: cargo build -vv --no-default-features
+      - name: Run tests on precomputed bindings
+        run: cargo test -vv --no-default-features -- --nocapture --test-threads=1
 
