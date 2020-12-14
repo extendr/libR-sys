@@ -162,6 +162,8 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
 
 fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionStrings> {
+    // FIXME: This function likely doesn't work for R devel.
+
     let r_binary = if cfg!(target_os = "windows") {
         Path::new(&r_paths.library)
             .join("R.exe")
