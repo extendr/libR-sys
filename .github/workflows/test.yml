@@ -34,8 +34,10 @@ jobs:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
       - name: Run tests
         run: cargo test -- --nocapture --test-threads=1
+      - name: Run tests on precomputed bindings
+        run: cargo test -vv --no-default-features -- --nocapture --test-threads=1
       - name: Upload generated bindings
-        if: success()
+        if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@main
         with:
           name: Linux ${{ matrix.rust-version }} generated bindings
