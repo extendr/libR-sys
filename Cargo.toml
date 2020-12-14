@@ -11,8 +11,14 @@ documentation = "https://docs.rs/libR-sys/latest/libR_sys/"
 [dependencies]
 
 [build-dependencies]
-bindgen = "0.53.2"
-regex = "1"
+bindgen = { version = "0.53.2", optional = true }
+regex = { version = "1", optional = true }
+
+[features]
+# By default, we generate bindings using bindgen. Turn off default features
+# to use pre-computed bindings.
+default = ["bindgen", "regex"]
+
 
 [target.'cfg(windows)'.build-dependencies]
 winapi = "0.3"
