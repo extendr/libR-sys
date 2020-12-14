@@ -25,10 +25,11 @@ struct InstallationPaths {
 
 #[allow(dead_code)]
 #[derive(Debug)]
-struct RVersionStrings {
+struct RVersionInfo {
     major: String,
     minor: String,
     patch: String,
+    devel: String,
 }
 
 
@@ -161,9 +162,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 }
 
 
-fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionStrings> {
-    // FIXME: This function likely doesn't work for R devel.
-
+fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo> {
     let r_binary = if cfg!(target_os = "windows") {
         Path::new(&r_paths.library)
             .join("R.exe")
@@ -177,8 +176,11 @@ fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionStri
         .args(&[
             "-s",
             "-e",
-            r#"v <- strsplit(R.version$minor, ".", fixed = TRUE)[[1]];
-cat(R.version$major, v[1], paste0(v[2:length(v)], collapse = "."), sep = "\n")"#
+            r#"
+v <- strsplit(R.version$minor, ".", fixed = TRUE)[[1]]
+devel <- isTRUE(grepl("devel", R.version$status, fixed = TRUE))
+cat(R.version$major, v[1], paste0(v[2:length(v)], collapse = "."), devel, sep = "\n")
+"#
         ])
         .output()?;
 
@@ -203,10 +205,20 @@ cat(R.version$major, v[1], paste0(v[2:length(v)], collapse = "."), sep = "\n")"#
         _ => return Err(Error::new(ErrorKind::Other, "Cannot find R patch level")),
     };
 
-    Ok(RVersionStrings {
+    let devel = match lines.next() {
+        Some(line) => if line == "TRUE" {
+            "-devel".to_string()
+        } else {
+            "".to_string()
+        },
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R development status")),
+    };
+
+    Ok(RVersionInfo {
         major,
         minor,
         patch,
+        devel,
     })
 }
 
@@ -268,8 +280,8 @@ fn generate_bindings(r_paths: &InstallationPaths) {
         let out_path = PathBuf::from(alt_target)
             .join(
                 format!(
-                    "bindings-{}-{}-R{}.{}.rs",
-                    target_os, target_arch, version_info.major, version_info.minor
+                    "bindings-{}-{}-R{}.{}{}.rs",
+                    target_os, target_arch, version_info.major, version_info.minor, version_info.devel
                 )
             );
 
@@ -296,8 +308,8 @@ fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
         )
         .join(
             format!(
-                "bindings-{}-{}-R{}.{}.rs",
-                target_os, target_arch, version_info.major, version_info.minor
+                "bindings-{}-{}-R{}.{}{}.rs",
+                target_os, target_arch, version_info.major, version_info.minor, version_info.devel
             )
         );
     if !from.exists() {
