@@ -319,32 +319,25 @@ fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
             target_os, target_arch, version_info.major, version_info.minor, version_info.devel
         )
     );
-    let bindings_file_noarch = PathBuf::from(
-        format!(
-            "bindings-{}-R{}.{}{}.rs",
-            target_os, version_info.major, version_info.minor, version_info.devel
-        )
+    let bindings_file_novers = PathBuf::from(
+        format!("bindings-{}-{}.rs", target_os, target_arch)
     );
-    let bindings_file_novers = PathBuf::from(format!("bindings-{}.rs", target_os));
 
     let mut from = bindings_path.join(bindings_file_full);
     if !from.exists() {
-        from = bindings_path.join(bindings_file_noarch);
+        from = bindings_path.join(bindings_file_novers);
         if !from.exists() {
-            from = bindings_path.join(bindings_file_novers);
-            if !from.exists() {
-                panic!(
-                    format!(
-                        "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with default features enabled.",
-                        version_info.major, version_info.minor, version_info.patch, version_info.devel, target_os, bindings_path.display()
-                    )
+            panic!(
+                format!(
+                    "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with default features enabled.",
+                    version_info.major, version_info.minor, version_info.patch, version_info.devel, target_os, bindings_path.display()
                 )
-            } else {
-                println!(
-                    "Warning: using generic {} libR-sys bindings. These may not work for R {}.{}.{}{}.",
-                    target_os, version_info.major, version_info.minor, version_info.patch, version_info.devel
-                );
-            }
+            )
+        } else {
+            println!(
+                "Warning: using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
+                target_os, target_arch, version_info.major, version_info.minor, version_info.patch, version_info.devel
+            );
         }
     }
 
