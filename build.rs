@@ -239,11 +239,13 @@ fn generate_bindings(r_paths: &InstallationPaths) {
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks));
 
-    // println!("TARGET: {}",cargo_env("TARGET"));
+    let target = env::var("TARGET").expect("Could not get the target triple");
+
+    println!("Generating bindings for target: {}", target);
     // Point to the correct headers
     bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", r_paths.include.display()),
-        format!("--target={}", std::env::var("TARGET").expect("Could not get the target triple"))
+        format!("--target={}", target)
     ]);
 
     // allow injection of an alternative include path to libclang
