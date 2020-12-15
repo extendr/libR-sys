@@ -99,7 +99,7 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ matrix.rust-version }}
-          target: stable-i686-pc-windows-gnu
+          target: i686-pc-windows-gnu
           default: true
           components: rustfmt, clippy
       - name: Build
