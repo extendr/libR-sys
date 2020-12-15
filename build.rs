@@ -240,8 +240,10 @@ fn generate_bindings(r_paths: &InstallationPaths) {
         .parse_callbacks(Box::new(bindgen::CargoCallbacks));
 
     let target = env::var("TARGET").expect("Could not get the target triple");
+    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
+    let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
 
-    println!("Generating bindings for target: {}", target);
+    println!("Generating bindings for target: {}, os: {}, architecture: {}", target, target_os, target_arch);
     // Point to the correct headers
     bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", r_paths.include.display()),
@@ -253,6 +255,11 @@ fn generate_bindings(r_paths: &InstallationPaths) {
         bindgen_builder = bindgen_builder.clang_arg(
             format!("-I{}", PathBuf::from(alt_include).display()),
         );
+    }
+
+    // disable layout tests for windows x86
+    if target_os == "windows" && target_arch == "x86" {
+        bindgen_builder = bindgen_builder.layout_tests(false);
     }
 
     // Finish the builder and generate the bindings.
@@ -287,8 +294,6 @@ fn generate_bindings(r_paths: &InstallationPaths) {
         }
 
         let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
-        let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
-        let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
         let out_file = out_path.join(
                 format!(
                     "bindings-{}-{}-R{}.{}{}.rs",
