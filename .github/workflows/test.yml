@@ -85,6 +85,7 @@ jobs:
     strategy:
       matrix:
         rust-version: [stable-x86_64-pc-windows-gnu]
+        allow-failure: [true]
     steps:
       - uses: actions/checkout@v2
       - uses: msys2/setup-msys2@v2
@@ -112,7 +113,7 @@ jobs:
       - name: Build i686
         id: build_i686
         run: |
-          cargo build -vv --target stable-i686-pc-windows-gnu
+          cargo build -vv --target i686-pc-windows-gnu
         env:
           LIBCLANG_PATH: C:/msys64/mingw64/bin
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings_i686
