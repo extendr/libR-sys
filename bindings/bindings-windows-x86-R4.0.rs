@@ -338,7 +338,7 @@ pub struct localeinfo_struct {
     pub locinfo: pthreadlocinfo,
     pub mbcinfo: pthreadmbcinfo,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout_localeinfo_struct() {
     assert_eq!(
         ::std::mem::size_of::<localeinfo_struct>(),
@@ -380,7 +380,7 @@ pub struct tagLC_ID {
     pub wCountry: ::std::os::raw::c_ushort,
     pub wCodePage: ::std::os::raw::c_ushort,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout_tagLC_ID() {
     assert_eq!(
         ::std::mem::size_of::<tagLC_ID>(),
@@ -455,7 +455,7 @@ pub struct threadlocaleinfostruct__bindgen_ty_1 {
     pub refcount: *mut ::std::os::raw::c_int,
     pub wrefcount: *mut ::std::os::raw::c_int,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout_threadlocaleinfostruct__bindgen_ty_1() {
     assert_eq!(
         ::std::mem::size_of::<threadlocaleinfostruct__bindgen_ty_1>(),
@@ -526,7 +526,7 @@ fn bindgen_test_layout_threadlocaleinfostruct__bindgen_ty_1() {
         )
     );
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout_threadlocaleinfostruct() {
     assert_eq!(
         ::std::mem::size_of::<threadlocaleinfostruct>(),
@@ -755,7 +755,7 @@ pub struct _iobuf {
     pub _bufsiz: ::std::os::raw::c_int,
     pub _tmpfname: *mut ::std::os::raw::c_char,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout__iobuf() {
     assert_eq!(
         ::std::mem::size_of::<_iobuf>(),
@@ -2683,7 +2683,7 @@ pub struct max_align_t {
     pub __max_align_ll: ::std::os::raw::c_longlong,
     pub __max_align_ld: f64,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout_max_align_t() {
     assert_eq!(
         ::std::mem::size_of::<max_align_t>(),
@@ -2730,7 +2730,7 @@ pub struct __mingw_dbl_type_t__bindgen_ty_1 {
     pub low: ::std::os::raw::c_uint,
     pub high: ::std::os::raw::c_uint,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout___mingw_dbl_type_t__bindgen_ty_1() {
     assert_eq!(
         ::std::mem::size_of::<__mingw_dbl_type_t__bindgen_ty_1>(),
@@ -2770,7 +2770,7 @@ fn bindgen_test_layout___mingw_dbl_type_t__bindgen_ty_1() {
         )
     );
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout___mingw_dbl_type_t() {
     assert_eq!(
         ::std::mem::size_of::<__mingw_dbl_type_t>(),
@@ -2820,7 +2820,7 @@ pub union __mingw_flt_type_t {
     pub val: ::std::os::raw::c_uint,
     _bindgen_union_align: u32,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout___mingw_flt_type_t() {
     assert_eq!(
         ::std::mem::size_of::<__mingw_flt_type_t>(),
@@ -2867,7 +2867,7 @@ pub struct __mingw_ldbl_type_t__bindgen_ty_1 {
     pub high: ::std::os::raw::c_uint,
     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 8usize], u32>,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout___mingw_ldbl_type_t__bindgen_ty_1() {
     assert_eq!(
         ::std::mem::size_of::<__mingw_ldbl_type_t__bindgen_ty_1>(),
@@ -2964,7 +2964,7 @@ impl __mingw_ldbl_type_t__bindgen_ty_1 {
         __bindgen_bitfield_unit
     }
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout___mingw_ldbl_type_t() {
     assert_eq!(
         ::std::mem::size_of::<__mingw_ldbl_type_t>(),
@@ -3009,7 +3009,7 @@ pub struct _exception {
     pub arg2: f64,
     pub retval: f64,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout__exception() {
     assert_eq!(
         ::std::mem::size_of::<_exception>(),
@@ -3194,7 +3194,7 @@ pub struct _complex {
     pub x: f64,
     pub y: f64,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout__complex() {
     assert_eq!(
         ::std::mem::size_of::<_complex>(),
@@ -3841,7 +3841,7 @@ pub struct Rcomplex {
     pub r: f64,
     pub i: f64,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout_Rcomplex() {
     assert_eq!(
         ::std::mem::size_of::<Rcomplex>(),
@@ -4110,7 +4110,7 @@ pub struct R_CMethodDef {
     pub numArgs: ::std::os::raw::c_int,
     pub types: *mut R_NativePrimitiveArgType,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout_R_CMethodDef() {
     assert_eq!(
         ::std::mem::size_of::<R_CMethodDef>(),
@@ -4171,7 +4171,7 @@ pub struct R_CallMethodDef {
     pub fun: DL_FUNC,
     pub numArgs: ::std::os::raw::c_int,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout_R_CallMethodDef() {
     assert_eq!(
         ::std::mem::size_of::<R_CallMethodDef>(),
@@ -5842,7 +5842,7 @@ pub struct R_outpstream_st {
         ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
     pub OutPersistHookData: SEXP,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout_R_outpstream_st() {
     assert_eq!(
         ::std::mem::size_of::<R_outpstream_st>(),
@@ -5951,7 +5951,7 @@ pub struct R_inpstream_st {
     pub nat2nat_obj: *mut ::std::os::raw::c_void,
     pub nat2utf8_obj: *mut ::std::os::raw::c_void,
 }
-#[cfg(target_family = "unix")]
+#[test]
 fn bindgen_test_layout_R_inpstream_st() {
     assert_eq!(
         ::std::mem::size_of::<R_inpstream_st>(),
