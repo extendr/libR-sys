@@ -99,6 +99,7 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ matrix.rust-version }}
+          target: stable-i686-pc-windows-gnu
           default: true
           components: rustfmt, clippy
       - name: Build
@@ -108,6 +109,14 @@ jobs:
         env:
           LIBCLANG_PATH: C:/msys64/mingw64/bin
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
+      - name: Build i686
+        id: build_i686
+        run: |
+          cargo build -vv --target stable-i686-pc-windows-gnu
+        env:
+          LIBCLANG_PATH: C:/msys64/mingw64/bin
+          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings_i686
+          LIBRSYS_LIBCLANG_INCLUDE_PATH: C:/msys64/mingw32/i686-w64-mingw32/include/
       - name: Run tests
         run: cargo test -- --nocapture --test-threads=1
       - name: Run tests on precomputed bindings
@@ -118,6 +127,13 @@ jobs:
         with:
           name: Windows generated bindings
           path: generated_bindings
+      - name: Upload generated i686 bindings
+        if: steps.build_i686.outcome == 'success'
+        uses: actions/upload-artifact@main
+        with:
+          name: Windows generated i686 bindings
+          path: generated_bindings_i686
+
 
   test_windows_32bit:
     name: Run tests (Windows i686)

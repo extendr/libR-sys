@@ -225,7 +225,7 @@ fn generate_bindings(r_paths: &InstallationPaths) {
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
-    let bindgen_builder = bindgen::Builder::default()
+    let mut bindgen_builder = bindgen::Builder::default()
         // These constants from libm break bindgen.
         .blacklist_item("FP_NAN")
         .blacklist_item("FP_INFINITE")
@@ -241,10 +241,17 @@ fn generate_bindings(r_paths: &InstallationPaths) {
 
     // println!("TARGET: {}",cargo_env("TARGET"));
     // Point to the correct headers
-    let bindgen_builder = bindgen_builder.clang_args(&[
+    bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", r_paths.include.display()),
         format!("--target={}", std::env::var("TARGET").expect("Could not get the target triple"))
     ]);
+
+    // allow injection of an alternative include path to libclang
+    if let Some(alt_include) = env::var_os("LIBRSYS_LIBCLANG_INCLUDE_PATH") {
+        bindgen_builder = bindgen_builder.clang_arg(
+            format!("-I{}", PathBuf::from(alt_include).display()),
+        );
+    }
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
