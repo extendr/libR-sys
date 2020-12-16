@@ -20,7 +20,7 @@ regex = { version = "1", optional = true }
 [features]
 # By default, we generate bindings using bindgen. Turn off default features
 # to use pre-computed bindings.
-default = ["bindgen", "regex"]
+use-bindgen = ["bindgen", "regex"]
 
 
 [target.'cfg(windows)'.build-dependencies]

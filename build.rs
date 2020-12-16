@@ -219,7 +219,7 @@ fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo
     })
 }
 
-#[cfg(feature = "default")]
+#[cfg(feature = "use-bindgen")]
 /// Generate bindings by calling bindgen.
 fn generate_bindings(r_paths: &InstallationPaths) {
     // The bindgen::Builder is the main entry point
@@ -375,8 +375,8 @@ fn main() {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=wrapper.h");
 
-    #[cfg(feature = "default")]
+    #[cfg(feature = "use-bindgen")]
         generate_bindings(&r_paths);
-    #[cfg(not(feature = "default"))]
+    #[cfg(not(feature = "use-bindgen"))]
         retrieve_prebuild_bindings(&r_paths);
 }
