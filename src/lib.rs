@@ -72,13 +72,11 @@ mod tests {
 
             //let res = unsafe { Rf_initEmbeddedR(1, args.as_mut_ptr()) };
             if cfg!(target_os = "windows") && cfg!(target_arch = "x86") {
-                println!("running on Windows 32-bit architecture");
                 Rf_initialize_R(
                     4,
                     [cstr_mut!("R"), cstr_mut!("--arch=i386"), cstr_mut!("--slave"), cstr_mut!("--no-save")].as_mut_ptr(),
                 );
             } else {
-                println!("running on any 64-bit architecture");
                 Rf_initialize_R(
                     3,
                     [cstr_mut!("R"), cstr_mut!("--slave"), cstr_mut!("--no-save")].as_mut_ptr(),
