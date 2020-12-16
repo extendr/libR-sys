@@ -18,10 +18,9 @@ bindgen = { version = "0.53.2", optional = true }
 regex = { version = "1", optional = true }
 
 [features]
-# By default, we generate bindings using bindgen. Turn off default features
-# to use pre-computed bindings.
+# By default, we use pre-computed bindings that ship with the library. This may fail!
+# Turn on the 'use-bindgen' feature to generate bindings on the fly for your platform.
 use-bindgen = ["bindgen", "regex"]
-
 
 [target.'cfg(windows)'.build-dependencies]
 winapi = "0.3"
