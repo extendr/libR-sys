@@ -61,13 +61,9 @@ mod tests {
     // Thanks to @qinwf and @scottmmjackson for showing the way here.
     fn start_R() {
         unsafe {
-            // TODO: This has only been tested on the debian package
-            // r-base-dev.
-            if cfg!(unix) {
-                if std::env::var("R_HOME").is_err() {
-                    // env! gets the build-time R_HOME made in build.rs
-                    std::env::set_var("R_HOME", env!("R_HOME"));
-                }
+            if std::env::var("R_HOME").is_err() {
+                // env! gets the build-time R_HOME made in build.rs
+                std::env::set_var("R_HOME", env!("R_HOME"));
             }
 
             // Due to Rf_initEmbeddedR using __libc_stack_end
@@ -75,10 +71,20 @@ mod tests {
             // Instead we must follow rustr's example and call the parts.
 
             //let res = unsafe { Rf_initEmbeddedR(1, args.as_mut_ptr()) };
-            Rf_initialize_R(
-                3,
-                [cstr_mut!("R"), cstr_mut!("--slave"), cstr_mut!("--no-save")].as_mut_ptr(),
-            );
+            if cfg!(target_os = "windows") && cfg!(target_arch = "x86") {
+                println!("running on Windows 32-bit architecture");
+                Rf_initialize_R(
+                    4,
+                    [cstr_mut!("R"), cstr_mut!("--arch=i386"), cstr_mut!("--slave"), cstr_mut!("--no-save")].as_mut_ptr(),
+                );
+            } else {
+                println!("running on any 64-bit architecture");
+                Rf_initialize_R(
+                    3,
+                    [cstr_mut!("R"), cstr_mut!("--slave"), cstr_mut!("--no-save")].as_mut_ptr(),
+                );
+            }
+
             // In case you are curious.
             // Maybe 8MB is a bit small.
             // eprintln!("R_CStackLimit={:016x}", R_CStackLimit);
