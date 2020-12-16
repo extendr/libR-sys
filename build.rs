@@ -349,10 +349,11 @@ fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
     }
 
     fs::copy(
-        from,
+        &from,
         PathBuf::from(env::var_os("OUT_DIR").unwrap())
             .join("bindings.rs")
     ).expect("No precomputed bindings available!");
+    println!("cargo:rerun-if-changed={}", from.display());
 }
 
 fn main() {
