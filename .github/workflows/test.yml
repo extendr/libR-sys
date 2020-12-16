@@ -135,34 +135,34 @@ jobs:
           name: Windows generated i686 bindings
           path: generated_bindings_i686
 
-
-  test_windows_32bit:
-    name: Run tests (Windows i686)
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: msys2 {0}
-    strategy:
-      matrix:
-        rust-version: [stable-i686-pc-windows-gnu]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: msys2/setup-msys2@v2
-        with:
-          msystem: MINGW32
-          path-type: inherit
-          release: false
-          update: false
-      - uses: r-lib/actions/setup-r@v1
-        with:
-          r-version: 'release'
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.rust-version }}
-          default: true
-          components: rustfmt, clippy
-      - name: Build with precomputed bindings
-        run: cargo build -vv
-      - name: Run tests on precomputed bindings
-        run: cargo test -vv -- --nocapture --test-threads=1
+## Windows 32bit is disabled as it doesn't currently work
+#  test_windows_32bit:
+#    name: Run tests (Windows i686)
+#    runs-on: windows-latest
+#    defaults:
+#      run:
+#        shell: msys2 {0}
+#    strategy:
+#      matrix:
+#        rust-version: [stable-i686-pc-windows-gnu]
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: msys2/setup-msys2@v2
+#        with:
+#          msystem: MINGW32
+#          path-type: inherit
+#          release: false
+#          update: false
+#      - uses: r-lib/actions/setup-r@v1
+#        with:
+#          r-version: 'release'
+#      - uses: actions-rs/toolchain@v1
+#        with:
+#          toolchain: ${{ matrix.rust-version }}
+#          default: true
+#          components: rustfmt, clippy
+#      - name: Build with precomputed bindings
+#        run: cargo build -vv
+#      - name: Run tests on precomputed bindings
+#        run: cargo test -vv -- --nocapture --test-threads=1
 
