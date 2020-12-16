@@ -14,14 +14,9 @@ jobs:
   test_linux:
     name: Run tests (Linux)
     runs-on: ubuntu-20.04
-    continue-on-error: ${{ matrix.allow-failure }}
     strategy:
       matrix:
-        rust-version: [stable, beta]
-        allow-failure: [false]
-        include:
-          - rust-version: nightly
-            allow-failure: true
+        rust-version: [stable, beta, nightly]
 
     steps:
       - uses: actions/checkout@v2
@@ -35,14 +30,14 @@ jobs:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
       - name: Run tests
         run: cargo test -vv --features use-bindgen -- --nocapture --test-threads=1
-      - name: Run tests on precomputed bindings
-        run: cargo test -vv -- --nocapture --test-threads=1
       - name: Upload generated bindings
         if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@main
         with:
           name: Linux ${{ matrix.rust-version }} generated bindings
           path: generated_bindings
+      - name: Run tests on precomputed bindings shipped with libR-sys
+        run: cargo test -vv -- --nocapture --test-threads=1
 
 
   test_macos:
@@ -67,14 +62,14 @@ jobs:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
       - name: Run tests
         run: cargo test -vv --features use-bindgen -- --nocapture --test-threads=1
-      - name: Run tests on precomputed bindings
-        run: cargo test -vv -- --nocapture --test-threads=1
-      - name: Upload generated bindings
+      - name: Upload generated bindings shipped with libR-sys
         if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@main
         with:
           name: macOS generated bindings
           path: generated_bindings
+      - name: Run tests on precomputed bindings
+        run: cargo test -vv -- --nocapture --test-threads=1
 
   test_windows:
     name: Run tests (Windows x86_64)
@@ -85,7 +80,6 @@ jobs:
     strategy:
       matrix:
         rust-version: [stable-x86_64-pc-windows-gnu]
-        allow-failure: [true]
     steps:
       - uses: actions/checkout@v2
       - uses: msys2/setup-msys2@v2
@@ -120,8 +114,6 @@ jobs:
           LIBRSYS_LIBCLANG_INCLUDE_PATH: C:/msys64/mingw32/i686-w64-mingw32/include/
       - name: Run tests
         run: cargo test --features use-bindgen -- --nocapture --test-threads=1
-      - name: Run tests on precomputed bindings
-        run: cargo test -- --nocapture --test-threads=1
       - name: Upload generated bindings
         if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@main
@@ -134,6 +126,8 @@ jobs:
         with:
           name: Windows generated i686 bindings
           path: generated_bindings_i686
+      - name: Run tests on precomputed bindings shipped with libR-sys
+        run: cargo test -- --nocapture --test-threads=1
 
 ## Windows 32bit is disabled as it doesn't currently work
 #  test_windows_32bit:
