@@ -1,9 +1,7 @@
-extern crate bindgen;
-
-use regex::Regex;
 use std::{
     env,
     ffi::OsString,
+    fs,
     io,
     io::{ Error, ErrorKind },
     path::{ Path, PathBuf },
@@ -19,10 +17,20 @@ use std::{
 #[cfg(target_family = "windows")]
 use std::os::windows::ffi::OsStringExt;
 
+#[allow(dead_code)]
 struct InstallationPaths {
     r_home: PathBuf,
     include: PathBuf,
     library: PathBuf,
+}
+
+#[allow(dead_code)]
+#[derive(Debug)]
+struct RVersionInfo {
+    major: String,
+    minor: String,
+    patch: String,
+    devel: String,
 }
 
 
@@ -87,7 +95,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     };
 
     // Now the library location. On Windows, it depends on the target architecture
-    let pkg_target_arch = env::var_os("CARGO_CFG_TARGET_ARCH").unwrap();
+    let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
     let library = if cfg!(target_os = "windows") {
         if pkg_target_arch == "x86_64" {
             Path::new(&r_home)
@@ -154,30 +162,70 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     })
 }
 
-fn main() {
-    let details = probe_r_paths();
 
-    let details = match details {
-        Ok(result) => result,
-        Err(error) => {
-            println!("Problem locating local R install: {:?}", error);
-            exit(1);
-        }
+fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo> {
+    let r_binary = if cfg!(target_os = "windows") {
+        Path::new(&r_paths.library)
+            .join("R.exe")
+    } else {
+        Path::new(&r_paths.r_home)
+            .join("bin")
+            .join("R")
     };
 
-    println!("cargo:rustc-env=R_HOME={}", details.r_home.display());
-    println!("cargo:r_home={}", details.r_home.display()); // Becomes DEP_R_R_HOME for clients
-    // make sure cargo links properly against library
-    println!("cargo:rustc-link-search={}", details.library.display());
-    println!("cargo:rustc-link-lib=dylib=R");
+    let out = Command::new(&r_binary)
+        .args(&[
+            "-s",
+            "-e",
+            r#"v <- strsplit(R.version$minor, '.', fixed = TRUE)[[1]];devel <- isTRUE(grepl('devel', R.version$status, fixed = TRUE));cat(R.version$major, v[1], paste0(v[2:length(v)], collapse = '.'), devel, sep = '\n')"#
+        ])
+        .output()?;
 
-    println!("cargo:rerun-if-changed=build.rs");
-    println!("cargo:rerun-if-changed=wrapper.h");
+    let out = byte_array_to_os_string(&out.stdout)
+        .as_os_str()
+        .to_string_lossy()
+        .into_owned();
+    let mut lines = out.lines();
 
+    let major = match lines.next() {
+        Some(line) => line.to_string(),
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R major version")),
+    };
+
+    let minor = match lines.next() {
+        Some(line) => line.to_string(),
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R minor version")),
+    };
+
+    let patch = match lines.next() {
+        Some(line) => line.to_string(),
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R patch level")),
+    };
+
+    let devel = match lines.next() {
+        Some(line) => if line == "TRUE" {
+            "-devel".to_string()
+        } else {
+            "".to_string()
+        },
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R development status")),
+    };
+
+    Ok(RVersionInfo {
+        major,
+        minor,
+        patch,
+        devel,
+    })
+}
+
+#[cfg(feature = "use-bindgen")]
+/// Generate bindings by calling bindgen.
+fn generate_bindings(r_paths: &InstallationPaths) {
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
-    let bindgen_builder = bindgen::Builder::default()
+    let mut bindgen_builder = bindgen::Builder::default()
         // These constants from libm break bindgen.
         .blacklist_item("FP_NAN")
         .blacklist_item("FP_INFINITE")
@@ -191,12 +239,28 @@ fn main() {
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks));
 
-        // println!("TARGET: {}",cargo_env("TARGET"));
+    let target = env::var("TARGET").expect("Could not get the target triple");
+    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
+    let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+
+    println!("Generating bindings for target: {}, os: {}, architecture: {}", target, target_os, target_arch);
     // Point to the correct headers
-    let bindgen_builder = bindgen_builder.clang_args(&[
-        format!("-I{}", details.include.display()),
-        format!("--target={}", std::env::var("TARGET").expect("Could not get the target triple"))
+    bindgen_builder = bindgen_builder.clang_args(&[
+        format!("-I{}", r_paths.include.display()),
+        format!("--target={}", target)
     ]);
+
+    // allow injection of an alternative include path to libclang
+    if let Some(alt_include) = env::var_os("LIBRSYS_LIBCLANG_INCLUDE_PATH") {
+        bindgen_builder = bindgen_builder.clang_arg(
+            format!("-I{}", PathBuf::from(alt_include).display()),
+        );
+    }
+
+    // disable layout tests for windows x86
+    if target_os == "windows" && target_arch == "x86" {
+        bindgen_builder = bindgen_builder.layout_tests(false);
+    }
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
@@ -205,7 +269,7 @@ fn main() {
         .expect("Unable to generate bindings");
 
     // Extract the version number from the R headers.
-    let version_matcher = Regex::new(r"pub const R_VERSION ?: ?u32 = (\d+)").unwrap();
+    let version_matcher = regex::Regex::new(r"pub const R_VERSION ?: ?u32 = (\d+)").unwrap();
     if let Some(version) = version_matcher.captures(bindings.to_string().as_str()) {
         let version = version.get(1).unwrap().as_str().parse::<u32>().unwrap();
         println!("cargo:r_version={}", version);
@@ -214,20 +278,106 @@ fn main() {
     }
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
-    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+    let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
 
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings to default output path!");
 
-    // Also write the bindings to a folder specified by $LIBRSYS_BINDINGS_DIR, if it exists
-
-    if let Ok(alt_target) = env::var("LIBRSYS_BINDINGS_DIR") {
+    // Also write the bindings to a folder specified by LIBRSYS_BINDINGS_OUTPUT_PATH, if defined
+    if let Some(alt_target) = env::var_os("LIBRSYS_BINDINGS_OUTPUT_PATH") {
         let out_path = PathBuf::from(alt_target);
+        // if folder doesn't exist, try to create it
+        if !out_path.exists() {
+            fs::create_dir(&out_path)
+                .expect(&format!("Couldn't create output directory for bindings: {}", out_path.display()));
+        }
+
+        let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
+        let out_file = out_path.join(
+                format!(
+                    "bindings-{}-{}-R{}.{}{}.rs",
+                    target_os, target_arch, version_info.major, version_info.minor, version_info.devel
+                )
+            );
 
         bindings
-            .write_to_file(out_path.join("bindings.rs"))
-            .expect("Couldn't write bindings to output path specified by $LIBRSYS_BINDINGS_DIR!");
-
+            .write_to_file(&out_file)
+            .expect(&format!("Couldn't write bindings: {}", out_file.display()));
     }
+}
+
+
+#[allow(dead_code)]
+/// Retrieve bindings from cache, if available. Errors out otherwise.
+fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
+    let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
+    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
+    let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+    let bindings_path = PathBuf::from(
+        env::var_os("LIBRSYS_BINDINGS_PATH")
+        .unwrap_or(OsString::from("bindings"))
+    );
+    
+    // we try a few different file names, from more specific to less specific
+    let bindings_file_full = PathBuf::from(
+        format!(
+            "bindings-{}-{}-R{}.{}{}.rs",
+            target_os, target_arch, version_info.major, version_info.minor, version_info.devel
+        )
+    );
+    let bindings_file_novers = PathBuf::from(
+        format!("bindings-{}-{}.rs", target_os, target_arch)
+    );
+
+    let mut from = bindings_path.join(bindings_file_full);
+    if !from.exists() {
+        from = bindings_path.join(bindings_file_novers);
+        if !from.exists() {
+            panic!(
+                format!(
+                    "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with default features enabled.",
+                    version_info.major, version_info.minor, version_info.patch, version_info.devel, target_os, bindings_path.display()
+                )
+            )
+        } else {
+            println!(
+                "Warning: using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
+                target_os, target_arch, version_info.major, version_info.minor, version_info.patch, version_info.devel
+            );
+        }
+    }
+
+    fs::copy(
+        &from,
+        PathBuf::from(env::var_os("OUT_DIR").unwrap())
+            .join("bindings.rs")
+    ).expect("No precomputed bindings available!");
+    println!("cargo:rerun-if-changed={}", from.display());
+}
+
+fn main() {
+    let r_paths = probe_r_paths();
+
+    let r_paths = match r_paths {
+        Ok(result) => result,
+        Err(error) => {
+            println!("Problem locating local R install: {:?}", error);
+            exit(1);
+        }
+    };
+
+    println!("cargo:rustc-env=R_HOME={}", r_paths.r_home.display());
+    println!("cargo:r_home={}", r_paths.r_home.display()); // Becomes DEP_R_R_HOME for clients
+    // make sure cargo links properly against library
+    println!("cargo:rustc-link-search={}", r_paths.library.display());
+    println!("cargo:rustc-link-lib=dylib=R");
+
+    println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=wrapper.h");
+
+    #[cfg(feature = "use-bindgen")]
+        generate_bindings(&r_paths);
+    #[cfg(not(feature = "use-bindgen"))]
+        retrieve_prebuild_bindings(&r_paths);
 }
