@@ -3373,7 +3373,7 @@ extern "C" {
 }
 pub type Rbyte = ::std::os::raw::c_uchar;
 pub type R_len_t = ::std::os::raw::c_int;
-pub type R_xlen_t = ::std::os::raw::c_int;
+pub type R_xlen_t = isize;
 pub type SEXPTYPE = ::std::os::raw::c_uint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
