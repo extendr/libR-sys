@@ -1,4 +1,10 @@
+#include <stddef.h> // for ptrdiff_t
 
+// R_xlen_t is defined as int on 32-bit platforms, and
+// that confuses Rust. Keeping it always as ptrdiff_t works
+// fine even on 32-bit.
+/// <div rustbindgen replaces="R_xlen_t"></div>
+typedef ptrdiff_t R_xlen_t_rust;
 
 // Define this for R_CStackLimit
 // #define HAVE_UINTPTR_T
@@ -16,11 +22,6 @@
 #endif
 #include <Rembedded.h>
 
-// todo: what is this #define?
-#ifdef MAC_STUFF
-  #include <R/Rversion.h>
-#else
-  #include <Rversion.h>
-#endif
+#include <Rversion.h>
 #include <R_ext/Parse.h>
 #include <R_ext/Error.h>
