@@ -416,15 +416,20 @@ pub const WINT_MIN: i32 = -2147483648;
 pub const WINT_MAX: u32 = 2147483647;
 pub const SIG_ATOMIC_MIN: i32 = -2147483648;
 pub const SIG_ATOMIC_MAX: u32 = 2147483647;
-pub const R_VERSION: u32 = 262146;
-pub const R_NICK: &'static [u8; 17usize] = b"Taking Off Again\0";
+pub const R_VERSION: u32 = 262147;
+pub const R_NICK: &'static [u8; 24usize] = b"Bunny-Wunnies Freak Out\0";
 pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
-pub const R_MINOR: &'static [u8; 4usize] = b"0.2\0";
+pub const R_MINOR: &'static [u8; 4usize] = b"0.3\0";
 pub const R_STATUS: &'static [u8; 1usize] = b"\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2020\0";
-pub const R_MONTH: &'static [u8; 3usize] = b"06\0";
-pub const R_DAY: &'static [u8; 3usize] = b"22\0";
-pub const R_SVN_REVISION: u32 = 78730;
+pub const R_MONTH: &'static [u8; 3usize] = b"10\0";
+pub const R_DAY: &'static [u8; 3usize] = b"10\0";
+pub const R_SVN_REVISION: u32 = 79318;
+pub type size_t = ::std::os::raw::c_ulong;
+pub type wchar_t = ::std::os::raw::c_int;
+pub type max_align_t = u128;
+#[doc = " <div rustbindgen replaces=\"R_xlen_t\"></div>"]
+pub type R_xlen_t = isize;
 pub type __int8_t = ::std::os::raw::c_schar;
 pub type __uint8_t = ::std::os::raw::c_uchar;
 pub type __int16_t = ::std::os::raw::c_short;
@@ -970,7 +975,6 @@ pub type user_time_t = i64;
 pub type user_off_t = i64;
 pub type syscall_arg_t = u_int64_t;
 pub type va_list = __darwin_va_list;
-pub type size_t = __darwin_size_t;
 extern "C" {
     pub fn renameat(
         arg1: ::std::os::raw::c_int,
@@ -1763,9 +1767,6 @@ extern "C" {
         arg6: *mut __va_list_tag,
     ) -> ::std::os::raw::c_int;
 }
-pub type rsize_t = ::std::os::raw::c_ulong;
-pub type wchar_t = ::std::os::raw::c_int;
-pub type max_align_t = u128;
 pub type float_t = f32;
 pub type double_t = f64;
 extern "C" {
@@ -3002,7 +3003,6 @@ extern "C" {
 }
 pub type Rbyte = ::std::os::raw::c_uchar;
 pub type R_len_t = ::std::os::raw::c_int;
-pub type R_xlen_t = isize;
 pub type SEXPTYPE = ::std::os::raw::c_uint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
