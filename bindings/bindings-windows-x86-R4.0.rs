@@ -380,6 +380,29 @@ pub struct threadlocaleinfostruct__bindgen_ty_1 {
     pub wrefcount: *mut ::std::os::raw::c_int,
 }
 pub type threadlocinfo = threadlocaleinfostruct;
+extern "C" {
+    pub fn _errno() -> *mut ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn _set_errno(_Value: ::std::os::raw::c_int) -> errno_t;
+}
+extern "C" {
+    pub fn _get_errno(_Value: *mut ::std::os::raw::c_int) -> errno_t;
+}
+extern "C" {
+    pub fn __threadid() -> ::std::os::raw::c_ulong;
+}
+extern "C" {
+    pub fn __threadhandle() -> usize;
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct max_align_t {
+    pub __max_align_ll: ::std::os::raw::c_longlong,
+    pub __max_align_ld: f64,
+}
+#[doc = " <div rustbindgen replaces=\"R_xlen_t\"></div>"]
+pub type R_xlen_t = isize;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _iobuf {
@@ -2206,27 +2229,6 @@ extern "C" {
         _File: *mut FILE,
     ) -> size_t;
 }
-extern "C" {
-    pub fn _errno() -> *mut ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _set_errno(_Value: ::std::os::raw::c_int) -> errno_t;
-}
-extern "C" {
-    pub fn _get_errno(_Value: *mut ::std::os::raw::c_int) -> errno_t;
-}
-extern "C" {
-    pub fn __threadid() -> ::std::os::raw::c_ulong;
-}
-extern "C" {
-    pub fn __threadhandle() -> usize;
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct max_align_t {
-    pub __max_align_ll: ::std::os::raw::c_longlong,
-    pub __max_align_ld: f64,
-}
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union __mingw_dbl_type_t {
@@ -3373,7 +3375,6 @@ extern "C" {
 }
 pub type Rbyte = ::std::os::raw::c_uchar;
 pub type R_len_t = ::std::os::raw::c_int;
-pub type R_xlen_t = isize;
 pub type SEXPTYPE = ::std::os::raw::c_uint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]

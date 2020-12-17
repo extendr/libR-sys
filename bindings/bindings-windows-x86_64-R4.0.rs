@@ -305,6 +305,55 @@ pub const R_YEAR: &'static [u8; 5usize] = b"2020\0";
 pub const R_MONTH: &'static [u8; 3usize] = b"10\0";
 pub const R_DAY: &'static [u8; 3usize] = b"10\0";
 pub const R_SVN_REVISION: u32 = 79318;
+pub type size_t = ::std::os::raw::c_ulonglong;
+pub type wchar_t = ::std::os::raw::c_ushort;
+#[repr(C)]
+#[repr(align(16))]
+#[derive(Debug, Copy, Clone)]
+pub struct max_align_t {
+    pub __clang_max_align_nonce1: ::std::os::raw::c_longlong,
+    pub __bindgen_padding_0: u64,
+    pub __clang_max_align_nonce2: u128,
+}
+#[test]
+fn bindgen_test_layout_max_align_t() {
+    assert_eq!(
+        ::std::mem::size_of::<max_align_t>(),
+        32usize,
+        concat!("Size of: ", stringify!(max_align_t))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<max_align_t>(),
+        16usize,
+        concat!("Alignment of ", stringify!(max_align_t))
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<max_align_t>())).__clang_max_align_nonce1 as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(max_align_t),
+            "::",
+            stringify!(__clang_max_align_nonce1)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<max_align_t>())).__clang_max_align_nonce2 as *const _ as usize
+        },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(max_align_t),
+            "::",
+            stringify!(__clang_max_align_nonce2)
+        )
+    );
+}
+#[doc = " <div rustbindgen replaces=\"R_xlen_t\"></div>"]
+pub type R_xlen_t = isize;
 pub type __gnuc_va_list = __builtin_va_list;
 pub type va_list = __gnuc_va_list;
 extern "C" {
@@ -313,10 +362,8 @@ extern "C" {
 extern "C" {
     pub fn __mingw_get_crt_info() -> *const ::std::os::raw::c_char;
 }
-pub type size_t = ::std::os::raw::c_ulonglong;
 pub type ssize_t = ::std::os::raw::c_longlong;
 pub type rsize_t = size_t;
-pub type wchar_t = ::std::os::raw::c_ushort;
 pub type wint_t = ::std::os::raw::c_ushort;
 pub type wctype_t = ::std::os::raw::c_ushort;
 pub type errno_t = ::std::os::raw::c_int;
@@ -2644,51 +2691,6 @@ extern "C" {
     ) -> size_t;
 }
 #[repr(C)]
-#[repr(align(16))]
-#[derive(Debug, Copy, Clone)]
-pub struct max_align_t {
-    pub __clang_max_align_nonce1: ::std::os::raw::c_longlong,
-    pub __bindgen_padding_0: u64,
-    pub __clang_max_align_nonce2: u128,
-}
-#[test]
-fn bindgen_test_layout_max_align_t() {
-    assert_eq!(
-        ::std::mem::size_of::<max_align_t>(),
-        32usize,
-        concat!("Size of: ", stringify!(max_align_t))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<max_align_t>(),
-        16usize,
-        concat!("Alignment of ", stringify!(max_align_t))
-    );
-    assert_eq!(
-        unsafe {
-            &(*(::std::ptr::null::<max_align_t>())).__clang_max_align_nonce1 as *const _ as usize
-        },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(max_align_t),
-            "::",
-            stringify!(__clang_max_align_nonce1)
-        )
-    );
-    assert_eq!(
-        unsafe {
-            &(*(::std::ptr::null::<max_align_t>())).__clang_max_align_nonce2 as *const _ as usize
-        },
-        16usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(max_align_t),
-            "::",
-            stringify!(__clang_max_align_nonce2)
-        )
-    );
-}
-#[repr(C)]
 #[derive(Copy, Clone)]
 pub union __mingw_dbl_type_t {
     pub x: f64,
@@ -4242,7 +4244,6 @@ extern "C" {
 }
 pub type Rbyte = ::std::os::raw::c_uchar;
 pub type R_len_t = ::std::os::raw::c_int;
-pub type R_xlen_t = isize;
 pub type SEXPTYPE = ::std::os::raw::c_uint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
