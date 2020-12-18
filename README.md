@@ -28,56 +28,115 @@ Set `LIBCLANG_PATH` to the `lib` directory of your `llvm` installation. E.g.,
 
 ### Windows-specific instructions
 
-Ensure the preferred R binaries, are part of the `PATH`, e.g. `C:/R/R-4.0.2/bin/x64`.
+Ensure the preferred R binaries, are part of the `PATH`, e.g. `C:\R\R-4.0.3\bin\x64`.
 For information on how to add environment variables on Windows, [see here](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables?view=powershell-7.1#saving-changes-to-environment-variables).
 
-Add the mingw toolchains that are used to build R:
-
-```bash
-rustup target add x86_64-pc-windows-gnu
-rustup target add i686-pc-windows-gnu
+Ensure that `rust` `msvc` toolchains are available:
+```Shell
+rustup toolchain add stable-x86_64-pc-windows-msvc
+rustup toolchain add stable-i686-pc-windows-msvc
 ```
 
-The default toolchain must be `(stable|beta|nightly)-gnu`, e.g. to set the default
-toolchain to be nightly mingw:
+Add the `mingw` targets that are used to build R:
 
-```bash
-rustup default nightly-gnu
+```Shell
+rustup target add x86_64-pc-windows-gnu --toolchain stable-x86_64-pc-windows-msvc
+rustup target add i686-pc-windows-gnu --toolchain stable-i686-pc-windows-msvc
 ```
+Install `MSYS2`. 
+Using `scoop` it is done by
 
-Install `MSYS2`. Using scoop it is done by
-
-```bash
+```Shell
 scoop install msys2
+```
+
+Alternatively, `chocolatey` can be used (from elevated prompt):
+```Shell
+choco install msys2
 ```
 
 To complete the installation, run `msys2` once, then restart the terminal.
 
-Run `msys2` again, and install Clang and mingw-toolchain via
+Run `msys2` again, and install `Clang` and `mingw`-toolchain via
 
-```bash
+```Shell
 pacman -S --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain
 pacman -S --noconfirm mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain
 ```
 
+If not, or if it is missing, set `R_HOME` to default `R` location (e.g. `C:\Program Files\R\R-4.0.3`).
+
+- **CMD**
+    ```Shell
+    set R_HOME="C:\Program Files\R\R-4.0.3"
+    ```
+- **PowerShell**
+    ```PowerShell
+    $env:R_HOME="C:\Program Files\R\R-4.0.3"
+    ```
+
+
+
+Set `MSYS_ROOT` to the root of your `msys2` installation.
+If `scoop` was used then the path would be:
+- **CMD**
+    ```Shell
+    set MSYS_ROOT="%USERPROFILE%\scoop\apps\msys2\current"
+    ```
+- **PowerShell**
+    ```PowerShell
+    $env:MSYS_ROOT="$env:USERPROFILE\scoop\apps\msys2\current"
+    ```
+If `chocolatey` was used then the path would be:
+- **CMD**
+    ```Shell
+    set MSYS_ROOT="C:\tools\msys64"
+    ```
+- **PowerShell**
+    ```PowerShell
+    $env:MSYS_ROOT="C:\tools\msys64"
+    ```
+
+Ensure `PATH` variable contains `%MSYS_ROOT%\usr\bin`, `%MSYS_ROOT%\mingw32\bin`, `%MSYS_ROOT%\mingw64\bin`.
+For example,
+- **CMD**
+  ```Shell
+  set PATH=%MSYS_ROOT%\usr\bin;%MSYS_ROOT%\mingw32\bin;%MSYS_ROOT%\mingw64\bin;%PATH%
+  ```
+- **PowerShell**
+  ```PowerShell
+  $env:PATH="$env:MSYS_ROOT\usr\bin;$env:MSYS_ROOT\mingw32\bin;$env:MSYS_ROOT\mingw64\bin;$env:PATH"
+  ```
+
 Add environment variable `LIBCLANG_PATH` with the value pointing to where the
-clang binaries are placed. If scoop was used then the path would be:
-`%USERPROFILE%\scoop\apps\msys2\current\mingw64\bin`.
+clang binaries are placed. This depends on whether the target architecture is `32` or `64` bit.
 
-Then from now on, in order to build this, use:
-
-```bash
-mingw64
-cargo build
-cargo test
+To build `64`-bit library, run
+- **CMD**
+    ```Shell
+    set LIBCLANG_PATH=%MSYS_ROOT%\mingw64\bin 
+    ```
+- **PowerShell**
+  ```PowerShell
+  $env:LIBCLANG_PATH="$env:MSYS_ROOT\mingw64\bin"
+  ```
+and then
+```Shell
+cargo +stable-x86_64-pc-windows-msvc build --target=x86_64-pc-windows-gnu
 ```
 
-In order to build it without having to enter a `mingw64`/`mingw32` shell, then add these
-paths to `PATH`:
-
-```bash
-%USERPROFILE%\scoop\apps\msys2\current\usr\bin
-%USERPROFILE%\scoop\apps\msys2\current\mingw64\bin # change this to mingw32
+To build `32-bit`, run
+- **CMD**
+    ```Shell
+    set LIBCLANG_PATH=%MSYS_ROOT%\mingw32\bin 
+    ```
+- **PowerShell**
+  ```PowerShell
+  $env:LIBCLANG_PATH="$env:MSYS_ROOT\mingw32\bin"
+  ```
+and then
+```Shell
+cargo +stable-i686-pc-windows-msvc build --target=i686-pc-windows-gnu
 ```
 
 ### Mac-specific instructions
