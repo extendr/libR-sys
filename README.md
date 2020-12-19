@@ -9,6 +9,89 @@ Low-level R library bindings
 
 ## Installation
 
+The recommended way to build this library is to use precomputed bindings, which are available for `Linux`, `MacOS`, and `Windows` (`32`- and `64`-bit).
+
+Alternatively, the library can be built from source, in which case it invokes `bindgen` crate, which has extra platform-specific dependencies (including `msys2` on `Windows`).
+
+
+## Using precomputed bindings (recommended)
+
+Two components are required to build the library:
+1. [R](https://cran.r-project.org/): It needs to be installed and available in the search path.
+2. [rust](https://www.rust-lang.org/learn/get-started): It is recommended to install `rust` using `rustup`; search path should include `rust` binaries.
+
+
+When building for `Windows`, special `rust` targets should be added for compatibility with `R`:
+- **Windows**
+  ```Shell
+  rustup target add x86_64-pc-windows-gnu  # 64-bit
+  rustup target add i686-pc-windows-gnu    # 32-bit
+  ```
+
+Once `R` and `rust` are configured, the library can be easily build:
+- **MacOS/Linux**
+    ```bash
+    cargo build
+    ```
+- **Windows**
+    ```Shell
+    cargo build --target x86_64-pc-windows-gnu # 64-bit
+    cargo build --target i686-pc-windows-gnu   # 32-bit
+    ```
+
+
+To test the build, run `cargo test`. Note the `--test-threads=1`, without this flag `R` integration tests will fail:
+
+- **MacOs/Linux**
+    ```bash
+    cargo test -- --nocapture --test-threads=1
+    ```
+- **Windows**
+    **NOTE:** currently `Windows` tests are unstable, but still can be executed with additional effort:
+    <details>
+    <summary>Running tests on Windows</summary>
+
+    First, locate the installation of `R` and ensure that environment variable `R_HOME` points to it.
+    The standard value for the latest `R` version is `C:\Program Files\R\R-4.0.3`.
+
+    In order to run tests, `PATH` variable should be temporarily prepended with the path to correct `R.dll`.
+
+    - **64-bit**
+      - **CMD**
+        ```Shell
+        set OLD_PATH=%PATH%                        # Captures current PATH
+        set PATH=%R_HOME%\bin\x64;%PATH%           # Prepends with correct R directory
+        cargo test --target x86_64-pc-windows-gnu -- --nocapture --test-threads=1
+        set PATH=%OLD_PATH%                        # Resets PATH to the original value
+        ```
+      - **PowerShell**
+        ```PowerShell
+        $OLD_PATH=$env:PATH                        # Captures current PATH
+        $env:PATH="$env:R_HOME\bin\x64;$env:PATH"  # Prepends with correct R directory
+        cargo test --target x86_64-pc-windows-gnu -- --nocapture --test-threads=1
+        $env:PATH=$OLD_PATH                        # Resets PATH to the original value
+        ```
+    - **32-bit**
+      - **CMD**
+        ```Shell
+        set OLD_PATH=%PATH%                        # Captures current PATH
+        set PATH=%R_HOME%\bin\i386;%PATH%          # Prepends with correct R directory
+        cargo test --target i686-pc-windows-gnu -- --nocapture --test-threads=1
+        set PATH=%OLD_PATH%                        # Resets PATH to the original value
+        ```
+      - **PowerShell**
+        ```PowerShell
+        $OLD_PATH=$env:PATH                        # Captures current PATH
+        $env:PATH="$env:R_HOME\bin\i386;$env:PATH" # Prepends with correct R directory
+        cargo test --target i686-pc-windows-gnu -- --nocapture --test-threads=1
+        $env:PATH=$OLD_PATH                        # Resets PATH to the original value
+        ```
+
+
+    </details>
+
+
+
 To build this library and test that everything is working as expected, run the following two commands in the library's top-level directory:
 
 ```bash
