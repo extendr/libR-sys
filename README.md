@@ -97,7 +97,7 @@ The bindings can be generated using [bindgen](https://github.com/rust-lang/rust-
 `bindgen` usage is enabled via `use-bindgen` feature flag.
 
 `bindgen` requires [libclang](https://clang.llvm.org/docs/Tooling.html), which should be installed first. 
-This library relies on `LIBCALNG_PATH` environment variable to determine path to the appropriate version of `libclang`.
+This library relies on `LIBCLANG_PATH` environment variable to determine path to the appropriate version of `libclang`.
 
 The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_PATH` environment variable.
 ### Linux-specific instructions
