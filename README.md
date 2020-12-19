@@ -47,7 +47,7 @@ To test the build, run `cargo test`. Note the `--test-threads=1`, without this f
     cargo test -- --nocapture --test-threads=1
     ```
 - **Windows**
-    **NOTE:** currently `Windows` tests are unstable, but still can be executed with additional effort:
+    **NOTE:** currently `Windows` tests are unstable, but they still can be executed with extra efforts:
     <details>
     <summary>Running tests on Windows</summary>
 
@@ -91,19 +91,15 @@ To test the build, run `cargo test`. Note the `--test-threads=1`, without this f
     </details>
 
 
+## Building bindings from source (advanced)
 
-To build this library and test that everything is working as expected, run the following two commands in the library's top-level directory:
+The bindings can be generated using [bindgen](https://github.com/rust-lang/rust-bindgen), special `rust` crate. 
+`bindgen` usage is enabled via `use-bindgen` feature flag.
 
-```bash
-cargo build
-cargo test
-```
+`bindgen` requires [libclang](https://clang.llvm.org/docs/Tooling.html), which should be installed first. 
+This library relies on `LIBCALNG_PATH` environment variable to determine path to the appropriate version of `libclang`.
 
-The build script has the following two dependencies:
-
-1. [R](https://cran.r-project.org/): It needs to be installed and available in the search path.
-2. [libclang](https://clang.llvm.org/docs/Tooling.html): Depending on your operating system, you may need to set the `LIBCLANG_PATH` environment variable or add `llvm-config` to your search path.
-
+The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_PATH` environment variable.
 ### Linux-specific instructions
 
 Set `LIBCLANG_PATH` to the `lib` directory of your `llvm` installation. E.g.,
@@ -116,69 +112,57 @@ For information on how to add environment variables on Windows, [see here](https
 
 Ensure that `rust` `msvc` toolchains are available:
 ```Shell
-rustup toolchain add stable-x86_64-pc-windows-msvc
-rustup toolchain add stable-i686-pc-windows-msvc
+rustup toolchain add stable-x86_64-pc-windows-msvc     # 64-bit
+rustup toolchain add stable-i686-pc-windows-msvc       # 32-bit
 ```
 
 Add the `mingw` targets that are used to build R:
 
 ```Shell
-rustup target add x86_64-pc-windows-gnu --toolchain stable-x86_64-pc-windows-msvc
-rustup target add i686-pc-windows-gnu --toolchain stable-i686-pc-windows-msvc
+rustup target add x86_64-pc-windows-gnu --toolchain stable-x86_64-pc-windows-msvc # 64-bit
+rustup target add i686-pc-windows-gnu --toolchain stable-i686-pc-windows-msvc     # 32-bit
 ```
-Install `MSYS2`. 
-Using `scoop` it is done by
-
-```Shell
-scoop install msys2
-```
-
-Alternatively, `chocolatey` can be used (from elevated prompt):
-```Shell
-choco install msys2
-```
+Install `MSYS2` using e.g. `scoop` or `chocolatey` (or any other method):
+- **scoop**
+  ```Shell
+  scoop install msys2
+  ```
+- **chocolatey**
+  ```Shell
+  choco install msys2
+  ```
 
 To complete the installation, run `msys2` once, then restart the terminal.
 
 Run `msys2` again, and install `Clang` and `mingw`-toolchain via
 
 ```Shell
-pacman -S --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain
-pacman -S --noconfirm mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain
+pacman -S --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain      # 64-bit
+pacman -S --noconfirm mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain  # 32-bit
 ```
 
-If not, or if it is missing, set `R_HOME` to default `R` location (e.g. `C:\Program Files\R\R-4.0.3`).
-
-- **CMD**
-    ```Shell
-    set R_HOME="C:\Program Files\R\R-4.0.3"
-    ```
-- **PowerShell**
-    ```PowerShell
-    $env:R_HOME="C:\Program Files\R\R-4.0.3"
-    ```
-
+If misconfigured or missing, set `R_HOME` to default `R` location (e.g. `C:\Program Files\R\R-4.0.3`).
 
 
 Set `MSYS_ROOT` to the root of your `msys2` installation.
-If `scoop` was used then the path would be:
-- **CMD**
-    ```Shell
-    set MSYS_ROOT="%USERPROFILE%\scoop\apps\msys2\current"
-    ```
-- **PowerShell**
-    ```PowerShell
-    $env:MSYS_ROOT="$env:USERPROFILE\scoop\apps\msys2\current"
-    ```
-If `chocolatey` was used then the path would be:
-- **CMD**
-    ```Shell
-    set MSYS_ROOT="C:\tools\msys64"
-    ```
-- **PowerShell**
-    ```PowerShell
-    $env:MSYS_ROOT="C:\tools\msys64"
-    ```
+- **scoop**
+  - **CMD**
+      ```Shell
+      set MSYS_ROOT="%USERPROFILE%\scoop\apps\msys2\current"
+      ```
+  - **PowerShell**
+      ```PowerShell
+      $env:MSYS_ROOT="$env:USERPROFILE\scoop\apps\msys2\current"
+      ```
+- **chocolatey**
+  - **CMD**
+      ```Shell
+      set MSYS_ROOT=C:\tools\msys64
+      ```
+  - **PowerShell**
+      ```PowerShell
+      $env:MSYS_ROOT="C:\tools\msys64"
+      ```
 
 Ensure `PATH` variable contains `%MSYS_ROOT%\usr\bin`, `%MSYS_ROOT%\mingw32\bin`, `%MSYS_ROOT%\mingw64\bin`.
 For example,
@@ -194,33 +178,79 @@ For example,
 Add environment variable `LIBCLANG_PATH` with the value pointing to where the
 clang binaries are placed. This depends on whether the target architecture is `32` or `64` bit.
 
-To build `64`-bit library, run
-- **CMD**
+- **64 bit**
+  - Set `LIBCLANG_PATH`
+    - **CMD**
+        ```Shell
+        set LIBCLANG_PATH=%MSYS_ROOT%\mingw64\bin 
+        ```
+    - **PowerShell**
+      ```PowerShell
+      $env:LIBCLANG_PATH="$env:MSYS_ROOT\mingw64\bin"
+      ```
+  - then build (CMD/PowerShell)
     ```Shell
-    set LIBCLANG_PATH=%MSYS_ROOT%\mingw64\bin 
-    ```
-- **PowerShell**
-  ```PowerShell
-  $env:LIBCLANG_PATH="$env:MSYS_ROOT\mingw64\bin"
-  ```
-and then
-```Shell
-cargo +stable-x86_64-pc-windows-msvc build --target=x86_64-pc-windows-gnu
-```
+    cargo +stable-x86_64-pc-windows-msvc build --target=x86_64-pc-windows-gnu
+    ``` 
 
-To build `32-bit`, run
-- **CMD**
+- **32 bit**
+  - Set `LIBCLANG_PATH`
+    - **CMD**
+        ```Shell
+        set LIBCLANG_PATH=%MSYS_ROOT%\mingw32\bin 
+        ```
+    - **PowerShell**
+      ```PowerShell
+      $env:LIBCLANG_PATH="$env:MSYS_ROOT\mingw32\bin"
+      ```
+  - then build (CMD/PowerShell)
     ```Shell
-    set LIBCLANG_PATH=%MSYS_ROOT%\mingw32\bin 
-    ```
-- **PowerShell**
-  ```PowerShell
-  $env:LIBCLANG_PATH="$env:MSYS_ROOT\mingw32\bin"
-  ```
-and then
-```Shell
-cargo +stable-i686-pc-windows-msvc build --target=i686-pc-windows-gnu
-```
+    cargo +stable-i686-pc-windows-msvc build --target=i686-pc-windows-gnu
+    ``` 
+
+The output can be tested (with some additional steps to allow simultaneous `32` and `64` bit targets).
+
+<details>
+  <summary>Running tests on Windows</summary>
+
+  - **64-bit**
+    - **CMD**
+      ```Shell
+      set OLD_PATH=%PATH%                        # Captures current PATH
+      set PATH=%R_HOME%\bin\x64;%PATH%           # Prepends with correct R directory
+      set LIBCLANG_PATH=%MSYS_ROOT%\mingw64\bin  # Path to libclang
+      cargo +stable-x86_64-pc-windows-msvc test --target x86_64-pc-windows-gnu --features use-bindgen -- --nocapture --test-threads=1
+      set PATH=%OLD_PATH%                        # Resets PATH to the original value
+      ```
+    - **PowerShell**
+      ```PowerShell
+      $OLD_PATH=$env:PATH                              # Captures current PATH
+      $env:PATH="$env:R_HOME\bin\x64;$env:PATH"        # Prepends with correct R directory
+      $env:LIBCLANG_PATH="$env:MSYS_ROOT\mingw64\bin"  # Path to libclang
+      cargo +stable-x86_64-pc-windows-msvc test --target x86_64-pc-windows-gnu --features use-bindgen -- --nocapture --test-threads=1
+      $env:PATH=$OLD_PATH                              # Resets PATH to the original value
+      ```
+  - **32-bit**
+    - **CMD**
+      ```Shell
+      set OLD_PATH=%PATH%                        # Captures current PATH
+      set PATH=%R_HOME%\bin\i386;%PATH%          # Prepends with correct R directory
+      set LIBCLANG_PATH=%MSYS_ROOT%\mingw32\bin  # Path to libclang
+      cargo +stable-i686-pc-windows-msvc test --target i686-pc-windows-gnu --features use-bindgen -- --nocapture --test-threads=1
+      set PATH=%OLD_PATH%                        # Resets PATH to the original value
+      ```
+    - **PowerShell**
+      ```PowerShell
+      $OLD_PATH=$env:PATH                              # Captures current PATH
+      $env:PATH="$env:R_HOME\bin\i386;$env:PATH"       # Prepends with correct R directory
+      $env:LIBCLANG_PATH="$env:MSYS_ROOT\mingw32\bin"  # Path to libclang
+      cargo +stable-i686-pc-windows-msvc test --target i686-pc-windows-gnu --features use-bindgen -- --nocapture --test-threads=1
+      $env:PATH=$OLD_PATH                              # Resets PATH to the original value
+      ```
+
+
+  </details>
+
 
 ### Mac-specific instructions
 
