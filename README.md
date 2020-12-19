@@ -11,7 +11,7 @@ Low-level R library bindings
 
 The recommended way to build this library is to use precomputed bindings, which are available for `Linux`, `MacOS`, and `Windows` (`32`- and `64`-bit).
 
-Alternatively, the library can be built from source, in which case it invokes `bindgen` crate, which has extra platform-specific dependencies (including `msys2` on `Windows`).
+Alternatively, the library can be built from source, in which case it invokes `bindgen` crate, which has extra platform-specific dependencies (including `msys2` for `Windows`).
 
 
 ## Using precomputed bindings (recommended)
@@ -28,7 +28,7 @@ When building for `Windows`, special `rust` targets should be added for compatib
   rustup target add i686-pc-windows-gnu    # 32-bit
   ```
 
-Once `R` and `rust` are configured, the library can be easily build:
+Once `R` and `rust` are configured, the library can be easily built:
 - **MacOS/Linux**
     ```bash
     cargo build
@@ -107,7 +107,7 @@ Set `LIBCLANG_PATH` to the `lib` directory of your `llvm` installation. E.g.,
 
 ### Windows-specific instructions
 
-Ensure the preferred R binaries, are part of the `PATH`, e.g. `C:\R\R-4.0.3\bin\x64`.
+Ensure the preferred R binaries are part of the `PATH`, e.g. `C:\R\R-4.0.3\bin\x64`.
 For information on how to add environment variables on Windows, [see here](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables?view=powershell-7.1#saving-changes-to-environment-variables).
 
 Ensure that `rust` `msvc` toolchains are available:
@@ -175,8 +175,7 @@ For example,
   $env:PATH="$env:MSYS_ROOT\usr\bin;$env:MSYS_ROOT\mingw32\bin;$env:MSYS_ROOT\mingw64\bin;$env:PATH"
   ```
 
-Add environment variable `LIBCLANG_PATH` with the value pointing to where the
-clang binaries are placed. This depends on whether the target architecture is `32` or `64` bit.
+Add environment variable `LIBCLANG_PATH` with the value pointing to where the `clang` binaries are placed. This depends on whether the target architecture is `32` or `64` bit.
 
 - **64 bit**
   - Set `LIBCLANG_PATH`
@@ -190,7 +189,7 @@ clang binaries are placed. This depends on whether the target architecture is `3
       ```
   - then build (CMD/PowerShell)
     ```Shell
-    cargo +stable-x86_64-pc-windows-msvc build --target=x86_64-pc-windows-gnu
+    cargo +stable-x86_64-pc-windows-msvc build --target=x86_64-pc-windows-gnu --features use-bindgen
     ``` 
 
 - **32 bit**
@@ -205,7 +204,7 @@ clang binaries are placed. This depends on whether the target architecture is `3
       ```
   - then build (CMD/PowerShell)
     ```Shell
-    cargo +stable-i686-pc-windows-msvc build --target=i686-pc-windows-gnu
+    cargo +stable-i686-pc-windows-msvc build --target=i686-pc-windows-gnu --features use-bindgen
     ``` 
 
 The output can be tested (with some additional steps to allow simultaneous `32` and `64` bit targets).
