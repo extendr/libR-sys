@@ -21,9 +21,10 @@ Two components are required to build the library:
 2. [rust](https://www.rust-lang.org/learn/get-started): It is recommended to install `rust` using `rustup`; search path should include `rust` binaries.
 
 
-When building for `Windows`, special `rust` targets should be added for compatibility with `R`:
+When building for `Windows`, the default host shall be `stable-msvc` and special `rust` targets should be added for compatibility with `R`:
 - **Windows**
   ```Shell
+  rustup default stable-msvc
   rustup target add x86_64-pc-windows-gnu  # 64-bit
   rustup target add i686-pc-windows-gnu    # 32-bit
   ```
