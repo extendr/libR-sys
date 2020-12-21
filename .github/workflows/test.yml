@@ -91,8 +91,8 @@ jobs:
         run: |
           cargo test -vv --features use-bindgen $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
 
-      # - name: Run tests on precomputed bindings shipped with libR-sys
-      #   run: cargo test -vv $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
+      - name: Run tests on precomputed bindings shipped with libR-sys
+        run: cargo test -vv $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
 
 
   # test_linux:
