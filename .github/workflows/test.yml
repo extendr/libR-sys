@@ -27,7 +27,7 @@ jobs:
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           # R-devel fails on Ubuntu
-          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          # - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
 
 
     env:
@@ -116,8 +116,9 @@ jobs:
 
       # If success, upload bindings
       # TODO: Some bindings are likely overwritten, need some filter condition to disable upload
+      # currently uses only stable version of rust
       - name: Upload generated bindings
-        if: steps.build.outcome == 'success' && steps.test.outcome == 'success'
+        if: steps.build.outcome == 'success' && steps.test.outcome == 'success' && startsWith(matrix.rust-version, 'stable')
         uses: actions/upload-artifact@main
         with:
           name: ${{ matrix.os }} ${{ matrix.rust-version }} generated bindings
