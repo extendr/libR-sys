@@ -29,7 +29,7 @@ jobs:
           # R-devel fails on Ubuntu
           # - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
 
-    
+    # PowerShell core is available on all platforms and can be used to unify scripts
     defaults:
       run:
         shell: pwsh
@@ -49,7 +49,7 @@ jobs:
           default: true
           components: rustfmt, clippy
 
-     
+      # This step is only needed for Windows
       - name: Set up `msys2` for Windows
         if: runner.os == 'Windows'
         uses: msys2/setup-msys2@v2
@@ -59,8 +59,16 @@ jobs:
           release: false
           update: false
      
+      # All configurations for Windows go here
+      # `Rust` toolchain is used to determine target architecture
+      # Alternatively, `if:` conditions can be used
       - name: Configure Windows
         if: runner.os == 'Windows'
+        # 1. Add appropriate *-gnu target
+        # 2. Set CARGO_BUILD_FLAGS to the `rust` target
+        # 3. Configure path to `libclang`
+        # 4. Add path to `mingw32`/`mingw64` -- otherwise library is linked to `rtools`
+        # 5. Add path to R's `i386`/`x64`  -- to solve `x86` build/test issue
         run: |
           if ($env:RUST_TOOLCHAIN -like "*x86_64*") {
             rustup target add x86_64-pc-windows-gnu ;
@@ -81,12 +89,14 @@ jobs:
           RUST_TOOLCHAIN: ${{ matrix.config.rust-version }}
           
 
+      # MacOS configurations, mainly `llvm` and path to `libclang`
       - name: Configure MacOs
         if: runner.os == 'macOS'
         run: | 
           brew install llvm r
           echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           
+      # Build and emit bindings to `./generated_bindings`
       - name: Build & Emit bindings
         id: build
         run: |
@@ -94,10 +104,14 @@ jobs:
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
 
+      # Test the result of previous step
       - name: Run tests
+        id: test
         run: |
           cargo test -vv --features use-bindgen $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
 
+      # If success, upload bindings
+      # TODO: Some bindings are likely overwritten, need some filter condition to disable upload
       - name: Upload generated bindings
         if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@main
