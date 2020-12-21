@@ -23,7 +23,7 @@ jobs:
         config:
           - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc'}
           # - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
-          # - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           # - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           # - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
 
@@ -60,7 +60,7 @@ jobs:
       - name: Configure Windows
         if: matrix.config.rust-version == 'stable-x86_64-pc-windows-msvc'
         run: |
-            rustup add target x86_64-pc-windows-gnu
+            rustup target add x86_64-pc-windows-gnu
             echo "CARGO_BUILD_FLAGS=--target=x86_64-pc-windows-gnu" >> $GITHUB_ENV
 
       - name: Test environment
