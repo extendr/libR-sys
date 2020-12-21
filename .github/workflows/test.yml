@@ -79,7 +79,7 @@ jobs:
         shell: msys2 {0}
     strategy:
       matrix:
-        rust-version: [stable-x86_64-pc-windows-gnu]
+        rust-version: [stable-x86_64-pc-windows-msvc]
     steps:
       - uses: actions/checkout@v2
       - uses: msys2/setup-msys2@v2
@@ -94,69 +94,79 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ matrix.rust-version }}
-          target: i686-pc-windows-gnu
+          target: x86_64-pc-windows-gnu
           default: true
           components: rustfmt, clippy
       - name: Build
         id: build
         run: |
-          cargo build -vv --features use-bindgen 
+          cargo build -vv --features use-bindgen --target=x86_64-pc-windows-gnu
         env:
-          LIBCLANG_PATH: C:/msys64/mingw64/bin
+          LIBCLANG_PATH: C:\msys64\mingw64\bin
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
-      - name: Build i686
-        id: build_i686
-        run: |
-          cargo build -vv --features use-bindgen --target i686-pc-windows-gnu
-        env:
-          LIBCLANG_PATH: C:/msys64/mingw64/bin
-          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings_i686
-          LIBRSYS_LIBCLANG_INCLUDE_PATH: C:/msys64/mingw32/i686-w64-mingw32/include/
+      
       - name: Run tests
-        run: cargo test --features use-bindgen -- --nocapture --test-threads=1
+        run: cargo test --features use-bindgen --target=x86_64-pc-windows-gnu -- --nocapture --test-threads=1
+
       - name: Upload generated bindings
         if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@main
         with:
           name: Windows generated bindings
           path: generated_bindings
+      
+      - name: Run tests on precomputed bindings shipped with libR-sys
+        run: cargo test --target=x86_64-pc-windows-gnu -- --nocapture --test-threads=1
+
+
+  test_windows_32bit:
+    name: Run tests (Windows i686)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    strategy:
+      matrix:
+        rust-version: [stable-i686-pc-windows-msvc]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW32
+          path-type: inherit
+          release: false
+          update: false
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 'release'
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust-version }}
+          default: true
+          components: rustfmt, clippy
+          target: i686-pc-windows-gnu
+
+      # Ensures that dlls are search in \i386 before any other folder on the PATH
+      - name: Update path to resolve linking issue
+        run: echo "C:\R\bin\i386" >> $GITHUB_PATH
+
+      - name: Build
+        id: build
+        run: |
+          cargo build -vv --features use-bindgen --target i686-pc-windows-gnu
+        env:
+          LIBCLANG_PATH: C:\msys64\mingw32\bin
+          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings_i686
+      
+      - name: Run tests
+        run: cargo test --features use-bindgen --target=i686-pc-windows-gnu -- --nocapture --test-threads=1
+
       - name: Upload generated i686 bindings
-        if: steps.build_i686.outcome == 'success'
+        if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@main
         with:
           name: Windows generated i686 bindings
           path: generated_bindings_i686
+
       - name: Run tests on precomputed bindings shipped with libR-sys
-        run: cargo test -- --nocapture --test-threads=1
-
-## Windows 32bit is disabled as it doesn't currently work
-#  test_windows_32bit:
-#    name: Run tests (Windows i686)
-#    runs-on: windows-latest
-#    defaults:
-#      run:
-#        shell: msys2 {0}
-#    strategy:
-#      matrix:
-#        rust-version: [stable-i686-pc-windows-gnu]
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: msys2/setup-msys2@v2
-#        with:
-#          msystem: MINGW32
-#          path-type: inherit
-#          release: false
-#          update: false
-#      - uses: r-lib/actions/setup-r@v1
-#        with:
-#          r-version: 'release'
-#      - uses: actions-rs/toolchain@v1
-#        with:
-#          toolchain: ${{ matrix.rust-version }}
-#          default: true
-#          components: rustfmt, clippy
-#      - name: Build with precomputed bindings
-#        run: cargo build -vv
-#      - name: Run tests on precomputed bindings
-#        run: cargo test -vv -- --nocapture --test-threads=1
-
+        run: cargo test --target=i686-pc-windows-gnu -- --nocapture --test-threads=1
