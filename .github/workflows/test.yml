@@ -34,14 +34,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Set up `msys2` for Windows
-        uses: msys2/setup-msys2@v2
-        if: runner.os == 'Windows'
-        with:
-          msystem: MINGW64
-          path-type: inherit
-          release: false
-          update: false
       
       - name: Set up `R`
         uses: r-lib/actions/setup-r@v1
@@ -55,6 +47,16 @@ jobs:
           default: true
           components: rustfmt, clippy
 
+     
+      - name: Set up `msys2` for Windows
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          path-type: inherit
+          release: false
+          update: false
+     
       - name: Configure Windows
         if: runner.os == 'Windows'
         run: |
@@ -63,12 +65,15 @@ jobs:
             echo "CARGO_BUILD_FLAGS=--target=x86_64-pc-windows-gnu" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
             echo "LIBCLANG_PATH=C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
             echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"
           }
           if ($env:RUST_TOOLCHAIN -like "*i686*") {
             rustup target add i686-pc-windows-gnu ;
             echo "CARGO_BUILD_FLAGS=--target=i686-pc-windows-gnu" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
             echo "LIBCLANG_PATH=C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
             echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"
+
           }
         env: 
           RUST_TOOLCHAIN: ${{ matrix.config.rust-version }}
