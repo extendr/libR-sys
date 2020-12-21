@@ -113,7 +113,7 @@ jobs:
       # If success, upload bindings
       # TODO: Some bindings are likely overwritten, need some filter condition to disable upload
       - name: Upload generated bindings
-        if: steps.build.outcome == 'success'
+        if: steps.build.outcome == 'success' && steps.test.outcome == 'success'
         uses: actions/upload-artifact@main
         with:
           name: ${{ matrix.os }} ${{ matrix.rust-version }} generated bindings
