@@ -118,7 +118,7 @@ jobs:
       # TODO: Some bindings are likely overwritten, need some filter condition to disable upload
       # currently uses only stable version of rust
       - name: Upload generated bindings
-        if: steps.build.outcome == 'success' && steps.test.outcome == 'success' && startsWith(matrix.rust-version, 'stable')
+        if: steps.build.outcome == 'success' && steps.test.outcome == 'success' && startsWith(matrix.rust-version, 'rust-stable')
         uses: actions/upload-artifact@main
         with:
           name: ${{ matrix.os }} ${{ matrix.rust-version }} generated bindings
