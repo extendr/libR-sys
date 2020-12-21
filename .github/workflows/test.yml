@@ -27,9 +27,10 @@ jobs:
           # - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           # - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
 
-    env:
-      RSPM: ${{ matrix.config.rspm }}
-
+    
+    defaults:
+      run:
+        shell: pwsh
     steps:
       - uses: actions/checkout@v2
       
@@ -57,14 +58,12 @@ jobs:
       - name: Configure Windows
         if: matrix.config.rust-version == 'stable-x86_64-pc-windows-msvc'
         run: |
-            rustup target add x86_64-pc-windows-gnu
-            echo "CARGO_BUILD_FLAGS=--target=x86_64-pc-windows-gnu" >> $GITHUB_ENV
-
-
-      - name: Test environment
+            echo "CARGO_BUILD_FLAGS=--target=x86_64-pc-windows-gnu" >> $env:GITHUB_ENV
+            echo "LIBCLANG_PATH=C:\msys64\mingw64\bin" >> $env:GITHUB_ENV
+         
+      - name: Build & bindgen
         run: |
-            echo $CARGO_BUILD_FLAGS
-
+          cargo build $env:CARGO_BUILD_FLAGS
 
   # test_linux:
   #   name: Run tests (Linux)
