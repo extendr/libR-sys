@@ -106,8 +106,9 @@ jobs:
       - name: Configure Linux
         if: runner.os == 'linux'
         run: |
-          del alias:R ; echo "R_HOME=$(R -s -e 'cat(normalizePath(R.home()))')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          echo "LD_LIBRARY_PATH=$env:R_HOME/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Del alias:R
+          echo "R_HOME=$(R -s -e 'cat(normalizePath(R.home()))')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "LD_LIBRARY_PATH=$(R -s -e 'cat(normalizePath(R.home()))')/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       # Build and emit bindings to `./generated_bindings`
       - name: Build & Emit bindings
@@ -124,14 +125,9 @@ jobs:
           cargo test -vv --features use-bindgen $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
 
 
-      - name: Debug
-        run:
-          echo "${{ matrix.config.rust-version }}"
-          echo "${{ matrix.config.os }}"
-          echo "${{ startsWith(matrix.config.rust-version, 'stable') }}"
       # If success, upload bindings
       - name: Upload generated bindings
-        if: steps.build.outcome == 'success' && steps.test.outcome == 'success'
+        if: steps.build.outcome == 'success' && steps.test.outcome == 'success' && startsWith(matrix.config.rust-version, 'stable')
         uses: actions/upload-artifact@main
         with:
           name: ${{ matrix.config.os }} ${{ matrix.config.rust-version }} generated bindings
