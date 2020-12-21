@@ -91,6 +91,13 @@ jobs:
         run: |
           cargo test -vv --features use-bindgen $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
 
+      - name: Upload generated bindings
+        if: steps.build.outcome == 'success'
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ matrix.os }} ${{ matrix.rust-version }} generated bindings
+          path: generated_bindings
+
       - name: Run tests on precomputed bindings shipped with libR-sys
         run: cargo test -vv $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
 
