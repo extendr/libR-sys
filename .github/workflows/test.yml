@@ -52,20 +52,18 @@ jobs:
         with:
           toolchain: ${{ matrix.config.rust-version }}
           default: true
-          # target:
-          #   if: matrix.config.rust-version == 'stable-x86_64-pc-windows-msvc'
-          #   x86_64-pc-windows-gnu
           components: rustfmt, clippy
-      
+
       - name: Configure Windows
         if: matrix.config.rust-version == 'stable-x86_64-pc-windows-msvc'
         run: |
             rustup target add x86_64-pc-windows-gnu
             echo "CARGO_BUILD_FLAGS=--target=x86_64-pc-windows-gnu" >> $GITHUB_ENV
 
+
       - name: Test environment
         run: |
-            echo $GITHUB_ENV
+            echo $CARGO_BUILD_FLAGS
 
 
   # test_linux:
