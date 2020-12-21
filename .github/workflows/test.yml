@@ -27,7 +27,7 @@ jobs:
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           # R-devel fails on Ubuntu
-          # - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
 
 
     env:
@@ -100,6 +100,14 @@ jobs:
           brew install llvm r
           echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           
+
+      # This is required for ubuntu r-devel
+      - name: Configure Linux
+        if: runner.os == 'linux'
+        run: |
+          echo "R_HOME=$(R -s -e 'cat(normalizePath(R.home()))')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "LD_LIBRARY_PATH=$env:R_HOME/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
       # Build and emit bindings to `./generated_bindings`
       - name: Build & Emit bindings
         id: build
@@ -109,10 +117,10 @@ jobs:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
 
       # Test the result of previous step
-      # - name: Run tests
-      #   id: test
-      #   run: |
-      #     cargo test -vv --features use-bindgen $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
+      - name: Run tests
+        id: test
+        run: |
+          cargo test -vv --features use-bindgen $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
 
 
       - name: Debug
