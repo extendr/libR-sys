@@ -21,12 +21,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc'}
-          # - {os: windows-latest, r: 'release', rust-version: 'stable-i686-pc-windows-msvc'}
-          # - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc'}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-i686-pc-windows-msvc'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          # R-devel fails on Ubuntu
+          # R-devel requires LD_LIBRARY_PATH
           - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
 
 
@@ -41,12 +41,12 @@ jobs:
       - uses: actions/checkout@v2
       
       
-      - name: Set up `R`
+      - name: Set up R
         uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.config.r }}
 
-      - name: Set up `rust`
+      - name: Set up Rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ matrix.config.rust-version }}
@@ -54,7 +54,7 @@ jobs:
           components: rustfmt, clippy
 
       # This step is only needed for Windows
-      - name: Set up `msys2` for Windows
+      - name: Set up MSYS2 for Windows
         if: runner.os == 'Windows'
         uses: msys2/setup-msys2@v2
         with:
