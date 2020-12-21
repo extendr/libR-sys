@@ -30,29 +30,32 @@ jobs:
       env:
         RSPM: ${{ matrix.config.rspm }}
 
-      steps:
-        - uses: actions/checkout@v2
-        
-        - name: Set up `msys2` for Windows
-          uses: msys2/setup-msys2@v2
-          if: runner.os == 'Windows'
-          with:
-            msystem: MINGW64
-            path-type: inherit
-            release: false
-            update: false
-        
-        - name: Set up `R`
-          uses: r-lib/actions/setup-r@v1
-          with:
-            r-version: ${{ matrix.config.r }}
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up `msys2` for Windows
+        uses: msys2/setup-msys2@v2
+        if: runner.os == 'Windows'
+        with:
+          msystem: MINGW64
+          path-type: inherit
+          release: false
+          update: false
+      
+      - name: Set up `R`
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.config.r }}
 
-        - name: Set up `rust`
-          uses: actions-rs/toolchain@v1
-          with:
-            toolchain: ${{ matrix.config.rust-version }}
-            default: true
-            components: rustfmt, clippy
+      - name: Set up `rust`
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.config.rust-version }}
+          default: true
+          # target:
+          #   if: matrix.config.rust-version == 'stable-x86_64-pc-windows-msvc'
+          #   x86_64-pc-windows-gnu
+          components: rustfmt, clippy
 
   # test_linux:
   #   name: Run tests (Linux)
