@@ -129,7 +129,7 @@ jobs:
         if: steps.build.outcome == 'success' && steps.test.outcome == 'success' && startsWith(matrix.config.rust-version, 'stable')
         uses: actions/upload-artifact@main
         with:
-          name: ${{ matrix.config.os }} ${{ matrix.config.rust-version }} generated bindings
+          name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) generated bindings
           path: generated_bindings
 
       # Run tests again using different bindings
