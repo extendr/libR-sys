@@ -56,12 +56,12 @@ In general, we follow the [GitHub flow](https://guides.github.com/introduction/f
 
 ## Package Authorship
 
-Contributors who have made multiple, sustained, and/or non-trivial contributions to the project may be added to the author list. New author names will always be added at the end of the list, so that author order reflects chronological order of joining the project. All authorship decisions are at the discretion of the current maintainers of the library.
+Contributors who have made multiple, sustained, and/or non-trivial contributions to the project may be added to the author list. New author names will always be added at the end of the list, so that author order reflects chronological order of joining the project. All authorship decisions are at the discretion of the current maintainers of the project.
 
 ## Getting Help
 
 Please join us on our [Discord server](https://discord.gg/7hmApuc) for general conversations and questions that don't belong into a GitHub issue.
 
-## Acknowledgments
+## Attribution
 
 This document was adapted from the [General Contributing Guidelines](https://github.com/auth0/open-source-template/blob/master/GENERAL-CONTRIBUTING.md) of the auth0 project.
