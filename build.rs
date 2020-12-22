@@ -257,9 +257,10 @@ fn generate_bindings(r_paths: &InstallationPaths) {
         );
     }
 
-    // disable layout tests for windows x86
+    // Blacklist some types on i686
+    // https://github.com/rust-lang/rust-bindgen/issues/1823
+    // https://github.com/rust-lang/rust/issues/54341
     if target_os == "windows" && target_arch == "x86" {
-        // bindgen_builder = bindgen_builder.layout_tests(false);
         bindgen_builder = 
             bindgen_builder
             .blacklist_item("max_align_t")
