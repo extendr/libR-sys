@@ -260,6 +260,7 @@ fn generate_bindings(r_paths: &InstallationPaths) {
     // Blacklist some types on i686
     // https://github.com/rust-lang/rust-bindgen/issues/1823
     // https://github.com/rust-lang/rust/issues/54341
+    // https://github.com/extendr/libR-sys/issues/39
     if target_os == "windows" && target_arch == "x86" {
         bindgen_builder = 
             bindgen_builder
