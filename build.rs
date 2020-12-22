@@ -259,7 +259,11 @@ fn generate_bindings(r_paths: &InstallationPaths) {
 
     // disable layout tests for windows x86
     if target_os == "windows" && target_arch == "x86" {
-        bindgen_builder = bindgen_builder.layout_tests(false);
+        // bindgen_builder = bindgen_builder.layout_tests(false);
+        bindgen_builder = 
+            bindgen_builder
+            .blacklist_item("max_align_t")
+            .blacklist_item("__mingw_ldbl_type_t");
     }
 
     // Finish the builder and generate the bindings.
