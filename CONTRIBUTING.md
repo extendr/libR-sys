@@ -1,6 +1,6 @@
 # Contributing
 
-We welcome contributions to the libR-sys project. Contributions come in many forms. Please carefully read and follow these guidelines. This will help us make the contribution process easy and effective for everyone involved. It also communicates that you agree to respect the time of the developers managing and developing this project.
+We welcome contributions to the extendr project. Contributions come in many forms. Please carefully read and follow these guidelines. This will help us make the contribution process easy and effective for everyone involved. It also communicates that you agree to respect the time of the developers managing and developing this project.
 
 
 ## Quicklinks
@@ -10,6 +10,8 @@ We welcome contributions to the libR-sys project. Contributions come in many for
     * [Issues](#issues)
     * [Pull Requests](#pull-requests)
 * [Getting Help](#getting-help)
+* [Authorship](#authorship)
+* [Attribution](#attribution)
 
 ## Code of Conduct
 
@@ -54,13 +56,13 @@ In general, we follow the [GitHub flow](https://guides.github.com/introduction/f
 5. Push changes to your fork
 6. Open a PR in our repository and follow the PR template so that we can efficiently review the changes.
 
-## Package Authorship
-
-Contributors who have made multiple, sustained, and/or non-trivial contributions to the project may be added to the author list. New author names will always be added at the end of the list, so that author order reflects chronological order of joining the project. All authorship decisions are at the discretion of the current maintainers of the project.
-
 ## Getting Help
 
 Please join us on our [Discord server](https://discord.gg/7hmApuc) for general conversations and questions that don't belong into a GitHub issue.
+
+## Authorship
+
+Contributors who have made multiple, sustained, and/or non-trivial contributions to the project may be added to the author list. New author names will always be added at the end of the list, so that author order reflects chronological order of joining the project. All authorship decisions are at the discretion of the current maintainers of the project.
 
 ## Attribution
 
