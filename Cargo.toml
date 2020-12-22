@@ -3,7 +3,8 @@ name = "libR-sys"
 version = "0.1.12"
 authors = [
     "andy-thomason <andy@andythomason.com>",
-    "Claus O. Wilke <wilke@austin.utexas.edu>"
+    "Claus O. Wilke <wilke@austin.utexas.edu>",
+    "Ilia Kosenkov <ilia.kosenkov.at.gm@gmail.com>"
 ]
 edition = "2018"
 description = "Low level bindings to the R programming language."
