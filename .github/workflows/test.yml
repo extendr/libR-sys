@@ -11,152 +11,145 @@ on:
       - master
 
 jobs:
-  test_linux:
-    name: Run tests (Linux)
-    runs-on: ubuntu-20.04
+
+  test_with_bindgen:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }})
+              
     strategy:
+      fail-fast: false
       matrix:
-        rust-version: [stable, beta, nightly]
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.rust-version }}
-      - name: Build
-        id: build
-        run: cargo build -vv --features use-bindgen
-        env:
-          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
-      - name: Run tests
-        run: cargo test -vv --features use-bindgen -- --nocapture --test-threads=1
-      - name: Upload generated bindings
-        if: steps.build.outcome == 'success'
-        uses: actions/upload-artifact@main
-        with:
-          name: Linux ${{ matrix.rust-version }} generated bindings
-          path: generated_bindings
-      - name: Run tests on precomputed bindings shipped with libR-sys
-        run: cargo test -vv -- --nocapture --test-threads=1
+        config:
+          
+          - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc'}
+          - {os: windows-latest, r: 'release', rust-version: 'nightly-x86_64-pc-windows-msvc'}
+          - {os: windows-latest, r: 'devel', rust-version: 'stable-x86_64-pc-windows-msvc'}
+          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-x86_64-pc-windows-msvc'}
 
 
-  test_macos:
-    name: Run tests (macOS)
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        rust-version: [stable]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.rust-version }}
-      - name: Install dependencies
-        run: brew install llvm r
-      - name: Set dynamic environment variables
-        run: echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" >> $GITHUB_ENV
-      - name: Build
-        id: build
-        run: cargo build -vv --features use-bindgen
-        env:
-          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
-      - name: Run tests
-        run: cargo test -vv --features use-bindgen -- --nocapture --test-threads=1
-      - name: Upload generated bindings shipped with libR-sys
-        if: steps.build.outcome == 'success'
-        uses: actions/upload-artifact@main
-        with:
-          name: macOS generated bindings
-          path: generated_bindings
-      - name: Run tests on precomputed bindings
-        run: cargo test -vv -- --nocapture --test-threads=1
+          - {os: windows-latest, r: 'release', rust-version: 'stable-i686-pc-windows-msvc'}
+          - {os: windows-latest, r: 'release', rust-version: 'nightly-i686-pc-windows-msvc'}
+          - {os: windows-latest, r: 'devel', rust-version: 'stable-i686-pc-windows-msvc'}
+          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-i686-pc-windows-msvc'}
 
-  test_windows:
-    name: Run tests (Windows x86_64)
-    runs-on: windows-latest
+
+          - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
+          - {os: macOS-latest,   r: 'devel', rust-version: 'stable'}
+          - {os: macOS-latest,   r: 'oldrel', rust-version: 'stable'}
+
+
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          # R-devel requires LD_LIBRARY_PATH
+          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          - {os: ubuntu-20.04,   r: 'oldrel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+
+
+
+    env:
+      RSPM: ${{ matrix.config.rspm }}
+
+    # PowerShell core is available on all platforms and can be used to unify scripts
     defaults:
       run:
-        shell: msys2 {0}
-    strategy:
-      matrix:
-        rust-version: [stable-x86_64-pc-windows-gnu]
+        shell: pwsh
     steps:
       - uses: actions/checkout@v2
-      - uses: msys2/setup-msys2@v2
+      
+      
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.config.r }}
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.config.rust-version }}
+          default: true
+          components: rustfmt, clippy
+
+      # This step is only needed for Windows
+      - name: Set up MSYS2 for Windows
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
           path-type: inherit
           release: false
           update: false
-      - uses: r-lib/actions/setup-r@v1
-        with:
-          r-version: 'release'
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.rust-version }}
-          target: i686-pc-windows-gnu
-          default: true
-          components: rustfmt, clippy
-      - name: Build
+     
+      # All configurations for Windows go here
+      # `Rust` toolchain is used to determine target architecture
+      # Alternatively, `if:` conditions can be used
+      - name: Configure Windows
+        if: runner.os == 'Windows'
+        # 1. Add appropriate *-gnu target
+        # 2. Set CARGO_BUILD_FLAGS to the `rust` target
+        # 3. Configure path to `libclang`
+        # 4. Add path to `mingw32`/`mingw64` -- otherwise library is linked to `rtools`
+        # 5. Add path to R's `i386`/`x64`  -- to solve `x86` build/test issue
+        run: |
+          if ($env:RUST_TOOLCHAIN -like "*x86_64*") {
+            rustup target add x86_64-pc-windows-gnu ;
+            echo "CARGO_BUILD_FLAGS=--target=x86_64-pc-windows-gnu" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
+            echo "LIBCLANG_PATH=C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
+            echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          }
+          if ($env:RUST_TOOLCHAIN -like "*i686*") {
+            rustup target add i686-pc-windows-gnu ;
+            echo "CARGO_BUILD_FLAGS=--target=i686-pc-windows-gnu" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
+            echo "LIBCLANG_PATH=C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
+            echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+
+          }
+        env: 
+          RUST_TOOLCHAIN: ${{ matrix.config.rust-version }}
+          
+
+      # MacOS configurations, mainly `llvm` and path to `libclang`
+      - name: Configure MacOs
+        if: runner.os == 'macOS'
+        run: | 
+          brew install llvm r
+          echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          
+
+      # This is required for ubuntu r-devel
+      # 'Del alias:R' removes 'R' alias which prevents running R 
+      - name: Configure Linux
+        if: runner.os == 'linux'
+        run: |
+          Del alias:R
+          echo "LD_LIBRARY_PATH=$(R -s -e 'cat(normalizePath(R.home()))')/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      # Build and emit bindings to `./generated_bindings`
+      - name: Build & Emit bindings
         id: build
         run: |
-          cargo build -vv --features use-bindgen 
+          cargo build -vv --features use-bindgen $env:CARGO_BUILD_FLAGS
         env:
-          LIBCLANG_PATH: C:/msys64/mingw64/bin
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
-      - name: Build i686
-        id: build_i686
-        run: |
-          cargo build -vv --features use-bindgen --target i686-pc-windows-gnu
-        env:
-          LIBCLANG_PATH: C:/msys64/mingw64/bin
-          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings_i686
-          LIBRSYS_LIBCLANG_INCLUDE_PATH: C:/msys64/mingw32/i686-w64-mingw32/include/
+
+      # Test the result of previous step
       - name: Run tests
-        run: cargo test --features use-bindgen -- --nocapture --test-threads=1
+        id: test
+        run: |
+          cargo test -vv --features use-bindgen $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
+
+
+      # If success, upload bindings
       - name: Upload generated bindings
-        if: steps.build.outcome == 'success'
+        if: steps.build.outcome == 'success' && steps.test.outcome == 'success' && startsWith(matrix.config.rust-version, 'stable')
         uses: actions/upload-artifact@main
         with:
-          name: Windows generated bindings
+          name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) generated bindings
           path: generated_bindings
-      - name: Upload generated i686 bindings
-        if: steps.build_i686.outcome == 'success'
-        uses: actions/upload-artifact@main
-        with:
-          name: Windows generated i686 bindings
-          path: generated_bindings_i686
+
+      # Run tests again using different bindings
       - name: Run tests on precomputed bindings shipped with libR-sys
-        run: cargo test -- --nocapture --test-threads=1
-
-## Windows 32bit is disabled as it doesn't currently work
-#  test_windows_32bit:
-#    name: Run tests (Windows i686)
-#    runs-on: windows-latest
-#    defaults:
-#      run:
-#        shell: msys2 {0}
-#    strategy:
-#      matrix:
-#        rust-version: [stable-i686-pc-windows-gnu]
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: msys2/setup-msys2@v2
-#        with:
-#          msystem: MINGW32
-#          path-type: inherit
-#          release: false
-#          update: false
-#      - uses: r-lib/actions/setup-r@v1
-#        with:
-#          r-version: 'release'
-#      - uses: actions-rs/toolchain@v1
-#        with:
-#          toolchain: ${{ matrix.rust-version }}
-#          default: true
-#          components: rustfmt, clippy
-#      - name: Build with precomputed bindings
-#        run: cargo build -vv
-#      - name: Run tests on precomputed bindings
-#        run: cargo test -vv -- --nocapture --test-threads=1
-
+        run: cargo test -vv $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
