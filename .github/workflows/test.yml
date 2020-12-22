@@ -115,7 +115,7 @@ jobs:
       - name: Configure MacOs
         if: runner.os == 'macOS'
         run: | 
-          brew install llvm r
+          brew install llvm
           echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           
 
