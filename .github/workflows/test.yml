@@ -22,16 +22,16 @@ jobs:
       matrix:
         config:
           
-          - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc'}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-x86_64-pc-windows-msvc'}
-          - {os: windows-latest, r: 'devel', rust-version: 'stable-x86_64-pc-windows-msvc'}
-          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-x86_64-pc-windows-msvc'}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc', msystem: "MINGW64"}
+          - {os: windows-latest, r: 'release', rust-version: 'nightly-x86_64-pc-windows-msvc', msystem: "MINGW64"}
+          - {os: windows-latest, r: 'devel', rust-version: 'stable-x86_64-pc-windows-msvc', msystem: "MINGW64"}
+          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-x86_64-pc-windows-msvc', msystem: "MINGW64"}
 
 
-          - {os: windows-latest, r: 'release', rust-version: 'stable-i686-pc-windows-msvc'}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-i686-pc-windows-msvc'}
-          - {os: windows-latest, r: 'devel', rust-version: 'stable-i686-pc-windows-msvc'}
-          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-i686-pc-windows-msvc'}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-i686-pc-windows-msvc', msystem: "MINGW32"}
+          - {os: windows-latest, r: 'release', rust-version: 'nightly-i686-pc-windows-msvc', msystem: "MINGW32"}
+          - {os: windows-latest, r: 'devel', rust-version: 'stable-i686-pc-windows-msvc', msystem: "MINGW32"}
+          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-i686-pc-windows-msvc', msystem: "MINGW32"}
 
 
           - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
@@ -76,7 +76,7 @@ jobs:
         if: runner.os == 'Windows'
         uses: msys2/setup-msys2@v2
         with:
-          msystem: MINGW64
+          msystem: ${{ matrix.config.msystem }}
           path-type: inherit
           release: false
           update: false
@@ -115,7 +115,7 @@ jobs:
       - name: Configure MacOs
         if: runner.os == 'macOS'
         run: | 
-          brew install llvm r
+          brew install llvm
           echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           
 
