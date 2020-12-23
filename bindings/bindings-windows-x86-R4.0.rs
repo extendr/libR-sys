@@ -302,6 +302,10 @@ pub const R_YEAR: &'static [u8; 5usize] = b"2020\0";
 pub const R_MONTH: &'static [u8; 3usize] = b"10\0";
 pub const R_DAY: &'static [u8; 3usize] = b"10\0";
 pub const R_SVN_REVISION: u32 = 79318;
+pub type size_t = ::std::os::raw::c_uint;
+pub type wchar_t = ::std::os::raw::c_ushort;
+#[doc = " <div rustbindgen replaces=\"R_xlen_t\"></div>"]
+pub type R_xlen_t = isize;
 pub type __gnuc_va_list = __builtin_va_list;
 pub type va_list = __gnuc_va_list;
 extern "C" {
@@ -310,10 +314,8 @@ extern "C" {
 extern "C" {
     pub fn __mingw_get_crt_info() -> *const ::std::os::raw::c_char;
 }
-pub type size_t = ::std::os::raw::c_uint;
 pub type ssize_t = ::std::os::raw::c_int;
 pub type rsize_t = size_t;
-pub type wchar_t = ::std::os::raw::c_ushort;
 pub type wint_t = ::std::os::raw::c_ushort;
 pub type wctype_t = ::std::os::raw::c_ushort;
 pub type errno_t = ::std::os::raw::c_int;
@@ -338,6 +340,39 @@ pub struct localeinfo_struct {
     pub locinfo: pthreadlocinfo,
     pub mbcinfo: pthreadmbcinfo,
 }
+#[test]
+fn bindgen_test_layout_localeinfo_struct() {
+    assert_eq!(
+        ::std::mem::size_of::<localeinfo_struct>(),
+        8usize,
+        concat!("Size of: ", stringify!(localeinfo_struct))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<localeinfo_struct>(),
+        4usize,
+        concat!("Alignment of ", stringify!(localeinfo_struct))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<localeinfo_struct>())).locinfo as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(localeinfo_struct),
+            "::",
+            stringify!(locinfo)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<localeinfo_struct>())).mbcinfo as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(localeinfo_struct),
+            "::",
+            stringify!(mbcinfo)
+        )
+    );
+}
 pub type _locale_tstruct = localeinfo_struct;
 pub type _locale_t = *mut localeinfo_struct;
 #[repr(C)]
@@ -346,6 +381,49 @@ pub struct tagLC_ID {
     pub wLanguage: ::std::os::raw::c_ushort,
     pub wCountry: ::std::os::raw::c_ushort,
     pub wCodePage: ::std::os::raw::c_ushort,
+}
+#[test]
+fn bindgen_test_layout_tagLC_ID() {
+    assert_eq!(
+        ::std::mem::size_of::<tagLC_ID>(),
+        6usize,
+        concat!("Size of: ", stringify!(tagLC_ID))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<tagLC_ID>(),
+        2usize,
+        concat!("Alignment of ", stringify!(tagLC_ID))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<tagLC_ID>())).wLanguage as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(tagLC_ID),
+            "::",
+            stringify!(wLanguage)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<tagLC_ID>())).wCountry as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(tagLC_ID),
+            "::",
+            stringify!(wCountry)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<tagLC_ID>())).wCodePage as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(tagLC_ID),
+            "::",
+            stringify!(wCodePage)
+        )
+    );
 }
 pub type LC_ID = tagLC_ID;
 pub type LPLC_ID = *mut tagLC_ID;
@@ -379,30 +457,294 @@ pub struct threadlocaleinfostruct__bindgen_ty_1 {
     pub refcount: *mut ::std::os::raw::c_int,
     pub wrefcount: *mut ::std::os::raw::c_int,
 }
+#[test]
+fn bindgen_test_layout_threadlocaleinfostruct__bindgen_ty_1() {
+    assert_eq!(
+        ::std::mem::size_of::<threadlocaleinfostruct__bindgen_ty_1>(),
+        16usize,
+        concat!(
+            "Size of: ",
+            stringify!(threadlocaleinfostruct__bindgen_ty_1)
+        )
+    );
+    assert_eq!(
+        ::std::mem::align_of::<threadlocaleinfostruct__bindgen_ty_1>(),
+        4usize,
+        concat!(
+            "Alignment of ",
+            stringify!(threadlocaleinfostruct__bindgen_ty_1)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct__bindgen_ty_1>())).locale as *const _
+                as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct__bindgen_ty_1),
+            "::",
+            stringify!(locale)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct__bindgen_ty_1>())).wlocale as *const _
+                as usize
+        },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct__bindgen_ty_1),
+            "::",
+            stringify!(wlocale)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct__bindgen_ty_1>())).refcount as *const _
+                as usize
+        },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct__bindgen_ty_1),
+            "::",
+            stringify!(refcount)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct__bindgen_ty_1>())).wrefcount as *const _
+                as usize
+        },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct__bindgen_ty_1),
+            "::",
+            stringify!(wrefcount)
+        )
+    );
+}
+#[test]
+fn bindgen_test_layout_threadlocaleinfostruct() {
+    assert_eq!(
+        ::std::mem::size_of::<threadlocaleinfostruct>(),
+        216usize,
+        concat!("Size of: ", stringify!(threadlocaleinfostruct))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<threadlocaleinfostruct>(),
+        4usize,
+        concat!("Alignment of ", stringify!(threadlocaleinfostruct))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).refcount as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(refcount)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct>())).lc_codepage as *const _ as usize
+        },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(lc_codepage)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct>())).lc_collate_cp as *const _ as usize
+        },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(lc_collate_cp)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct>())).lc_handle as *const _ as usize
+        },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(lc_handle)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).lc_id as *const _ as usize },
+        36usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(lc_id)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct>())).lc_category as *const _ as usize
+        },
+        72usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(lc_category)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).lc_clike as *const _ as usize },
+        168usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(lc_clike)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct>())).mb_cur_max as *const _ as usize
+        },
+        172usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(mb_cur_max)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct>())).lconv_intl_refcount as *const _
+                as usize
+        },
+        176usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(lconv_intl_refcount)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct>())).lconv_num_refcount as *const _
+                as usize
+        },
+        180usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(lconv_num_refcount)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct>())).lconv_mon_refcount as *const _
+                as usize
+        },
+        184usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(lconv_mon_refcount)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).lconv as *const _ as usize },
+        188usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(lconv)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct>())).ctype1_refcount as *const _ as usize
+        },
+        192usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(ctype1_refcount)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).ctype1 as *const _ as usize },
+        196usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(ctype1)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).pctype as *const _ as usize },
+        200usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(pctype)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).pclmap as *const _ as usize },
+        204usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(pclmap)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).pcumap as *const _ as usize },
+        208usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(pcumap)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<threadlocaleinfostruct>())).lc_time_curr as *const _ as usize
+        },
+        212usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(threadlocaleinfostruct),
+            "::",
+            stringify!(lc_time_curr)
+        )
+    );
+}
 pub type threadlocinfo = threadlocaleinfostruct;
-extern "C" {
-    pub fn _errno() -> *mut ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _set_errno(_Value: ::std::os::raw::c_int) -> errno_t;
-}
-extern "C" {
-    pub fn _get_errno(_Value: *mut ::std::os::raw::c_int) -> errno_t;
-}
-extern "C" {
-    pub fn __threadid() -> ::std::os::raw::c_ulong;
-}
-extern "C" {
-    pub fn __threadhandle() -> usize;
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct max_align_t {
-    pub __max_align_ll: ::std::os::raw::c_longlong,
-    pub __max_align_ld: f64,
-}
-#[doc = " <div rustbindgen replaces=\"R_xlen_t\"></div>"]
-pub type R_xlen_t = isize;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _iobuf {
@@ -414,6 +756,99 @@ pub struct _iobuf {
     pub _charbuf: ::std::os::raw::c_int,
     pub _bufsiz: ::std::os::raw::c_int,
     pub _tmpfname: *mut ::std::os::raw::c_char,
+}
+#[test]
+fn bindgen_test_layout__iobuf() {
+    assert_eq!(
+        ::std::mem::size_of::<_iobuf>(),
+        32usize,
+        concat!("Size of: ", stringify!(_iobuf))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<_iobuf>(),
+        4usize,
+        concat!("Alignment of ", stringify!(_iobuf))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_iobuf>()))._ptr as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_iobuf),
+            "::",
+            stringify!(_ptr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_iobuf>()))._cnt as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_iobuf),
+            "::",
+            stringify!(_cnt)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_iobuf>()))._base as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_iobuf),
+            "::",
+            stringify!(_base)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_iobuf>()))._flag as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_iobuf),
+            "::",
+            stringify!(_flag)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_iobuf>()))._file as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_iobuf),
+            "::",
+            stringify!(_file)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_iobuf>()))._charbuf as *const _ as usize },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_iobuf),
+            "::",
+            stringify!(_charbuf)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_iobuf>()))._bufsiz as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_iobuf),
+            "::",
+            stringify!(_bufsiz)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_iobuf>()))._tmpfname as *const _ as usize },
+        28usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_iobuf),
+            "::",
+            stringify!(_tmpfname)
+        )
+    );
 }
 pub type FILE = _iobuf;
 pub type _off_t = ::std::os::raw::c_long;
@@ -1220,15 +1655,6 @@ extern "C" {
     pub fn rmtmp() -> ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " __mingw_str_wide_utf8"]
-    #[doc = " Converts a null terminated UCS-2 string to a multibyte (UTF-8) equivalent."]
-    #[doc = " Caller is supposed to free allocated buffer with __mingw_str_free()."]
-    #[doc = " @param[in] wptr Pointer to wide string."]
-    #[doc = " @param[out] mbptr Pointer to multibyte string."]
-    #[doc = " @param[out] buflen Optional parameter for length of allocated buffer."]
-    #[doc = " @return Number of characters converted, 0 for failure."]
-    #[doc = ""]
-    #[doc = " WideCharToMultiByte - http://msdn.microsoft.com/en-us/library/dd374130(VS.85).aspx"]
     pub fn __mingw_str_wide_utf8(
         wptr: *const wchar_t,
         mbptr: *mut *mut ::std::os::raw::c_char,
@@ -1236,15 +1662,6 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " __mingw_str_utf8_wide"]
-    #[doc = " Converts a null terminated UTF-8 string to a UCS-2 equivalent."]
-    #[doc = " Caller is supposed to free allocated buffer with __mingw_str_free()."]
-    #[doc = " @param[out] mbptr Pointer to multibyte string."]
-    #[doc = " @param[in] wptr Pointer to wide string."]
-    #[doc = " @param[out] buflen Optional parameter for length of allocated buffer."]
-    #[doc = " @return Number of characters converted, 0 for failure."]
-    #[doc = ""]
-    #[doc = " MultiByteToWideChar - http://msdn.microsoft.com/en-us/library/dd319072(VS.85).aspx"]
     pub fn __mingw_str_utf8_wide(
         mbptr: *const ::std::os::raw::c_char,
         wptr: *mut *mut wchar_t,
@@ -1252,10 +1669,6 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " __mingw_str_free"]
-    #[doc = " Frees buffer create by __mingw_str_wide_utf8 and __mingw_str_utf8_wide."]
-    #[doc = " @param[in] ptr memory block to free."]
-    #[doc = ""]
     pub fn __mingw_str_free(ptr: *mut ::std::os::raw::c_void);
 }
 extern "C" {
@@ -2243,6 +2656,89 @@ pub struct __mingw_dbl_type_t__bindgen_ty_1 {
     pub low: ::std::os::raw::c_uint,
     pub high: ::std::os::raw::c_uint,
 }
+#[test]
+fn bindgen_test_layout___mingw_dbl_type_t__bindgen_ty_1() {
+    assert_eq!(
+        ::std::mem::size_of::<__mingw_dbl_type_t__bindgen_ty_1>(),
+        8usize,
+        concat!("Size of: ", stringify!(__mingw_dbl_type_t__bindgen_ty_1))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<__mingw_dbl_type_t__bindgen_ty_1>(),
+        4usize,
+        concat!(
+            "Alignment of ",
+            stringify!(__mingw_dbl_type_t__bindgen_ty_1)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<__mingw_dbl_type_t__bindgen_ty_1>())).low as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__mingw_dbl_type_t__bindgen_ty_1),
+            "::",
+            stringify!(low)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<__mingw_dbl_type_t__bindgen_ty_1>())).high as *const _ as usize
+        },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__mingw_dbl_type_t__bindgen_ty_1),
+            "::",
+            stringify!(high)
+        )
+    );
+}
+#[test]
+fn bindgen_test_layout___mingw_dbl_type_t() {
+    assert_eq!(
+        ::std::mem::size_of::<__mingw_dbl_type_t>(),
+        8usize,
+        concat!("Size of: ", stringify!(__mingw_dbl_type_t))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<__mingw_dbl_type_t>(),
+        8usize,
+        concat!("Alignment of ", stringify!(__mingw_dbl_type_t))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<__mingw_dbl_type_t>())).x as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__mingw_dbl_type_t),
+            "::",
+            stringify!(x)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<__mingw_dbl_type_t>())).val as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__mingw_dbl_type_t),
+            "::",
+            stringify!(val)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<__mingw_dbl_type_t>())).lh as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__mingw_dbl_type_t),
+            "::",
+            stringify!(lh)
+        )
+    );
+}
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union __mingw_flt_type_t {
@@ -2250,12 +2746,38 @@ pub union __mingw_flt_type_t {
     pub val: ::std::os::raw::c_uint,
     _bindgen_union_align: u32,
 }
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub union __mingw_ldbl_type_t {
-    pub x: f64,
-    pub lh: __mingw_ldbl_type_t__bindgen_ty_1,
-    _bindgen_union_align: [u32; 4usize],
+#[test]
+fn bindgen_test_layout___mingw_flt_type_t() {
+    assert_eq!(
+        ::std::mem::size_of::<__mingw_flt_type_t>(),
+        4usize,
+        concat!("Size of: ", stringify!(__mingw_flt_type_t))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<__mingw_flt_type_t>(),
+        4usize,
+        concat!("Alignment of ", stringify!(__mingw_flt_type_t))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<__mingw_flt_type_t>())).x as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__mingw_flt_type_t),
+            "::",
+            stringify!(x)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<__mingw_flt_type_t>())).val as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__mingw_flt_type_t),
+            "::",
+            stringify!(val)
+        )
+    );
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -2263,6 +2785,46 @@ pub struct __mingw_ldbl_type_t__bindgen_ty_1 {
     pub low: ::std::os::raw::c_uint,
     pub high: ::std::os::raw::c_uint,
     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 8usize], u32>,
+}
+#[test]
+fn bindgen_test_layout___mingw_ldbl_type_t__bindgen_ty_1() {
+    assert_eq!(
+        ::std::mem::size_of::<__mingw_ldbl_type_t__bindgen_ty_1>(),
+        16usize,
+        concat!("Size of: ", stringify!(__mingw_ldbl_type_t__bindgen_ty_1))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<__mingw_ldbl_type_t__bindgen_ty_1>(),
+        4usize,
+        concat!(
+            "Alignment of ",
+            stringify!(__mingw_ldbl_type_t__bindgen_ty_1)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<__mingw_ldbl_type_t__bindgen_ty_1>())).low as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__mingw_ldbl_type_t__bindgen_ty_1),
+            "::",
+            stringify!(low)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<__mingw_ldbl_type_t__bindgen_ty_1>())).high as *const _ as usize
+        },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__mingw_ldbl_type_t__bindgen_ty_1),
+            "::",
+            stringify!(high)
+        )
+    );
 }
 impl __mingw_ldbl_type_t__bindgen_ty_1 {
     #[inline]
@@ -2332,6 +2894,69 @@ pub struct _exception {
     pub arg1: f64,
     pub arg2: f64,
     pub retval: f64,
+}
+#[test]
+fn bindgen_test_layout__exception() {
+    assert_eq!(
+        ::std::mem::size_of::<_exception>(),
+        32usize,
+        concat!("Size of: ", stringify!(_exception))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<_exception>(),
+        8usize,
+        concat!("Alignment of ", stringify!(_exception))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_exception>())).type_ as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_exception),
+            "::",
+            stringify!(type_)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_exception>())).name as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_exception),
+            "::",
+            stringify!(name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_exception>())).arg1 as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_exception),
+            "::",
+            stringify!(arg1)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_exception>())).arg2 as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_exception),
+            "::",
+            stringify!(arg2)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_exception>())).retval as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_exception),
+            "::",
+            stringify!(retval)
+        )
+    );
 }
 extern "C" {
     pub fn __mingw_raise_matherr(
@@ -2454,6 +3079,39 @@ extern "C" {
 pub struct _complex {
     pub x: f64,
     pub y: f64,
+}
+#[test]
+fn bindgen_test_layout__complex() {
+    assert_eq!(
+        ::std::mem::size_of::<_complex>(),
+        16usize,
+        concat!("Size of: ", stringify!(_complex))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<_complex>(),
+        8usize,
+        concat!("Alignment of ", stringify!(_complex))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_complex>())).x as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_complex),
+            "::",
+            stringify!(x)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_complex>())).y as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_complex),
+            "::",
+            stringify!(y)
+        )
+    );
 }
 extern "C" {
     pub fn _cabs(_ComplexA: _complex) -> f64;
@@ -3069,6 +3727,39 @@ pub struct Rcomplex {
     pub r: f64,
     pub i: f64,
 }
+#[test]
+fn bindgen_test_layout_Rcomplex() {
+    assert_eq!(
+        ::std::mem::size_of::<Rcomplex>(),
+        16usize,
+        concat!("Size of: ", stringify!(Rcomplex))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Rcomplex>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Rcomplex))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Rcomplex>())).r as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Rcomplex),
+            "::",
+            stringify!(r)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Rcomplex>())).i as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Rcomplex),
+            "::",
+            stringify!(i)
+        )
+    );
+}
 extern "C" {
     pub fn Rf_error(arg1: *const ::std::os::raw::c_char, ...);
 }
@@ -3305,6 +3996,59 @@ pub struct R_CMethodDef {
     pub numArgs: ::std::os::raw::c_int,
     pub types: *mut R_NativePrimitiveArgType,
 }
+#[test]
+fn bindgen_test_layout_R_CMethodDef() {
+    assert_eq!(
+        ::std::mem::size_of::<R_CMethodDef>(),
+        16usize,
+        concat!("Size of: ", stringify!(R_CMethodDef))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<R_CMethodDef>(),
+        4usize,
+        concat!("Alignment of ", stringify!(R_CMethodDef))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_CMethodDef>())).name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_CMethodDef),
+            "::",
+            stringify!(name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_CMethodDef>())).fun as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_CMethodDef),
+            "::",
+            stringify!(fun)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_CMethodDef>())).numArgs as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_CMethodDef),
+            "::",
+            stringify!(numArgs)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_CMethodDef>())).types as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_CMethodDef),
+            "::",
+            stringify!(types)
+        )
+    );
+}
 pub type R_FortranMethodDef = R_CMethodDef;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -3312,6 +4056,49 @@ pub struct R_CallMethodDef {
     pub name: *const ::std::os::raw::c_char,
     pub fun: DL_FUNC,
     pub numArgs: ::std::os::raw::c_int,
+}
+#[test]
+fn bindgen_test_layout_R_CallMethodDef() {
+    assert_eq!(
+        ::std::mem::size_of::<R_CallMethodDef>(),
+        12usize,
+        concat!("Size of: ", stringify!(R_CallMethodDef))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<R_CallMethodDef>(),
+        4usize,
+        concat!("Alignment of ", stringify!(R_CallMethodDef))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_CallMethodDef>())).name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_CallMethodDef),
+            "::",
+            stringify!(name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_CallMethodDef>())).fun as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_CallMethodDef),
+            "::",
+            stringify!(fun)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_CallMethodDef>())).numArgs as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_CallMethodDef),
+            "::",
+            stringify!(numArgs)
+        )
+    );
 }
 pub type R_ExternalMethodDef = R_CallMethodDef;
 #[repr(C)]
@@ -4940,6 +5727,93 @@ pub struct R_outpstream_st {
         ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
     pub OutPersistHookData: SEXP,
 }
+#[test]
+fn bindgen_test_layout_R_outpstream_st() {
+    assert_eq!(
+        ::std::mem::size_of::<R_outpstream_st>(),
+        28usize,
+        concat!("Size of: ", stringify!(R_outpstream_st))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<R_outpstream_st>(),
+        4usize,
+        concat!("Alignment of ", stringify!(R_outpstream_st))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_outpstream_st>())).data as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_outpstream_st),
+            "::",
+            stringify!(data)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_outpstream_st>())).type_ as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_outpstream_st),
+            "::",
+            stringify!(type_)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_outpstream_st>())).version as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_outpstream_st),
+            "::",
+            stringify!(version)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_outpstream_st>())).OutChar as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_outpstream_st),
+            "::",
+            stringify!(OutChar)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_outpstream_st>())).OutBytes as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_outpstream_st),
+            "::",
+            stringify!(OutBytes)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<R_outpstream_st>())).OutPersistHookFunc as *const _ as usize
+        },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_outpstream_st),
+            "::",
+            stringify!(OutPersistHookFunc)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<R_outpstream_st>())).OutPersistHookData as *const _ as usize
+        },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_outpstream_st),
+            "::",
+            stringify!(OutPersistHookData)
+        )
+    );
+}
 pub type R_inpstream_t = *mut R_inpstream_st;
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -4961,6 +5835,113 @@ pub struct R_inpstream_st {
     pub native_encoding: [::std::os::raw::c_char; 64usize],
     pub nat2nat_obj: *mut ::std::os::raw::c_void,
     pub nat2utf8_obj: *mut ::std::os::raw::c_void,
+}
+#[test]
+fn bindgen_test_layout_R_inpstream_st() {
+    assert_eq!(
+        ::std::mem::size_of::<R_inpstream_st>(),
+        96usize,
+        concat!("Size of: ", stringify!(R_inpstream_st))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<R_inpstream_st>(),
+        4usize,
+        concat!("Alignment of ", stringify!(R_inpstream_st))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).data as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_inpstream_st),
+            "::",
+            stringify!(data)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).type_ as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_inpstream_st),
+            "::",
+            stringify!(type_)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).InChar as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_inpstream_st),
+            "::",
+            stringify!(InChar)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).InBytes as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_inpstream_st),
+            "::",
+            stringify!(InBytes)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<R_inpstream_st>())).InPersistHookFunc as *const _ as usize
+        },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_inpstream_st),
+            "::",
+            stringify!(InPersistHookFunc)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<R_inpstream_st>())).InPersistHookData as *const _ as usize
+        },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_inpstream_st),
+            "::",
+            stringify!(InPersistHookData)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).native_encoding as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_inpstream_st),
+            "::",
+            stringify!(native_encoding)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).nat2nat_obj as *const _ as usize },
+        88usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_inpstream_st),
+            "::",
+            stringify!(nat2nat_obj)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).nat2utf8_obj as *const _ as usize },
+        92usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_inpstream_st),
+            "::",
+            stringify!(nat2utf8_obj)
+        )
+    );
 }
 extern "C" {
     pub fn R_InitInPStream(
