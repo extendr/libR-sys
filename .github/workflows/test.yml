@@ -72,14 +72,14 @@ jobs:
           components: rustfmt, clippy
 
       # This step is only needed for Windows
-      - name: Set up MSYS2 for Windows
-        if: runner.os == 'Windows'
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: ${{ matrix.config.msystem }}
-          path-type: inherit
-          release: false
-          update: false
+      # - name: Set up MSYS2 for Windows
+      #   if: runner.os == 'Windows'
+      #   uses: msys2/setup-msys2@v2
+      #   with:
+      #     msystem: ${{ matrix.config.msystem }}
+      #     path-type: inherit
+      #     release: false
+      #     update: false
      
       # All configurations for Windows go here
       # `Rust` toolchain is used to determine target architecture
