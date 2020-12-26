@@ -71,26 +71,15 @@ jobs:
           default: true
           components: rustfmt, clippy
 
-      # This step is only needed for Windows
-      - name: Set up MSYS2 for Windows
-        if: runner.os == 'Windows'
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: ${{ matrix.config.msystem }}
-          path-type: inherit
-          release: false
-          update: false
-     
       # All configurations for Windows go here
-      # `Rust` toolchain is used to determine target architecture
-      # Alternatively, `if:` conditions can be used
+      # Rust toolchain is used to determine target architecture
       - name: Configure Windows
         if: runner.os == 'Windows'
         # 1. Add appropriate *-gnu target
-        # 2. Set CARGO_BUILD_FLAGS to the `rust` target
-        # 3. Configure path to `libclang`
-        # 4. Add path to `mingw32`/`mingw64` -- otherwise library is linked to `rtools`
-        # 5. Add path to R's `i386`/`x64`  -- to solve `x86` build/test issue
+        # 2. Set CARGO_BUILD_FLAGS to the Rust target
+        # 3. Configure path to libclang
+        # 4. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
+        # 5. Add path to R's i386/x64  -- to solve x86 build/test issue
         run: |
           if ($env:RUST_TOOLCHAIN -like "*x86_64*") {
             rustup target add x86_64-pc-windows-gnu ;
@@ -111,7 +100,7 @@ jobs:
           RUST_TOOLCHAIN: ${{ matrix.config.rust-version }}
           
 
-      # MacOS configurations, mainly `llvm` and path to `libclang`
+      # MacOS configurations, mainly llvm and path to libclang
       - name: Configure MacOs
         if: runner.os == 'macOS'
         run: | 
@@ -120,14 +109,14 @@ jobs:
           
 
       # This is required for ubuntu r-devel
-      # 'Del alias:R' removes 'R' alias which prevents running R 
+      # 'Del alias:R' removes R alias which prevents running R 
       - name: Configure Linux
         if: runner.os == 'linux'
         run: |
           Del alias:R
           echo "LD_LIBRARY_PATH=$(R -s -e 'cat(normalizePath(R.home()))')/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      # Build and emit bindings to `./generated_bindings`
+      # Build and emit bindings to './generated_bindings'
       - name: Build & Emit bindings
         id: build
         run: |
