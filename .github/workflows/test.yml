@@ -129,7 +129,7 @@ jobs:
         run: |
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             echo "Executing for target: $target"
-            cargo build -vv --features use-bindgen $env:CARGO_BUILD_FLAGS $(if ($target -ne 'default') {"--target=$target"} )
+            cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} )
           }
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
@@ -141,7 +141,7 @@ jobs:
         run: |
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             echo "Executing for target: $target"
-            cargo test -vv --features use-bindgen $env:CARGO_BUILD_FLAGS $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+            cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
           }
 
 
@@ -158,5 +158,5 @@ jobs:
         run: |
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             echo "Executing for target: $target"
-            cargo test -vv $env:CARGO_BUILD_FLAGS $(if ($target -ne 'default') {"--target=$target"} )-- --nocapture --test-threads=1
+            cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
           }
