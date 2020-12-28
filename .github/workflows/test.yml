@@ -21,6 +21,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
+          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+
           # - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc'}
           # - {os: windows-latest, r: 'release', rust-version: 'nightly-x86_64-pc-windows-msvc'}
           # - {os: windows-latest, r: 'devel', rust-version: 'stable-x86_64-pc-windows-msvc'}
@@ -60,6 +62,11 @@ jobs:
           if ($env:RUST_TARGETS -eq '') {
             $env:RUST_TARGETS = "default"
           }
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+            if ($target -ne "default") {
+              rustup target add $target
+            }
+          }
           echo "RUST_TARGETS=$env:RUST_TARGETS"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
@@ -79,33 +86,27 @@ jobs:
           default: true
           components: rustfmt, clippy
 
-      # # All configurations for Windows go here
-      # # Rust toolchain is used to determine target architecture
-      # - name: Configure Windows
-      #   if: runner.os == 'Windows'
-      #   # 1. Add appropriate *-gnu target
-      #   # 2. Set CARGO_BUILD_FLAGS to the Rust target
-      #   # 3. Configure path to libclang
-      #   # 4. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
-      #   # 5. Add path to R's i386/x64  -- to solve x86 build/test issue
-      #   run: |
-      #     if ($env:RUST_TOOLCHAIN -like "*x86_64*") {
-      #       rustup target add x86_64-pc-windows-gnu ;
-      #       echo "CARGO_BUILD_FLAGS=--target=x86_64-pc-windows-gnu" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
-      #       echo "LIBCLANG_PATH=C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
-      #       echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-      #       echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-      #     }
-      #     if ($env:RUST_TOOLCHAIN -like "*i686*") {
-      #       rustup target add i686-pc-windows-gnu ;
-      #       echo "CARGO_BUILD_FLAGS=--target=i686-pc-windows-gnu" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
-      #       echo "LIBCLANG_PATH=C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
-      #       echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-      #       echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-
-      #     }
-      #   env: 
-      #     RUST_TOOLCHAIN: ${{ matrix.config.rust-version }}
+      # All configurations for Windows go here
+      # Rust toolchain is used to determine target architecture
+      - name: Configure Windows
+        if: runner.os == 'Windows'
+        # 1. Add appropriate *-gnu target
+        # 2. Set CARGO_BUILD_FLAGS to the Rust target
+        # 3. Configure path to libclang
+        # 4. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
+        # 5. Add path to R's i386/x64  -- to solve x86 build/test issue
+        run: |
+          if ($env:RUST_TARGETS -like "*x86_64*") {
+            echo "LIBCLANG_PATH=C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
+            echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          }
+          if ($env:RUST_TOOLCHAIN -like "*i686*") {
+            echo "LIBCLANG_PATH=C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
+            echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          }
+      
           
 
       # # MacOS configurations, mainly llvm and path to libclang
@@ -150,7 +151,7 @@ jobs:
       # Run tests again using different bindings
       - name: Run tests on precomputed bindings shipped with libR-sys
         run: |
-          foreach ($target in $env:RUST_TARGETS) {
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             echo "Executing for target: $target"
-            cargo test -vv $env:CARGO_BUILD_FLAGS (if ($target -ne 'default') {"--target=$target"} )-- --nocapture --test-threads=1
+            cargo test -vv $env:CARGO_BUILD_FLAGS $(if ($target -ne 'default') {"--target=$target"} )-- --nocapture --test-threads=1
           }
