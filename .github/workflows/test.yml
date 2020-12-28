@@ -27,9 +27,12 @@ jobs:
           - {os: windows-latest, r: 'oldrel', rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
 
           - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
-          - {os: macOS-latest,   r: 'release', rust-version: 'nightly', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
           - {os: macOS-latest,   r: 'devel', rust-version: 'stable'}
           - {os: macOS-latest,   r: 'oldrel', rust-version: 'stable'}
+
+          - {os: macOS-11.0,   r: 'release', rust-version: 'nightly', targets: ['aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
+
 
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
@@ -118,6 +121,7 @@ jobs:
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             echo "Building for target: $target"
             cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} )
+            if (!$?) { throw $LASTEXITCODE }
           }
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
@@ -133,6 +137,7 @@ jobs:
             else {
               echo "Running bindgen tests for target: $target"
               cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+              if (!$?) { throw $LASTEXITCODE }
             }
           }
         env: 
@@ -158,6 +163,7 @@ jobs:
             else {            
               echo "Running tests for target: $target"
               cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+              if (!$?) { throw $LASTEXITCODE }
             }
           }
         env: 
