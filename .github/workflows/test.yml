@@ -31,7 +31,7 @@ jobs:
           - {os: macOS-latest,   r: 'devel', rust-version: 'stable'}
           - {os: macOS-latest,   r: 'oldrel', rust-version: 'stable'}
 
-          - {os: macOS-11.0,   r: 'release', rust-version: 'nightly', targets: ['aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
+          - {os: macOS-11.0,   r: 'release', rust-version: 'nightly', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
 
 
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
@@ -99,12 +99,23 @@ jobs:
           
 
       # MacOS configurations, mainly llvm and path to libclang
+      # Because of this R installation issue on MacOS-11.0 
+      # https://github.com/r-lib/actions/issues/200
+      # Symlinks to R/Rscript are not properly set up, so we do it by hand, using this trick
+      # https://github.com/r-lib/ps/commit/a24f2c4d1bdba63be14e7729b9ab81d0ed9f719e
       - name: Configure MacOs
         if: runner.os == 'macOS'
         run: | 
           brew install llvm
           echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          
+          if ((Get-ChildItem -Path /usr/local/bin -Filter R | Measure-Object).Count -eq 0) {
+            echo "::warning:: Found no R symlink in /usr/local/bin, setting up manually..."
+            ln -s /Library/Frameworks/R.framework/Versions/Current/Resources/bin/R /usr/local/bin/
+          }
+          if ((Get-ChildItem -Path /usr/local/bin -Filter Rscript | Measure-Object).Count -eq 0) {
+            echo "::warning:: Found no Rscript symlink in /usr/local/bin, setting up manually..."
+            ln -s /Library/Frameworks/R.framework/Versions/Current/Resources/bin/Rscript /usr/local/bin/
+          }
 
       # This is required for ubuntu r-devel
       # 'Del alias:R' removes R alias which prevents running R 
