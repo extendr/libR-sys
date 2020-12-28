@@ -35,7 +35,7 @@ jobs:
           # - {os: windows-latest, r: 'oldrel', rust-version: 'stable-i686-pc-windows-msvc'S}
 
 
-          - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
           # - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
           # - {os: macOS-latest,   r: 'devel', rust-version: 'stable'}
           # - {os: macOS-latest,   r: 'oldrel', rust-version: 'stable'}
@@ -139,9 +139,17 @@ jobs:
         id: test
         run: |
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            echo "Executing for target: $target"
-            cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
+              echo "Skipping tests for target: $target"
+            }
+            else {
+              echo "Executing for target: $target"
+              cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+            }
           }
+        env: 
+          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
+            
 
 
       # If success, upload bindings
@@ -156,6 +164,13 @@ jobs:
       - name: Run tests on precomputed bindings shipped with libR-sys
         run: |
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            echo "Executing for target: $target"
-            cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
+              echo "Skipping tests for target: $target"
+            }
+            else {            
+              echo "Executing for target: $target"
+              cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+            }
           }
+        env: 
+          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
