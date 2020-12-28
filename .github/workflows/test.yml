@@ -22,16 +22,16 @@ jobs:
       matrix:
         config:
           
-          - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc', msystem: "MINGW64"}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-x86_64-pc-windows-msvc', msystem: "MINGW64"}
-          - {os: windows-latest, r: 'devel', rust-version: 'stable-x86_64-pc-windows-msvc', msystem: "MINGW64"}
-          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-x86_64-pc-windows-msvc', msystem: "MINGW64"}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc'}
+          - {os: windows-latest, r: 'release', rust-version: 'nightly-x86_64-pc-windows-msvc'}
+          - {os: windows-latest, r: 'devel', rust-version: 'stable-x86_64-pc-windows-msvc'}
+          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-x86_64-pc-windows-msvc'}
 
 
-          - {os: windows-latest, r: 'release', rust-version: 'stable-i686-pc-windows-msvc', msystem: "MINGW32"}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-i686-pc-windows-msvc', msystem: "MINGW32"}
-          - {os: windows-latest, r: 'devel', rust-version: 'stable-i686-pc-windows-msvc', msystem: "MINGW32"}
-          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-i686-pc-windows-msvc', msystem: "MINGW32"}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-i686-pc-windows-msvc'}
+          - {os: windows-latest, r: 'release', rust-version: 'nightly-i686-pc-windows-msvc'}
+          - {os: windows-latest, r: 'devel', rust-version: 'stable-i686-pc-windows-msvc'}
+          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-i686-pc-windows-msvc'S}
 
 
           - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
