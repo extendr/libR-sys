@@ -22,30 +22,20 @@ jobs:
       matrix:
         config:
           - {os: windows-latest, r: 'release', rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
-
-          # - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc'}
-          # - {os: windows-latest, r: 'release', rust-version: 'nightly-x86_64-pc-windows-msvc'}
-          # - {os: windows-latest, r: 'devel', rust-version: 'stable-x86_64-pc-windows-msvc'}
-          # - {os: windows-latest, r: 'oldrel', rust-version: 'stable-x86_64-pc-windows-msvc'}
-
-
-          # - {os: windows-latest, r: 'release', rust-version: 'stable-i686-pc-windows-msvc'}
-          # - {os: windows-latest, r: 'release', rust-version: 'nightly-i686-pc-windows-msvc'}
-          # - {os: windows-latest, r: 'devel', rust-version: 'stable-i686-pc-windows-msvc'}
-          # - {os: windows-latest, r: 'oldrel', rust-version: 'stable-i686-pc-windows-msvc'S}
-
+          - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+          - {os: windows-latest, r: 'devel', rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
 
           - {os: macOS-latest,   r: 'release', rust-version: 'nightly', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
-          # - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
-          # - {os: macOS-latest,   r: 'devel', rust-version: 'stable'}
-          # - {os: macOS-latest,   r: 'oldrel', rust-version: 'stable'}
-
+          - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
+          - {os: macOS-latest,   r: 'devel', rust-version: 'stable'}
+          - {os: macOS-latest,   r: 'oldrel', rust-version: 'stable'}
 
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          # - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           # R-devel requires LD_LIBRARY_PATH
-          # - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
-          # - {os: ubuntu-20.04,   r: 'oldrel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          - {os: ubuntu-20.04,   r: 'oldrel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
 
 
 
@@ -94,8 +84,6 @@ jobs:
         # 1. Configure path to libclang
         # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
         # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
-        # echo "LIBCLANG_PATH=C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
-        # echo "LIBCLANG_PATH=C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
         run: |
           if ($env:RUST_TARGETS -like "*x86_64*") {
             echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
@@ -105,7 +93,6 @@ jobs:
             echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
-      
           
 
       # MacOS configurations, mainly llvm and path to libclang
@@ -129,7 +116,7 @@ jobs:
         id: build
         run: |
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            echo "Executing for target: $target"
+            echo "Building for target: $target"
             cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} )
           }
         env:
@@ -141,10 +128,10 @@ jobs:
         run: |
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
-              echo "Skipping tests for target: $target"
+              echo "Skipping bindgen tests for target: $target"
             }
             else {
-              echo "Executing for target: $target"
+              echo "Running bindgen tests for target: $target"
               cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
             }
           }
@@ -169,7 +156,7 @@ jobs:
               echo "Skipping tests for target: $target"
             }
             else {            
-              echo "Executing for target: $target"
+              echo "Running tests for target: $target"
               cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
             }
           }
