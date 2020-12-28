@@ -26,8 +26,8 @@ jobs:
           - {os: windows-latest, r: 'devel', rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
           - {os: windows-latest, r: 'oldrel', rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
 
+          - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
           - {os: macOS-latest,   r: 'release', rust-version: 'nightly', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
-          - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
           - {os: macOS-latest,   r: 'devel', rust-version: 'stable'}
           - {os: macOS-latest,   r: 'oldrel', rust-version: 'stable'}
 
