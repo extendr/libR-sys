@@ -35,7 +35,7 @@ jobs:
           # - {os: windows-latest, r: 'oldrel', rust-version: 'stable-i686-pc-windows-msvc'S}
 
 
-          - {os: macOS-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'nightly', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
           # - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
           # - {os: macOS-latest,   r: 'devel', rust-version: 'stable'}
           # - {os: macOS-latest,   r: 'oldrel', rust-version: 'stable'}
@@ -56,7 +56,23 @@ jobs:
     defaults:
       run:
         shell: pwsh
+      
     steps:
+      
+      - uses: actions/checkout@v2
+      
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.config.r }}
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.config.rust-version }}
+          default: true
+          components: rustfmt, clippy
+
       - name: Configure targets
         run: |
           if ($env:RUST_TARGETS -eq '') {
@@ -71,21 +87,6 @@ jobs:
         env:
           RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
       
-      - uses: actions/checkout@v2
-      
-      
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v1
-        with:
-          r-version: ${{ matrix.config.r }}
-
-      - name: Set up Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.config.rust-version }}
-          default: true
-          components: rustfmt, clippy
-
       # All configurations for Windows go here
       # Rust toolchain is used to determine target architecture
       - name: Configure Windows
