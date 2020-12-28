@@ -123,19 +123,26 @@ jobs:
           Del alias:R
           echo "LD_LIBRARY_PATH=$(R -s -e 'cat(normalizePath(R.home()))')/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      # # Build and emit bindings to './generated_bindings'
-      # - name: Build & Emit bindings
-      #   id: build
-      #   run: |
-      #     cargo build -vv --features use-bindgen $env:CARGO_BUILD_FLAGS
-      #   env:
-      #     LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
+      # Build and emit bindings to './generated_bindings'
+      - name: Build & Emit bindings
+        id: build
+        run: |
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+            echo "Executing for target: $target"
+            cargo build -vv --features use-bindgen $env:CARGO_BUILD_FLAGS $(if ($target -ne 'default') {"--target=$target"} )
+          }
+        env:
+          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
 
-      # # Test the result of previous step
-      # - name: Run tests
-      #   id: test
-      #   run: |
-      #     cargo test -vv --features use-bindgen $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
+      # Test the result of previous step
+      - name: Run tests
+        id: test
+        needs: build
+        run: |
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+            echo "Executing for target: $target"
+            cargo test -vv --features use-bindgen $env:CARGO_BUILD_FLAGS $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+          }
 
 
       # # If success, upload bindings
