@@ -137,7 +137,6 @@ jobs:
       # Test the result of previous step
       - name: Run tests
         id: test
-        needs: build
         run: |
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             echo "Executing for target: $target"
@@ -145,13 +144,13 @@ jobs:
           }
 
 
-      # # If success, upload bindings
-      # - name: Upload generated bindings
-      #   if: steps.build.outcome == 'success' && steps.test.outcome == 'success' && startsWith(matrix.config.rust-version, 'stable')
-      #   uses: actions/upload-artifact@main
-      #   with:
-      #     name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) generated bindings
-      #     path: generated_bindings
+      # If success, upload bindings
+      - name: Upload generated bindings
+        if: steps.build.outcome == 'success' && steps.test.outcome == 'success' && startsWith(matrix.config.rust-version, 'stable')
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) generated bindings
+          path: generated_bindings
 
       # Run tests again using different bindings
       - name: Run tests on precomputed bindings shipped with libR-sys
