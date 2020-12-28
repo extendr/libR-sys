@@ -21,9 +21,6 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-latest, r: 'release', rust-version: 'stable', targets: ['target1', 'target2', 'default']}
-          - {os: ubuntu-latest, r: 'release', rust-version: 'stable'}
-
           # - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc'}
           # - {os: windows-latest, r: 'release', rust-version: 'nightly-x86_64-pc-windows-msvc'}
           # - {os: windows-latest, r: 'devel', rust-version: 'stable-x86_64-pc-windows-msvc'}
@@ -42,11 +39,11 @@ jobs:
           # - {os: macOS-latest,   r: 'oldrel', rust-version: 'stable'}
 
 
-          # - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          # - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          # # R-devel requires LD_LIBRARY_PATH
-          # - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
-          # - {os: ubuntu-20.04,   r: 'oldrel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          # R-devel requires LD_LIBRARY_PATH
+          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          - {os: ubuntu-20.04,   r: 'oldrel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
 
 
 
@@ -60,10 +57,10 @@ jobs:
     steps:
       - name: Configure targets
         run: |
-          if ($env:RUST_TARGET -eq '') {
-            echo "RUST_TARGET=default" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          if ($env:RUST_TARGETS -eq '') {
+            $env:RUST_TARGETS = "default"
           }
-          echo $env:RUST_TARGETS
+          echo "RUST_TARGETS=$env:RUST_TARGETS"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
       
@@ -150,6 +147,10 @@ jobs:
       #     name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) generated bindings
       #     path: generated_bindings
 
-      # # Run tests again using different bindings
-      # - name: Run tests on precomputed bindings shipped with libR-sys
-      #   run: cargo test -vv $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
+      # Run tests again using different bindings
+      - name: Run tests on precomputed bindings shipped with libR-sys
+        run: |
+          foreach ($target in $env:RUST_TARGETS) {
+            echo "Executing for target: $target"
+            cargo test -vv $env:CARGO_BUILD_FLAGS (if ($target -ne 'default') {"--target=$target"} )-- --nocapture --test-threads=1
+          }
