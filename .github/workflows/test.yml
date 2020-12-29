@@ -135,7 +135,10 @@ jobs:
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             echo "Building for target: $target"
             cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} )
-            if (!$?) { throw $LASTEXITCODE }
+            if (!$?) { 
+              echo "::error::$target" ;
+              throw "Last exit code $LASTEXITCODE"
+            }
           }
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
@@ -151,7 +154,10 @@ jobs:
             else {
               echo "Running bindgen tests for target: $target"
               cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
-              if (!$?) { throw $LASTEXITCODE }
+              if (!$?) { 
+                echo "::error::$target";
+                throw "Last exit code $LASTEXITCODE"
+              }
             }
           }
         env: 
@@ -180,7 +186,10 @@ jobs:
             else {            
               echo "Running tests for target: $target"
               cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
-              if (!$?) { throw $LASTEXITCODE }
+              if (!$?) { 
+                echo "::error::$target";
+                throw "Last exit code $LASTEXITCODE"
+              }
             }
           }
         env: 
