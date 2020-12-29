@@ -106,12 +106,16 @@ jobs:
       # https://github.com/r-lib/actions/issues/200
       # Symlinks to R/Rscript are not properly set up, so we do it by hand, using this trick
       # https://github.com/r-lib/ps/commit/a24f2c4d1bdba63be14e7729b9ab81d0ed9f719e
+      # Environment variables are required fir Mac-OS-11.0, see
+      # https://github.com/extendr/libR-sys/issues/35
       - name: Configure MacOs
         if: runner.os == 'macOS'
         run: | 
           brew install llvm
           echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$(brew --prefix llvm)/lib/clang/11.0.0/include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $env:LLVM_CONFIG_PATH = "$(brew --prefix llvm)/bin/llvm-config" 
+          echo "LLVM_CONFIG_PATH=$env:LLVM_CONFIG_PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$(. $env:LLVM_CONFIG_PATH --libdir)/clang/$(. $env:LLVM_CONFIG_PATH --version)/include"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
           if ((Get-ChildItem -Path /usr/local/bin -Filter R | Measure-Object).Count -eq 0) {
             echo "::warning:: Found no R symlink in /usr/local/bin, setting up manually..."
