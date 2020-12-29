@@ -21,30 +21,23 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          
-          - {os: windows-latest, r: 'release', rust-version: 'stable-x86_64-pc-windows-msvc', msystem: "MINGW64"}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-x86_64-pc-windows-msvc', msystem: "MINGW64"}
-          - {os: windows-latest, r: 'devel', rust-version: 'stable-x86_64-pc-windows-msvc', msystem: "MINGW64"}
-          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-x86_64-pc-windows-msvc', msystem: "MINGW64"}
-
-
-          - {os: windows-latest, r: 'release', rust-version: 'stable-i686-pc-windows-msvc', msystem: "MINGW32"}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-i686-pc-windows-msvc', msystem: "MINGW32"}
-          - {os: windows-latest, r: 'devel', rust-version: 'stable-i686-pc-windows-msvc', msystem: "MINGW32"}
-          - {os: windows-latest, r: 'oldrel', rust-version: 'stable-i686-pc-windows-msvc', msystem: "MINGW32"}
-
+          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+          - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
 
           - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
           - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
-          - {os: macOS-latest,   r: 'devel', rust-version: 'stable'}
-          - {os: macOS-latest,   r: 'oldrel', rust-version: 'stable'}
+          - {os: macOS-latest,   r: 'devel',   rust-version: 'stable'}
+          - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable'}
+          - {os: macOS-11.0,     r: 'release', rust-version: 'nightly',      targets: ['default', 'aarch64-apple-darwin'], 
+            no-test-targets: 'aarch64-apple-darwin', emit-bindings: 'true'}
 
-
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           # R-devel requires LD_LIBRARY_PATH
-          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
-          - {os: ubuntu-20.04,   r: 'oldrel',   rust-version: 'stable', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
 
 
 
@@ -55,9 +48,10 @@ jobs:
     defaults:
       run:
         shell: pwsh
-    steps:
-      - uses: actions/checkout@v2
       
+    steps:
+      
+      - uses: actions/checkout@v2
       
       - name: Set up R
         uses: r-lib/actions/setup-r@v1
@@ -71,42 +65,62 @@ jobs:
           default: true
           components: rustfmt, clippy
 
+      - name: Configure targets
+        run: |
+          if ($env:RUST_TARGETS -eq '') {
+            $env:RUST_TARGETS = "default"
+          }
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+            if ($target -ne "default") {
+              rustup target add $target
+            }
+          }
+          echo "RUST_TARGETS=$env:RUST_TARGETS"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        env:
+          RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
+      
       # All configurations for Windows go here
       # Rust toolchain is used to determine target architecture
       - name: Configure Windows
         if: runner.os == 'Windows'
-        # 1. Add appropriate *-gnu target
-        # 2. Set CARGO_BUILD_FLAGS to the Rust target
-        # 3. Configure path to libclang
-        # 4. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
-        # 5. Add path to R's i386/x64  -- to solve x86 build/test issue
+        # 1. Configure path to libclang
+        # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
+        # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
         run: |
-          if ($env:RUST_TOOLCHAIN -like "*x86_64*") {
-            rustup target add x86_64-pc-windows-gnu ;
-            echo "CARGO_BUILD_FLAGS=--target=x86_64-pc-windows-gnu" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
-            echo "LIBCLANG_PATH=C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
+          if ($env:RUST_TARGETS -like "*x86_64*") {
             echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
-          if ($env:RUST_TOOLCHAIN -like "*i686*") {
-            rustup target add i686-pc-windows-gnu ;
-            echo "CARGO_BUILD_FLAGS=--target=i686-pc-windows-gnu" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
-            echo "LIBCLANG_PATH=C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append ;
+          if ($env:RUST_TARGETS -like "*i686*") {
             echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-
           }
-        env: 
-          RUST_TOOLCHAIN: ${{ matrix.config.rust-version }}
           
 
       # MacOS configurations, mainly llvm and path to libclang
+      # Because of this R installation issue on MacOS-11.0 
+      # https://github.com/r-lib/actions/issues/200
+      # Symlinks to R/Rscript are not properly set up, so we do it by hand, using this trick
+      # https://github.com/r-lib/ps/commit/a24f2c4d1bdba63be14e7729b9ab81d0ed9f719e
+      # Environment variables are required fir Mac-OS-11.0, see
+      # https://github.com/extendr/libR-sys/issues/35
       - name: Configure MacOs
         if: runner.os == 'macOS'
         run: | 
           brew install llvm
           echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          
+          $env:LLVM_CONFIG_PATH = "$(brew --prefix llvm)/bin/llvm-config" 
+          echo "LLVM_CONFIG_PATH=$env:LLVM_CONFIG_PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$(. $env:LLVM_CONFIG_PATH --libdir)/clang/$(. $env:LLVM_CONFIG_PATH --version)/include"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          if ((Get-ChildItem -Path /usr/local/bin -Filter R | Measure-Object).Count -eq 0) {
+            echo "::warning:: Found no R symlink in /usr/local/bin, setting up manually..."
+            ln -s /Library/Frameworks/R.framework/Versions/Current/Resources/bin/R /usr/local/bin/
+          }
+          if ((Get-ChildItem -Path /usr/local/bin -Filter Rscript | Measure-Object).Count -eq 0) {
+            echo "::warning:: Found no Rscript symlink in /usr/local/bin, setting up manually..."
+            ln -s /Library/Frameworks/R.framework/Versions/Current/Resources/bin/Rscript /usr/local/bin/
+          }
 
       # This is required for ubuntu r-devel
       # 'Del alias:R' removes R alias which prevents running R 
@@ -120,7 +134,14 @@ jobs:
       - name: Build & Emit bindings
         id: build
         run: |
-          cargo build -vv --features use-bindgen $env:CARGO_BUILD_FLAGS
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+            echo "Building for target: $target"
+            cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} )
+            if (!$?) { 
+              echo "::error::$target" ;
+              throw "Last exit code $LASTEXITCODE"
+            }
+          }
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
 
@@ -128,12 +149,34 @@ jobs:
       - name: Run tests
         id: test
         run: |
-          cargo test -vv --features use-bindgen $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
+              echo "::warning:: Skipping bindgen tests for target: $target"
+            }
+            else {
+              echo "Running bindgen tests for target: $target"
+              cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+              if (!$?) { 
+                echo "::error::$target";
+                throw "Last exit code $LASTEXITCODE"
+              }
+            }
+          }
+        env: 
+          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
+            
 
 
-      # If success, upload bindings
+      # If success
+      # AND (either rust is stable and 'emit-bindings' != 'false'
+      #      OR rust is any and 'emit-bindings' == 'true'),
+      # upload bindings
       - name: Upload generated bindings
-        if: steps.build.outcome == 'success' && steps.test.outcome == 'success' && startsWith(matrix.config.rust-version, 'stable')
+        if: 
+          steps.build.outcome == 'success' && 
+          steps.test.outcome == 'success' && 
+          ((startsWith(matrix.config.rust-version, 'stable') && matrix.config.emit-bindings != 'false') ||
+            (matrix.config.emit-bindings == 'true'))
         uses: actions/upload-artifact@main
         with:
           name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) generated bindings
@@ -141,4 +184,19 @@ jobs:
 
       # Run tests again using different bindings
       - name: Run tests on precomputed bindings shipped with libR-sys
-        run: cargo test -vv $env:CARGO_BUILD_FLAGS -- --nocapture --test-threads=1
+        run: |
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
+              echo "::warning:: Skipping tests for target: $target"
+            }
+            else {            
+              echo "Running tests for target: $target"
+              cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+              if (!$?) { 
+                echo "::error::$target";
+                throw "Last exit code $LASTEXITCODE"
+              }
+            }
+          }
+        env: 
+          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
