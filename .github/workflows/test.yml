@@ -111,6 +111,8 @@ jobs:
         run: | 
           brew install llvm
           echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$(brew --prefix llvm)/lib/clang/11.0.0/include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
           if ((Get-ChildItem -Path /usr/local/bin -Filter R | Measure-Object).Count -eq 0) {
             echo "::warning:: Found no R symlink in /usr/local/bin, setting up manually..."
             ln -s /Library/Frameworks/R.framework/Versions/Current/Resources/bin/R /usr/local/bin/
