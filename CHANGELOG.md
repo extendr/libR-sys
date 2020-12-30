@@ -4,6 +4,8 @@
 
 - Added precomputed bindings for Apple Silicon.
 
+- Added contributing guidelines and code of conduct.
+
 ## libR-sys 0.2.0
 
 - Provide precomputed bindings. Computations of bindings on the fly now only
