@@ -217,15 +217,15 @@ fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo
         _ => return Err(Error::new(ErrorKind::Other, "Cannot find R version string")),
     };
 
-    println!("cargo:r_version_major={}", major);
-    println!("cargo:r_version_minor={}", minor);
-    println!("cargo:r_version_patch={}", patch);
+    println!("cargo:r_version_major={}", major); // Becomes DEP_R_R_VERSION_MAJOR for clients
+    println!("cargo:r_version_minor={}", minor); // Becomes DEP_R_R_VERSION_MINOR for clients
+    println!("cargo:r_version_patch={}", patch); // Becomes DEP_R_R_VERSION_PATCH for clients
     if devel.is_empty() {
-        println!("cargo:r_version_devel=false");
+        println!("cargo:r_version_devel=false"); // Becomes DEP_R_R_VERSION_DEVEL for clients
     } else {
         println!("cargo:r_version_devel=true");
     }
-    println!(r#"cargo:r_version_string="{}""#, version_string);
+    println!(r#"cargo:r_version_string="{}""#, version_string); // Becomes DEP_R_R_VERSION_STRING for clients
 
     Ok(RVersionInfo {
         major,
@@ -238,7 +238,7 @@ fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo
 
 #[cfg(feature = "use-bindgen")]
 /// Generate bindings by calling bindgen.
-fn generate_bindings(r_paths: &InstallationPaths) {
+fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
@@ -298,8 +298,6 @@ fn generate_bindings(r_paths: &InstallationPaths) {
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings to default output path!");
 
-    // extract version info from R and output for use by downstream crates
-    let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
 
     // Also write the bindings to a folder specified by LIBRSYS_BINDINGS_OUTPUT_PATH, if defined
     if let Some(alt_target) = env::var_os("LIBRSYS_BINDINGS_OUTPUT_PATH") {
@@ -326,9 +324,7 @@ fn generate_bindings(r_paths: &InstallationPaths) {
 
 #[allow(dead_code)]
 /// Retrieve bindings from cache, if available. Errors out otherwise.
-fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
-    // extract version info from R and output for use by downstream crates
-    let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
+fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
     let bindings_path = PathBuf::from(
@@ -393,8 +389,11 @@ fn main() {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=wrapper.h");
 
+    // extract version info from R and output for use by downstream crates
+    let version_info = get_r_version_strings(&r_paths).expect("Could not obtain R version");
+
     #[cfg(feature = "use-bindgen")]
-        generate_bindings(&r_paths);
+        generate_bindings(&r_paths, &version_info);
     #[cfg(not(feature = "use-bindgen"))]
-        retrieve_prebuild_bindings(&r_paths);
+        retrieve_prebuild_bindings(&version_info);
 }
