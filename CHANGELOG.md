@@ -2,6 +2,9 @@
 
 ## libR-sys devel
 
+- Output R version info to downstream crates using variables `R_VERSION_MAJOR`,
+ `R_VERSION_MINOR`, `R_VERSION_PATCH`, `R_VERSION_DEVEL`, and `R_VERSION_STRING`.
+
 - Added precomputed bindings for Apple Silicon.
 
 - Added contributing guidelines and code of conduct.
