@@ -31,6 +31,7 @@ struct RVersionInfo {
     minor: String,
     patch: String,
     devel: String,
+    version_string: String,
 }
 
 
@@ -177,7 +178,7 @@ fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo
         .args(&[
             "-s",
             "-e",
-            r#"v <- strsplit(R.version$minor, '.', fixed = TRUE)[[1]];devel <- isTRUE(grepl('devel', R.version$status, fixed = TRUE));cat(R.version$major, v[1], paste0(v[2:length(v)], collapse = '.'), devel, sep = '\n')"#
+            r#"v <- strsplit(R.version$minor, '.', fixed = TRUE)[[1]];devel <- isTRUE(grepl('devel', R.version$status, fixed = TRUE));cat(R.version$major, v[1], paste0(v[2:length(v)], collapse = '.'), devel, R.version$version.string, sep = '\n')"#
         ])
         .output()?;
 
@@ -211,11 +212,27 @@ fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo
         _ => return Err(Error::new(ErrorKind::Other, "Cannot find R development status")),
     };
 
+    let version_string = match lines.next() {
+        Some(line) => line.to_string(),
+        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R version string")),
+    };
+
+    println!("cargo:r_version_major={}", major);
+    println!("cargo:r_version_minor={}", minor);
+    println!("cargo:r_version_patch={}", patch);
+    if devel.is_empty() {
+        println!("cargo:r_version_devel=false");
+    } else {
+        println!("cargo:r_version_devel=true");
+    }
+    println!(r#"cargo:r_version_string="{}""#, version_string);
+
     Ok(RVersionInfo {
         major,
         minor,
         patch,
         devel,
+        version_string,
     })
 }
 
@@ -274,21 +291,15 @@ fn generate_bindings(r_paths: &InstallationPaths) {
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
 
-    // Extract the version number from the R headers.
-    let version_matcher = regex::Regex::new(r"pub const R_VERSION ?: ?u32 = (\d+)").unwrap();
-    if let Some(version) = version_matcher.captures(bindings.to_string().as_str()) {
-        let version = version.get(1).unwrap().as_str().parse::<u32>().unwrap();
-        println!("cargo:r_version={}", version);
-    } else {
-        panic!("failed to find R_VERSION");
-    }
-
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
 
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings to default output path!");
+
+    // extract version info from R and output for use by downstream crates
+    let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
 
     // Also write the bindings to a folder specified by LIBRSYS_BINDINGS_OUTPUT_PATH, if defined
     if let Some(alt_target) = env::var_os("LIBRSYS_BINDINGS_OUTPUT_PATH") {
@@ -299,7 +310,6 @@ fn generate_bindings(r_paths: &InstallationPaths) {
                 .expect(&format!("Couldn't create output directory for bindings: {}", out_path.display()));
         }
 
-        let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
         let out_file = out_path.join(
                 format!(
                     "bindings-{}-{}-R{}.{}{}.rs",
@@ -317,6 +327,7 @@ fn generate_bindings(r_paths: &InstallationPaths) {
 #[allow(dead_code)]
 /// Retrieve bindings from cache, if available. Errors out otherwise.
 fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
+    // extract version info from R and output for use by downstream crates
     let version_info = get_r_version_strings(r_paths).expect("Could not obtain R version");
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
