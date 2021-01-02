@@ -342,7 +342,7 @@ fn retrieve_prebuild_bindings(r_paths: &InstallationPaths) {
         if !from.exists() {
             panic!(
                 format!(
-                    "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with default features enabled.",
+                    "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with --features use-bindgen.",
                     version_info.major, version_info.minor, version_info.patch, version_info.devel, target_os, bindings_path.display()
                 )
             )
