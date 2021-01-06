@@ -1,6 +1,6 @@
 # Changelog
 
-## libR-sys devel
+## libR-sys 0.2.1
 
 - Output R version info to downstream crates using variables `R_VERSION_MAJOR`,
  `R_VERSION_MINOR`, `R_VERSION_PATCH`, `R_VERSION_DEVEL`, and `R_VERSION_STRING`.
