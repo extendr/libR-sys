@@ -154,6 +154,22 @@ jobs:
         env: 
           NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
 
+      # All configurations for Windows go here
+      # Rust toolchain is used to determine target architecture
+      - name: Configure MSYS2 for clang (Windows)
+        if: runner.os == 'Windows'
+        # 1. Configure path to libclang
+        # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
+        # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
+        run: |
+          if ($env:RUST_TARGETS -like "*x86_64*") {
+            echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          }
+          if ($env:RUST_TARGETS -like "*i686*") {
+            echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          }
+
+
       # Build and emit bindings to './generated_bindings'
       - name: Build & Emit bindings
         id: build
