@@ -26,5 +26,4 @@ regex = { version = "1", optional = true }
 use-bindgen = ["bindgen", "regex"]
 
 [target.'cfg(windows)'.build-dependencies]
-winapi = "0.3"
-kernel32-sys = "0.2.2"
+winapi = { version = "0.3", features = ["consoleapi", "stringapiset"] }
