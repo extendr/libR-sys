@@ -155,10 +155,11 @@ jobs:
         id: build
         run: |
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            echo "Building for target: $target"
+            echo "::group::Building for target: $target"
             cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} )
+            echo "::endgroup::"
             if (!$?) { 
-              echo "::error::$target" ;
+              echo "::error::Building for target: $target" ;
               throw "Last exit code $LASTEXITCODE"
             }
           }
@@ -174,10 +175,11 @@ jobs:
               echo "::warning:: Skipping bindgen tests for target: $target"
             }
             else {
-              echo "Running bindgen tests for target: $target"
+              echo "::group::Running bindgen tests for target: $target"
               cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+              echo "::endgroup::"
               if (!$?) { 
-                echo "::error::$target";
+                echo "::error::Running bindgen tests for target: $target";
                 throw "Last exit code $LASTEXITCODE"
               }
             }
