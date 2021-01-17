@@ -130,6 +130,26 @@ jobs:
           Del alias:R
           echo "LD_LIBRARY_PATH=$(R -s -e 'cat(normalizePath(R.home()))')/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
+      # Run tests again using different bindings
+      - name: Run tests on precomputed bindings shipped with libR-sys
+        run: |
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
+              echo "::warning:: Skipping tests for target: $target"
+            }
+            else {            
+              echo "::group::Running tests for target: $target"
+              cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+              echo "::endgroup::"
+              if (!$?) { 
+                echo "::error::Running tests for target: $target";
+                throw "Last exit code $LASTEXITCODE"
+              }
+            }
+          }
+        env: 
+          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
+
       # Build and emit bindings to './generated_bindings'
       - name: Build & Emit bindings
         id: build
@@ -181,22 +201,3 @@ jobs:
         with:
           name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) generated bindings
           path: generated_bindings
-
-      # Run tests again using different bindings
-      - name: Run tests on precomputed bindings shipped with libR-sys
-        run: |
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
-              echo "::warning:: Skipping tests for target: $target"
-            }
-            else {            
-              echo "Running tests for target: $target"
-              cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
-              if (!$?) { 
-                echo "::error::$target";
-                throw "Last exit code $LASTEXITCODE"
-              }
-            }
-          }
-        env: 
-          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
