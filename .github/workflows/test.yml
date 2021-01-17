@@ -137,11 +137,11 @@ jobs:
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             echo "::group::Building for target: $target"
             cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} )
-            echo "::endgroup::"
             if (!$?) { 
               echo "::error::Building for target: $target" ;
               throw "Last exit code $LASTEXITCODE"
             }
+            echo "::endgroup::"
           }
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
@@ -157,11 +157,11 @@ jobs:
             else {
               echo "::group::Running bindgen tests for target: $target"
               cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
-              echo "::endgroup::"
               if (!$?) { 
                 echo "::error::Running bindgen tests for target: $target";
                 throw "Last exit code $LASTEXITCODE"
               }
+              echo "::endgroup::"
             }
           }
         env: 
@@ -194,11 +194,11 @@ jobs:
             else {            
               echo "::group::Running tests for target: $target"
               cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
-              echo "::endgroup::"
               if (!$?) { 
                 echo "::error::Running tests for target: $target";
                 throw "Last exit code $LASTEXITCODE"
               }
+              echo "::endgroup::"
             }
           }
         env: 
@@ -283,11 +283,11 @@ jobs:
             else {            
               echo "::group::Running tests for target: $target"
               cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
-              echo "::endgroup::"
               if (!$?) { 
                 echo "::error::Running tests for target: $target";
                 throw "Last exit code $LASTEXITCODE"
               }
+              echo "::endgroup::"
             }
           }
         env: 
