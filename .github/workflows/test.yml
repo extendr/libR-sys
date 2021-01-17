@@ -88,13 +88,11 @@ jobs:
         # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
         run: |
           if ($env:RUST_TARGETS -like "*x86_64*") {
-            <# Amend rtools libgcc_eh.a #>
-            cp C:\rtools40\mingw64\lib\gcc\x86_64-w64-mingw32\8.3.0\libgcc.a C:\rtools40\mingw64\lib\gcc\x86_64-w64-mingw32\8.3.0\libgcc_eh.a 
-            echo "C:\rtools40\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+            echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
           if ($env:RUST_TARGETS -like "*i686*") {
-            echo "C:\rtools40\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+            echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
           
@@ -132,52 +130,15 @@ jobs:
           Del alias:R
           echo "LD_LIBRARY_PATH=$(R -s -e 'cat(normalizePath(R.home()))')/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      # Run tests again using different bindings
-      - name: Run tests on precomputed bindings shipped with libR-sys
-        run: |
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
-              echo "::warning:: Skipping tests for target: $target"
-            }
-            else {            
-              echo "::group::Running tests for target: $target"
-              cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
-              echo "::endgroup::"
-              if (!$?) { 
-                echo "::error::Running tests for target: $target";
-                throw "Last exit code $LASTEXITCODE"
-              }
-            }
-          }
-        env: 
-          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
-
-      # All configurations for Windows go here
-      # Rust toolchain is used to determine target architecture
-      - name: Configure MSYS2 for clang (Windows)
-        if: runner.os == 'Windows'
-        # 1. Configure path to libclang
-        # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
-        # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
-        run: |
-          if ($env:RUST_TARGETS -like "*x86_64*") {
-            echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          }
-          if ($env:RUST_TARGETS -like "*i686*") {
-            echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          }
-
-
       # Build and emit bindings to './generated_bindings'
       - name: Build & Emit bindings
         id: build
         run: |
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            echo "::group::Building for target: $target"
+            echo "Building for target: $target"
             cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} )
-            echo "::endgroup::"
             if (!$?) { 
-              echo "::error::Building for target: $target" ;
+              echo "::error::$target" ;
               throw "Last exit code $LASTEXITCODE"
             }
           }
@@ -193,11 +154,10 @@ jobs:
               echo "::warning:: Skipping bindgen tests for target: $target"
             }
             else {
-              echo "::group::Running bindgen tests for target: $target"
+              echo "Running bindgen tests for target: $target"
               cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
-              echo "::endgroup::"
               if (!$?) { 
-                echo "::error::Running bindgen tests for target: $target";
+                echo "::error::$target";
                 throw "Last exit code $LASTEXITCODE"
               }
             }
@@ -221,3 +181,113 @@ jobs:
         with:
           name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) generated bindings
           path: generated_bindings
+
+      # Run tests again using different bindings
+      - name: Run tests on precomputed bindings shipped with libR-sys
+        run: |
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
+              echo "::warning:: Skipping tests for target: $target"
+            }
+            else {            
+              echo "Running tests for target: $target"
+              cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+              if (!$?) { 
+                echo "::error::$target";
+                throw "Last exit code $LASTEXITCODE"
+              }
+            }
+          }
+        env: 
+          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
+
+  test_windows_rtools:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) \w RTOOLS
+              
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+
+    env:
+      RSPM: ${{ matrix.config.rspm }}
+
+    # PowerShell core is available on all platforms and can be used to unify scripts
+    defaults:
+      run:
+        shell: pwsh
+      
+    steps:
+      
+      - uses: actions/checkout@v2
+      
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.config.r }}
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.config.rust-version }}
+          default: true
+          components: rustfmt, clippy
+
+      - name: Configure targets
+        run: |
+          if ($env:RUST_TARGETS -eq '') {
+            $env:RUST_TARGETS = "default"
+          }
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+            if ($target -ne "default") {
+              rustup target add $target
+            }
+          }
+          echo "RUST_TARGETS=$env:RUST_TARGETS"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        env:
+          RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
+      
+      # All configurations for Windows go here
+      # Rust toolchain is used to determine target architecture
+      - name: Configure Windows
+        if: runner.os == 'Windows'
+        # 1. Configure path to libclang
+        # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
+        # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
+        run: |
+          if ($env:RUST_TARGETS -like "*x86_64*") {
+            <# Amend rtools libgcc_eh.a #>
+            cp C:\rtools40\mingw64\lib\gcc\x86_64-w64-mingw32\8.3.0\libgcc.a C:\rtools40\mingw64\lib\gcc\x86_64-w64-mingw32\8.3.0\libgcc_eh.a 
+            echo "C:\rtools40\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          }
+          if ($env:RUST_TARGETS -like "*i686*") {
+            echo "C:\rtools40\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          }
+          
+
+      # Run tests again using different bindings
+      - name: Run tests on precomputed bindings shipped with libR-sys
+        run: |
+          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
+              echo "::warning:: Skipping tests for target: $target"
+            }
+            else {            
+              echo "::group::Running tests for target: $target"
+              cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
+              echo "::endgroup::"
+              if (!$?) { 
+                echo "::error::Running tests for target: $target";
+                throw "Last exit code $LASTEXITCODE"
+              }
+            }
+          }
+        env: 
+          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
+
+      
