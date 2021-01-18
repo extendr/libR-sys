@@ -51,10 +51,10 @@ fn wide_from_console_string(bytes: &[u8]) -> Vec<u16> {
     let mut wide;
     let mut len;
     unsafe {
-        let cp = kernel32::GetConsoleCP();
-        len = kernel32::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, std::ptr::null_mut(), 0);
+        let cp = winapi::um::consoleapi::GetConsoleCP();
+        len = winapi::um::stringapiset::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, std::ptr::null_mut(), 0);
         wide = Vec::with_capacity(len as usize);
-        len = kernel32::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, wide.as_mut_ptr(), len);
+        len = winapi::um::stringapiset::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, wide.as_mut_ptr(), len);
         wide.set_len(len as usize);
     }
     wide
