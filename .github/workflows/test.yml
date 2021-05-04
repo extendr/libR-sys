@@ -9,6 +9,7 @@ on:
     branches:
       - main
       - master
+  workflow_dispatch:
 
 jobs:
 
@@ -134,14 +135,9 @@ jobs:
       - name: Build & Emit bindings
         id: build
         run: |
+          . ./ci-cargo.ps1
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            echo "::group::Building for target: $target"
-            cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} )
-            if (!$?) { 
-              echo "::error::Building for target: $target" ;
-              throw "Last exit code $LASTEXITCODE"
-            }
-            echo "::endgroup::"
+            ci-cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -ActionName "Building for target: $target"
           }
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
@@ -150,18 +146,13 @@ jobs:
       - name: Run tests
         id: test
         run: |
+          . ./ci-cargo.ps1
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
               echo "::warning:: Skipping bindgen tests for target: $target"
             }
             else {
-              echo "::group::Running bindgen tests for target: $target"
-              cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
-              if (!$?) { 
-                echo "::error::Running bindgen tests for target: $target";
-                throw "Last exit code $LASTEXITCODE"
-              }
-              echo "::endgroup::"
+              ci-cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running bindgen tests for target: $target"
             }
           }
         env: 
@@ -187,18 +178,13 @@ jobs:
       # Run tests again using different bindings
       - name: Run tests on precomputed bindings shipped with libR-sys
         run: |
+          . ./ci-cargo.ps1
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
               echo "::warning:: Skipping tests for target: $target"
             }
-            else {            
-              echo "::group::Running tests for target: $target"
-              cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
-              if (!$?) { 
-                echo "::error::Running tests for target: $target";
-                throw "Last exit code $LASTEXITCODE"
-              }
-              echo "::endgroup::"
+            else {    
+              ci-cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running tests for target: $target"
             }
           }
         env: 
@@ -276,18 +262,13 @@ jobs:
       # Run tests again using different bindings
       - name: Run tests on precomputed bindings shipped with libR-sys
         run: |
+          . ./ci-cargo.ps1
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
               echo "::warning:: Skipping tests for target: $target"
             }
             else {            
-              echo "::group::Running tests for target: $target"
-              cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) -- --nocapture --test-threads=1
-              if (!$?) { 
-                echo "::error::Running tests for target: $target";
-                throw "Last exit code $LASTEXITCODE"
-              }
-              echo "::endgroup::"
+              ci-cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running tests for target: $target"
             }
           }
         env: 
