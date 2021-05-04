@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - master
+      - 'ci-cargo'
   pull_request:
     branches:
       - main
