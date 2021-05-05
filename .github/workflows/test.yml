@@ -249,8 +249,6 @@ jobs:
         # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
         run: |
           if ($env:RUST_TARGETS -like "*x86_64*") {
-            <# Amend rtools libgcc_eh.a #>
-            cp C:\rtools40\mingw64\lib\gcc\x86_64-w64-mingw32\8.3.0\libgcc.a C:\rtools40\mingw64\lib\gcc\x86_64-w64-mingw32\8.3.0\libgcc_eh.a 
             echo "C:\rtools40\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
