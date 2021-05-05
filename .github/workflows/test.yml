@@ -14,182 +14,182 @@ on:
 
 jobs:
 
-  test_with_bindgen:
-    runs-on: ${{ matrix.config.os }}
+  # test_with_bindgen:
+  #   runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }})
+  #   name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }})
               
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
-          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       config:
+  #         - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+  #         - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+  #         - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+  #         - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
 
-          - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
-          - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
-          - {os: macOS-latest,   r: 'devel',   rust-version: 'stable'}
-          - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable'}
-          - {os: macOS-11.0,     r: 'release', rust-version: 'nightly',      targets: ['default', 'aarch64-apple-darwin'], 
-            no-test-targets: 'aarch64-apple-darwin', emit-bindings: 'true'}
+  #         - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
+  #         - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
+  #         - {os: macOS-latest,   r: 'devel',   rust-version: 'stable'}
+  #         - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable'}
+  #         - {os: macOS-11.0,     r: 'release', rust-version: 'nightly',      targets: ['default', 'aarch64-apple-darwin'], 
+  #           no-test-targets: 'aarch64-apple-darwin', emit-bindings: 'true'}
 
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          # R-devel requires LD_LIBRARY_PATH
-          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
-          - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+  #         - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+  #         - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+  #         # R-devel requires LD_LIBRARY_PATH
+  #         - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+  #         - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
 
 
 
-    env:
-      RSPM: ${{ matrix.config.rspm }}
+  #   env:
+  #     RSPM: ${{ matrix.config.rspm }}
 
-    # PowerShell core is available on all platforms and can be used to unify scripts
-    defaults:
-      run:
-        shell: pwsh
+  #   # PowerShell core is available on all platforms and can be used to unify scripts
+  #   defaults:
+  #     run:
+  #       shell: pwsh
       
-    steps:
+  #   steps:
       
-      - uses: actions/checkout@v2
+  #     - uses: actions/checkout@v2
       
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v1
-        with:
-          r-version: ${{ matrix.config.r }}
+  #     - name: Set up R
+  #       uses: r-lib/actions/setup-r@v1
+  #       with:
+  #         r-version: ${{ matrix.config.r }}
 
-      - name: Set up Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.config.rust-version }}
-          default: true
-          components: rustfmt, clippy
+  #     - name: Set up Rust
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: ${{ matrix.config.rust-version }}
+  #         default: true
+  #         components: rustfmt, clippy
 
-      - name: Configure targets
-        run: |
-          if ($env:RUST_TARGETS -eq '') {
-            $env:RUST_TARGETS = "default"
-          }
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            if ($target -ne "default") {
-              rustup target add $target
-            }
-          }
-          echo "RUST_TARGETS=$env:RUST_TARGETS"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        env:
-          RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
+  #     - name: Configure targets
+  #       run: |
+  #         if ($env:RUST_TARGETS -eq '') {
+  #           $env:RUST_TARGETS = "default"
+  #         }
+  #         foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+  #           if ($target -ne "default") {
+  #             rustup target add $target
+  #           }
+  #         }
+  #         echo "RUST_TARGETS=$env:RUST_TARGETS"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #       env:
+  #         RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
       
-      # All configurations for Windows go here
-      # Rust toolchain is used to determine target architecture
-      - name: Configure Windows
-        if: runner.os == 'Windows'
-        # 1. Configure path to libclang
-        # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
-        # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
-        run: |
-          if ($env:RUST_TARGETS -like "*x86_64*") {
-            echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-          }
-          if ($env:RUST_TARGETS -like "*i686*") {
-            echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-          }
+  #     # All configurations for Windows go here
+  #     # Rust toolchain is used to determine target architecture
+  #     - name: Configure Windows
+  #       if: runner.os == 'Windows'
+  #       # 1. Configure path to libclang
+  #       # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
+  #       # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
+  #       run: |
+  #         if ($env:RUST_TARGETS -like "*x86_64*") {
+  #           echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+  #           echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+  #         }
+  #         if ($env:RUST_TARGETS -like "*i686*") {
+  #           echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+  #           echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+  #         }
           
 
-      # MacOS configurations, mainly llvm and path to libclang
-      # Because of this R installation issue on MacOS-11.0 
-      # https://github.com/r-lib/actions/issues/200
-      # Symlinks to R/Rscript are not properly set up, so we do it by hand, using this trick
-      # https://github.com/r-lib/ps/commit/a24f2c4d1bdba63be14e7729b9ab81d0ed9f719e
-      # Environment variables are required fir Mac-OS-11.0, see
-      # https://github.com/extendr/libR-sys/issues/35
-      - name: Configure MacOs
-        if: runner.os == 'macOS'
-        run: | 
-          brew install llvm
-          echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          $env:LLVM_CONFIG_PATH = "$(brew --prefix llvm)/bin/llvm-config" 
-          echo "LLVM_CONFIG_PATH=$env:LLVM_CONFIG_PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$(. $env:LLVM_CONFIG_PATH --libdir)/clang/$(. $env:LLVM_CONFIG_PATH --version)/include"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #     # MacOS configurations, mainly llvm and path to libclang
+  #     # Because of this R installation issue on MacOS-11.0 
+  #     # https://github.com/r-lib/actions/issues/200
+  #     # Symlinks to R/Rscript are not properly set up, so we do it by hand, using this trick
+  #     # https://github.com/r-lib/ps/commit/a24f2c4d1bdba63be14e7729b9ab81d0ed9f719e
+  #     # Environment variables are required fir Mac-OS-11.0, see
+  #     # https://github.com/extendr/libR-sys/issues/35
+  #     - name: Configure MacOs
+  #       if: runner.os == 'macOS'
+  #       run: | 
+  #         brew install llvm
+  #         echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #         $env:LLVM_CONFIG_PATH = "$(brew --prefix llvm)/bin/llvm-config" 
+  #         echo "LLVM_CONFIG_PATH=$env:LLVM_CONFIG_PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #         echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$(. $env:LLVM_CONFIG_PATH --libdir)/clang/$(. $env:LLVM_CONFIG_PATH --version)/include"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-          if ((Get-ChildItem -Path /usr/local/bin -Filter R | Measure-Object).Count -eq 0) {
-            echo "::warning:: Found no R symlink in /usr/local/bin, setting up manually..."
-            ln -s /Library/Frameworks/R.framework/Versions/Current/Resources/bin/R /usr/local/bin/
-          }
-          if ((Get-ChildItem -Path /usr/local/bin -Filter Rscript | Measure-Object).Count -eq 0) {
-            echo "::warning:: Found no Rscript symlink in /usr/local/bin, setting up manually..."
-            ln -s /Library/Frameworks/R.framework/Versions/Current/Resources/bin/Rscript /usr/local/bin/
-          }
+  #         if ((Get-ChildItem -Path /usr/local/bin -Filter R | Measure-Object).Count -eq 0) {
+  #           echo "::warning:: Found no R symlink in /usr/local/bin, setting up manually..."
+  #           ln -s /Library/Frameworks/R.framework/Versions/Current/Resources/bin/R /usr/local/bin/
+  #         }
+  #         if ((Get-ChildItem -Path /usr/local/bin -Filter Rscript | Measure-Object).Count -eq 0) {
+  #           echo "::warning:: Found no Rscript symlink in /usr/local/bin, setting up manually..."
+  #           ln -s /Library/Frameworks/R.framework/Versions/Current/Resources/bin/Rscript /usr/local/bin/
+  #         }
 
-      # This is required for ubuntu r-devel
-      # 'Del alias:R' removes R alias which prevents running R 
-      - name: Configure Linux
-        if: runner.os == 'linux'
-        run: |
-          Del alias:R
-          echo "LD_LIBRARY_PATH=$(R -s -e 'cat(normalizePath(R.home()))')/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #     # This is required for ubuntu r-devel
+  #     # 'Del alias:R' removes R alias which prevents running R 
+  #     - name: Configure Linux
+  #       if: runner.os == 'linux'
+  #       run: |
+  #         Del alias:R
+  #         echo "LD_LIBRARY_PATH=$(R -s -e 'cat(normalizePath(R.home()))')/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      # Build and emit bindings to './generated_bindings'
-      - name: Build & Emit bindings
-        id: build
-        run: |
-          . ./ci-cargo.ps1
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            ci-cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -ActionName "Building for target: $target"
-          }
-        env:
-          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
+  #     # Build and emit bindings to './generated_bindings'
+  #     - name: Build & Emit bindings
+  #       id: build
+  #       run: |
+  #         . ./ci-cargo.ps1
+  #         foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+  #           ci-cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -ActionName "Building for target: $target"
+  #         }
+  #       env:
+  #         LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
 
-      # Test the result of previous step
-      - name: Run tests
-        id: test
-        run: |
-          . ./ci-cargo.ps1
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
-              echo "::warning:: Skipping bindgen tests for target: $target"
-            }
-            else {
-              ci-cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running bindgen tests for target: $target"
-            }
-          }
-        env: 
-          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
+  #     # Test the result of previous step
+  #     - name: Run tests
+  #       id: test
+  #       run: |
+  #         . ./ci-cargo.ps1
+  #         foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+  #           if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
+  #             echo "::warning:: Skipping bindgen tests for target: $target"
+  #           }
+  #           else {
+  #             ci-cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running bindgen tests for target: $target"
+  #           }
+  #         }
+  #       env: 
+  #         NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
             
 
 
-      # If success
-      # AND (either rust is stable and 'emit-bindings' != 'false'
-      #      OR rust is any and 'emit-bindings' == 'true'),
-      # upload bindings
-      - name: Upload generated bindings
-        if: 
-          steps.build.outcome == 'success' && 
-          steps.test.outcome == 'success' && 
-          ((startsWith(matrix.config.rust-version, 'stable') && matrix.config.emit-bindings != 'false') ||
-            (matrix.config.emit-bindings == 'true'))
-        uses: actions/upload-artifact@main
-        with:
-          name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) generated bindings
-          path: generated_bindings
+  #     # If success
+  #     # AND (either rust is stable and 'emit-bindings' != 'false'
+  #     #      OR rust is any and 'emit-bindings' == 'true'),
+  #     # upload bindings
+  #     - name: Upload generated bindings
+  #       if: 
+  #         steps.build.outcome == 'success' && 
+  #         steps.test.outcome == 'success' && 
+  #         ((startsWith(matrix.config.rust-version, 'stable') && matrix.config.emit-bindings != 'false') ||
+  #           (matrix.config.emit-bindings == 'true'))
+  #       uses: actions/upload-artifact@main
+  #       with:
+  #         name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) generated bindings
+  #         path: generated_bindings
 
-      # Run tests again using different bindings
-      - name: Run tests on precomputed bindings shipped with libR-sys
-        run: |
-          . ./ci-cargo.ps1
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
-              echo "::warning:: Skipping tests for target: $target"
-            }
-            else {    
-              ci-cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running tests for target: $target"
-            }
-          }
-        env: 
-          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
+  #     # Run tests again using different bindings
+  #     - name: Run tests on precomputed bindings shipped with libR-sys
+  #       run: |
+  #         . ./ci-cargo.ps1
+  #         foreach ($target in ($env:RUST_TARGETS).Split(",")) {
+  #           if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
+  #             echo "::warning:: Skipping tests for target: $target"
+  #           }
+  #           else {    
+  #             ci-cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running tests for target: $target"
+  #           }
+  #         }
+  #       env: 
+  #         NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
 
   test_windows_rtools:
     runs-on: ${{ matrix.config.os }}
