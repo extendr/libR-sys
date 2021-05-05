@@ -194,7 +194,7 @@ jobs:
   test_windows_rtools:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) \w RTOOLS test
+    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) \w RTOOLSv2
               
     strategy:
       fail-fast: false
@@ -215,8 +215,8 @@ jobs:
       - uses: actions/checkout@v2
       # When this issue is resolved and PR merged, this step can be safely removed
       # https://github.com/r-lib/actions/pull/287
-      # - name: Purge system Rtools installation
-      #   run: rm C:\rtools40 -Force -Recurse -ErrorAction SilentlyContinue
+      - name: Purge system Rtools installation
+        run: rm C:\rtools40 -Force -Recurse -ErrorAction SilentlyContinue
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v1
