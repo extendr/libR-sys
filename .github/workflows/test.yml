@@ -213,7 +213,10 @@ jobs:
     steps:
       
       - uses: actions/checkout@v2
-      
+      # https://github.com/r-lib/actions/pull/287
+      - name: Purge system Rtools installation
+        run: rm C:\rtools40 -Force -Recurse
+
       - name: Set up R
         uses: r-lib/actions/setup-r@v1
         with:
