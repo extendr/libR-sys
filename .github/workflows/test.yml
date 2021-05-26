@@ -9,7 +9,6 @@ on:
     branches:
       - main
       - master
-  workflow_dispatch:
 
 jobs:
 
@@ -193,7 +192,7 @@ jobs:
   test_windows_rtools:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) \w RTOOLS
+    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) \w RTOOLSv2
               
     strategy:
       fail-fast: false
@@ -212,7 +211,7 @@ jobs:
     steps:
       
       - uses: actions/checkout@v2
-      
+
       - name: Set up R
         uses: r-lib/actions/setup-r@v1
         with:
@@ -243,13 +242,10 @@ jobs:
       # Rust toolchain is used to determine target architecture
       - name: Configure Windows
         if: runner.os == 'Windows'
-        # 1. Configure path to libclang
-        # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
-        # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
+        # 1. Put rtools' mingw on PATH
+        # 2. Add R's i386/x64 to PATH
         run: |
           if ($env:RUST_TARGETS -like "*x86_64*") {
-            <# Amend rtools libgcc_eh.a #>
-            cp C:\rtools40\mingw64\lib\gcc\x86_64-w64-mingw32\8.3.0\libgcc.a C:\rtools40\mingw64\lib\gcc\x86_64-w64-mingw32\8.3.0\libgcc_eh.a 
             echo "C:\rtools40\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
