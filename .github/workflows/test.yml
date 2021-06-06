@@ -189,6 +189,31 @@ jobs:
         env: 
           NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
 
+      - name: Create a pull request if there's update to the bindings
+        if: 
+          github.ref == 'refs/heads/master' &&
+          steps.build.outcome == 'success' && 
+          steps.test.outcome == 'success' && 
+          ((startsWith(matrix.config.rust-version, 'stable') && matrix.config.emit-bindings != 'false') ||
+            (matrix.config.emit-bindings == 'true'))
+        run: |
+          cp generated_bindings/* bindings/
+
+          # detect changes (the code is derived from https://stackoverflow.com/a/3879077)
+          git add bindings/
+          git update-index --refresh 
+          git diff-index --quiet HEAD -- bindings/
+          if($LASTEXITCODE -eq 1) {
+            git switch -c "update-bindings-${{ matrix.config.os }}-R_${{ matrix.config.r }}-rust_${{ matrix.config.rust-version }}-$(date +%s)"
+            git config --local user.email "actions@github.com"
+            git config --local user.name "GitHub Actions"
+            git commit -m "Update bindings"
+            hub pull-request --base master --push --message "Update bindings for os:${{ matrix.config.os }}, R:${{ matrix.config.r }}, rust:${{ matrix.config.rust-version }}"
+          }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
   test_windows_rtools:
     runs-on: ${{ matrix.config.os }}
 
