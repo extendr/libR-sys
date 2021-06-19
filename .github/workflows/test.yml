@@ -12,6 +12,8 @@ on:
   # Run this once per three days
   schedule:
     - cron: '29 17 */3 * *'
+  # This can also manually run
+  workflow_dispatch: {}
 
 jobs:
 
@@ -318,3 +320,5 @@ jobs:
         else
           echo "No changes"
         fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
