@@ -300,7 +300,6 @@ jobs:
 
         # detect changes (the code is derived from https://stackoverflow.com/a/3879077)
         git add bindings/
-
         git update-index --refresh
         if ! git diff-index --quiet HEAD -- bindings/; then
           git config --local user.name "${GITHUB_ACTOR}"
