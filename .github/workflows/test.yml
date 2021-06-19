@@ -317,6 +317,21 @@ jobs:
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git commit -m "Update bindings [skip ci]"
           git push origin generated_bindings
+
+          # File an issue or a pull request
+          echo "Update the precomputed bindings"                          >  .msg
+          echo ""                                                         >> .msg
+          echo "The generated bindings have changed for these platforms:" >> .msg
+          echo ""                                                         >> .msg
+          git diff --name-only HEAD^ | sed 's/^/- /'                      >> .msg
+          echo ""                                                         >> .msg
+          echo "Please check the diff at <https://github.com/extendr/libR-sys/compare/master...generated_bindings?expand=1>" >> .msg
+
+          if ! (hub issue | grep -q "Update the precomputed bindings"); then
+            hub issue create -F .msg
+
+            hub pull-request --base master -m "Update the precomputed bindings"
+          fi
         else
           echo "No changes"
         fi
