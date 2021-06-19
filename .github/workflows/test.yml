@@ -30,7 +30,7 @@ jobs:
           - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
           - {os: macOS-latest,   r: 'devel',   rust-version: 'stable'}
           - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable'}
-          - {os: macOS-11.0,     r: 'release', rust-version: 'nightly',      targets: ['default', 'aarch64-apple-darwin'], 
+          - {os: macOS-11,       r: 'release', rust-version: 'nightly',      targets: ['default', 'aarch64-apple-darwin'], 
             no-test-targets: 'aarch64-apple-darwin', emit-bindings: 'true'}
 
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
