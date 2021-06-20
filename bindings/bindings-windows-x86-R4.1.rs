@@ -88,10 +88,8 @@ pub const __MINGW64_VERSION_RC: u32 = 0;
 pub const __MINGW64_VERSION_STATE: &'static [u8; 6usize] = b"alpha\0";
 pub const __MINGW32_MAJOR_VERSION: u32 = 3;
 pub const __MINGW32_MINOR_VERSION: u32 = 11;
-pub const _M_AMD64: u32 = 100;
-pub const _M_X64: u32 = 100;
-pub const __: u32 = 1;
-pub const __MINGW_USE_UNDERSCORE_PREFIX: u32 = 0;
+pub const _M_IX86: u32 = 300;
+pub const __MINGW_USE_UNDERSCORE_PREFIX: u32 = 1;
 pub const __MINGW_HAVE_ANSI_C99_PRINTF: u32 = 1;
 pub const __MINGW_HAVE_WIDE_C99_PRINTF: u32 = 1;
 pub const __MINGW_HAVE_ANSI_C99_SCANF: u32 = 1;
@@ -201,8 +199,8 @@ pub const ULONG_LONG_MAX: i32 = -1;
 pub const _I64_MIN: i64 = -9223372036854775808;
 pub const _I64_MAX: u64 = 9223372036854775807;
 pub const _UI64_MAX: i32 = -1;
-pub const SIZE_MAX: i32 = -1;
-pub const SSIZE_MAX: u64 = 9223372036854775807;
+pub const SIZE_MAX: u32 = 4294967295;
+pub const SSIZE_MAX: u32 = 2147483647;
 pub const _DOMAIN: u32 = 1;
 pub const _SING: u32 = 2;
 pub const _OVERFLOW: u32 = 3;
@@ -258,10 +256,9 @@ pub const IEEE_754: u32 = 1;
 pub const SUPPORT_UTF8: u32 = 1;
 pub const SUPPORT_MBCS: u32 = 1;
 pub const ENABLE_NLS: u32 = 1;
-pub const SIZEOF_SIZE_T: u32 = 8;
+pub const SIZEOF_SIZE_T: u32 = 4;
 pub const HAVE_UINTPTR_T: u32 = 1;
-pub const R_XLEN_T_MAX: u64 = 4503599627370496;
-pub const R_SHORT_LEN_MAX: u32 = 2147483647;
+pub const R_XLEN_T_MAX: u32 = 2147483647;
 pub const R_INTERNALS_UUID: &'static [u8; 37usize] = b"2fdf6c18-697a-4ba7-b8ef-11c0d92f1327\0";
 pub const NILSXP: u32 = 0;
 pub const SYMSXP: u32 = 1;
@@ -296,62 +293,17 @@ pub const NAMEDMAX: u32 = 7;
 pub const R_XDR_DOUBLE_SIZE: u32 = 8;
 pub const R_XDR_INTEGER_SIZE: u32 = 4;
 pub const R_CODESET_MAX: u32 = 63;
-pub const R_VERSION: u32 = 262149;
-pub const R_NICK: &'static [u8; 16usize] = b"Shake and Throw\0";
+pub const R_VERSION: u32 = 262400;
+pub const R_NICK: &'static [u8; 16usize] = b"Camp Pontanezen\0";
 pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
-pub const R_MINOR: &'static [u8; 4usize] = b"0.5\0";
+pub const R_MINOR: &'static [u8; 4usize] = b"1.0\0";
 pub const R_STATUS: &'static [u8; 1usize] = b"\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
-pub const R_MONTH: &'static [u8; 3usize] = b"03\0";
-pub const R_DAY: &'static [u8; 3usize] = b"31\0";
-pub const R_SVN_REVISION: u32 = 80133;
-pub type size_t = ::std::os::raw::c_ulonglong;
+pub const R_MONTH: &'static [u8; 3usize] = b"05\0";
+pub const R_DAY: &'static [u8; 3usize] = b"18\0";
+pub const R_SVN_REVISION: u32 = 80317;
+pub type size_t = ::std::os::raw::c_uint;
 pub type wchar_t = ::std::os::raw::c_ushort;
-#[repr(C)]
-#[repr(align(16))]
-#[derive(Debug, Copy, Clone)]
-pub struct max_align_t {
-    pub __clang_max_align_nonce1: ::std::os::raw::c_longlong,
-    pub __bindgen_padding_0: u64,
-    pub __clang_max_align_nonce2: u128,
-}
-#[test]
-fn bindgen_test_layout_max_align_t() {
-    assert_eq!(
-        ::std::mem::size_of::<max_align_t>(),
-        32usize,
-        concat!("Size of: ", stringify!(max_align_t))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<max_align_t>(),
-        16usize,
-        concat!("Alignment of ", stringify!(max_align_t))
-    );
-    assert_eq!(
-        unsafe {
-            &(*(::std::ptr::null::<max_align_t>())).__clang_max_align_nonce1 as *const _ as usize
-        },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(max_align_t),
-            "::",
-            stringify!(__clang_max_align_nonce1)
-        )
-    );
-    assert_eq!(
-        unsafe {
-            &(*(::std::ptr::null::<max_align_t>())).__clang_max_align_nonce2 as *const _ as usize
-        },
-        16usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(max_align_t),
-            "::",
-            stringify!(__clang_max_align_nonce2)
-        )
-    );
-}
 #[doc = " <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
 pub type __gnuc_va_list = __builtin_va_list;
@@ -362,14 +314,14 @@ extern "C" {
 extern "C" {
     pub fn __mingw_get_crt_info() -> *const ::std::os::raw::c_char;
 }
-pub type ssize_t = ::std::os::raw::c_longlong;
+pub type ssize_t = ::std::os::raw::c_int;
 pub type rsize_t = size_t;
 pub type wint_t = ::std::os::raw::c_ushort;
 pub type wctype_t = ::std::os::raw::c_ushort;
 pub type errno_t = ::std::os::raw::c_int;
 pub type __time32_t = ::std::os::raw::c_long;
 pub type __time64_t = ::std::os::raw::c_longlong;
-pub type time_t = __time64_t;
+pub type time_t = __time32_t;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct threadmbcinfostruct {
@@ -392,12 +344,12 @@ pub struct localeinfo_struct {
 fn bindgen_test_layout_localeinfo_struct() {
     assert_eq!(
         ::std::mem::size_of::<localeinfo_struct>(),
-        16usize,
+        8usize,
         concat!("Size of: ", stringify!(localeinfo_struct))
     );
     assert_eq!(
         ::std::mem::align_of::<localeinfo_struct>(),
-        8usize,
+        4usize,
         concat!("Alignment of ", stringify!(localeinfo_struct))
     );
     assert_eq!(
@@ -412,7 +364,7 @@ fn bindgen_test_layout_localeinfo_struct() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<localeinfo_struct>())).mbcinfo as *const _ as usize },
-        8usize,
+        4usize,
         concat!(
             "Offset of field: ",
             stringify!(localeinfo_struct),
@@ -509,7 +461,7 @@ pub struct threadlocaleinfostruct__bindgen_ty_1 {
 fn bindgen_test_layout_threadlocaleinfostruct__bindgen_ty_1() {
     assert_eq!(
         ::std::mem::size_of::<threadlocaleinfostruct__bindgen_ty_1>(),
-        32usize,
+        16usize,
         concat!(
             "Size of: ",
             stringify!(threadlocaleinfostruct__bindgen_ty_1)
@@ -517,7 +469,7 @@ fn bindgen_test_layout_threadlocaleinfostruct__bindgen_ty_1() {
     );
     assert_eq!(
         ::std::mem::align_of::<threadlocaleinfostruct__bindgen_ty_1>(),
-        8usize,
+        4usize,
         concat!(
             "Alignment of ",
             stringify!(threadlocaleinfostruct__bindgen_ty_1)
@@ -541,7 +493,7 @@ fn bindgen_test_layout_threadlocaleinfostruct__bindgen_ty_1() {
             &(*(::std::ptr::null::<threadlocaleinfostruct__bindgen_ty_1>())).wlocale as *const _
                 as usize
         },
-        8usize,
+        4usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct__bindgen_ty_1),
@@ -554,7 +506,7 @@ fn bindgen_test_layout_threadlocaleinfostruct__bindgen_ty_1() {
             &(*(::std::ptr::null::<threadlocaleinfostruct__bindgen_ty_1>())).refcount as *const _
                 as usize
         },
-        16usize,
+        8usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct__bindgen_ty_1),
@@ -567,7 +519,7 @@ fn bindgen_test_layout_threadlocaleinfostruct__bindgen_ty_1() {
             &(*(::std::ptr::null::<threadlocaleinfostruct__bindgen_ty_1>())).wrefcount as *const _
                 as usize
         },
-        24usize,
+        12usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct__bindgen_ty_1),
@@ -580,12 +532,12 @@ fn bindgen_test_layout_threadlocaleinfostruct__bindgen_ty_1() {
 fn bindgen_test_layout_threadlocaleinfostruct() {
     assert_eq!(
         ::std::mem::size_of::<threadlocaleinfostruct>(),
-        352usize,
+        216usize,
         concat!("Size of: ", stringify!(threadlocaleinfostruct))
     );
     assert_eq!(
         ::std::mem::align_of::<threadlocaleinfostruct>(),
-        8usize,
+        4usize,
         concat!("Alignment of ", stringify!(threadlocaleinfostruct))
     );
     assert_eq!(
@@ -658,7 +610,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).lc_clike as *const _ as usize },
-        264usize,
+        168usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -670,7 +622,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
         unsafe {
             &(*(::std::ptr::null::<threadlocaleinfostruct>())).mb_cur_max as *const _ as usize
         },
-        268usize,
+        172usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -683,7 +635,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
             &(*(::std::ptr::null::<threadlocaleinfostruct>())).lconv_intl_refcount as *const _
                 as usize
         },
-        272usize,
+        176usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -696,7 +648,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
             &(*(::std::ptr::null::<threadlocaleinfostruct>())).lconv_num_refcount as *const _
                 as usize
         },
-        280usize,
+        180usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -709,7 +661,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
             &(*(::std::ptr::null::<threadlocaleinfostruct>())).lconv_mon_refcount as *const _
                 as usize
         },
-        288usize,
+        184usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -719,7 +671,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).lconv as *const _ as usize },
-        296usize,
+        188usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -731,7 +683,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
         unsafe {
             &(*(::std::ptr::null::<threadlocaleinfostruct>())).ctype1_refcount as *const _ as usize
         },
-        304usize,
+        192usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -741,7 +693,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).ctype1 as *const _ as usize },
-        312usize,
+        196usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -751,7 +703,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).pctype as *const _ as usize },
-        320usize,
+        200usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -761,7 +713,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).pclmap as *const _ as usize },
-        328usize,
+        204usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -771,7 +723,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<threadlocaleinfostruct>())).pcumap as *const _ as usize },
-        336usize,
+        208usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -783,7 +735,7 @@ fn bindgen_test_layout_threadlocaleinfostruct() {
         unsafe {
             &(*(::std::ptr::null::<threadlocaleinfostruct>())).lc_time_curr as *const _ as usize
         },
-        344usize,
+        212usize,
         concat!(
             "Offset of field: ",
             stringify!(threadlocaleinfostruct),
@@ -809,12 +761,12 @@ pub struct _iobuf {
 fn bindgen_test_layout__iobuf() {
     assert_eq!(
         ::std::mem::size_of::<_iobuf>(),
-        48usize,
+        32usize,
         concat!("Size of: ", stringify!(_iobuf))
     );
     assert_eq!(
         ::std::mem::align_of::<_iobuf>(),
-        8usize,
+        4usize,
         concat!("Alignment of ", stringify!(_iobuf))
     );
     assert_eq!(
@@ -829,7 +781,7 @@ fn bindgen_test_layout__iobuf() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<_iobuf>()))._cnt as *const _ as usize },
-        8usize,
+        4usize,
         concat!(
             "Offset of field: ",
             stringify!(_iobuf),
@@ -839,7 +791,7 @@ fn bindgen_test_layout__iobuf() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<_iobuf>()))._base as *const _ as usize },
-        16usize,
+        8usize,
         concat!(
             "Offset of field: ",
             stringify!(_iobuf),
@@ -849,7 +801,7 @@ fn bindgen_test_layout__iobuf() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<_iobuf>()))._flag as *const _ as usize },
-        24usize,
+        12usize,
         concat!(
             "Offset of field: ",
             stringify!(_iobuf),
@@ -859,7 +811,7 @@ fn bindgen_test_layout__iobuf() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<_iobuf>()))._file as *const _ as usize },
-        28usize,
+        16usize,
         concat!(
             "Offset of field: ",
             stringify!(_iobuf),
@@ -869,7 +821,7 @@ fn bindgen_test_layout__iobuf() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<_iobuf>()))._charbuf as *const _ as usize },
-        32usize,
+        20usize,
         concat!(
             "Offset of field: ",
             stringify!(_iobuf),
@@ -879,7 +831,7 @@ fn bindgen_test_layout__iobuf() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<_iobuf>()))._bufsiz as *const _ as usize },
-        36usize,
+        24usize,
         concat!(
             "Offset of field: ",
             stringify!(_iobuf),
@@ -889,7 +841,7 @@ fn bindgen_test_layout__iobuf() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<_iobuf>()))._tmpfname as *const _ as usize },
-        40usize,
+        28usize,
         concat!(
             "Offset of field: ",
             stringify!(_iobuf),
@@ -908,7 +860,7 @@ extern "C" {
     pub fn __acrt_iob_func(index: ::std::os::raw::c_uint) -> *mut FILE;
 }
 extern "C" {
-    pub fn __iob_func() -> *mut FILE;
+    pub static mut _imp___iob: *mut [FILE; 0usize];
 }
 pub type fpos_t = ::std::os::raw::c_longlong;
 extern "C" {
@@ -1161,10 +1113,10 @@ extern "C" {
 extern "C" {
     pub fn fread(
         _DstBuf: *mut ::std::os::raw::c_void,
-        _ElementSize: ::std::os::raw::c_ulonglong,
-        _Count: ::std::os::raw::c_ulonglong,
+        _ElementSize: ::std::os::raw::c_uint,
+        _Count: ::std::os::raw::c_uint,
         _File: *mut FILE,
-    ) -> ::std::os::raw::c_ulonglong;
+    ) -> ::std::os::raw::c_uint;
 }
 extern "C" {
     pub fn freopen(
@@ -1222,10 +1174,10 @@ extern "C" {
 extern "C" {
     pub fn fwrite(
         _Str: *const ::std::os::raw::c_void,
-        _Size: ::std::os::raw::c_ulonglong,
-        _Count: ::std::os::raw::c_ulonglong,
+        _Size: ::std::os::raw::c_uint,
+        _Count: ::std::os::raw::c_uint,
         _File: *mut FILE,
-    ) -> ::std::os::raw::c_ulonglong;
+    ) -> ::std::os::raw::c_uint;
 }
 extern "C" {
     pub fn getc(_File: *mut FILE) -> ::std::os::raw::c_int;
@@ -2764,13 +2716,6 @@ fn bindgen_test_layout___mingw_flt_type_t() {
         )
     );
 }
-#[repr(C, packed(8))]
-#[derive(Copy, Clone)]
-pub union __mingw_ldbl_type_t {
-    pub x: u128,
-    pub lh: __mingw_ldbl_type_t__bindgen_ty_1,
-    _bindgen_union_align: [u64; 2usize],
-}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __mingw_ldbl_type_t__bindgen_ty_1 {
@@ -2875,41 +2820,8 @@ impl __mingw_ldbl_type_t__bindgen_ty_1 {
         __bindgen_bitfield_unit
     }
 }
-#[test]
-fn bindgen_test_layout___mingw_ldbl_type_t() {
-    assert_eq!(
-        ::std::mem::size_of::<__mingw_ldbl_type_t>(),
-        16usize,
-        concat!("Size of: ", stringify!(__mingw_ldbl_type_t))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<__mingw_ldbl_type_t>(),
-        8usize,
-        concat!("Alignment of ", stringify!(__mingw_ldbl_type_t))
-    );
-    assert_eq!(
-        unsafe { &(*(::std::ptr::null::<__mingw_ldbl_type_t>())).x as *const _ as usize },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__mingw_ldbl_type_t),
-            "::",
-            stringify!(x)
-        )
-    );
-    assert_eq!(
-        unsafe { &(*(::std::ptr::null::<__mingw_ldbl_type_t>())).lh as *const _ as usize },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__mingw_ldbl_type_t),
-            "::",
-            stringify!(lh)
-        )
-    );
-}
 extern "C" {
-    pub static mut __imp__HUGE: *mut f64;
+    pub static mut _imp___HUGE: *mut f64;
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -2924,7 +2836,7 @@ pub struct _exception {
 fn bindgen_test_layout__exception() {
     assert_eq!(
         ::std::mem::size_of::<_exception>(),
-        40usize,
+        32usize,
         concat!("Size of: ", stringify!(_exception))
     );
     assert_eq!(
@@ -2944,7 +2856,7 @@ fn bindgen_test_layout__exception() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<_exception>())).name as *const _ as usize },
-        8usize,
+        4usize,
         concat!(
             "Offset of field: ",
             stringify!(_exception),
@@ -2954,7 +2866,7 @@ fn bindgen_test_layout__exception() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<_exception>())).arg1 as *const _ as usize },
-        16usize,
+        8usize,
         concat!(
             "Offset of field: ",
             stringify!(_exception),
@@ -2964,7 +2876,7 @@ fn bindgen_test_layout__exception() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<_exception>())).arg2 as *const _ as usize },
-        24usize,
+        16usize,
         concat!(
             "Offset of field: ",
             stringify!(_exception),
@@ -2974,7 +2886,7 @@ fn bindgen_test_layout__exception() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<_exception>())).retval as *const _ as usize },
-        32usize,
+        24usize,
         concat!(
             "Offset of field: ",
             stringify!(_exception),
@@ -3061,7 +2973,7 @@ extern "C" {
     pub fn fabsf(x: f32) -> f32;
 }
 extern "C" {
-    pub fn fabsl(arg1: u128) -> u128;
+    pub fn fabsl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn fabs(_X: f64) -> f64;
@@ -3082,7 +2994,7 @@ extern "C" {
     pub fn sincos(__x: f64, p_sin: *mut f64, p_cos: *mut f64);
 }
 extern "C" {
-    pub fn sincosl(__x: u128, p_sin: *mut u128, p_cos: *mut u128);
+    pub fn sincosl(__x: f64, p_sin: *mut f64, p_cos: *mut f64);
 }
 extern "C" {
     pub fn sincosf(__x: f32, p_sin: *mut f32, p_cos: *mut f32);
@@ -3216,10 +3128,13 @@ extern "C" {
 extern "C" {
     pub fn fpclass(arg1: f64) -> ::std::os::raw::c_int;
 }
+extern "C" {
+    pub fn _set_SSE2_enable(_Flag: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+}
 pub type float_t = f32;
 pub type double_t = f64;
 extern "C" {
-    pub fn __fpclassifyl(arg1: u128) -> ::std::os::raw::c_int;
+    pub fn __fpclassifyl(arg1: f64) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn __fpclassifyf(arg1: f32) -> ::std::os::raw::c_int;
@@ -3234,7 +3149,7 @@ extern "C" {
     pub fn __isnanf(arg1: f32) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn __isnanl(arg1: u128) -> ::std::os::raw::c_int;
+    pub fn __isnanl(arg1: f64) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn __signbit(arg1: f64) -> ::std::os::raw::c_int;
@@ -3243,67 +3158,67 @@ extern "C" {
     pub fn __signbitf(arg1: f32) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn __signbitl(arg1: u128) -> ::std::os::raw::c_int;
+    pub fn __signbitl(arg1: f64) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn sinf(_X: f32) -> f32;
 }
 extern "C" {
-    pub fn sinl(arg1: u128) -> u128;
+    pub fn sinl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn cosf(_X: f32) -> f32;
 }
 extern "C" {
-    pub fn cosl(arg1: u128) -> u128;
+    pub fn cosl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn tanf(_X: f32) -> f32;
 }
 extern "C" {
-    pub fn tanl(arg1: u128) -> u128;
+    pub fn tanl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn asinf(_X: f32) -> f32;
 }
 extern "C" {
-    pub fn asinl(arg1: u128) -> u128;
+    pub fn asinl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn acosf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn acosl(arg1: u128) -> u128;
+    pub fn acosl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn atanf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn atanl(arg1: u128) -> u128;
+    pub fn atanl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn atan2f(arg1: f32, arg2: f32) -> f32;
 }
 extern "C" {
-    pub fn atan2l(arg1: u128, arg2: u128) -> u128;
+    pub fn atan2l(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn sinhf(_X: f32) -> f32;
 }
 extern "C" {
-    pub fn sinhl(arg1: u128) -> u128;
+    pub fn sinhl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn coshf(_X: f32) -> f32;
 }
 extern "C" {
-    pub fn coshl(arg1: u128) -> u128;
+    pub fn coshl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn tanhf(_X: f32) -> f32;
 }
 extern "C" {
-    pub fn tanhl(arg1: u128) -> u128;
+    pub fn tanhl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn acosh(arg1: f64) -> f64;
@@ -3312,7 +3227,7 @@ extern "C" {
     pub fn acoshf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn acoshl(arg1: u128) -> u128;
+    pub fn acoshl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn asinh(arg1: f64) -> f64;
@@ -3321,7 +3236,7 @@ extern "C" {
     pub fn asinhf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn asinhl(arg1: u128) -> u128;
+    pub fn asinhl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn atanh(arg1: f64) -> f64;
@@ -3330,13 +3245,13 @@ extern "C" {
     pub fn atanhf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn atanhl(arg1: u128) -> u128;
+    pub fn atanhl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn expf(_X: f32) -> f32;
 }
 extern "C" {
-    pub fn expl(arg1: u128) -> u128;
+    pub fn expl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn exp2(arg1: f64) -> f64;
@@ -3345,7 +3260,7 @@ extern "C" {
     pub fn exp2f(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn exp2l(arg1: u128) -> u128;
+    pub fn exp2l(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn expm1(arg1: f64) -> f64;
@@ -3354,13 +3269,13 @@ extern "C" {
     pub fn expm1f(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn expm1l(arg1: u128) -> u128;
+    pub fn expm1l(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn frexpf(_X: f32, _Y: *mut ::std::os::raw::c_int) -> f32;
 }
 extern "C" {
-    pub fn frexpl(arg1: u128, arg2: *mut ::std::os::raw::c_int) -> u128;
+    pub fn frexpl(arg1: f64, arg2: *mut ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
     pub fn ilogb(arg1: f64) -> ::std::os::raw::c_int;
@@ -3369,25 +3284,25 @@ extern "C" {
     pub fn ilogbf(arg1: f32) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn ilogbl(arg1: u128) -> ::std::os::raw::c_int;
+    pub fn ilogbl(arg1: f64) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn ldexpf(_X: f32, _Y: ::std::os::raw::c_int) -> f32;
 }
 extern "C" {
-    pub fn ldexpl(arg1: u128, arg2: ::std::os::raw::c_int) -> u128;
+    pub fn ldexpl(arg1: f64, arg2: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
     pub fn logf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn logl(arg1: u128) -> u128;
+    pub fn logl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn log10f(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn log10l(arg1: u128) -> u128;
+    pub fn log10l(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn log1p(arg1: f64) -> f64;
@@ -3396,7 +3311,7 @@ extern "C" {
     pub fn log1pf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn log1pl(arg1: u128) -> u128;
+    pub fn log1pl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn log2(arg1: f64) -> f64;
@@ -3405,7 +3320,7 @@ extern "C" {
     pub fn log2f(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn log2l(arg1: u128) -> u128;
+    pub fn log2l(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn logb(arg1: f64) -> f64;
@@ -3414,13 +3329,13 @@ extern "C" {
     pub fn logbf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn logbl(arg1: u128) -> u128;
+    pub fn logbl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn modff(arg1: f32, arg2: *mut f32) -> f32;
 }
 extern "C" {
-    pub fn modfl(arg1: u128, arg2: *mut u128) -> u128;
+    pub fn modfl(arg1: f64, arg2: *mut f64) -> f64;
 }
 extern "C" {
     pub fn scalbn(arg1: f64, arg2: ::std::os::raw::c_int) -> f64;
@@ -3429,7 +3344,7 @@ extern "C" {
     pub fn scalbnf(arg1: f32, arg2: ::std::os::raw::c_int) -> f32;
 }
 extern "C" {
-    pub fn scalbnl(arg1: u128, arg2: ::std::os::raw::c_int) -> u128;
+    pub fn scalbnl(arg1: f64, arg2: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
     pub fn scalbln(arg1: f64, arg2: ::std::os::raw::c_long) -> f64;
@@ -3438,7 +3353,7 @@ extern "C" {
     pub fn scalblnf(arg1: f32, arg2: ::std::os::raw::c_long) -> f32;
 }
 extern "C" {
-    pub fn scalblnl(arg1: u128, arg2: ::std::os::raw::c_long) -> u128;
+    pub fn scalblnl(arg1: f64, arg2: ::std::os::raw::c_long) -> f64;
 }
 extern "C" {
     pub fn cbrt(arg1: f64) -> f64;
@@ -3447,7 +3362,7 @@ extern "C" {
     pub fn cbrtf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn cbrtl(arg1: u128) -> u128;
+    pub fn cbrtl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn hypot(arg1: f64, arg2: f64) -> f64;
@@ -3456,19 +3371,19 @@ extern "C" {
     pub fn hypotf(x: f32, y: f32) -> f32;
 }
 extern "C" {
-    pub fn hypotl(arg1: u128, arg2: u128) -> u128;
+    pub fn hypotl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn powf(_X: f32, _Y: f32) -> f32;
 }
 extern "C" {
-    pub fn powl(arg1: u128, arg2: u128) -> u128;
+    pub fn powl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn sqrtf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn sqrtl(arg1: u128) -> u128;
+    pub fn sqrtl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn erf(arg1: f64) -> f64;
@@ -3477,7 +3392,7 @@ extern "C" {
     pub fn erff(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn erfl(arg1: u128) -> u128;
+    pub fn erfl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn erfc(arg1: f64) -> f64;
@@ -3486,7 +3401,7 @@ extern "C" {
     pub fn erfcf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn erfcl(arg1: u128) -> u128;
+    pub fn erfcl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn lgamma(arg1: f64) -> f64;
@@ -3495,7 +3410,7 @@ extern "C" {
     pub fn lgammaf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn lgammal(arg1: u128) -> u128;
+    pub fn lgammal(arg1: f64) -> f64;
 }
 extern "C" {
     pub static mut signgam: ::std::os::raw::c_int;
@@ -3507,19 +3422,19 @@ extern "C" {
     pub fn tgammaf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn tgammal(arg1: u128) -> u128;
+    pub fn tgammal(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn ceilf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn ceill(arg1: u128) -> u128;
+    pub fn ceill(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn floorf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn floorl(arg1: u128) -> u128;
+    pub fn floorl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn nearbyint(arg1: f64) -> f64;
@@ -3528,7 +3443,7 @@ extern "C" {
     pub fn nearbyintf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn nearbyintl(arg1: u128) -> u128;
+    pub fn nearbyintl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn rint(arg1: f64) -> f64;
@@ -3537,7 +3452,7 @@ extern "C" {
     pub fn rintf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn rintl(arg1: u128) -> u128;
+    pub fn rintl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn lrint(arg1: f64) -> ::std::os::raw::c_long;
@@ -3546,7 +3461,7 @@ extern "C" {
     pub fn lrintf(arg1: f32) -> ::std::os::raw::c_long;
 }
 extern "C" {
-    pub fn lrintl(arg1: u128) -> ::std::os::raw::c_long;
+    pub fn lrintl(arg1: f64) -> ::std::os::raw::c_long;
 }
 extern "C" {
     pub fn llrint(arg1: f64) -> ::std::os::raw::c_longlong;
@@ -3555,7 +3470,7 @@ extern "C" {
     pub fn llrintf(arg1: f32) -> ::std::os::raw::c_longlong;
 }
 extern "C" {
-    pub fn llrintl(arg1: u128) -> ::std::os::raw::c_longlong;
+    pub fn llrintl(arg1: f64) -> ::std::os::raw::c_longlong;
 }
 extern "C" {
     pub fn round(arg1: f64) -> f64;
@@ -3564,7 +3479,7 @@ extern "C" {
     pub fn roundf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn roundl(arg1: u128) -> u128;
+    pub fn roundl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn lround(arg1: f64) -> ::std::os::raw::c_long;
@@ -3573,7 +3488,7 @@ extern "C" {
     pub fn lroundf(arg1: f32) -> ::std::os::raw::c_long;
 }
 extern "C" {
-    pub fn lroundl(arg1: u128) -> ::std::os::raw::c_long;
+    pub fn lroundl(arg1: f64) -> ::std::os::raw::c_long;
 }
 extern "C" {
     pub fn llround(arg1: f64) -> ::std::os::raw::c_longlong;
@@ -3582,7 +3497,7 @@ extern "C" {
     pub fn llroundf(arg1: f32) -> ::std::os::raw::c_longlong;
 }
 extern "C" {
-    pub fn llroundl(arg1: u128) -> ::std::os::raw::c_longlong;
+    pub fn llroundl(arg1: f64) -> ::std::os::raw::c_longlong;
 }
 extern "C" {
     pub fn trunc(arg1: f64) -> f64;
@@ -3591,13 +3506,13 @@ extern "C" {
     pub fn truncf(arg1: f32) -> f32;
 }
 extern "C" {
-    pub fn truncl(arg1: u128) -> u128;
+    pub fn truncl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn fmodf(arg1: f32, arg2: f32) -> f32;
 }
 extern "C" {
-    pub fn fmodl(arg1: u128, arg2: u128) -> u128;
+    pub fn fmodl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn remainder(arg1: f64, arg2: f64) -> f64;
@@ -3606,7 +3521,7 @@ extern "C" {
     pub fn remainderf(arg1: f32, arg2: f32) -> f32;
 }
 extern "C" {
-    pub fn remainderl(arg1: u128, arg2: u128) -> u128;
+    pub fn remainderl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn remquo(arg1: f64, arg2: f64, arg3: *mut ::std::os::raw::c_int) -> f64;
@@ -3615,7 +3530,7 @@ extern "C" {
     pub fn remquof(arg1: f32, arg2: f32, arg3: *mut ::std::os::raw::c_int) -> f32;
 }
 extern "C" {
-    pub fn remquol(arg1: u128, arg2: u128, arg3: *mut ::std::os::raw::c_int) -> u128;
+    pub fn remquol(arg1: f64, arg2: f64, arg3: *mut ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
     pub fn copysign(arg1: f64, arg2: f64) -> f64;
@@ -3624,7 +3539,7 @@ extern "C" {
     pub fn copysignf(arg1: f32, arg2: f32) -> f32;
 }
 extern "C" {
-    pub fn copysignl(arg1: u128, arg2: u128) -> u128;
+    pub fn copysignl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn nan(tagp: *const ::std::os::raw::c_char) -> f64;
@@ -3633,7 +3548,7 @@ extern "C" {
     pub fn nanf(tagp: *const ::std::os::raw::c_char) -> f32;
 }
 extern "C" {
-    pub fn nanl(tagp: *const ::std::os::raw::c_char) -> u128;
+    pub fn nanl(tagp: *const ::std::os::raw::c_char) -> f64;
 }
 extern "C" {
     pub fn nextafter(arg1: f64, arg2: f64) -> f64;
@@ -3642,16 +3557,16 @@ extern "C" {
     pub fn nextafterf(arg1: f32, arg2: f32) -> f32;
 }
 extern "C" {
-    pub fn nextafterl(arg1: u128, arg2: u128) -> u128;
+    pub fn nextafterl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn nexttoward(arg1: f64, arg2: u128) -> f64;
+    pub fn nexttoward(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn nexttowardf(arg1: f32, arg2: u128) -> f32;
+    pub fn nexttowardf(arg1: f32, arg2: f64) -> f32;
 }
 extern "C" {
-    pub fn nexttowardl(arg1: u128, arg2: u128) -> u128;
+    pub fn nexttowardl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn fdim(x: f64, y: f64) -> f64;
@@ -3660,7 +3575,7 @@ extern "C" {
     pub fn fdimf(x: f32, y: f32) -> f32;
 }
 extern "C" {
-    pub fn fdiml(x: u128, y: u128) -> u128;
+    pub fn fdiml(x: f64, y: f64) -> f64;
 }
 extern "C" {
     pub fn fmax(arg1: f64, arg2: f64) -> f64;
@@ -3669,7 +3584,7 @@ extern "C" {
     pub fn fmaxf(arg1: f32, arg2: f32) -> f32;
 }
 extern "C" {
-    pub fn fmaxl(arg1: u128, arg2: u128) -> u128;
+    pub fn fmaxl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn fmin(arg1: f64, arg2: f64) -> f64;
@@ -3678,7 +3593,7 @@ extern "C" {
     pub fn fminf(arg1: f32, arg2: f32) -> f32;
 }
 extern "C" {
-    pub fn fminl(arg1: u128, arg2: u128) -> u128;
+    pub fn fminl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn fma(arg1: f64, arg2: f64, arg3: f64) -> f64;
@@ -3687,7 +3602,10 @@ extern "C" {
     pub fn fmaf(arg1: f32, arg2: f32, arg3: f32) -> f32;
 }
 extern "C" {
-    pub fn fmal(arg1: u128, arg2: u128, arg3: u128) -> u128;
+    pub fn fmal(arg1: f64, arg2: f64, arg3: f64) -> f64;
+}
+extern "C" {
+    pub fn _hypotf(_X: f32, _Y: f32) -> f32;
 }
 extern "C" {
     pub fn _copysignf(_Number: f32, _Sign: f32) -> f32;
@@ -3711,7 +3629,7 @@ extern "C" {
     pub fn _fpclassf(_X: f32) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn _chgsignl(arg1: u128) -> u128;
+    pub fn _chgsignl(arg1: f64) -> f64;
 }
 extern "C" {
     pub static mut R_NaN: f64;
@@ -3810,7 +3728,7 @@ extern "C" {
     pub fn R_alloc(arg1: size_t, arg2: ::std::os::raw::c_int) -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
-    pub fn R_allocLD(nelem: size_t) -> *mut u128;
+    pub fn R_allocLD(nelem: size_t) -> *mut f64;
 }
 extern "C" {
     pub fn S_alloc(
@@ -4019,12 +3937,12 @@ pub struct R_CMethodDef {
 fn bindgen_test_layout_R_CMethodDef() {
     assert_eq!(
         ::std::mem::size_of::<R_CMethodDef>(),
-        32usize,
+        16usize,
         concat!("Size of: ", stringify!(R_CMethodDef))
     );
     assert_eq!(
         ::std::mem::align_of::<R_CMethodDef>(),
-        8usize,
+        4usize,
         concat!("Alignment of ", stringify!(R_CMethodDef))
     );
     assert_eq!(
@@ -4039,7 +3957,7 @@ fn bindgen_test_layout_R_CMethodDef() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_CMethodDef>())).fun as *const _ as usize },
-        8usize,
+        4usize,
         concat!(
             "Offset of field: ",
             stringify!(R_CMethodDef),
@@ -4049,7 +3967,7 @@ fn bindgen_test_layout_R_CMethodDef() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_CMethodDef>())).numArgs as *const _ as usize },
-        16usize,
+        8usize,
         concat!(
             "Offset of field: ",
             stringify!(R_CMethodDef),
@@ -4059,7 +3977,7 @@ fn bindgen_test_layout_R_CMethodDef() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_CMethodDef>())).types as *const _ as usize },
-        24usize,
+        12usize,
         concat!(
             "Offset of field: ",
             stringify!(R_CMethodDef),
@@ -4080,12 +3998,12 @@ pub struct R_CallMethodDef {
 fn bindgen_test_layout_R_CallMethodDef() {
     assert_eq!(
         ::std::mem::size_of::<R_CallMethodDef>(),
-        24usize,
+        12usize,
         concat!("Size of: ", stringify!(R_CallMethodDef))
     );
     assert_eq!(
         ::std::mem::align_of::<R_CallMethodDef>(),
-        8usize,
+        4usize,
         concat!("Alignment of ", stringify!(R_CallMethodDef))
     );
     assert_eq!(
@@ -4100,7 +4018,7 @@ fn bindgen_test_layout_R_CallMethodDef() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_CallMethodDef>())).fun as *const _ as usize },
-        8usize,
+        4usize,
         concat!(
             "Offset of field: ",
             stringify!(R_CallMethodDef),
@@ -4110,7 +4028,7 @@ fn bindgen_test_layout_R_CallMethodDef() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_CallMethodDef>())).numArgs as *const _ as usize },
-        16usize,
+        8usize,
         concat!(
             "Offset of field: ",
             stringify!(R_CallMethodDef),
@@ -4617,13 +4535,6 @@ extern "C" {
     pub fn R_tryUnwrap(arg1: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn R_BadLongVector(
-        arg1: SEXP,
-        arg2: *const ::std::os::raw::c_char,
-        arg3: ::std::os::raw::c_int,
-    ) -> R_len_t;
-}
-extern "C" {
     pub fn BNDCELL_TAG(e: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -4920,6 +4831,9 @@ extern "C" {
 }
 extern "C" {
     pub static mut R_EvalSymbol: SEXP;
+}
+extern "C" {
+    pub static mut R_FunctionSymbol: SEXP;
 }
 extern "C" {
     pub static mut R_LastvalueSymbol: SEXP;
@@ -5657,6 +5571,9 @@ extern "C" {
     ) -> SEXP;
 }
 extern "C" {
+    pub fn R_NewEnv(arg1: SEXP, arg2: ::std::os::raw::c_int, arg3: ::std::os::raw::c_int) -> SEXP;
+}
+extern "C" {
     pub fn R_RestoreHashCount(rho: SEXP);
 }
 extern "C" {
@@ -5757,12 +5674,12 @@ pub struct R_outpstream_st {
 fn bindgen_test_layout_R_outpstream_st() {
     assert_eq!(
         ::std::mem::size_of::<R_outpstream_st>(),
-        48usize,
+        28usize,
         concat!("Size of: ", stringify!(R_outpstream_st))
     );
     assert_eq!(
         ::std::mem::align_of::<R_outpstream_st>(),
-        8usize,
+        4usize,
         concat!("Alignment of ", stringify!(R_outpstream_st))
     );
     assert_eq!(
@@ -5777,7 +5694,7 @@ fn bindgen_test_layout_R_outpstream_st() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_outpstream_st>())).type_ as *const _ as usize },
-        8usize,
+        4usize,
         concat!(
             "Offset of field: ",
             stringify!(R_outpstream_st),
@@ -5787,7 +5704,7 @@ fn bindgen_test_layout_R_outpstream_st() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_outpstream_st>())).version as *const _ as usize },
-        12usize,
+        8usize,
         concat!(
             "Offset of field: ",
             stringify!(R_outpstream_st),
@@ -5797,7 +5714,7 @@ fn bindgen_test_layout_R_outpstream_st() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_outpstream_st>())).OutChar as *const _ as usize },
-        16usize,
+        12usize,
         concat!(
             "Offset of field: ",
             stringify!(R_outpstream_st),
@@ -5807,7 +5724,7 @@ fn bindgen_test_layout_R_outpstream_st() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_outpstream_st>())).OutBytes as *const _ as usize },
-        24usize,
+        16usize,
         concat!(
             "Offset of field: ",
             stringify!(R_outpstream_st),
@@ -5819,7 +5736,7 @@ fn bindgen_test_layout_R_outpstream_st() {
         unsafe {
             &(*(::std::ptr::null::<R_outpstream_st>())).OutPersistHookFunc as *const _ as usize
         },
-        32usize,
+        20usize,
         concat!(
             "Offset of field: ",
             stringify!(R_outpstream_st),
@@ -5831,7 +5748,7 @@ fn bindgen_test_layout_R_outpstream_st() {
         unsafe {
             &(*(::std::ptr::null::<R_outpstream_st>())).OutPersistHookData as *const _ as usize
         },
-        40usize,
+        24usize,
         concat!(
             "Offset of field: ",
             stringify!(R_outpstream_st),
@@ -5866,12 +5783,12 @@ pub struct R_inpstream_st {
 fn bindgen_test_layout_R_inpstream_st() {
     assert_eq!(
         ::std::mem::size_of::<R_inpstream_st>(),
-        128usize,
+        96usize,
         concat!("Size of: ", stringify!(R_inpstream_st))
     );
     assert_eq!(
         ::std::mem::align_of::<R_inpstream_st>(),
-        8usize,
+        4usize,
         concat!("Alignment of ", stringify!(R_inpstream_st))
     );
     assert_eq!(
@@ -5886,7 +5803,7 @@ fn bindgen_test_layout_R_inpstream_st() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).type_ as *const _ as usize },
-        8usize,
+        4usize,
         concat!(
             "Offset of field: ",
             stringify!(R_inpstream_st),
@@ -5896,7 +5813,7 @@ fn bindgen_test_layout_R_inpstream_st() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).InChar as *const _ as usize },
-        16usize,
+        8usize,
         concat!(
             "Offset of field: ",
             stringify!(R_inpstream_st),
@@ -5906,7 +5823,7 @@ fn bindgen_test_layout_R_inpstream_st() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).InBytes as *const _ as usize },
-        24usize,
+        12usize,
         concat!(
             "Offset of field: ",
             stringify!(R_inpstream_st),
@@ -5918,7 +5835,7 @@ fn bindgen_test_layout_R_inpstream_st() {
         unsafe {
             &(*(::std::ptr::null::<R_inpstream_st>())).InPersistHookFunc as *const _ as usize
         },
-        32usize,
+        16usize,
         concat!(
             "Offset of field: ",
             stringify!(R_inpstream_st),
@@ -5930,7 +5847,7 @@ fn bindgen_test_layout_R_inpstream_st() {
         unsafe {
             &(*(::std::ptr::null::<R_inpstream_st>())).InPersistHookData as *const _ as usize
         },
-        40usize,
+        20usize,
         concat!(
             "Offset of field: ",
             stringify!(R_inpstream_st),
@@ -5940,7 +5857,7 @@ fn bindgen_test_layout_R_inpstream_st() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).native_encoding as *const _ as usize },
-        48usize,
+        24usize,
         concat!(
             "Offset of field: ",
             stringify!(R_inpstream_st),
@@ -5950,7 +5867,7 @@ fn bindgen_test_layout_R_inpstream_st() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).nat2nat_obj as *const _ as usize },
-        112usize,
+        88usize,
         concat!(
             "Offset of field: ",
             stringify!(R_inpstream_st),
@@ -5960,7 +5877,7 @@ fn bindgen_test_layout_R_inpstream_st() {
     );
     assert_eq!(
         unsafe { &(*(::std::ptr::null::<R_inpstream_st>())).nat2utf8_obj as *const _ as usize },
-        120usize,
+        92usize,
         concat!(
             "Offset of field: ",
             stringify!(R_inpstream_st),

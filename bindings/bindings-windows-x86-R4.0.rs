@@ -81,7 +81,7 @@ where
         }
     }
 }
-pub const __MINGW64_VERSION_MAJOR: u32 = 9;
+pub const __MINGW64_VERSION_MAJOR: u32 = 10;
 pub const __MINGW64_VERSION_MINOR: u32 = 0;
 pub const __MINGW64_VERSION_BUGFIX: u32 = 0;
 pub const __MINGW64_VERSION_RC: u32 = 0;
@@ -142,11 +142,11 @@ pub const FILENAME_MAX: u32 = 260;
 pub const FOPEN_MAX: u32 = 20;
 pub const _SYS_OPEN: u32 = 20;
 pub const TMP_MAX: u32 = 32767;
-pub const _IOREAD: u32 = 1;
-pub const _IOWRT: u32 = 2;
 pub const _IOFBF: u32 = 0;
 pub const _IOLBF: u32 = 64;
 pub const _IONBF: u32 = 4;
+pub const _IOREAD: u32 = 1;
+pub const _IOWRT: u32 = 2;
 pub const _IOMYBUF: u32 = 8;
 pub const _IOEOF: u32 = 16;
 pub const _IOERR: u32 = 32;
@@ -293,15 +293,15 @@ pub const NAMEDMAX: u32 = 7;
 pub const R_XDR_DOUBLE_SIZE: u32 = 8;
 pub const R_XDR_INTEGER_SIZE: u32 = 4;
 pub const R_CODESET_MAX: u32 = 63;
-pub const R_VERSION: u32 = 262147;
-pub const R_NICK: &'static [u8; 24usize] = b"Bunny-Wunnies Freak Out\0";
+pub const R_VERSION: u32 = 262149;
+pub const R_NICK: &'static [u8; 16usize] = b"Shake and Throw\0";
 pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
-pub const R_MINOR: &'static [u8; 4usize] = b"0.3\0";
+pub const R_MINOR: &'static [u8; 4usize] = b"0.5\0";
 pub const R_STATUS: &'static [u8; 1usize] = b"\0";
-pub const R_YEAR: &'static [u8; 5usize] = b"2020\0";
-pub const R_MONTH: &'static [u8; 3usize] = b"10\0";
-pub const R_DAY: &'static [u8; 3usize] = b"10\0";
-pub const R_SVN_REVISION: u32 = 79318;
+pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
+pub const R_MONTH: &'static [u8; 3usize] = b"03\0";
+pub const R_DAY: &'static [u8; 3usize] = b"31\0";
+pub const R_SVN_REVISION: u32 = 80133;
 pub type size_t = ::std::os::raw::c_uint;
 pub type wchar_t = ::std::os::raw::c_ushort;
 #[doc = " <div rustbindgen replaces=\"R_xlen_t\"></div>"]
@@ -1559,64 +1559,10 @@ extern "C" {
     pub fn _wtmpnam(_Buffer: *mut wchar_t) -> *mut wchar_t;
 }
 extern "C" {
-    pub fn _fgetwc_nolock(_File: *mut FILE) -> wint_t;
-}
-extern "C" {
-    pub fn _fputwc_nolock(_Ch: wchar_t, _File: *mut FILE) -> wint_t;
-}
-extern "C" {
-    pub fn _ungetwc_nolock(_Ch: wint_t, _File: *mut FILE) -> wint_t;
-}
-extern "C" {
     pub fn _lock_file(_File: *mut FILE);
 }
 extern "C" {
     pub fn _unlock_file(_File: *mut FILE);
-}
-extern "C" {
-    pub fn _fclose_nolock(_File: *mut FILE) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _fflush_nolock(_File: *mut FILE) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _fread_nolock(
-        _DstBuf: *mut ::std::os::raw::c_void,
-        _ElementSize: size_t,
-        _Count: size_t,
-        _File: *mut FILE,
-    ) -> size_t;
-}
-extern "C" {
-    pub fn _fseek_nolock(
-        _File: *mut FILE,
-        _Offset: ::std::os::raw::c_long,
-        _Origin: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _ftell_nolock(_File: *mut FILE) -> ::std::os::raw::c_long;
-}
-extern "C" {
-    pub fn _fseeki64_nolock(
-        _File: *mut FILE,
-        _Offset: ::std::os::raw::c_longlong,
-        _Origin: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _ftelli64_nolock(_File: *mut FILE) -> ::std::os::raw::c_longlong;
-}
-extern "C" {
-    pub fn _fwrite_nolock(
-        _DstBuf: *const ::std::os::raw::c_void,
-        _Size: size_t,
-        _Count: size_t,
-        _File: *mut FILE,
-    ) -> size_t;
-}
-extern "C" {
-    pub fn _ungetc_nolock(_Ch: ::std::os::raw::c_int, _File: *mut FILE) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn tempnam(
@@ -2632,15 +2578,6 @@ extern "C" {
 }
 extern "C" {
     pub fn _wscanf_l(_Format: *const wchar_t, _Locale: _locale_t, ...) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _fread_nolock_s(
-        _DstBuf: *mut ::std::os::raw::c_void,
-        _DstSize: size_t,
-        _ElementSize: size_t,
-        _Count: size_t,
-        _File: *mut FILE,
-    ) -> size_t;
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
