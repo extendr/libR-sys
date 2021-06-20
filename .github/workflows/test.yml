@@ -9,6 +9,11 @@ on:
     branches:
       - main
       - master
+  # Run this once per three days
+  schedule:
+    - cron: '29 17 */3 * *'
+  # This can also manually run
+  workflow_dispatch: {}
 
 jobs:
 
@@ -171,7 +176,7 @@ jobs:
             (matrix.config.emit-bindings == 'true'))
         uses: actions/upload-artifact@main
         with:
-          name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) generated bindings
+          name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}
           path: generated_bindings
 
       # Run tests again using different bindings
@@ -269,5 +274,49 @@ jobs:
           }
         env: 
           NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
+  
+  # Gather the generated bindings and push them to generated_bindings branch.
+  # If we need to update the bindings, create a pull request from that branch.
+  commit_generated_bindings:
+    needs: test_with_bindgen
+    runs-on: ubuntu-latest
+    # Do not run this on pull request
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - uses: actions/checkout@v2
 
-      
+    - uses: actions/download-artifact@v2
+        
+    - name: Push the generated bindings
+      run: |
+        # 1) If there's already generated_bindings branch, checkout it.
+        # 2) If generated_binding branch is not created, create it from the default branch.
+        if git ls-remote --exit-code --heads origin generated_bindings 2>&1 >/dev/null; then
+          git fetch origin --no-tags --prune --depth=1 generated_bindings
+          git checkout generated_bindings
+        else
+          git switch -c generated_bindings
+        fi
+
+        # Update or add the bindings
+        cp generated_binding-*/*.rs bindings/
+
+        # Replace the default bindings
+        cd bindings
+        for x in linux-x86_64 macos-aarch64 macos-x86_64 windows-x86 windows-x86_64; do
+          # Choose the newest version except for devel
+          ln --force -s "$(ls -1 ./bindings-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-${x}.rs
+        done
+        cd ..
+
+        # detect changes (the code is derived from https://stackoverflow.com/a/3879077)
+        git add bindings/
+        git update-index --refresh
+        if ! git diff-index --quiet HEAD -- bindings/; then
+          git config --local user.name "${GITHUB_ACTOR}"
+          git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git commit -m "Update bindings [skip ci]"
+          git push origin generated_bindings
+        else
+          echo "No changes"
+        fi
