@@ -296,15 +296,15 @@ pub const NAMEDMAX: u32 = 7;
 pub const R_XDR_DOUBLE_SIZE: u32 = 8;
 pub const R_XDR_INTEGER_SIZE: u32 = 4;
 pub const R_CODESET_MAX: u32 = 63;
-pub const R_VERSION: u32 = 262149;
-pub const R_NICK: &'static [u8; 16usize] = b"Shake and Throw\0";
+pub const R_VERSION: u32 = 262656;
+pub const R_NICK: &'static [u8; 24usize] = b"Unsuffered Consequences\0";
 pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
-pub const R_MINOR: &'static [u8; 4usize] = b"0.5\0";
-pub const R_STATUS: &'static [u8; 1usize] = b"\0";
+pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
+pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
-pub const R_MONTH: &'static [u8; 3usize] = b"03\0";
-pub const R_DAY: &'static [u8; 3usize] = b"31\0";
-pub const R_SVN_REVISION: u32 = 80133;
+pub const R_MONTH: &'static [u8; 3usize] = b"06\0";
+pub const R_DAY: &'static [u8; 3usize] = b"18\0";
+pub const R_SVN_REVISION: u32 = 80528;
 pub type size_t = ::std::os::raw::c_ulonglong;
 pub type wchar_t = ::std::os::raw::c_ushort;
 #[repr(C)]
@@ -4922,6 +4922,9 @@ extern "C" {
     pub static mut R_EvalSymbol: SEXP;
 }
 extern "C" {
+    pub static mut R_FunctionSymbol: SEXP;
+}
+extern "C" {
     pub static mut R_LastvalueSymbol: SEXP;
 }
 extern "C" {
@@ -5655,6 +5658,9 @@ extern "C" {
         cleandata: *mut ::std::os::raw::c_void,
         cont: SEXP,
     ) -> SEXP;
+}
+extern "C" {
+    pub fn R_NewEnv(arg1: SEXP, arg2: ::std::os::raw::c_int, arg3: ::std::os::raw::c_int) -> SEXP;
 }
 extern "C" {
     pub fn R_RestoreHashCount(rho: SEXP);
