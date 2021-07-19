@@ -23,11 +23,11 @@ Two components are required to build the library:
 
 ### **Windows**
 When building for `Windows`, the default host should be `stable-msvc` and special `rust` targets should be added for compatibility with `R`:
-  ```Shell
-  rustup default stable-msvc
-  rustup target add x86_64-pc-windows-gnu  # 64-bit
-  rustup target add i686-pc-windows-gnu    # 32-bit
-  ```
+```Shell
+rustup default stable-msvc
+rustup target add x86_64-pc-windows-gnu  # 64-bit
+rustup target add i686-pc-windows-gnu    # 32-bit
+```
 
 `stable-msvc` toolchain requires VS Build Tools. They are usually available on the systems with an installation of Visual Studio.
 Build tools can be obtained using an online [installer](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019) (see also [these examples](https://docs.microsoft.com/en-us/visualstudio/install/command-line-parameter-examples?view=vs-2019)) or using `chocolatey`.
@@ -47,65 +47,25 @@ choco install visualstudio2019-workload-vctools -y -f --package-parameters "--no
 Once `R` and `rust` are configured, the library can be easily built:
 
 ### **MacOS/Linux**
-    ```bash
-    cargo build
-    ```
+
+```Shell
+cargo build
+```
 ### **Windows**
-    ```Shell
-    cargo build --target x86_64-pc-windows-gnu # 64-bit
-    cargo build --target i686-pc-windows-gnu   # 32-bit
-    ```
+```Shell
+cargo build --target x86_64-pc-windows-gnu # 64-bit
+cargo build --target i686-pc-windows-gnu   # 32-bit
+```
 
 
 To test the build, run `cargo test`. Note the `--test-threads=1`, without this flag `R` integration tests will fail:
 
-- **MacOs/Linux**
-    ```bash
-    cargo test -- --nocapture --test-threads=1
-    ```
-- **Windows**
-    **NOTE:** currently `Windows` tests are unstable, but they still can be executed with extra efforts:
-    <details>
-    <summary>Running tests on Windows</summary>
-
-    First, locate the installation of `R` and ensure that environment variable `R_HOME` points to it.
-    The standard value for the latest `R` version is `C:\Program Files\R\R-4.0.3`.
-
-    In order to run tests, `PATH` variable should be temporarily prepended with the path to correct `R.dll`.
-
-    - **64-bit**
-      - **CMD**
-        ```Shell
-        set OLD_PATH=%PATH%                        # Captures current PATH
-        set PATH=%R_HOME%\bin\x64;%PATH%           # Prepends with correct R directory
-        cargo test --target x86_64-pc-windows-gnu -- --nocapture --test-threads=1
-        set PATH=%OLD_PATH%                        # Resets PATH to the original value
-        ```
-      - **PowerShell**
-        ```PowerShell
-        $OLD_PATH=$env:PATH                        # Captures current PATH
-        $env:PATH="$env:R_HOME\bin\x64;$env:PATH"  # Prepends with correct R directory
-        cargo test --target x86_64-pc-windows-gnu -- --nocapture --test-threads=1
-        $env:PATH=$OLD_PATH                        # Resets PATH to the original value
-        ```
-    - **32-bit**
-      - **CMD**
-        ```Shell
-        set OLD_PATH=%PATH%                        # Captures current PATH
-        set PATH=%R_HOME%\bin\i386;%PATH%          # Prepends with correct R directory
-        cargo test --target i686-pc-windows-gnu -- --nocapture --test-threads=1
-        set PATH=%OLD_PATH%                        # Resets PATH to the original value
-        ```
-      - **PowerShell**
-        ```PowerShell
-        $OLD_PATH=$env:PATH                        # Captures current PATH
-        $env:PATH="$env:R_HOME\bin\i386;$env:PATH" # Prepends with correct R directory
-        cargo test --target i686-pc-windows-gnu -- --nocapture --test-threads=1
-        $env:PATH=$OLD_PATH                        # Resets PATH to the original value
-        ```
-
-
-    </details>
+### **MacOs/Linux**
+```bash
+cargo test -- --nocapture --test-threads=1
+```
+### **Windows**
+   
 
 
 ## Building bindings from source (advanced)
