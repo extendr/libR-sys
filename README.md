@@ -22,6 +22,16 @@ Two components are required to build the library:
 
 
 ### **Windows**
+On Windows, install [`Rtools40v2`](https://cran.r-project.org/bin/windows/Rtools/).
+Alternatively, both `R` and `Rtools` can be installed using `chocolatey`
+
+```Shell
+choco install R rtools -y
+```
+Verify that the environment variable `RTOOLS40_HOME` is set up to point to the `Rtools` root.
+Also, ensure that `R_HOME` points to `R` home, e.g. `C:\Program Files\R\R-4.1.0`. 
+
+
 When building for `Windows`, the default host should be `stable-msvc` and special `rust` targets should be added for compatibility with `R`:
 ```Shell
 rustup default stable-msvc
@@ -65,7 +75,7 @@ To test the build, run `cargo test`. Note the `--test-threads=1`, without this f
 cargo test -- --nocapture --test-threads=1
 ```
 ### **Windows**
-   
+On Windows, 
 
 
 ## Building bindings from source (advanced)
