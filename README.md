@@ -36,7 +36,9 @@ Required workflow components are:
 - Microsoft.VisualStudio.Component.VC.Tools.x86.x64 
 - Microsoft.VisualStudio.Component.Windows10SDK.19041 (the latest version of the SDK available at the moment of writing this readme)
 
-With `chocolatey` the installation is completely unattended:
+If there is an installation of VS (or Build Tools) on the system, launch `Visual Studio Installer` and ensure that either three required workflows are installed as individual components, or the whole `Desktop Development with C++` workflow pack is installed.
+
+If neither VS Build Tools nor Visual Studio itself are installed, all the necessary workflows can be easily obtained with the help of `chocolatey`:
 ```Shell
 choco install visualstudio2019buildtools -y 
 choco install visualstudio2019-workload-vctools -y -f --package-parameters "--no-includeRecommended --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.19041"  
