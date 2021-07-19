@@ -132,7 +132,7 @@ Install `clang` and `mingw`-toolchains (assuming `PowerShell` syntax)
 
 For `x64`, append the following to the `PATH` (using `PowerShell` syntax):
 ```pwsh
-$env:PATH += ";$env:R_HOME\bin\x64;$env:MSYS_HOME\mingw64\bin"
+$env:PATH += ";$env:R_HOME\bin\x64;$env:MSYS_ROOT\mingw64\bin"
 ```
 then build & test with 
 ```pwsh
@@ -142,7 +142,7 @@ cargo  test --target x86_64-pc-windows-gnu --features use-bindgen -- --test-thre
 
 For `x86`, 
 ```pwsh
-$env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_HOME\mingw32\bin"
+$env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_ROOT\mingw32\bin"
 ```
 and then build & test with 
 ```pwsh
