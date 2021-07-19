@@ -75,7 +75,24 @@ To test the build, run `cargo test`. Note the `--test-threads=1`, without this f
 cargo test -- --nocapture --test-threads=1
 ```
 ### **Windows**
-On Windows, 
+On Windows, both `R` and `Rtools` should be available on `PATH` for tests to succeed.
+For `x64`, append the following to the `PATH` (using `PowerShell` syntax):
+```pwsh
+$env:PATH += ";$env:R_HOME\bin\x64;$env:RTOOLS40_HOME\mingw64\bin"
+```
+then test with 
+```pwsh
+cargo test --target x86_64-pc-windows-gnu -- --test-threads=1
+```
+
+For `x86`, 
+```pwsh
+$env:PATH += ";$env:R_HOME\bin\i386;$env:RTOOLS40_HOME\mingw32\bin"
+```
+and then test with 
+```pwsh
+cargo test --target x86_64-pc-windows-gnu -- --test-threads=1
+```
 
 
 ## Building bindings from source (advanced)
