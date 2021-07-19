@@ -30,7 +30,7 @@ When building for `Windows`, the default host should be `stable-msvc` and specia
   ```
 
 `stable-msvc` toolchain requires VS Build Tools. They are usually available on the systems with an installation of Visual Studio.
-Build tools can be obtained using an online [installer](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019) or using `chocolatey`.
+Build tools can be obtained using an online [installer](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019) (see also [these examples](https://docs.microsoft.com/en-us/visualstudio/install/command-line-parameter-examples?view=vs-2019)) or using `chocolatey`.
 Required workflow components are:
 - Microsoft.VisualStudio.Component.VC.CoreBuildTools 
 - Microsoft.VisualStudio.Component.VC.Tools.x86.x64 
