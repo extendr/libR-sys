@@ -21,20 +21,34 @@ Two components are required to build the library:
 2. [rust](https://www.rust-lang.org/learn/get-started): It is recommended to install `rust` using `rustup`; search path should include `rust` binaries.
 
 
+### **Windows**
 When building for `Windows`, the default host should be `stable-msvc` and special `rust` targets should be added for compatibility with `R`:
-- **Windows**
   ```Shell
   rustup default stable-msvc
   rustup target add x86_64-pc-windows-gnu  # 64-bit
   rustup target add i686-pc-windows-gnu    # 32-bit
   ```
 
+`stable-msvc` toolchain requires VS Build Tools. They are usually available on the systems with an installation of Visual Studio.
+Build tools can be obtained using an online [installer](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019) or using `chocolatey`.
+Required workflow components are:
+- Microsoft.VisualStudio.Component.VC.CoreBuildTools 
+- Microsoft.VisualStudio.Component.VC.Tools.x86.x64 
+- Microsoft.VisualStudio.Component.Windows10SDK.19041 (the latest version of the SDK available at the moment of writing this readme)
+
+With `chocolatey` the installation is completely unattended:
+```Shell
+choco install visualstudio2019buildtools -y 
+choco install visualstudio2019-workload-vctools -y -f --package-parameters "--no-includeRecommended --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.19041"  
+```
+
 Once `R` and `rust` are configured, the library can be easily built:
-- **MacOS/Linux**
+
+### **MacOS/Linux**
     ```bash
     cargo build
     ```
-- **Windows**
+### **Windows**
     ```Shell
     cargo build --target x86_64-pc-windows-gnu # 64-bit
     cargo build --target i686-pc-windows-gnu   # 32-bit
