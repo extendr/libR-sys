@@ -20,80 +20,88 @@ Two components are required to build the library:
 1. [R](https://cran.r-project.org/): It needs to be installed and available in the search path.
 2. [rust](https://www.rust-lang.org/learn/get-started): It is recommended to install `rust` using `rustup`; search path should include `rust` binaries.
 
+Once `R` and `rust` are configured, the library can be easily built:
+- **MacOS/Linux**
+  ```Shell
+  cargo build
+  ```
 
-### **Windows**
-On Windows, install [`Rtools40v2`](https://cran.r-project.org/bin/windows/Rtools/).
-Alternatively, both `R` and `Rtools` can be installed using `chocolatey`
+- **Windows**
+  
+  ```Shell
+  cargo build --target x86_64-pc-windows-gnu # 64-bit
+  cargo build --target i686-pc-windows-gnu   # 32-bit
+  ```
 
-```Shell
-choco install R rtools -y
-```
-Verify that the environment variable `RTOOLS40_HOME` is set up to point to the `Rtools` root.
-Also, ensure that `R_HOME` points to `R` home, e.g. `C:\Program Files\R\R-4.1.0`. 
+  
+  <details>
+    <summary>If cargo is not configured</summary>
 
+    When building for `Windows`, the default host should be `stable-msvc` and special `rust` targets should be added for compatibility with `R`:
+    ```Shell
+    rustup default stable-msvc
+    rustup target add x86_64-pc-windows-gnu  # 64-bit
+    rustup target add i686-pc-windows-gnu    # 32-bit
+    ```
 
-When building for `Windows`, the default host should be `stable-msvc` and special `rust` targets should be added for compatibility with `R`:
-```Shell
-rustup default stable-msvc
-rustup target add x86_64-pc-windows-gnu  # 64-bit
-rustup target add i686-pc-windows-gnu    # 32-bit
-```
+    `stable-msvc` toolchain requires VS Build Tools. They are usually available on the systems with an installation of Visual Studio.
+    Build tools can be obtained using an online [installer](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019) (see also [these examples](https://docs.microsoft.com/en-us/visualstudio/install/command-line-parameter-examples?view=vs-2019)) or using `chocolatey`.
+    Required workflow components are:
+    - Microsoft.VisualStudio.Component.VC.CoreBuildTools 
+    - Microsoft.VisualStudio.Component.VC.Tools.x86.x64 
+    - Microsoft.VisualStudio.Component.Windows10SDK.19041 (the latest version of the SDK available at the moment of writing this readme)
 
-`stable-msvc` toolchain requires VS Build Tools. They are usually available on the systems with an installation of Visual Studio.
-Build tools can be obtained using an online [installer](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019) (see also [these examples](https://docs.microsoft.com/en-us/visualstudio/install/command-line-parameter-examples?view=vs-2019)) or using `chocolatey`.
-Required workflow components are:
-- Microsoft.VisualStudio.Component.VC.CoreBuildTools 
-- Microsoft.VisualStudio.Component.VC.Tools.x86.x64 
-- Microsoft.VisualStudio.Component.Windows10SDK.19041 (the latest version of the SDK available at the moment of writing this readme)
+    If there is an installation of VS (or Build Tools) on the system, launch `Visual Studio Installer` and ensure that either three required workflows are installed as individual components, or the whole `Desktop Development with C++` workflow pack is installed.
 
-If there is an installation of VS (or Build Tools) on the system, launch `Visual Studio Installer` and ensure that either three required workflows are installed as individual components, or the whole `Desktop Development with C++` workflow pack is installed.
-
-If neither VS Build Tools nor Visual Studio itself are installed, all the necessary workflows can be easily obtained with the help of `chocolatey`:
-```Shell
-choco install visualstudio2019buildtools -y 
-choco install visualstudio2019-workload-vctools -y -f --package-parameters "--no-includeRecommended --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.19041"  
-```
-
-Once `R` and `rust` are configured, the library can be built:
-
-### **MacOS/Linux**
-
-```Shell
-cargo build
-```
-### **Windows**
-```Shell
-cargo build --target x86_64-pc-windows-gnu # 64-bit
-cargo build --target i686-pc-windows-gnu   # 32-bit
-```
+    If neither VS Build Tools nor Visual Studio itself are installed, all the necessary workflows can be easily obtained with the help of `chocolatey`:
+    ```Shell
+    choco install visualstudio2019buildtools -y 
+    choco install visualstudio2019-workload-vctools -y -f --package-parameters "--no-includeRecommended --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.19041"  
+    ```
+  </details>
+ 
 
 
-To test the build, run `cargo test`. Note the `--test-threads=1`, without this flag `R` integration tests may fail:
 
-### **MacOs/Linux**
-```bash
-cargo test -- --nocapture --test-threads=1
-```
-### **Windows**
-On Windows, both `R` and `Rtools` should be available on `PATH` for tests to succeed.
-For `x64`, append the following to the `PATH` (using `PowerShell` syntax):
-```pwsh
-$env:PATH += ";$env:R_HOME\bin\x64;$env:RTOOLS40_HOME\mingw64\bin"
-```
-then test with 
-```pwsh
-cargo test --target x86_64-pc-windows-gnu -- --test-threads=1
-```
 
-For `x86`, 
-```pwsh
-$env:PATH += ";$env:R_HOME\bin\i386;$env:RTOOLS40_HOME\mingw32\bin"
-```
-and then test with 
-```pwsh
-cargo test --target x86_64-pc-windows-gnu -- --test-threads=1
-```
 
+To test the build, run `cargo test`.
+
+
+- **MacOs/Linux**
+  ```bash
+  cargo test
+  ```
+- **Windows**
+  On Windows, both `R` and `Rtools` should be available on `PATH` for tests to succeed. Ensure that `R_HOME` points to `R` home, e.g. `C:\Program Files\R\R-4.1.0`. 
+  For `x64`, append the following to the `PATH` (using `PowerShell` syntax):
+  ```pwsh
+  $env:PATH += ";$env:R_HOME\bin\x64;$env:RTOOLS40_HOME\mingw64\bin"
+  ```
+  then test with 
+  ```pwsh
+  cargo test --target x86_64-pc-windows-gnu
+  ```
+
+  For `x86`, 
+  ```pwsh
+  $env:PATH += ";$env:R_HOME\bin\i386;$env:RTOOLS40_HOME\mingw32\bin"
+  ```
+  and then test with 
+  ```pwsh
+  cargo test --target x86_64-pc-windows-gnu
+  ```
+  <details>
+    <summary>If Rtools40v2 is missing</summary>
+
+    Rtools can be downloaded from [here](https://cran.r-project.org/bin/windows/Rtools/). Alternatively, `Rtools` can be installed using `chocolatey`
+    
+    ```Shell
+    choco install rtools -y
+    ```
+
+    Verify that the environment variable `RTOOLS40_HOME` is set up to point to the `Rtools` root.
+  </details>
 
 ## Building bindings from source (advanced)
 
