@@ -164,8 +164,8 @@ $env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_ROOT\mingw32\bin"
 
 Build & test using specific toolchain
 ```pwsh
-cargo +toolchain stable-i686-pc-windows-msvc build --target i686-pc-windows-gnu --features use-bindgen
-cargo +toolchain stable-i686-pc-windows-msvc test --target i686-pc-windows-gnu --features use-bindgen -- --test-threads=1
+cargo +stable-i686-pc-windows-msvc build --target i686-pc-windows-gnu --features use-bindgen
+cargo +stable-i686-pc-windows-msvc test --target i686-pc-windows-gnu --features use-bindgen -- --test-threads=1
 ```
 </details>
 
