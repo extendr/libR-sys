@@ -73,6 +73,7 @@ To test the build, run `cargo test`.
   cargo test
   ```
 - **Windows**
+  
   On Windows, both `R` and `Rtools` should be available on `PATH` for tests to succeed. Ensure that `R_HOME` points to `R` home, e.g. `C:\Program Files\R\R-4.1.0`. 
   For `x64`, append the following to the `PATH` (using `PowerShell` syntax):
   ```pwsh
