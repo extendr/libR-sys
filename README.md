@@ -142,7 +142,7 @@ cargo  test --target x86_64-pc-windows-gnu --features use-bindgen -- --test-thre
 
 For `x86`, 
 ```pwsh
-$env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_ROOT\mingw32\bin"
+$env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_ROOT\mingw64\bin$env:MSYS_ROOT\mingw32\bin"
 ```
 and then build & test with 
 ```pwsh
@@ -150,6 +150,24 @@ cargo build --target i686-pc-windows-gnu --features use-bindgen
 cargo  test --target i686-pc-windows-gnu --features use-bindgen -- --test-threads=1
 ```
 
+<details>
+<summary>Generating x86 bindings using 32-bit process (optional)</summary>
+Add 32-bit `Rust` toolchain and configure target:
+```pwsh
+rustup toolchain install stable-i686-pc-windows-msvc
+rustup target add i686-pc-windows-gnu --toolchain stable-i686-pc-windows-msvc
+```
+Configure environment variables:
+```pwsh
+$env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_ROOT\mingw32\bin"
+```
+
+Build & test using specific toolchain
+```pwsh
+cargo +toolchain stable-i686-pc-windows-msvc build --target i686-pc-windows-gnu --features use-bindgen
+cargo +toolchain stable-i686-pc-windows-msvc test --target i686-pc-windows-gnu --features use-bindgen -- --test-threads=1
+```
+</details>
 
 ### **MacOs**
 
