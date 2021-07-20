@@ -54,7 +54,7 @@ choco install visualstudio2019buildtools -y
 choco install visualstudio2019-workload-vctools -y -f --package-parameters "--no-includeRecommended --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.19041"  
 ```
 
-Once `R` and `rust` are configured, the library can be easily built:
+Once `R` and `rust` are configured, the library can be built:
 
 ### **MacOS/Linux**
 
@@ -68,7 +68,7 @@ cargo build --target i686-pc-windows-gnu   # 32-bit
 ```
 
 
-To test the build, run `cargo test`. Note the `--test-threads=1`, without this flag `R` integration tests will fail:
+To test the build, run `cargo test`. Note the `--test-threads=1`, without this flag `R` integration tests may fail:
 
 ### **MacOs/Linux**
 ```bash
@@ -126,8 +126,8 @@ Set up environment variable `MSYS_ROOT` to point to `MSYS2` root, which is (if i
 Install `clang` and `mingw`-toolchains (assuming `PowerShell` syntax)
 
 ```pwsh
-&"$env:MSYS_ROOT\\usr\\bin\\bash" -l -c "pacman -S --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain"      # 64-bit
-&"$env:MSYS_ROOT\\usr\\bin\\bash" -l -c "pacman -S --noconfirm mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain"  # 32-bit
+&"$env:MSYS_ROOT\usr\bin\bash" -l -c "pacman -S --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain"      # 64-bit
+&"$env:MSYS_ROOT\usr\bin\bash" -l -c "pacman -S --noconfirm mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain"  # 32-bit
 ```
 
 For `x64`, append the following to the `PATH` (using `PowerShell` syntax):
@@ -152,7 +152,9 @@ cargo  test --target i686-pc-windows-gnu --features use-bindgen -- --test-thread
 
 <details>
 <summary>Generating x86 bindings using 32-bit process (optional)</summary>
+
 Add 32-bit `Rust` toolchain and configure target:
+
 ```pwsh
 rustup toolchain install stable-i686-pc-windows-msvc
 rustup target add i686-pc-windows-gnu --toolchain stable-i686-pc-windows-msvc
@@ -165,7 +167,7 @@ $env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_ROOT\mingw32\bin"
 Build & test using specific toolchain
 ```pwsh
 cargo +stable-i686-pc-windows-msvc build --target i686-pc-windows-gnu --features use-bindgen
-cargo +stable-i686-pc-windows-msvc test --target i686-pc-windows-gnu --features use-bindgen -- --test-threads=1
+cargo +stable-i686-pc-windows-msvc  test --target i686-pc-windows-gnu --features use-bindgen -- --test-threads=1
 ```
 </details>
 
