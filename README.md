@@ -30,7 +30,7 @@ Once `R` and `rust` are configured, the library can be easily built:
   
   ```Shell
   cargo build --target x86_64-pc-windows-gnu # 64-bit
-  cargo build --target i686-pc-windows-gnu   # 32-bit
+  cargo build --target   i686-pc-windows-gnu # 32-bit
   ```
 
   
@@ -41,7 +41,7 @@ Once `R` and `rust` are configured, the library can be easily built:
     ```Shell
     rustup default stable-msvc
     rustup target add x86_64-pc-windows-gnu  # 64-bit
-    rustup target add i686-pc-windows-gnu    # 32-bit
+    rustup target add   i686-pc-windows-gnu  # 32-bit
     ```
 
     `stable-msvc` toolchain requires VS Build Tools. They are usually available on the systems with an installation of Visual Studio.
@@ -89,7 +89,7 @@ To test the build, run `cargo test`.
   ```
   and then test with 
   ```pwsh
-  cargo test --target x86_64-pc-windows-gnu
+  cargo test --target i686-pc-windows-gnu
   ```
   <details>
     <summary>If Rtools40v2 is missing</summary>
@@ -112,89 +112,100 @@ The bindings can be generated using [bindgen](https://github.com/rust-lang/rust-
 This library relies on `LIBCLANG_PATH` environment variable to determine path to the appropriate version of `libclang`.
 
 The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_PATH` environment variable.
-### **Linux**
 
-Set `LIBCLANG_PATH` to the `lib` directory of your `llvm` installation. E.g.,
-`LIBCLANG_PATH=/usr/lib/llvm-3.9/lib`.
+- **Linux**
 
-```shell
-cargo build --features use-bindgen
-cargo test --features use-bindgen -- --test-threads=1
-```
+  Set `LIBCLANG_PATH` to the `lib` directory of your `llvm` installation, e.g.,
+  `LIBCLANG_PATH=/usr/lib/llvm-3.9/lib`. Build & test using
 
-### **Windows**
-Binding generation on Windows happens with the help of `MSYS2`.
-Install `MSYS2` using e.g. `chocolatey`:
-```Shell
-choco install msys2 -y
-```
+  ```shell
+  cargo build --features use-bindgen
+  cargo test  --features use-bindgen 
+  ```
 
-Set up environment variable `MSYS_ROOT` to point to `MSYS2` root, which is (if installed using `chocolatey`) `C:\tools\msys64`.
+- **MacOs**
 
-Install `clang` and `mingw`-toolchains (assuming `PowerShell` syntax)
+  Install `llvm-config` via [homebrew](https://brew.sh/) with:
 
-```pwsh
-&"$env:MSYS_ROOT\usr\bin\bash" -l -c "pacman -S --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain"      # 64-bit
-&"$env:MSYS_ROOT\usr\bin\bash" -l -c "pacman -S --noconfirm mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain"  # 32-bit
-```
+  ```bash
+  brew install llvm
+  ```
 
-For `x64`, append the following to the `PATH` (using `PowerShell` syntax):
-```pwsh
-$env:PATH += ";$env:R_HOME\bin\x64;$env:MSYS_ROOT\mingw64\bin"
-```
-then build & test with 
-```pwsh
-cargo build --target x86_64-pc-windows-gnu --features use-bindgen
-cargo  test --target x86_64-pc-windows-gnu --features use-bindgen -- --test-threads=1
-```
+  Add it to your search path via:
 
-For `x86`, 
-```pwsh
-$env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_ROOT\mingw64\bin$env:MSYS_ROOT\mingw32\bin"
-```
-and then build & test with 
-```pwsh
-cargo build --target i686-pc-windows-gnu --features use-bindgen
-cargo  test --target i686-pc-windows-gnu --features use-bindgen -- --test-threads=1
-```
+  ```bash
+  echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.bash_profile
+  ```
 
-<details>
-<summary>Generating x86 bindings using 32-bit process (optional)</summary>
+  If you want to compile `libR-sys` from within RStudio, you may also have to add the following line to your `.Renviron` file:
 
-Add 32-bit `Rust` toolchain and configure target:
+  ```bash
+  PATH=/usr/local/opt/llvm/bin:${PATH}
+  ```
+  Build & test using
+   ```shell
+  cargo build --features use-bindgen
+  cargo test  --features use-bindgen 
+  ```
+- **Windows**
+  
+  Binding generation on Windows happens with the help of `MSYS2`.
+  Make sure the environment variable `MSYS_ROOT` points to `MSYS2` root, e.g., `C:\tools\msys64`.
 
-```pwsh
-rustup toolchain install stable-i686-pc-windows-msvc
-rustup target add i686-pc-windows-gnu --toolchain stable-i686-pc-windows-msvc
-```
-Configure environment variables:
-```pwsh
-$env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_ROOT\mingw32\bin"
-```
+  <details>
+    <summary>Installing and configuring MSYS2</summary>
 
-Build & test using specific toolchain
-```pwsh
-cargo +stable-i686-pc-windows-msvc build --target i686-pc-windows-gnu --features use-bindgen
-cargo +stable-i686-pc-windows-msvc  test --target i686-pc-windows-gnu --features use-bindgen -- --test-threads=1
-```
-</details>
+    Install `MSYS2`. Here is an example using  `chocolatey`:
+    ```Shell
+    choco install msys2 -y
+    ```
+    Set up `MSYS_ROOT` environment variable.
+    Install `clang` and `mingw`-toolchains (assuming `PowerShell` syntax)
 
-### **MacOs**
+    ```pwsh
+    &"$env:MSYS_ROOT\usr\bin\bash" -l -c "pacman -S --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain"      # 64-bit
+    &"$env:MSYS_ROOT\usr\bin\bash" -l -c "pacman -S --noconfirm mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain"  # 32-bit
+    ```
+    
+  </details>
 
-Install `llvm-config` via [homebrew](https://brew.sh/) with:
+  For `x64`, append the following to the `PATH` (using `PowerShell` syntax):
+  ```pwsh
+  $env:PATH += ";$env:R_HOME\bin\x64;$env:MSYS_ROOT\mingw64\bin"
+  ```
+  then build & test with 
+  ```pwsh
+  cargo build --target x86_64-pc-windows-gnu --features use-bindgen
+  cargo  test --target x86_64-pc-windows-gnu --features use-bindgen
+  ```
 
-```bash
-brew install llvm
-```
+  For `x86`, 
+  ```pwsh
+  $env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_ROOT\mingw64\bin$env:MSYS_ROOT\mingw32\bin"
+  ```
+  and then build & test with 
+  ```pwsh
+  cargo build --target i686-pc-windows-gnu --features use-bindgen
+  cargo  test --target i686-pc-windows-gnu --features use-bindgen
+  ```
 
-Add it to your search path via:
+  <details>
+  <summary>Generating x86 bindings using 32-bit process (optional)</summary>
 
-```bash
-echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.bash_profile
-```
+  Add 32-bit `Rust` toolchain and configure target:
 
-If you want to compile `libR-sys` from within RStudio, you may also have to add the following line to your `.Renviron` file:
+  ```pwsh
+  rustup toolchain install stable-i686-pc-windows-msvc
+  rustup target add i686-pc-windows-gnu --toolchain stable-i686-pc-windows-msvc
+  ```
+  Configure environment variables:
+  ```pwsh
+  $env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_ROOT\mingw32\bin"
+  ```
 
-```bash
-PATH=/usr/local/opt/llvm/bin:${PATH}
-```
+  Build & test using specific toolchain
+  ```pwsh
+  cargo +stable-i686-pc-windows-msvc build --target i686-pc-windows-gnu --features use-bindgen
+  cargo +stable-i686-pc-windows-msvc  test --target i686-pc-windows-gnu --features use-bindgen
+  ```
+  </details>
