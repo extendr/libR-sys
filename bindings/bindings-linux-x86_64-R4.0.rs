@@ -291,6 +291,20 @@ pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
 pub const R_MONTH: &'static [u8; 3usize] = b"03\0";
 pub const R_DAY: &'static [u8; 3usize] = b"31\0";
 pub const R_SVN_REVISION: u32 = 80133;
+pub const R_GE_version: u32 = 12;
+pub const MAX_GRAPHICS_SYSTEMS: u32 = 24;
+pub const R_USE_PROTOTYPES: u32 = 1;
+pub const leftButton: u32 = 1;
+pub const middleButton: u32 = 2;
+pub const rightButton: u32 = 4;
+pub const LTY_BLANK: i32 = -1;
+pub const LTY_SOLID: u32 = 0;
+pub const LTY_DASHED: u32 = 68;
+pub const LTY_DOTTED: u32 = 49;
+pub const LTY_DOTDASH: u32 = 13361;
+pub const LTY_LONGDASH: u32 = 55;
+pub const LTY_TWODASH: u32 = 9762;
+pub const DEG2RAD: f64 = 0.017453292519943295;
 pub type size_t = ::std::os::raw::c_ulong;
 pub type wchar_t = ::std::os::raw::c_int;
 #[repr(C)]
@@ -5963,6 +5977,2121 @@ extern "C" {
         arg3: *mut ParseStatus,
         arg4: SEXP,
     ) -> SEXP;
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct R_altrep_class_t {
+    pub ptr: SEXP,
+}
+#[test]
+fn bindgen_test_layout_R_altrep_class_t() {
+    assert_eq!(
+        ::std::mem::size_of::<R_altrep_class_t>(),
+        8usize,
+        concat!("Size of: ", stringify!(R_altrep_class_t))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<R_altrep_class_t>(),
+        8usize,
+        concat!("Alignment of ", stringify!(R_altrep_class_t))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_altrep_class_t>())).ptr as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_altrep_class_t),
+            "::",
+            stringify!(ptr)
+        )
+    );
+}
+extern "C" {
+    pub fn R_new_altrep(aclass: R_altrep_class_t, data1: SEXP, data2: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_make_altstring_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+}
+extern "C" {
+    pub fn R_make_altinteger_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+}
+extern "C" {
+    pub fn R_make_altreal_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+}
+extern "C" {
+    pub fn R_make_altlogical_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+}
+extern "C" {
+    pub fn R_make_altraw_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+}
+extern "C" {
+    pub fn R_make_altcomplex_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+}
+extern "C" {
+    pub fn R_altrep_inherits(x: SEXP, arg1: R_altrep_class_t) -> Rboolean;
+}
+pub type R_altrep_UnserializeEX_method_t = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: SEXP,
+        arg2: SEXP,
+        arg3: SEXP,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> SEXP,
+>;
+pub type R_altrep_Unserialize_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>;
+pub type R_altrep_Serialized_state_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> SEXP>;
+pub type R_altrep_DuplicateEX_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
+pub type R_altrep_Duplicate_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
+pub type R_altrep_Coerce_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP>;
+pub type R_altrep_Inspect_method_t = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: SEXP,
+        arg2: ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: SEXP,
+                arg2: ::std::os::raw::c_int,
+                arg3: ::std::os::raw::c_int,
+                arg4: ::std::os::raw::c_int,
+            ),
+        >,
+    ) -> Rboolean,
+>;
+pub type R_altrep_Length_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> R_xlen_t>;
+pub type R_altvec_Dataptr_method_t = ::std::option::Option<
+    unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> *mut ::std::os::raw::c_void,
+>;
+pub type R_altvec_Dataptr_or_null_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> *const ::std::os::raw::c_void>;
+pub type R_altvec_Extract_subset_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP>;
+pub type R_altinteger_Elt_method_t = ::std::option::Option<
+    unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t) -> ::std::os::raw::c_int,
+>;
+pub type R_altinteger_Get_region_method_t = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: SEXP,
+        arg2: R_xlen_t,
+        arg3: R_xlen_t,
+        arg4: *mut ::std::os::raw::c_int,
+    ) -> R_xlen_t,
+>;
+pub type R_altinteger_Is_sorted_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+pub type R_altinteger_No_NA_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+pub type R_altinteger_Sum_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
+pub type R_altinteger_Min_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
+pub type R_altinteger_Max_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
+pub type R_altreal_Elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t) -> f64>;
+pub type R_altreal_Get_region_method_t = ::std::option::Option<
+    unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t, arg3: R_xlen_t, arg4: *mut f64) -> R_xlen_t,
+>;
+pub type R_altreal_Is_sorted_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+pub type R_altreal_No_NA_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+pub type R_altreal_Sum_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
+pub type R_altreal_Min_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
+pub type R_altreal_Max_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
+pub type R_altlogical_Elt_method_t = ::std::option::Option<
+    unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t) -> ::std::os::raw::c_int,
+>;
+pub type R_altlogical_Get_region_method_t = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: SEXP,
+        arg2: R_xlen_t,
+        arg3: R_xlen_t,
+        arg4: *mut ::std::os::raw::c_int,
+    ) -> R_xlen_t,
+>;
+pub type R_altlogical_Is_sorted_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+pub type R_altlogical_No_NA_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+pub type R_altlogical_Sum_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
+pub type R_altraw_Elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t) -> Rbyte>;
+pub type R_altraw_Get_region_method_t = ::std::option::Option<
+    unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t, arg3: R_xlen_t, arg4: *mut Rbyte) -> R_xlen_t,
+>;
+pub type R_altcomplex_Elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t) -> Rcomplex>;
+pub type R_altcomplex_Get_region_method_t = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: SEXP,
+        arg2: R_xlen_t,
+        arg3: R_xlen_t,
+        arg4: *mut Rcomplex,
+    ) -> R_xlen_t,
+>;
+pub type R_altstring_Elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t) -> SEXP>;
+pub type R_altstring_Set_elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t, arg3: SEXP)>;
+pub type R_altstring_Is_sorted_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+pub type R_altstring_No_NA_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+extern "C" {
+    pub fn R_set_altrep_UnserializeEX_method(
+        cls: R_altrep_class_t,
+        fun: R_altrep_UnserializeEX_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altrep_Unserialize_method(
+        cls: R_altrep_class_t,
+        fun: R_altrep_Unserialize_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altrep_Serialized_state_method(
+        cls: R_altrep_class_t,
+        fun: R_altrep_Serialized_state_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altrep_DuplicateEX_method(
+        cls: R_altrep_class_t,
+        fun: R_altrep_DuplicateEX_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altrep_Duplicate_method(cls: R_altrep_class_t, fun: R_altrep_Duplicate_method_t);
+}
+extern "C" {
+    pub fn R_set_altrep_Coerce_method(cls: R_altrep_class_t, fun: R_altrep_Coerce_method_t);
+}
+extern "C" {
+    pub fn R_set_altrep_Inspect_method(cls: R_altrep_class_t, fun: R_altrep_Inspect_method_t);
+}
+extern "C" {
+    pub fn R_set_altrep_Length_method(cls: R_altrep_class_t, fun: R_altrep_Length_method_t);
+}
+extern "C" {
+    pub fn R_set_altvec_Dataptr_method(cls: R_altrep_class_t, fun: R_altvec_Dataptr_method_t);
+}
+extern "C" {
+    pub fn R_set_altvec_Dataptr_or_null_method(
+        cls: R_altrep_class_t,
+        fun: R_altvec_Dataptr_or_null_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altvec_Extract_subset_method(
+        cls: R_altrep_class_t,
+        fun: R_altvec_Extract_subset_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altinteger_Elt_method(cls: R_altrep_class_t, fun: R_altinteger_Elt_method_t);
+}
+extern "C" {
+    pub fn R_set_altinteger_Get_region_method(
+        cls: R_altrep_class_t,
+        fun: R_altinteger_Get_region_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altinteger_Is_sorted_method(
+        cls: R_altrep_class_t,
+        fun: R_altinteger_Is_sorted_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altinteger_No_NA_method(cls: R_altrep_class_t, fun: R_altinteger_No_NA_method_t);
+}
+extern "C" {
+    pub fn R_set_altinteger_Sum_method(cls: R_altrep_class_t, fun: R_altinteger_Sum_method_t);
+}
+extern "C" {
+    pub fn R_set_altinteger_Min_method(cls: R_altrep_class_t, fun: R_altinteger_Min_method_t);
+}
+extern "C" {
+    pub fn R_set_altinteger_Max_method(cls: R_altrep_class_t, fun: R_altinteger_Max_method_t);
+}
+extern "C" {
+    pub fn R_set_altreal_Elt_method(cls: R_altrep_class_t, fun: R_altreal_Elt_method_t);
+}
+extern "C" {
+    pub fn R_set_altreal_Get_region_method(
+        cls: R_altrep_class_t,
+        fun: R_altreal_Get_region_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altreal_Is_sorted_method(cls: R_altrep_class_t, fun: R_altreal_Is_sorted_method_t);
+}
+extern "C" {
+    pub fn R_set_altreal_No_NA_method(cls: R_altrep_class_t, fun: R_altreal_No_NA_method_t);
+}
+extern "C" {
+    pub fn R_set_altreal_Sum_method(cls: R_altrep_class_t, fun: R_altreal_Sum_method_t);
+}
+extern "C" {
+    pub fn R_set_altreal_Min_method(cls: R_altrep_class_t, fun: R_altreal_Min_method_t);
+}
+extern "C" {
+    pub fn R_set_altreal_Max_method(cls: R_altrep_class_t, fun: R_altreal_Max_method_t);
+}
+extern "C" {
+    pub fn R_set_altlogical_Elt_method(cls: R_altrep_class_t, fun: R_altlogical_Elt_method_t);
+}
+extern "C" {
+    pub fn R_set_altlogical_Get_region_method(
+        cls: R_altrep_class_t,
+        fun: R_altlogical_Get_region_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altlogical_Is_sorted_method(
+        cls: R_altrep_class_t,
+        fun: R_altlogical_Is_sorted_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altlogical_No_NA_method(cls: R_altrep_class_t, fun: R_altlogical_No_NA_method_t);
+}
+extern "C" {
+    pub fn R_set_altlogical_Sum_method(cls: R_altrep_class_t, fun: R_altlogical_Sum_method_t);
+}
+extern "C" {
+    pub fn R_set_altraw_Elt_method(cls: R_altrep_class_t, fun: R_altraw_Elt_method_t);
+}
+extern "C" {
+    pub fn R_set_altraw_Get_region_method(cls: R_altrep_class_t, fun: R_altraw_Get_region_method_t);
+}
+extern "C" {
+    pub fn R_set_altcomplex_Elt_method(cls: R_altrep_class_t, fun: R_altcomplex_Elt_method_t);
+}
+extern "C" {
+    pub fn R_set_altcomplex_Get_region_method(
+        cls: R_altrep_class_t,
+        fun: R_altcomplex_Get_region_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altstring_Elt_method(cls: R_altrep_class_t, fun: R_altstring_Elt_method_t);
+}
+extern "C" {
+    pub fn R_set_altstring_Set_elt_method(cls: R_altrep_class_t, fun: R_altstring_Set_elt_method_t);
+}
+extern "C" {
+    pub fn R_set_altstring_Is_sorted_method(
+        cls: R_altrep_class_t,
+        fun: R_altstring_Is_sorted_method_t,
+    );
+}
+extern "C" {
+    pub fn R_set_altstring_No_NA_method(cls: R_altrep_class_t, fun: R_altstring_No_NA_method_t);
+}
+extern "C" {
+    pub fn R_GE_getVersion() -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_GE_checkVersionOrDie(version: ::std::os::raw::c_int);
+}
+pub const GEUnit_GE_DEVICE: GEUnit = 0;
+pub const GEUnit_GE_NDC: GEUnit = 1;
+pub const GEUnit_GE_INCHES: GEUnit = 2;
+pub const GEUnit_GE_CM: GEUnit = 3;
+pub type GEUnit = u32;
+pub const GEevent_GE_InitState: GEevent = 0;
+pub const GEevent_GE_FinaliseState: GEevent = 1;
+pub const GEevent_GE_SaveState: GEevent = 2;
+pub const GEevent_GE_RestoreState: GEevent = 6;
+pub const GEevent_GE_CopyState: GEevent = 3;
+pub const GEevent_GE_SaveSnapshotState: GEevent = 4;
+pub const GEevent_GE_RestoreSnapshotState: GEevent = 5;
+pub const GEevent_GE_CheckPlot: GEevent = 7;
+pub const GEevent_GE_ScalePS: GEevent = 8;
+pub type GEevent = u32;
+pub const R_GE_lineend_GE_ROUND_CAP: R_GE_lineend = 1;
+pub const R_GE_lineend_GE_BUTT_CAP: R_GE_lineend = 2;
+pub const R_GE_lineend_GE_SQUARE_CAP: R_GE_lineend = 3;
+pub type R_GE_lineend = u32;
+pub const R_GE_linejoin_GE_ROUND_JOIN: R_GE_linejoin = 1;
+pub const R_GE_linejoin_GE_MITRE_JOIN: R_GE_linejoin = 2;
+pub const R_GE_linejoin_GE_BEVEL_JOIN: R_GE_linejoin = 3;
+pub type R_GE_linejoin = u32;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct R_GE_gcontext {
+    pub col: ::std::os::raw::c_int,
+    pub fill: ::std::os::raw::c_int,
+    pub gamma: f64,
+    pub lwd: f64,
+    pub lty: ::std::os::raw::c_int,
+    pub lend: R_GE_lineend,
+    pub ljoin: R_GE_linejoin,
+    pub lmitre: f64,
+    pub cex: f64,
+    pub ps: f64,
+    pub lineheight: f64,
+    pub fontface: ::std::os::raw::c_int,
+    pub fontfamily: [::std::os::raw::c_char; 201usize],
+}
+#[test]
+fn bindgen_test_layout_R_GE_gcontext() {
+    assert_eq!(
+        ::std::mem::size_of::<R_GE_gcontext>(),
+        280usize,
+        concat!("Size of: ", stringify!(R_GE_gcontext))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<R_GE_gcontext>(),
+        8usize,
+        concat!("Alignment of ", stringify!(R_GE_gcontext))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).col as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(col)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).fill as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(fill)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).gamma as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(gamma)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).lwd as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(lwd)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).lty as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(lty)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).lend as *const _ as usize },
+        28usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(lend)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).ljoin as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(ljoin)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).lmitre as *const _ as usize },
+        40usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(lmitre)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).cex as *const _ as usize },
+        48usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(cex)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).ps as *const _ as usize },
+        56usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(ps)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).lineheight as *const _ as usize },
+        64usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(lineheight)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).fontface as *const _ as usize },
+        72usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(fontface)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_GE_gcontext>())).fontfamily as *const _ as usize },
+        76usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_GE_gcontext),
+            "::",
+            stringify!(fontfamily)
+        )
+    );
+}
+pub type pGEcontext = *mut R_GE_gcontext;
+pub type DevDesc = _DevDesc;
+pub type pDevDesc = *mut DevDesc;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct _DevDesc {
+    #[doc = " Device physical characteristics"]
+    pub left: f64,
+    pub right: f64,
+    pub bottom: f64,
+    pub top: f64,
+    pub clipLeft: f64,
+    pub clipRight: f64,
+    pub clipBottom: f64,
+    pub clipTop: f64,
+    pub xCharOffset: f64,
+    pub yCharOffset: f64,
+    pub yLineBias: f64,
+    pub ipr: [f64; 2usize],
+    pub cra: [f64; 2usize],
+    pub gamma: f64,
+    #[doc = " Device capabilities"]
+    pub canClip: Rboolean,
+    pub canChangeGamma: Rboolean,
+    pub canHAdj: ::std::os::raw::c_int,
+    #[doc = " Device initial settings"]
+    pub startps: f64,
+    pub startcol: ::std::os::raw::c_int,
+    pub startfill: ::std::os::raw::c_int,
+    pub startlty: ::std::os::raw::c_int,
+    pub startfont: ::std::os::raw::c_int,
+    pub startgamma: f64,
+    #[doc = " Device specific information"]
+    pub deviceSpecific: *mut ::std::os::raw::c_void,
+    #[doc = " Device display list"]
+    pub displayListOn: Rboolean,
+    #[doc = " Event handling entries"]
+    pub canGenMouseDown: Rboolean,
+    pub canGenMouseMove: Rboolean,
+    pub canGenMouseUp: Rboolean,
+    pub canGenKeybd: Rboolean,
+    pub canGenIdle: Rboolean,
+    pub gettingEvent: Rboolean,
+    pub activate: ::std::option::Option<unsafe extern "C" fn(arg1: pDevDesc)>,
+    pub circle: ::std::option::Option<
+        unsafe extern "C" fn(x: f64, y: f64, r: f64, gc: pGEcontext, dd: pDevDesc),
+    >,
+    pub clip: ::std::option::Option<
+        unsafe extern "C" fn(x0: f64, x1: f64, y0: f64, y1: f64, dd: pDevDesc),
+    >,
+    pub close: ::std::option::Option<unsafe extern "C" fn(dd: pDevDesc)>,
+    pub deactivate: ::std::option::Option<unsafe extern "C" fn(arg1: pDevDesc)>,
+    pub locator: ::std::option::Option<
+        unsafe extern "C" fn(x: *mut f64, y: *mut f64, dd: pDevDesc) -> Rboolean,
+    >,
+    pub line: ::std::option::Option<
+        unsafe extern "C" fn(x1: f64, y1: f64, x2: f64, y2: f64, gc: pGEcontext, dd: pDevDesc),
+    >,
+    pub metricInfo: ::std::option::Option<
+        unsafe extern "C" fn(
+            c: ::std::os::raw::c_int,
+            gc: pGEcontext,
+            ascent: *mut f64,
+            descent: *mut f64,
+            width: *mut f64,
+            dd: pDevDesc,
+        ),
+    >,
+    pub mode:
+        ::std::option::Option<unsafe extern "C" fn(mode: ::std::os::raw::c_int, dd: pDevDesc)>,
+    pub newPage: ::std::option::Option<unsafe extern "C" fn(gc: pGEcontext, dd: pDevDesc)>,
+    pub polygon: ::std::option::Option<
+        unsafe extern "C" fn(
+            n: ::std::os::raw::c_int,
+            x: *mut f64,
+            y: *mut f64,
+            gc: pGEcontext,
+            dd: pDevDesc,
+        ),
+    >,
+    pub polyline: ::std::option::Option<
+        unsafe extern "C" fn(
+            n: ::std::os::raw::c_int,
+            x: *mut f64,
+            y: *mut f64,
+            gc: pGEcontext,
+            dd: pDevDesc,
+        ),
+    >,
+    pub rect: ::std::option::Option<
+        unsafe extern "C" fn(x0: f64, y0: f64, x1: f64, y1: f64, gc: pGEcontext, dd: pDevDesc),
+    >,
+    pub path: ::std::option::Option<
+        unsafe extern "C" fn(
+            x: *mut f64,
+            y: *mut f64,
+            npoly: ::std::os::raw::c_int,
+            nper: *mut ::std::os::raw::c_int,
+            winding: Rboolean,
+            gc: pGEcontext,
+            dd: pDevDesc,
+        ),
+    >,
+    pub raster: ::std::option::Option<
+        unsafe extern "C" fn(
+            raster: *mut ::std::os::raw::c_uint,
+            w: ::std::os::raw::c_int,
+            h: ::std::os::raw::c_int,
+            x: f64,
+            y: f64,
+            width: f64,
+            height: f64,
+            rot: f64,
+            interpolate: Rboolean,
+            gc: pGEcontext,
+            dd: pDevDesc,
+        ),
+    >,
+    pub cap: ::std::option::Option<unsafe extern "C" fn(dd: pDevDesc) -> SEXP>,
+    pub size: ::std::option::Option<
+        unsafe extern "C" fn(
+            left: *mut f64,
+            right: *mut f64,
+            bottom: *mut f64,
+            top: *mut f64,
+            dd: pDevDesc,
+        ),
+    >,
+    pub strWidth: ::std::option::Option<
+        unsafe extern "C" fn(
+            str: *const ::std::os::raw::c_char,
+            gc: pGEcontext,
+            dd: pDevDesc,
+        ) -> f64,
+    >,
+    pub text: ::std::option::Option<
+        unsafe extern "C" fn(
+            x: f64,
+            y: f64,
+            str: *const ::std::os::raw::c_char,
+            rot: f64,
+            hadj: f64,
+            gc: pGEcontext,
+            dd: pDevDesc,
+        ),
+    >,
+    pub onExit: ::std::option::Option<unsafe extern "C" fn(dd: pDevDesc)>,
+    pub getEvent: ::std::option::Option<
+        unsafe extern "C" fn(arg1: SEXP, arg2: *const ::std::os::raw::c_char) -> SEXP,
+    >,
+    pub newFrameConfirm: ::std::option::Option<unsafe extern "C" fn(dd: pDevDesc) -> Rboolean>,
+    pub hasTextUTF8: Rboolean,
+    pub textUTF8: ::std::option::Option<
+        unsafe extern "C" fn(
+            x: f64,
+            y: f64,
+            str: *const ::std::os::raw::c_char,
+            rot: f64,
+            hadj: f64,
+            gc: pGEcontext,
+            dd: pDevDesc,
+        ),
+    >,
+    pub strWidthUTF8: ::std::option::Option<
+        unsafe extern "C" fn(
+            str: *const ::std::os::raw::c_char,
+            gc: pGEcontext,
+            dd: pDevDesc,
+        ) -> f64,
+    >,
+    pub wantSymbolUTF8: Rboolean,
+    pub useRotatedTextInContour: Rboolean,
+    pub eventEnv: SEXP,
+    pub eventHelper:
+        ::std::option::Option<unsafe extern "C" fn(dd: pDevDesc, code: ::std::os::raw::c_int)>,
+    pub holdflush: ::std::option::Option<
+        unsafe extern "C" fn(dd: pDevDesc, level: ::std::os::raw::c_int) -> ::std::os::raw::c_int,
+    >,
+    pub haveTransparency: ::std::os::raw::c_int,
+    pub haveTransparentBg: ::std::os::raw::c_int,
+    pub haveRaster: ::std::os::raw::c_int,
+    pub haveCapture: ::std::os::raw::c_int,
+    pub haveLocator: ::std::os::raw::c_int,
+    pub reserved: [::std::os::raw::c_char; 64usize],
+}
+#[test]
+fn bindgen_test_layout__DevDesc() {
+    assert_eq!(
+        ::std::mem::size_of::<_DevDesc>(),
+        536usize,
+        concat!("Size of: ", stringify!(_DevDesc))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<_DevDesc>(),
+        8usize,
+        concat!("Alignment of ", stringify!(_DevDesc))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).left as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(left)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).right as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(right)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).bottom as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(bottom)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).top as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(top)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).clipLeft as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(clipLeft)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).clipRight as *const _ as usize },
+        40usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(clipRight)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).clipBottom as *const _ as usize },
+        48usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(clipBottom)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).clipTop as *const _ as usize },
+        56usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(clipTop)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).xCharOffset as *const _ as usize },
+        64usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(xCharOffset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).yCharOffset as *const _ as usize },
+        72usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(yCharOffset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).yLineBias as *const _ as usize },
+        80usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(yLineBias)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).ipr as *const _ as usize },
+        88usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(ipr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).cra as *const _ as usize },
+        104usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(cra)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).gamma as *const _ as usize },
+        120usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(gamma)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).canClip as *const _ as usize },
+        128usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(canClip)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).canChangeGamma as *const _ as usize },
+        132usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(canChangeGamma)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).canHAdj as *const _ as usize },
+        136usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(canHAdj)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).startps as *const _ as usize },
+        144usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(startps)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).startcol as *const _ as usize },
+        152usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(startcol)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).startfill as *const _ as usize },
+        156usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(startfill)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).startlty as *const _ as usize },
+        160usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(startlty)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).startfont as *const _ as usize },
+        164usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(startfont)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).startgamma as *const _ as usize },
+        168usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(startgamma)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).deviceSpecific as *const _ as usize },
+        176usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(deviceSpecific)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).displayListOn as *const _ as usize },
+        184usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(displayListOn)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).canGenMouseDown as *const _ as usize },
+        188usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(canGenMouseDown)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).canGenMouseMove as *const _ as usize },
+        192usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(canGenMouseMove)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).canGenMouseUp as *const _ as usize },
+        196usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(canGenMouseUp)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).canGenKeybd as *const _ as usize },
+        200usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(canGenKeybd)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).canGenIdle as *const _ as usize },
+        204usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(canGenIdle)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).gettingEvent as *const _ as usize },
+        208usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(gettingEvent)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).activate as *const _ as usize },
+        216usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(activate)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).circle as *const _ as usize },
+        224usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(circle)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).clip as *const _ as usize },
+        232usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(clip)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).close as *const _ as usize },
+        240usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(close)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).deactivate as *const _ as usize },
+        248usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(deactivate)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).locator as *const _ as usize },
+        256usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(locator)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).line as *const _ as usize },
+        264usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(line)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).metricInfo as *const _ as usize },
+        272usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(metricInfo)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).mode as *const _ as usize },
+        280usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(mode)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).newPage as *const _ as usize },
+        288usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(newPage)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).polygon as *const _ as usize },
+        296usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(polygon)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).polyline as *const _ as usize },
+        304usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(polyline)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).rect as *const _ as usize },
+        312usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(rect)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).path as *const _ as usize },
+        320usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(path)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).raster as *const _ as usize },
+        328usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(raster)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).cap as *const _ as usize },
+        336usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(cap)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).size as *const _ as usize },
+        344usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).strWidth as *const _ as usize },
+        352usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(strWidth)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).text as *const _ as usize },
+        360usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(text)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).onExit as *const _ as usize },
+        368usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(onExit)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).getEvent as *const _ as usize },
+        376usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(getEvent)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).newFrameConfirm as *const _ as usize },
+        384usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(newFrameConfirm)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).hasTextUTF8 as *const _ as usize },
+        392usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(hasTextUTF8)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).textUTF8 as *const _ as usize },
+        400usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(textUTF8)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).strWidthUTF8 as *const _ as usize },
+        408usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(strWidthUTF8)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).wantSymbolUTF8 as *const _ as usize },
+        416usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(wantSymbolUTF8)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<_DevDesc>())).useRotatedTextInContour as *const _ as usize
+        },
+        420usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(useRotatedTextInContour)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).eventEnv as *const _ as usize },
+        424usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(eventEnv)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).eventHelper as *const _ as usize },
+        432usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(eventHelper)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).holdflush as *const _ as usize },
+        440usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(holdflush)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).haveTransparency as *const _ as usize },
+        448usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(haveTransparency)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).haveTransparentBg as *const _ as usize },
+        452usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(haveTransparentBg)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).haveRaster as *const _ as usize },
+        456usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(haveRaster)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).haveCapture as *const _ as usize },
+        460usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(haveCapture)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).haveLocator as *const _ as usize },
+        464usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(haveLocator)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).reserved as *const _ as usize },
+        468usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(reserved)
+        )
+    );
+}
+extern "C" {
+    pub fn Rf_ndevNumber(arg1: pDevDesc) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn Rf_NumDevices() -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_CheckDeviceAvailable();
+}
+extern "C" {
+    pub fn R_CheckDeviceAvailableBool() -> Rboolean;
+}
+extern "C" {
+    pub fn Rf_curDevice() -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn Rf_nextDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn Rf_prevDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn Rf_selectDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn Rf_killDevice(arg1: ::std::os::raw::c_int);
+}
+extern "C" {
+    pub fn Rf_NoDevices() -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn Rf_NewFrameConfirm(arg1: pDevDesc);
+}
+pub const R_KeyName_knUNKNOWN: R_KeyName = -1;
+pub const R_KeyName_knLEFT: R_KeyName = 0;
+pub const R_KeyName_knUP: R_KeyName = 1;
+pub const R_KeyName_knRIGHT: R_KeyName = 2;
+pub const R_KeyName_knDOWN: R_KeyName = 3;
+pub const R_KeyName_knF1: R_KeyName = 4;
+pub const R_KeyName_knF2: R_KeyName = 5;
+pub const R_KeyName_knF3: R_KeyName = 6;
+pub const R_KeyName_knF4: R_KeyName = 7;
+pub const R_KeyName_knF5: R_KeyName = 8;
+pub const R_KeyName_knF6: R_KeyName = 9;
+pub const R_KeyName_knF7: R_KeyName = 10;
+pub const R_KeyName_knF8: R_KeyName = 11;
+pub const R_KeyName_knF9: R_KeyName = 12;
+pub const R_KeyName_knF10: R_KeyName = 13;
+pub const R_KeyName_knF11: R_KeyName = 14;
+pub const R_KeyName_knF12: R_KeyName = 15;
+pub const R_KeyName_knPGUP: R_KeyName = 16;
+pub const R_KeyName_knPGDN: R_KeyName = 17;
+pub const R_KeyName_knEND: R_KeyName = 18;
+pub const R_KeyName_knHOME: R_KeyName = 19;
+pub const R_KeyName_knINS: R_KeyName = 20;
+pub const R_KeyName_knDEL: R_KeyName = 21;
+pub type R_KeyName = i32;
+pub const R_MouseEvent_meMouseDown: R_MouseEvent = 0;
+pub const R_MouseEvent_meMouseUp: R_MouseEvent = 1;
+pub const R_MouseEvent_meMouseMove: R_MouseEvent = 2;
+pub type R_MouseEvent = u32;
+extern "C" {
+    pub fn Rf_doMouseEvent(
+        dd: pDevDesc,
+        event: R_MouseEvent,
+        buttons: ::std::os::raw::c_int,
+        x: f64,
+        y: f64,
+    );
+}
+extern "C" {
+    pub fn Rf_doKeybd(dd: pDevDesc, rkey: R_KeyName, keyname: *const ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn Rf_doIdle(dd: pDevDesc);
+}
+extern "C" {
+    pub fn Rf_doesIdle(dd: pDevDesc) -> Rboolean;
+}
+extern "C" {
+    pub static mut R_interrupts_suspended: Rboolean;
+}
+extern "C" {
+    pub static mut R_interrupts_pending: ::std::os::raw::c_int;
+}
+extern "C" {
+    pub static mut mbcslocale: Rboolean;
+}
+extern "C" {
+    pub fn Rf_AdobeSymbol2utf8(
+        out: *mut ::std::os::raw::c_char,
+        in_: *const ::std::os::raw::c_char,
+        nwork: size_t,
+        usePUA: Rboolean,
+    ) -> *mut ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn Rf_utf8toAdobeSymbol(
+        out: *mut ::std::os::raw::c_char,
+        in_: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn Rf_utf8Toutf8NoPUA(in_: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn Rf_utf8ToLatin1AdobeSymbol2utf8(
+        in_: *const ::std::os::raw::c_char,
+        usePUA: Rboolean,
+    ) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn Rf_ucstoutf8(s: *mut ::std::os::raw::c_char, c: ::std::os::raw::c_uint) -> size_t;
+}
+pub type GEDevDesc = _GEDevDesc;
+pub type GEcallback = ::std::option::Option<
+    unsafe extern "C" fn(arg1: GEevent, arg2: *mut GEDevDesc, arg3: SEXP) -> SEXP,
+>;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct GESystemDesc {
+    pub systemSpecific: *mut ::std::os::raw::c_void,
+    pub callback: GEcallback,
+}
+#[test]
+fn bindgen_test_layout_GESystemDesc() {
+    assert_eq!(
+        ::std::mem::size_of::<GESystemDesc>(),
+        16usize,
+        concat!("Size of: ", stringify!(GESystemDesc))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<GESystemDesc>(),
+        8usize,
+        concat!("Alignment of ", stringify!(GESystemDesc))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<GESystemDesc>())).systemSpecific as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(GESystemDesc),
+            "::",
+            stringify!(systemSpecific)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<GESystemDesc>())).callback as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(GESystemDesc),
+            "::",
+            stringify!(callback)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct _GEDevDesc {
+    pub dev: pDevDesc,
+    pub displayListOn: Rboolean,
+    pub displayList: SEXP,
+    pub DLlastElt: SEXP,
+    pub savedSnapshot: SEXP,
+    pub dirty: Rboolean,
+    pub recordGraphics: Rboolean,
+    pub gesd: [*mut GESystemDesc; 24usize],
+    pub ask: Rboolean,
+}
+#[test]
+fn bindgen_test_layout__GEDevDesc() {
+    assert_eq!(
+        ::std::mem::size_of::<_GEDevDesc>(),
+        248usize,
+        concat!("Size of: ", stringify!(_GEDevDesc))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<_GEDevDesc>(),
+        8usize,
+        concat!("Alignment of ", stringify!(_GEDevDesc))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_GEDevDesc>())).dev as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_GEDevDesc),
+            "::",
+            stringify!(dev)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_GEDevDesc>())).displayListOn as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_GEDevDesc),
+            "::",
+            stringify!(displayListOn)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_GEDevDesc>())).displayList as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_GEDevDesc),
+            "::",
+            stringify!(displayList)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_GEDevDesc>())).DLlastElt as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_GEDevDesc),
+            "::",
+            stringify!(DLlastElt)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_GEDevDesc>())).savedSnapshot as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_GEDevDesc),
+            "::",
+            stringify!(savedSnapshot)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_GEDevDesc>())).dirty as *const _ as usize },
+        40usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_GEDevDesc),
+            "::",
+            stringify!(dirty)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_GEDevDesc>())).recordGraphics as *const _ as usize },
+        44usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_GEDevDesc),
+            "::",
+            stringify!(recordGraphics)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_GEDevDesc>())).gesd as *const _ as usize },
+        48usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_GEDevDesc),
+            "::",
+            stringify!(gesd)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_GEDevDesc>())).ask as *const _ as usize },
+        240usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_GEDevDesc),
+            "::",
+            stringify!(ask)
+        )
+    );
+}
+pub type pGEDevDesc = *mut GEDevDesc;
+extern "C" {
+    pub fn Rf_desc2GEDesc(dd: pDevDesc) -> pGEDevDesc;
+}
+extern "C" {
+    pub fn GEdeviceNumber(arg1: pGEDevDesc) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn GEgetDevice(arg1: ::std::os::raw::c_int) -> pGEDevDesc;
+}
+extern "C" {
+    pub fn GEaddDevice(arg1: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEaddDevice2(arg1: pGEDevDesc, arg2: *const ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn GEaddDevice2f(
+        arg1: pGEDevDesc,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn GEkillDevice(arg1: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEcreateDevDesc(dev: pDevDesc) -> pGEDevDesc;
+}
+extern "C" {
+    pub fn GEdestroyDevDesc(dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEsystemState(
+        dd: pGEDevDesc,
+        index: ::std::os::raw::c_int,
+    ) -> *mut ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn GEregisterWithDevice(dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEregisterSystem(callback: GEcallback, systemRegisterIndex: *mut ::std::os::raw::c_int);
+}
+extern "C" {
+    pub fn GEunregisterSystem(registerIndex: ::std::os::raw::c_int);
+}
+extern "C" {
+    pub fn GEhandleEvent(event: GEevent, dev: pDevDesc, data: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn GEfromDeviceX(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
+}
+extern "C" {
+    pub fn GEtoDeviceX(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
+}
+extern "C" {
+    pub fn GEfromDeviceY(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
+}
+extern "C" {
+    pub fn GEtoDeviceY(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
+}
+extern "C" {
+    pub fn GEfromDeviceWidth(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
+}
+extern "C" {
+    pub fn GEtoDeviceWidth(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
+}
+extern "C" {
+    pub fn GEfromDeviceHeight(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
+}
+extern "C" {
+    pub fn GEtoDeviceHeight(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
+}
+pub type rcolor = ::std::os::raw::c_uint;
+extern "C" {
+    pub fn Rf_RGBpar(arg1: SEXP, arg2: ::std::os::raw::c_int) -> rcolor;
+}
+extern "C" {
+    pub fn Rf_RGBpar3(arg1: SEXP, arg2: ::std::os::raw::c_int, arg3: rcolor) -> rcolor;
+}
+extern "C" {
+    pub fn Rf_col2name(col: rcolor) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn R_GE_str2col(s: *const ::std::os::raw::c_char) -> rcolor;
+}
+extern "C" {
+    pub fn GE_LENDpar(value: SEXP, ind: ::std::os::raw::c_int) -> R_GE_lineend;
+}
+extern "C" {
+    pub fn GE_LENDget(lend: R_GE_lineend) -> SEXP;
+}
+extern "C" {
+    pub fn GE_LJOINpar(value: SEXP, ind: ::std::os::raw::c_int) -> R_GE_linejoin;
+}
+extern "C" {
+    pub fn GE_LJOINget(ljoin: R_GE_linejoin) -> SEXP;
+}
+extern "C" {
+    pub fn GESetClip(x1: f64, y1: f64, x2: f64, y2: f64, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GENewPage(gc: pGEcontext, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GELine(x1: f64, y1: f64, x2: f64, y2: f64, gc: pGEcontext, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEPolyline(
+        n: ::std::os::raw::c_int,
+        x: *mut f64,
+        y: *mut f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
+    pub fn GEPolygon(
+        n: ::std::os::raw::c_int,
+        x: *mut f64,
+        y: *mut f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
+    pub fn GEXspline(
+        n: ::std::os::raw::c_int,
+        x: *mut f64,
+        y: *mut f64,
+        s: *mut f64,
+        open: Rboolean,
+        repEnds: Rboolean,
+        draw: Rboolean,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    ) -> SEXP;
+}
+extern "C" {
+    pub fn GECircle(x: f64, y: f64, radius: f64, gc: pGEcontext, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GERect(x0: f64, y0: f64, x1: f64, y1: f64, gc: pGEcontext, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEPath(
+        x: *mut f64,
+        y: *mut f64,
+        npoly: ::std::os::raw::c_int,
+        nper: *mut ::std::os::raw::c_int,
+        winding: Rboolean,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
+    pub fn GERaster(
+        raster: *mut ::std::os::raw::c_uint,
+        w: ::std::os::raw::c_int,
+        h: ::std::os::raw::c_int,
+        x: f64,
+        y: f64,
+        width: f64,
+        height: f64,
+        angle: f64,
+        interpolate: Rboolean,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
+    pub fn GECap(dd: pGEDevDesc) -> SEXP;
+}
+extern "C" {
+    pub fn GEText(
+        x: f64,
+        y: f64,
+        str: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        xc: f64,
+        yc: f64,
+        rot: f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
+    pub fn GEMode(mode: ::std::os::raw::c_int, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GESymbol(
+        x: f64,
+        y: f64,
+        pch: ::std::os::raw::c_int,
+        size: f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
+    pub fn GEPretty(lo: *mut f64, up: *mut f64, ndiv: *mut ::std::os::raw::c_int);
+}
+extern "C" {
+    pub fn GEMetricInfo(
+        c: ::std::os::raw::c_int,
+        gc: pGEcontext,
+        ascent: *mut f64,
+        descent: *mut f64,
+        width: *mut f64,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
+    pub fn GEStrWidth(
+        str: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    ) -> f64;
+}
+extern "C" {
+    pub fn GEStrHeight(
+        str: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    ) -> f64;
+}
+extern "C" {
+    pub fn GEStrMetric(
+        str: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        gc: pGEcontext,
+        ascent: *mut f64,
+        descent: *mut f64,
+        width: *mut f64,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
+    pub fn GEstring_to_pch(pch: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn GE_LTYpar(arg1: SEXP, arg2: ::std::os::raw::c_int) -> ::std::os::raw::c_uint;
+}
+extern "C" {
+    pub fn GE_LTYget(arg1: ::std::os::raw::c_uint) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_rasterScale(
+        sraster: *mut ::std::os::raw::c_uint,
+        sw: ::std::os::raw::c_int,
+        sh: ::std::os::raw::c_int,
+        draster: *mut ::std::os::raw::c_uint,
+        dw: ::std::os::raw::c_int,
+        dh: ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn R_GE_rasterInterpolate(
+        sraster: *mut ::std::os::raw::c_uint,
+        sw: ::std::os::raw::c_int,
+        sh: ::std::os::raw::c_int,
+        draster: *mut ::std::os::raw::c_uint,
+        dw: ::std::os::raw::c_int,
+        dh: ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn R_GE_rasterRotatedSize(
+        w: ::std::os::raw::c_int,
+        h: ::std::os::raw::c_int,
+        angle: f64,
+        wnew: *mut ::std::os::raw::c_int,
+        hnew: *mut ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn R_GE_rasterRotatedOffset(
+        w: ::std::os::raw::c_int,
+        h: ::std::os::raw::c_int,
+        angle: f64,
+        botleft: ::std::os::raw::c_int,
+        xoff: *mut f64,
+        yoff: *mut f64,
+    );
+}
+extern "C" {
+    pub fn R_GE_rasterResizeForRotation(
+        sraster: *mut ::std::os::raw::c_uint,
+        w: ::std::os::raw::c_int,
+        h: ::std::os::raw::c_int,
+        newRaster: *mut ::std::os::raw::c_uint,
+        wnew: ::std::os::raw::c_int,
+        hnew: ::std::os::raw::c_int,
+        gc: pGEcontext,
+    );
+}
+extern "C" {
+    pub fn R_GE_rasterRotate(
+        sraster: *mut ::std::os::raw::c_uint,
+        w: ::std::os::raw::c_int,
+        h: ::std::os::raw::c_int,
+        angle: f64,
+        draster: *mut ::std::os::raw::c_uint,
+        gc: pGEcontext,
+        perPixelAlpha: Rboolean,
+    );
+}
+extern "C" {
+    pub fn GEExpressionWidth(expr: SEXP, gc: pGEcontext, dd: pGEDevDesc) -> f64;
+}
+extern "C" {
+    pub fn GEExpressionHeight(expr: SEXP, gc: pGEcontext, dd: pGEDevDesc) -> f64;
+}
+extern "C" {
+    pub fn GEExpressionMetric(
+        expr: SEXP,
+        gc: pGEcontext,
+        ascent: *mut f64,
+        descent: *mut f64,
+        width: *mut f64,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
+    pub fn GEMathText(
+        x: f64,
+        y: f64,
+        expr: SEXP,
+        xc: f64,
+        yc: f64,
+        rot: f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
+    pub fn GEcontourLines(
+        x: *mut f64,
+        nx: ::std::os::raw::c_int,
+        y: *mut f64,
+        ny: ::std::os::raw::c_int,
+        z: *mut f64,
+        levels: *mut f64,
+        nl: ::std::os::raw::c_int,
+    ) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_VStrWidth(
+        s: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    ) -> f64;
+}
+extern "C" {
+    pub fn R_GE_VStrHeight(
+        s: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    ) -> f64;
+}
+extern "C" {
+    pub fn R_GE_VText(
+        x: f64,
+        y: f64,
+        s: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        x_justify: f64,
+        y_justify: f64,
+        rotation: f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
+    pub fn GEcurrentDevice() -> pGEDevDesc;
+}
+extern "C" {
+    pub fn GEdeviceDirty(dd: pGEDevDesc) -> Rboolean;
+}
+extern "C" {
+    pub fn GEdirtyDevice(dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEcheckState(dd: pGEDevDesc) -> Rboolean;
+}
+extern "C" {
+    pub fn GErecording(call: SEXP, dd: pGEDevDesc) -> Rboolean;
+}
+extern "C" {
+    pub fn GErecordGraphicOperation(op: SEXP, args: SEXP, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEinitDisplayList(dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEplayDisplayList(dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEcopyDisplayList(fromDevice: ::std::os::raw::c_int);
+}
+extern "C" {
+    pub fn GEcreateSnapshot(dd: pGEDevDesc) -> SEXP;
+}
+extern "C" {
+    pub fn GEplaySnapshot(snapshot: SEXP, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEonExit();
+}
+extern "C" {
+    pub fn GEnullDevice();
+}
+extern "C" {
+    pub fn Rf_CreateAtVector(
+        arg1: *mut f64,
+        arg2: *mut f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: Rboolean,
+    ) -> SEXP;
+}
+extern "C" {
+    pub fn Rf_GAxisPars(
+        min: *mut f64,
+        max: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        log: Rboolean,
+        axis: ::std::os::raw::c_int,
+    );
 }
 pub type __builtin_va_list = [__va_list_tag; 1usize];
 #[repr(C)]
