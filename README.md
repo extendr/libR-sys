@@ -210,3 +210,34 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
   cargo +stable-i686-pc-windows-msvc  test --target i686-pc-windows-gnu --features use-bindgen
   ```
   </details>
+
+## Conditional compilation depending on R installation
+
+extendr crate provides these environmental variables that you can use in `build.rs`:
+
+- `DEP_R_R_VERSION_MAJOR`: The major part of the R version (e.g. `4` in version `4.1.0`)
+- `DEP_R_R_VERSION_MINOR`: The minor part of the R version (e.g. `1` in version `4.1.0`)
+- `DEP_R_R_VERSION_PATCH`: The patch part of the R version (e.g. `0` in version `4.1.0`)
+- `DEP_R_R_VERSION_DEVEL`: `true` if the R is a development version, otherwise `false`
+- `DEP_R_R_VERSION_STRING`: The full version string (e.g. `R version 4.1.0 (2021-05-18)`)
+- `DEP_R_R_HOME`: The R home directory
+
+### Example `build.rs`
+
+``` rust
+use std::env;
+
+fn main() {
+    // Set R_HOME envvar, and refer to it on compile time by env!("R_HOME")
+    let r_home = env::var("DEP_R_R_HOME").unwrap();
+    println!("cargo:rustc-env=R_HOME={}", r_home);
+
+    // Enable cfg setting to conditionally compile a code using a feature
+    // available only on newer versions of R
+    let major = env::var("DEP_R_R_VERSION_MAJOR").unwrap();
+    let minor = env::var("DEP_R_R_VERSION_MINOR").unwrap();
+    if &*major >= "4" && &*minor >= "1" {
+        println!("cargo:rustc-cfg=use_a_feature");
+    }
+}
+```
