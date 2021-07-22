@@ -213,7 +213,7 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
 
 ## Conditional compilation depending on R installation
 
-extendr crate provides these environmental variables that you can use in `build.rs`:
+libR-sys crate provides these environmental variables that you can use in `build.rs`:
 
 - `DEP_R_R_VERSION_MAJOR`: The major part of the R version (e.g. `4` in version `4.1.0`)
 - `DEP_R_R_VERSION_MINOR`: The minor part of the R version (e.g. `1` in version `4.1.0`)
