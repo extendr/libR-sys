@@ -25,3 +25,6 @@ typedef ptrdiff_t R_xlen_t_rust;
 #include <Rversion.h>
 #include <R_ext/Parse.h>
 #include <R_ext/Error.h>
+
+#include <R_ext/Rdynload.h>
+#include <R_ext/Altrep.h>
