@@ -262,7 +262,6 @@ pub const SIZEOF_SIZE_T: u32 = 8;
 pub const HAVE_UINTPTR_T: u32 = 1;
 pub const R_XLEN_T_MAX: u64 = 4503599627370496;
 pub const R_SHORT_LEN_MAX: u32 = 2147483647;
-pub const R_INTERNALS_UUID: &'static [u8; 37usize] = b"2fdf6c18-697a-4ba7-b8ef-11c0d92f1327\0";
 pub const NILSXP: u32 = 0;
 pub const SYMSXP: u32 = 1;
 pub const LISTSXP: u32 = 2;
@@ -303,8 +302,8 @@ pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
 pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
 pub const R_MONTH: &'static [u8; 3usize] = b"07\0";
-pub const R_DAY: &'static [u8; 3usize] = b"17\0";
-pub const R_SVN_REVISION: u32 = 80639;
+pub const R_DAY: &'static [u8; 3usize] = b"20\0";
+pub const R_SVN_REVISION: u32 = 80647;
 pub type size_t = ::std::os::raw::c_ulonglong;
 pub type wchar_t = ::std::os::raw::c_ushort;
 #[repr(C)]
@@ -4218,13 +4217,6 @@ extern "C" {
 extern "C" {
     pub fn Rf_isObject(s: SEXP) -> Rboolean;
 }
-pub const SORTED_DECR_NA_1ST: _bindgen_ty_1 = -2;
-pub const SORTED_DECR: _bindgen_ty_1 = -1;
-pub const UNKNOWN_SORTEDNESS: _bindgen_ty_1 = -2147483648;
-pub const SORTED_INCR: _bindgen_ty_1 = 1;
-pub const SORTED_INCR_NA_1ST: _bindgen_ty_1 = 2;
-pub const KNOWN_UNSORTED: _bindgen_ty_1 = 0;
-pub type _bindgen_ty_1 = i32;
 extern "C" {
     pub fn ATTRIB(x: SEXP) -> SEXP;
 }
@@ -4244,18 +4236,6 @@ extern "C" {
     pub fn REFCNT(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn TRACKREFS(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_NAMED(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
     pub fn SET_ATTRIB(x: SEXP, v: SEXP);
 }
 extern "C" {
@@ -4265,73 +4245,10 @@ extern "C" {
     pub fn SHALLOW_DUPLICATE_ATTRIB(to: SEXP, from: SEXP);
 }
 extern "C" {
-    pub fn ENSURE_NAMEDMAX(x: SEXP);
-}
-extern "C" {
-    pub fn ENSURE_NAMED(x: SEXP);
-}
-extern "C" {
-    pub fn SETTER_CLEAR_NAMED(x: SEXP);
-}
-extern "C" {
-    pub fn RAISE_NAMED(x: SEXP, n: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn DECREMENT_REFCNT(x: SEXP);
-}
-extern "C" {
-    pub fn INCREMENT_REFCNT(x: SEXP);
-}
-extern "C" {
-    pub fn DISABLE_REFCNT(x: SEXP);
-}
-extern "C" {
-    pub fn ENABLE_REFCNT(x: SEXP);
-}
-extern "C" {
     pub fn MARK_NOT_MUTABLE(x: SEXP);
 }
 extern "C" {
-    pub fn ASSIGNMENT_PENDING(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_ASSIGNMENT_PENDING(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn IS_ASSIGNMENT_CALL(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn MARK_ASSIGNMENT_CALL(x: SEXP);
-}
-extern "C" {
     pub fn IS_S4_OBJECT(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_S4_OBJECT(x: SEXP);
-}
-extern "C" {
-    pub fn UNSET_S4_OBJECT(x: SEXP);
-}
-extern "C" {
-    pub fn NOJIT(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn MAYBEJIT(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_NOJIT(x: SEXP);
-}
-extern "C" {
-    pub fn SET_MAYBEJIT(x: SEXP);
-}
-extern "C" {
-    pub fn UNSET_MAYBEJIT(x: SEXP);
-}
-extern "C" {
-    pub fn IS_GROWABLE(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_GROWABLE_BIT(x: SEXP);
 }
 extern "C" {
     pub fn LENGTH(x: SEXP) -> ::std::os::raw::c_int;
@@ -4343,19 +4260,10 @@ extern "C" {
     pub fn TRUELENGTH(x: SEXP) -> R_xlen_t;
 }
 extern "C" {
-    pub fn SETLENGTH(x: SEXP, v: R_xlen_t);
-}
-extern "C" {
-    pub fn SET_TRUELENGTH(x: SEXP, v: R_xlen_t);
-}
-extern "C" {
     pub fn IS_LONG_VEC(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn LEVELS(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SETLEVELS(x: SEXP, v: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn LOGICAL(x: SEXP) -> *mut ::std::os::raw::c_int;
@@ -4404,106 +4312,6 @@ extern "C" {
 }
 extern "C" {
     pub fn VECTOR_PTR(x: SEXP) -> *mut SEXP;
-}
-extern "C" {
-    pub fn STDVEC_DATAPTR(x: SEXP) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn IS_SCALAR(x: SEXP, type_: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn ALTREP(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn ALTREP_DUPLICATE_EX(x: SEXP, deep: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn ALTREP_COERCE(x: SEXP, type_: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn ALTREP_INSPECT(
-        arg1: SEXP,
-        arg2: ::std::os::raw::c_int,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::option::Option<
-            unsafe extern "C" fn(
-                arg1: SEXP,
-                arg2: ::std::os::raw::c_int,
-                arg3: ::std::os::raw::c_int,
-                arg4: ::std::os::raw::c_int,
-            ),
-        >,
-    ) -> Rboolean;
-}
-extern "C" {
-    pub fn ALTREP_SERIALIZED_CLASS(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn ALTREP_SERIALIZED_STATE(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn ALTREP_UNSERIALIZE_EX(
-        arg1: SEXP,
-        arg2: SEXP,
-        arg3: SEXP,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn ALTREP_LENGTH(x: SEXP) -> R_xlen_t;
-}
-extern "C" {
-    pub fn ALTREP_TRUELENGTH(x: SEXP) -> R_xlen_t;
-}
-extern "C" {
-    pub fn ALTVEC_DATAPTR(x: SEXP) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn ALTVEC_DATAPTR_RO(x: SEXP) -> *const ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn ALTVEC_DATAPTR_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn ALTVEC_EXTRACT_SUBSET(x: SEXP, indx: SEXP, call: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn ALTINTEGER_ELT(x: SEXP, i: R_xlen_t) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn ALTINTEGER_SET_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn ALTLOGICAL_ELT(x: SEXP, i: R_xlen_t) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn ALTLOGICAL_SET_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn ALTREAL_ELT(x: SEXP, i: R_xlen_t) -> f64;
-}
-extern "C" {
-    pub fn ALTREAL_SET_ELT(x: SEXP, i: R_xlen_t, v: f64);
-}
-extern "C" {
-    pub fn ALTSTRING_ELT(arg1: SEXP, arg2: R_xlen_t) -> SEXP;
-}
-extern "C" {
-    pub fn ALTSTRING_SET_ELT(arg1: SEXP, arg2: R_xlen_t, arg3: SEXP);
-}
-extern "C" {
-    pub fn ALTCOMPLEX_ELT(x: SEXP, i: R_xlen_t) -> Rcomplex;
-}
-extern "C" {
-    pub fn ALTCOMPLEX_SET_ELT(x: SEXP, i: R_xlen_t, v: Rcomplex);
-}
-extern "C" {
-    pub fn ALTRAW_ELT(x: SEXP, i: R_xlen_t) -> Rbyte;
-}
-extern "C" {
-    pub fn ALTRAW_SET_ELT(x: SEXP, i: R_xlen_t, v: Rbyte);
 }
 extern "C" {
     pub fn INTEGER_GET_REGION(
@@ -4555,109 +4363,7 @@ extern "C" {
     pub fn STRING_NO_NA(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn ALTINTEGER_SUM(x: SEXP, narm: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn ALTINTEGER_MIN(x: SEXP, narm: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn ALTINTEGER_MAX(x: SEXP, narm: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn INTEGER_MATCH(
-        arg1: SEXP,
-        arg2: SEXP,
-        arg3: ::std::os::raw::c_int,
-        arg4: SEXP,
-        arg5: SEXP,
-        arg6: Rboolean,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn INTEGER_IS_NA(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn ALTREAL_SUM(x: SEXP, narm: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn ALTREAL_MIN(x: SEXP, narm: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn ALTREAL_MAX(x: SEXP, narm: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn REAL_MATCH(
-        arg1: SEXP,
-        arg2: SEXP,
-        arg3: ::std::os::raw::c_int,
-        arg4: SEXP,
-        arg5: SEXP,
-        arg6: Rboolean,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn REAL_IS_NA(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn ALTLOGICAL_SUM(x: SEXP, narm: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn R_compact_intrange(n1: R_xlen_t, n2: R_xlen_t) -> SEXP;
-}
-extern "C" {
-    pub fn R_deferred_coerceToString(v: SEXP, info: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_virtrep_vec(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_tryWrap(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_tryUnwrap(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_BadLongVector(
-        arg1: SEXP,
-        arg2: *const ::std::os::raw::c_char,
-        arg3: ::std::os::raw::c_int,
-    ) -> R_len_t;
-}
-extern "C" {
-    pub fn BNDCELL_TAG(e: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_BNDCELL_TAG(e: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn BNDCELL_DVAL(cell: SEXP) -> f64;
-}
-extern "C" {
-    pub fn BNDCELL_IVAL(cell: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn BNDCELL_LVAL(cell: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_BNDCELL_DVAL(cell: SEXP, v: f64);
-}
-extern "C" {
-    pub fn SET_BNDCELL_IVAL(cell: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_BNDCELL_LVAL(cell: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn INIT_BNDCELL(cell: SEXP, type_: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_BNDCELL(cell: SEXP, val: SEXP);
-}
-extern "C" {
     pub fn TAG(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn CAR0(e: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn CDR(e: SEXP) -> SEXP;
@@ -4690,9 +4396,6 @@ extern "C" {
     pub fn MISSING(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn SET_MISSING(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
     pub fn SET_TAG(x: SEXP, y: SEXP);
 }
 extern "C" {
@@ -4712,18 +4415,6 @@ extern "C" {
 }
 extern "C" {
     pub fn SETCAD4R(e: SEXP, y: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn EXTPTR_PROT(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn EXTPTR_TAG(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn EXTPTR_PTR(arg1: SEXP) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn CONS_NR(a: SEXP, b: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn FORMALS(x: SEXP) -> SEXP;
@@ -4774,18 +4465,6 @@ extern "C" {
     pub fn DDVAL(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn SET_DDVAL(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_PRINTNAME(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_SYMVALUE(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_INTERNAL(x: SEXP, v: SEXP);
-}
-extern "C" {
     pub fn FRAME(x: SEXP) -> SEXP;
 }
 extern "C" {
@@ -4796,18 +4475,6 @@ extern "C" {
 }
 extern "C" {
     pub fn ENVFLAGS(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_ENVFLAGS(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_FRAME(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_ENCLOS(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_HASHTAB(x: SEXP, v: SEXP);
 }
 extern "C" {
     pub fn PRCODE(x: SEXP) -> SEXP;
@@ -4822,28 +4489,13 @@ extern "C" {
     pub fn PRSEEN(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn SET_PRSEEN(x: SEXP, v: ::std::os::raw::c_int);
+    pub fn EXTPTR_PROT(arg1: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn SET_PRENV(x: SEXP, v: SEXP);
+    pub fn EXTPTR_TAG(arg1: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn SET_PRVALUE(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_PRCODE(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn HASHASH(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn HASHVALUE(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_HASHASH(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_HASHVALUE(x: SEXP, v: ::std::os::raw::c_int);
+    pub fn EXTPTR_PTR(arg1: SEXP) -> *mut ::std::os::raw::c_void;
 }
 pub type PROTECT_INDEX = ::std::os::raw::c_int;
 extern "C" {
@@ -5030,14 +4682,6 @@ extern "C" {
     pub fn Rf_asLogical(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn Rf_asLogical2(
-        x: SEXP,
-        checking: ::std::os::raw::c_int,
-        call: SEXP,
-        rho: SEXP,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
     pub fn Rf_asInteger(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -5052,15 +4696,8 @@ pub struct R_allocator {
     _unused: [u8; 0],
 }
 pub type R_allocator_t = R_allocator;
-pub const warn_type_iSILENT: warn_type = 0;
-pub const warn_type_iWARN: warn_type = 1;
-pub const warn_type_iERROR: warn_type = 2;
-pub type warn_type = u32;
 extern "C" {
     pub fn Rf_acopy_string(arg1: *const ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn Rf_addMissingVarsToNewEnv(arg1: SEXP, arg2: SEXP);
 }
 extern "C" {
     pub fn Rf_alloc3DArray(
@@ -5072,29 +4709,6 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_allocArray(arg1: SEXPTYPE, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_allocFormalsList2(sym1: SEXP, sym2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_allocFormalsList3(sym1: SEXP, sym2: SEXP, sym3: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_allocFormalsList4(sym1: SEXP, sym2: SEXP, sym3: SEXP, sym4: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_allocFormalsList5(sym1: SEXP, sym2: SEXP, sym3: SEXP, sym4: SEXP, sym5: SEXP)
-        -> SEXP;
-}
-extern "C" {
-    pub fn Rf_allocFormalsList6(
-        sym1: SEXP,
-        sym2: SEXP,
-        sym3: SEXP,
-        sym4: SEXP,
-        sym5: SEXP,
-        sym6: SEXP,
-    ) -> SEXP;
 }
 extern "C" {
     pub fn Rf_allocMatrix(
@@ -5125,25 +4739,10 @@ extern "C" {
     pub fn Rf_applyClosure(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn Rf_arraySubscript(
-        arg1: ::std::os::raw::c_int,
-        arg2: SEXP,
-        arg3: SEXP,
-        arg4: ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
-        arg5: ::std::option::Option<
-            unsafe extern "C" fn(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP,
-        >,
-        arg6: SEXP,
-    ) -> SEXP;
-}
-extern "C" {
     pub fn Rf_classgets(arg1: SEXP, arg2: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn Rf_cons(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_fixSubset3Args(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: *mut SEXP) -> SEXP;
 }
 extern "C" {
     pub fn Rf_copyMatrix(arg1: SEXP, arg2: SEXP, arg3: Rboolean);
@@ -5158,15 +4757,6 @@ extern "C" {
     pub fn Rf_copyVector(arg1: SEXP, arg2: SEXP);
 }
 extern "C" {
-    pub fn Rf_countContexts(
-        arg1: ::std::os::raw::c_int,
-        arg2: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_CreateTag(arg1: SEXP) -> SEXP;
-}
-extern "C" {
     pub fn Rf_defineVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);
 }
 extern "C" {
@@ -5174,9 +4764,6 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_dimnamesgets(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_DropDims(arg1: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn Rf_duplicate(arg1: SEXP) -> SEXP;
@@ -5197,22 +4784,10 @@ extern "C" {
     pub fn Rf_duplicated(arg1: SEXP, arg2: Rboolean) -> SEXP;
 }
 extern "C" {
-    pub fn R_envHasNoSpecialSymbols(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
     pub fn Rf_eval(arg1: SEXP, arg2: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn Rf_ExtractSubset(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
-}
-extern "C" {
     pub fn Rf_findFun(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_findFun3(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_findFunctionForBody(arg1: SEXP);
 }
 extern "C" {
     pub fn Rf_findVar(arg1: SEXP, arg2: SEXP) -> SEXP;
@@ -5251,12 +4826,6 @@ extern "C" {
     pub fn Rf_GetOption1(arg1: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn Rf_FixupDigits(arg1: SEXP, arg2: warn_type) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_FixupWidth(arg1: SEXP, arg2: warn_type) -> ::std::os::raw::c_int;
-}
-extern "C" {
     pub fn Rf_GetOptionDigits() -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -5281,22 +4850,7 @@ extern "C" {
     pub fn Rf_installTrChar(arg1: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn Rf_installDDVAL(i: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_installS3Signature(
-        arg1: *const ::std::os::raw::c_char,
-        arg2: *const ::std::os::raw::c_char,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_isFree(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
     pub fn Rf_isOrdered(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isUnmodifiedSpecSym(sym: SEXP, env: SEXP) -> Rboolean;
 }
 extern "C" {
     pub fn Rf_isUnordered(arg1: SEXP) -> Rboolean;
@@ -5318,9 +4872,6 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_match(arg1: SEXP, arg2: SEXP, arg3: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_matchE(arg1: SEXP, arg2: SEXP, arg3: ::std::os::raw::c_int, arg4: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn Rf_namesgets(arg1: SEXP, arg2: SEXP) -> SEXP;
@@ -5357,46 +4908,16 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn Rf_pmatch(arg1: SEXP, arg2: SEXP, arg3: Rboolean) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_psmatch(
-        arg1: *const ::std::os::raw::c_char,
-        arg2: *const ::std::os::raw::c_char,
-        arg3: Rboolean,
-    ) -> Rboolean;
-}
-extern "C" {
     pub fn R_ParseEvalString(arg1: *const ::std::os::raw::c_char, arg2: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn Rf_PrintValue(arg1: SEXP);
 }
 extern "C" {
-    pub fn Rf_printwhere();
-}
-extern "C" {
-    pub fn Rf_readS3VarsFromFrame(
-        arg1: SEXP,
-        arg2: *mut SEXP,
-        arg3: *mut SEXP,
-        arg4: *mut SEXP,
-        arg5: *mut SEXP,
-        arg6: *mut SEXP,
-        arg7: *mut SEXP,
-    );
-}
-extern "C" {
     pub fn Rf_setAttrib(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn Rf_setSVector(arg1: *mut SEXP, arg2: ::std::os::raw::c_int, arg3: SEXP);
-}
-extern "C" {
     pub fn Rf_setVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);
-}
-extern "C" {
-    pub fn Rf_stringSuffix(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP;
 }
 extern "C" {
     pub fn Rf_str2type(arg1: *const ::std::os::raw::c_char) -> SEXPTYPE;
@@ -5412,9 +4933,6 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_translateChar(arg1: SEXP) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn Rf_translateChar0(arg1: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
     pub fn Rf_translateCharUTF8(arg1: SEXP) -> *const ::std::os::raw::c_char;
@@ -5435,15 +4953,6 @@ extern "C" {
     pub fn Rf_unprotect_ptr(arg1: SEXP);
 }
 extern "C" {
-    pub fn R_signal_protect_error();
-}
-extern "C" {
-    pub fn R_signal_unprotect_error();
-}
-extern "C" {
-    pub fn R_signal_reprotect_error(i: PROTECT_INDEX);
-}
-extern "C" {
     pub fn R_tryEval(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_int) -> SEXP;
 }
 extern "C" {
@@ -5451,9 +4960,6 @@ extern "C" {
 }
 extern "C" {
     pub fn R_GetCurrentEnv() -> SEXP;
-}
-extern "C" {
-    pub fn R_curErrorBuf() -> *const ::std::os::raw::c_char;
 }
 extern "C" {
     pub fn Rf_isS4(arg1: SEXP) -> Rboolean;
@@ -5466,9 +4972,6 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_isBasicClass(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_cycle_detected(s: SEXP, child: SEXP) -> Rboolean;
 }
 pub const cetype_t_CE_NATIVE: cetype_t = 0;
 pub const cetype_t_CE_UTF8: cetype_t = 1;
@@ -5572,30 +5075,6 @@ extern "C" {
     pub fn R_BytecodeExpr(e: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn R_initialize_bcode();
-}
-extern "C" {
-    pub fn R_bcEncode(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_bcDecode(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_registerBC(arg1: SEXP, arg2: SEXP);
-}
-extern "C" {
-    pub fn R_checkConstants(arg1: Rboolean) -> Rboolean;
-}
-extern "C" {
-    pub fn R_BCVersionOK(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn R_init_altrep();
-}
-extern "C" {
-    pub fn R_reinit_altrep_classes(arg1: *mut DllInfo);
-}
-extern "C" {
     pub fn R_ToplevelExec(
         fun: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
         data: *mut ::std::os::raw::c_void,
@@ -5667,9 +5146,6 @@ extern "C" {
 }
 extern "C" {
     pub fn R_NewEnv(arg1: SEXP, arg2: ::std::os::raw::c_int, arg3: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn R_RestoreHashCount(rho: SEXP);
 }
 extern "C" {
     pub fn R_IsPackageEnv(rho: SEXP) -> Rboolean;
@@ -6332,9 +5808,6 @@ extern "C" {
     pub fn R_Reprotect(arg1: SEXP, arg2: PROTECT_INDEX);
 }
 extern "C" {
-    pub fn R_FixupRHS(x: SEXP, y: SEXP) -> SEXP;
-}
-extern "C" {
     pub fn CAR(e: SEXP) -> SEXP;
 }
 extern "C" {
@@ -6380,28 +5853,22 @@ extern "C" {
     pub fn STRING_ELT(x: SEXP, i: R_xlen_t) -> SEXP;
 }
 extern "C" {
-    pub fn SCALAR_DVAL(x: SEXP) -> f64;
+    pub fn SET_LOGICAL_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
 }
 extern "C" {
-    pub fn SCALAR_LVAL(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn SET_INTEGER_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
 }
 extern "C" {
-    pub fn SCALAR_IVAL(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn SET_REAL_ELT(x: SEXP, i: R_xlen_t, v: f64);
 }
 extern "C" {
-    pub fn SET_SCALAR_DVAL(x: SEXP, v: f64);
+    pub fn SET_COMPLEX_ELT(x: SEXP, i: R_xlen_t, v: Rcomplex);
 }
 extern "C" {
-    pub fn SET_SCALAR_LVAL(x: SEXP, v: ::std::os::raw::c_int);
+    pub fn SET_RAW_ELT(x: SEXP, i: R_xlen_t, v: Rbyte);
 }
 extern "C" {
-    pub fn SET_SCALAR_IVAL(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_SCALAR_CVAL(x: SEXP, v: Rcomplex);
-}
-extern "C" {
-    pub fn SET_SCALAR_BVAL(x: SEXP, v: Rbyte);
+    pub fn ALTREP_CLASS(x: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn R_altrep_data1(x: SEXP) -> SEXP;
@@ -6414,9 +5881,6 @@ extern "C" {
 }
 extern "C" {
     pub fn R_set_altrep_data2(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn ALTREP_CLASS(x: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn LOGICAL0(x: SEXP) -> *mut ::std::os::raw::c_int;
@@ -6434,31 +5898,81 @@ extern "C" {
     pub fn RAW0(x: SEXP) -> *mut Rbyte;
 }
 extern "C" {
-    pub fn SET_LOGICAL_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
+    pub fn ALTREP(x: SEXP) -> ::std::os::raw::c_int;
+}
+pub const SORTED_DECR_NA_1ST: _bindgen_ty_1 = -2;
+pub const SORTED_DECR: _bindgen_ty_1 = -1;
+pub const UNKNOWN_SORTEDNESS: _bindgen_ty_1 = -2147483648;
+pub const SORTED_INCR: _bindgen_ty_1 = 1;
+pub const SORTED_INCR_NA_1ST: _bindgen_ty_1 = 2;
+pub const KNOWN_UNSORTED: _bindgen_ty_1 = 0;
+pub type _bindgen_ty_1 = i32;
+extern "C" {
+    pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
 }
 extern "C" {
-    pub fn SET_INTEGER_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
+    pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
 }
 extern "C" {
-    pub fn SET_REAL_ELT(x: SEXP, i: R_xlen_t, v: f64);
+    pub fn SET_S4_OBJECT(x: SEXP);
 }
 extern "C" {
-    pub fn SET_COMPLEX_ELT(x: SEXP, i: R_xlen_t, v: Rcomplex);
+    pub fn UNSET_S4_OBJECT(x: SEXP);
 }
 extern "C" {
-    pub fn SET_RAW_ELT(x: SEXP, i: R_xlen_t, v: Rbyte);
+    pub fn R_curErrorBuf() -> *const ::std::os::raw::c_char;
 }
 extern "C" {
-    pub fn R_BadValueInRCode(
-        value: SEXP,
-        call: SEXP,
-        rho: SEXP,
-        rawmsg: *const ::std::os::raw::c_char,
-        errmsg: *const ::std::os::raw::c_char,
-        warnmsg: *const ::std::os::raw::c_char,
-        varname: *const ::std::os::raw::c_char,
-        warnByDefault: Rboolean,
-    );
+    pub fn IS_SCALAR(x: SEXP, type_: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn Rf_psmatch(
+        arg1: *const ::std::os::raw::c_char,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: Rboolean,
+    ) -> Rboolean;
+}
+extern "C" {
+    pub fn SETLENGTH(x: SEXP, v: R_xlen_t);
+}
+extern "C" {
+    pub fn SET_TRUELENGTH(x: SEXP, v: R_xlen_t);
+}
+extern "C" {
+    pub fn SETLEVELS(x: SEXP, v: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn SET_ENVFLAGS(x: SEXP, v: ::std::os::raw::c_int);
+}
+extern "C" {
+    pub fn SET_FRAME(x: SEXP, v: SEXP);
+}
+extern "C" {
+    pub fn SET_ENCLOS(x: SEXP, v: SEXP);
+}
+extern "C" {
+    pub fn SET_HASHTAB(x: SEXP, v: SEXP);
+}
+extern "C" {
+    pub fn SET_PRENV(x: SEXP, v: SEXP);
+}
+extern "C" {
+    pub fn SET_PRVALUE(x: SEXP, v: SEXP);
+}
+extern "C" {
+    pub fn SET_PRCODE(x: SEXP, v: SEXP);
+}
+extern "C" {
+    pub fn STDVEC_DATAPTR(x: SEXP) -> *mut ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn IS_GROWABLE(x: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn SET_GROWABLE_BIT(x: SEXP);
+}
+extern "C" {
+    pub fn SET_NAMED(x: SEXP, v: ::std::os::raw::c_int);
 }
 extern "C" {
     pub static mut R_CStackLimit: usize;
