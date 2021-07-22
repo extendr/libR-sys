@@ -9,7 +9,7 @@ Low-level R library bindings
 
 ## Installation
 
-The recommended way to build this library is to use precomputed bindings, which are available for `Linux`, `MacOS`, and `Windows` (`32`- and `64`-bit).
+The recommended way to build this library is to use precomputed bindings, which are available for `Linux`, `macOS`, and `Windows` (`32`- and `64`-bit).
 
 Alternatively, the library can be built from source, in which case it invokes `bindgen` crate, which has extra platform-specific dependencies (including `msys2` for `Windows`).
 
@@ -21,7 +21,7 @@ Two components are required to build the library:
 2. [rust](https://www.rust-lang.org/learn/get-started): It is recommended to install `rust` using `rustup`; search path should include `rust` binaries.
 
 Once `R` and `rust` are configured, the library can be easily built:
-- **MacOS/Linux**
+- **macOS/Linux**
   ```Shell
   cargo build
   ```
@@ -68,7 +68,7 @@ Once `R` and `rust` are configured, the library can be easily built:
 To test the build, run `cargo test`.
 
 
-- **MacOs/Linux**
+- **macOS/Linux**
   ```bash
   cargo test
   ```
@@ -124,7 +124,7 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
   cargo test  --features use-bindgen 
   ```
 
-- **MacOs**
+- **macOS**
 
   Install `llvm-config` via [homebrew](https://brew.sh/) with:
 

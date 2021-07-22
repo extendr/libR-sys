@@ -106,14 +106,14 @@ jobs:
           }
           
 
-      # MacOS configurations, mainly llvm and path to libclang
-      # Because of this R installation issue on MacOS-11.0 
+      # macOS configurations, mainly llvm and path to libclang
+      # Because of this R installation issue on macOS-11.0 
       # https://github.com/r-lib/actions/issues/200
       # Symlinks to R/Rscript are not properly set up, so we do it by hand, using this trick
       # https://github.com/r-lib/ps/commit/a24f2c4d1bdba63be14e7729b9ab81d0ed9f719e
       # Environment variables are required fir Mac-OS-11.0, see
       # https://github.com/extendr/libR-sys/issues/35
-      - name: Configure MacOs
+      - name: Configure macOS
         if: runner.os == 'macOS'
         run: | 
           brew install llvm
