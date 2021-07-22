@@ -2,7 +2,7 @@
 
 ## libR-sys 0.2.2
 
-- Bump the R version of default precomuted bindings to 4.1.0.
+- Update the default precomuted bindings to R 4.1.0.
 - Provide bindings for `R_ext/Altrep.h` and `R_ext/GraphicsEngine.h`.
 
 ## libR-sys 0.2.1
