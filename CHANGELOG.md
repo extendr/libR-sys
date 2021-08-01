@@ -1,5 +1,10 @@
 # Changelog
 
+## libR-sys 0.2.2
+
+- Update the default precomuted bindings to R 4.1.0.
+- Provide bindings for `R_ext/Altrep.h` and `R_ext/GraphicsEngine.h`.
+
 ## libR-sys 0.2.1
 
 - Output R version info to downstream crates using variables `R_VERSION_MAJOR`,
