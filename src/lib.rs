@@ -30,7 +30,7 @@
 //!
 //! # Conditional compilation depending on R installation
 //!
-//! libR-sys crate provides these environmental variables that you can use in `build.rs`:
+//! The libR-sys crate provides these environmental variables that you can use in `build.rs`:
 //!
 //! - `DEP_R_R_VERSION_MAJOR`: The major part of the R version (e.g. `4` in version `4.1.0`)
 //! - `DEP_R_R_VERSION_MINOR`: The minor part of the R version (e.g. `1` in version `4.1.0`)
