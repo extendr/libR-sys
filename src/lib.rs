@@ -41,7 +41,7 @@
 //!
 //! ## Example `build.rs`
 //!
-//! ``` rust
+//! ```ignore
 //! use std::env;
 //!
 //! fn main() {
