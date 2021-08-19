@@ -1,18 +1,14 @@
 use std::{
     env,
     ffi::OsString,
-    fs,
-    io,
-    io::{ Error, ErrorKind },
-    path::{ Path, PathBuf },
-    process::{ exit, Command },
+    fs, io,
+    io::{Error, ErrorKind},
+    path::{Path, PathBuf},
+    process::{exit, Command},
 };
 
 #[cfg(target_family = "unix")]
-use std::{
-    os::unix::ffi::OsStrExt,
-    ffi::OsStr,
-};
+use std::{ffi::OsStr, os::unix::ffi::OsStrExt};
 
 #[cfg(target_family = "windows")]
 use std::os::windows::ffi::OsStringExt;
@@ -34,7 +30,6 @@ struct RVersionInfo {
     version_string: String,
 }
 
-
 // frustratingly, something like the following does not exist in an
 // OS-independent way in Rust
 #[cfg(target_family = "unix")]
@@ -52,9 +47,23 @@ fn wide_from_console_string(bytes: &[u8]) -> Vec<u16> {
     let mut len;
     unsafe {
         let cp = winapi::um::consoleapi::GetConsoleCP();
-        len = winapi::um::stringapiset::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, std::ptr::null_mut(), 0);
+        len = winapi::um::stringapiset::MultiByteToWideChar(
+            cp,
+            0,
+            bytes.as_ptr() as *const i8,
+            bytes.len() as i32,
+            std::ptr::null_mut(),
+            0,
+        );
         wide = Vec::with_capacity(len as usize);
-        len = winapi::um::stringapiset::MultiByteToWideChar(cp, 0, bytes.as_ptr() as *const i8, bytes.len() as i32, wide.as_mut_ptr(), len);
+        len = winapi::um::stringapiset::MultiByteToWideChar(
+            cp,
+            0,
+            bytes.as_ptr() as *const i8,
+            bytes.len() as i32,
+            wide.as_mut_ptr(),
+            len,
+        );
         wide.set_len(len as usize);
     }
     wide
@@ -79,11 +88,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
         // https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Writing-portable-packages
         _ => {
             let rout = Command::new("R")
-                .args(&[
-                    "-s",
-                    "-e",
-                    r#"cat(normalizePath(R.home()))"#
-                ])
+                .args(&["-s", "-e", r#"cat(normalizePath(R.home()))"#])
                 .output()?;
 
             let rout = byte_array_to_os_string(&rout.stdout);
@@ -99,13 +104,9 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
     let library = if cfg!(target_os = "windows") {
         if pkg_target_arch == "x86_64" {
-            Path::new(&r_home)
-                .join("bin")
-                .join("x64")
+            Path::new(&r_home).join("bin").join("x64")
         } else if pkg_target_arch == "x86" {
-            Path::new(&r_home)
-                .join("bin")
-                .join("i386")
+            Path::new(&r_home).join("bin").join("i386")
         } else {
             panic!("Unknown architecture")
         }
@@ -122,28 +123,22 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
         // we're using the R home we found earlier, to make sure we're consistent.
         _ => {
             let r_binary = if cfg!(target_os = "windows") {
-                Path::new(&library)
-                    .join("R.exe")
+                Path::new(&library).join("R.exe")
             } else {
-                Path::new(&r_home)
-                    .join("bin")
-                    .join("R")
+                Path::new(&r_home).join("bin").join("R")
             };
 
             let out = Command::new(&r_binary)
-                .args(&[
-                    "-s",
-                    "-e",
-                    r#"cat(normalizePath(R.home('include')))"#
-                ])
+                .args(&["-s", "-e", r#"cat(normalizePath(R.home('include')))"#])
                 .output()?;
 
             // if there are any errors we print them out, helps with debugging
             if !out.stderr.is_empty() {
-                println!("> {}",
+                println!(
+                    "> {}",
                     byte_array_to_os_string(&out.stderr)
-                    .as_os_str()
-                    .to_string_lossy()
+                        .as_os_str()
+                        .to_string_lossy()
                 );
             }
 
@@ -163,15 +158,11 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     })
 }
 
-
 fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo> {
     let r_binary = if cfg!(target_os = "windows") {
-        Path::new(&r_paths.library)
-            .join("R.exe")
+        Path::new(&r_paths.library).join("R.exe")
     } else {
-        Path::new(&r_paths.r_home)
-            .join("bin")
-            .join("R")
+        Path::new(&r_paths.r_home).join("bin").join("R")
     };
 
     let out = Command::new(&r_binary)
@@ -204,12 +195,19 @@ fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo
     };
 
     let devel = match lines.next() {
-        Some(line) => if line == "TRUE" {
-            "-devel".to_string()
-        } else {
-            "".to_string()
-        },
-        _ => return Err(Error::new(ErrorKind::Other, "Cannot find R development status")),
+        Some(line) => {
+            if line == "TRUE" {
+                "-devel".to_string()
+            } else {
+                "".to_string()
+            }
+        }
+        _ => {
+            return Err(Error::new(
+                ErrorKind::Other,
+                "Cannot find R development status",
+            ))
+        }
     };
 
     let version_string = match lines.next() {
@@ -260,18 +258,20 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
 
-    println!("Generating bindings for target: {}, os: {}, architecture: {}", target, target_os, target_arch);
+    println!(
+        "Generating bindings for target: {}, os: {}, architecture: {}",
+        target, target_os, target_arch
+    );
     // Point to the correct headers
     bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", r_paths.include.display()),
-        format!("--target={}", target)
+        format!("--target={}", target),
     ]);
 
     // allow injection of an alternative include path to libclang
     if let Some(alt_include) = env::var_os("LIBRSYS_LIBCLANG_INCLUDE_PATH") {
-        bindgen_builder = bindgen_builder.clang_arg(
-            format!("-I{}", PathBuf::from(alt_include).display()),
-        );
+        bindgen_builder =
+            bindgen_builder.clang_arg(format!("-I{}", PathBuf::from(alt_include).display()));
     }
 
     // Blacklist some types on i686
@@ -279,8 +279,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // https://github.com/rust-lang/rust/issues/54341
     // https://github.com/extendr/libR-sys/issues/39
     if target_os == "windows" && target_arch == "x86" {
-        bindgen_builder = 
-            bindgen_builder
+        bindgen_builder = bindgen_builder
             .blacklist_item("max_align_t")
             .blacklist_item("__mingw_ldbl_type_t");
     }
@@ -298,22 +297,21 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings to default output path!");
 
-
     // Also write the bindings to a folder specified by LIBRSYS_BINDINGS_OUTPUT_PATH, if defined
     if let Some(alt_target) = env::var_os("LIBRSYS_BINDINGS_OUTPUT_PATH") {
         let out_path = PathBuf::from(alt_target);
         // if folder doesn't exist, try to create it
         if !out_path.exists() {
-            fs::create_dir(&out_path)
-                .expect(&format!("Couldn't create output directory for bindings: {}", out_path.display()));
+            fs::create_dir(&out_path).expect(&format!(
+                "Couldn't create output directory for bindings: {}",
+                out_path.display()
+            ));
         }
 
-        let out_file = out_path.join(
-                format!(
-                    "bindings-{}-{}-R{}.{}{}.rs",
-                    target_os, target_arch, version_info.major, version_info.minor, version_info.devel
-                )
-            );
+        let out_file = out_path.join(format!(
+            "bindings-{}-{}-R{}.{}{}.rs",
+            target_os, target_arch, version_info.major, version_info.minor, version_info.devel
+        ));
 
         bindings
             .write_to_file(&out_file)
@@ -321,37 +319,28 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     }
 }
 
-
 #[allow(dead_code)]
 /// Retrieve bindings from cache, if available. Errors out otherwise.
 fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-    let bindings_path = PathBuf::from(
-        env::var_os("LIBRSYS_BINDINGS_PATH")
-        .unwrap_or(OsString::from("bindings"))
-    );
-    
+    let bindings_path =
+        PathBuf::from(env::var_os("LIBRSYS_BINDINGS_PATH").unwrap_or(OsString::from("bindings")));
+
     // we try a few different file names, from more specific to less specific
-    let bindings_file_full = PathBuf::from(
-        format!(
-            "bindings-{}-{}-R{}.{}{}.rs",
-            target_os, target_arch, version_info.major, version_info.minor, version_info.devel
-        )
-    );
-    let bindings_file_novers = PathBuf::from(
-        format!("bindings-{}-{}.rs", target_os, target_arch)
-    );
+    let bindings_file_full = PathBuf::from(format!(
+        "bindings-{}-{}-R{}.{}{}.rs",
+        target_os, target_arch, version_info.major, version_info.minor, version_info.devel
+    ));
+    let bindings_file_novers = PathBuf::from(format!("bindings-{}-{}.rs", target_os, target_arch));
 
     let mut from = bindings_path.join(bindings_file_full);
     if !from.exists() {
         from = bindings_path.join(bindings_file_novers);
         if !from.exists() {
             panic!(
-                format!(
                     "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with --features use-bindgen.",
                     version_info.major, version_info.minor, version_info.patch, version_info.devel, target_os, bindings_path.display()
-                )
             )
         } else {
             println!(
@@ -363,9 +352,9 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
 
     fs::copy(
         &from,
-        PathBuf::from(env::var_os("OUT_DIR").unwrap())
-            .join("bindings.rs")
-    ).expect("No precomputed bindings available!");
+        PathBuf::from(env::var_os("OUT_DIR").unwrap()).join("bindings.rs"),
+    )
+    .expect("No precomputed bindings available!");
     println!("cargo:rerun-if-changed={}", from.display());
 }
 
@@ -382,7 +371,7 @@ fn main() {
 
     println!("cargo:rustc-env=R_HOME={}", r_paths.r_home.display());
     println!("cargo:r_home={}", r_paths.r_home.display()); // Becomes DEP_R_R_HOME for clients
-    // make sure cargo links properly against library
+                                                           // make sure cargo links properly against library
     println!("cargo:rustc-link-search={}", r_paths.library.display());
     println!("cargo:rustc-link-lib=dylib=R");
 
@@ -393,7 +382,7 @@ fn main() {
     let version_info = get_r_version_strings(&r_paths).expect("Could not obtain R version");
 
     #[cfg(feature = "use-bindgen")]
-        generate_bindings(&r_paths, &version_info);
+    generate_bindings(&r_paths, &version_info);
     #[cfg(not(feature = "use-bindgen"))]
-        retrieve_prebuild_bindings(&version_info);
+    retrieve_prebuild_bindings(&version_info);
 }
