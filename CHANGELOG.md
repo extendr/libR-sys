@@ -1,5 +1,9 @@
 # Changelog
 
+## libR-sys (unreleased)
+
+- Drop support for 32-bit Windows with R >= 4.2.
+
 ## libR-sys 0.2.2
 
 - Update the default precomuted bindings to R 4.1.0.
