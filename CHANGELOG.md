@@ -1,5 +1,14 @@
 # Changelog
 
+## libR-sys (unreleased)
+
+- Drop support for 32-bit Windows with R >= 4.2. As
+  [the release note of R 4.1.0](https://stat.ethz.ch/pipermail/r-announce/2021/000670.html)
+  announced "the 4.1.x series will be the last to support 32-bit Windows,"
+  there will be no 32-bit version of R as of R 4.2.0.  
+  To be clear, libR-sys (and extendr) crate will keep supporting 32-bit on R <
+  4.2 for a year or so.
+
 ## libR-sys 0.2.2
 
 - Update the default precomuted bindings to R 4.1.0.
