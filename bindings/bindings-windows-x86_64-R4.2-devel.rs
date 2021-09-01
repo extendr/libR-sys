@@ -301,9 +301,9 @@ pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
 pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
 pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
-pub const R_MONTH: &'static [u8; 3usize] = b"07\0";
-pub const R_DAY: &'static [u8; 3usize] = b"21\0";
-pub const R_SVN_REVISION: u32 = 80651;
+pub const R_MONTH: &'static [u8; 3usize] = b"08\0";
+pub const R_DAY: &'static [u8; 3usize] = b"31\0";
+pub const R_SVN_REVISION: u32 = 80839;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_version: u32 = 14;
@@ -5996,6 +5996,9 @@ extern "C" {
 }
 extern "C" {
     pub fn SET_NAMED(x: SEXP, v: ::std::os::raw::c_int);
+}
+extern "C" {
+    pub fn R_tryWrap(arg1: SEXP) -> SEXP;
 }
 extern "C" {
     pub static mut R_CStackLimit: usize;

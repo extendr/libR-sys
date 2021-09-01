@@ -282,15 +282,15 @@ pub const SIG_ATOMIC_MAX: u32 = 2147483647;
 pub const SIZE_MAX: i32 = -1;
 pub const WINT_MIN: u32 = 0;
 pub const WINT_MAX: u32 = 4294967295;
-pub const R_VERSION: u32 = 262400;
-pub const R_NICK: &'static [u8; 16usize] = b"Camp Pontanezen\0";
+pub const R_VERSION: u32 = 262401;
+pub const R_NICK: &'static [u8; 12usize] = b"Kick Things\0";
 pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
-pub const R_MINOR: &'static [u8; 4usize] = b"1.0\0";
+pub const R_MINOR: &'static [u8; 4usize] = b"1.1\0";
 pub const R_STATUS: &'static [u8; 1usize] = b"\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
-pub const R_MONTH: &'static [u8; 3usize] = b"05\0";
-pub const R_DAY: &'static [u8; 3usize] = b"18\0";
-pub const R_SVN_REVISION: u32 = 80317;
+pub const R_MONTH: &'static [u8; 3usize] = b"08\0";
+pub const R_DAY: &'static [u8; 3usize] = b"10\0";
+pub const R_SVN_REVISION: u32 = 80725;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_version: u32 = 14;
@@ -5470,6 +5470,12 @@ extern "C" {
 }
 extern "C" {
     pub fn SET_REAL_ELT(x: SEXP, i: R_xlen_t, v: f64);
+}
+extern "C" {
+    pub fn SET_COMPLEX_ELT(x: SEXP, i: R_xlen_t, v: Rcomplex);
+}
+extern "C" {
+    pub fn SET_RAW_ELT(x: SEXP, i: R_xlen_t, v: Rbyte);
 }
 extern "C" {
     pub fn R_BadValueInRCode(
