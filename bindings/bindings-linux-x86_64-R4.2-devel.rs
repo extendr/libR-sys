@@ -288,8 +288,8 @@ pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
 pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
 pub const R_MONTH: &'static [u8; 3usize] = b"10\0";
-pub const R_DAY: &'static [u8; 3usize] = b"08\0";
-pub const R_SVN_REVISION: u32 = 81022;
+pub const R_DAY: &'static [u8; 3usize] = b"12\0";
+pub const R_SVN_REVISION: u32 = 81044;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_version: u32 = 14;
@@ -3832,6 +3832,9 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_findVarInFrame3(arg1: SEXP, arg2: SEXP, arg3: Rboolean) -> SEXP;
+}
+extern "C" {
+    pub fn R_existsVarInFrame(arg1: SEXP, arg2: SEXP) -> Rboolean;
 }
 extern "C" {
     pub fn R_removeVarFromFrame(arg1: SEXP, arg2: SEXP);
