@@ -288,11 +288,12 @@ pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
 pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
 pub const R_MONTH: &'static [u8; 3usize] = b"10\0";
-pub const R_DAY: &'static [u8; 3usize] = b"24\0";
-pub const R_SVN_REVISION: u32 = 81096;
+pub const R_DAY: &'static [u8; 3usize] = b"27\0";
+pub const R_SVN_REVISION: u32 = 81107;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
-pub const R_GE_version: u32 = 14;
+pub const R_GE_group: u32 = 15;
+pub const R_GE_version: u32 = 15;
 pub const MAX_GRAPHICS_SYSTEMS: u32 = 24;
 pub const R_USE_PROTOTYPES: u32 = 1;
 pub const leftButton: u32 = 1;
@@ -313,6 +314,33 @@ pub const R_GE_patternExtendPad: u32 = 1;
 pub const R_GE_patternExtendRepeat: u32 = 2;
 pub const R_GE_patternExtendReflect: u32 = 3;
 pub const R_GE_patternExtendNone: u32 = 4;
+pub const R_GE_compositeClear: u32 = 1;
+pub const R_GE_compositeSource: u32 = 2;
+pub const R_GE_compositeOver: u32 = 3;
+pub const R_GE_compositeIn: u32 = 4;
+pub const R_GE_compositeOut: u32 = 5;
+pub const R_GE_compositeAtop: u32 = 6;
+pub const R_GE_compositeDest: u32 = 7;
+pub const R_GE_compositeDestOver: u32 = 8;
+pub const R_GE_compositeDestIn: u32 = 9;
+pub const R_GE_compositeDestOut: u32 = 10;
+pub const R_GE_compositeDestAtop: u32 = 11;
+pub const R_GE_compositeXor: u32 = 12;
+pub const R_GE_compositeAdd: u32 = 13;
+pub const R_GE_compositeSaturate: u32 = 14;
+pub const R_GE_compositeMultiply: u32 = 15;
+pub const R_GE_compositeScreen: u32 = 16;
+pub const R_GE_compositeOverlay: u32 = 17;
+pub const R_GE_compositeDarken: u32 = 18;
+pub const R_GE_compositeLighten: u32 = 19;
+pub const R_GE_compositeColorDodge: u32 = 20;
+pub const R_GE_compositeColorBurn: u32 = 21;
+pub const R_GE_compositeHardLight: u32 = 22;
+pub const R_GE_compositeSoftLight: u32 = 23;
+pub const R_GE_compositeDifference: u32 = 24;
+pub const R_GE_compositeExclusion: u32 = 25;
+pub const R_GE_nonZeroWindingRule: u32 = 1;
+pub const R_GE_evenOddRule: u32 = 2;
 pub type size_t = ::std::os::raw::c_ulong;
 pub type wchar_t = ::std::os::raw::c_int;
 #[repr(C)]
@@ -6268,13 +6296,32 @@ pub struct _DevDesc {
     pub releaseMask: ::std::option::Option<unsafe extern "C" fn(ref_: SEXP, dd: pDevDesc)>,
     pub deviceVersion: ::std::os::raw::c_int,
     pub deviceClip: Rboolean,
+    pub defineGroup: ::std::option::Option<
+        unsafe extern "C" fn(
+            source: SEXP,
+            op: ::std::os::raw::c_int,
+            destination: SEXP,
+            dd: pDevDesc,
+        ) -> SEXP,
+    >,
+    pub useGroup:
+        ::std::option::Option<unsafe extern "C" fn(ref_: SEXP, trans: SEXP, dd: pDevDesc)>,
+    pub releaseGroup: ::std::option::Option<unsafe extern "C" fn(ref_: SEXP, dd: pDevDesc)>,
+    pub stroke:
+        ::std::option::Option<unsafe extern "C" fn(path: SEXP, gc: pGEcontext, dd: pDevDesc)>,
+    pub fill: ::std::option::Option<
+        unsafe extern "C" fn(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pDevDesc),
+    >,
+    pub fillStroke: ::std::option::Option<
+        unsafe extern "C" fn(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pDevDesc),
+    >,
     pub reserved: [::std::os::raw::c_char; 64usize],
 }
 #[test]
 fn bindgen_test_layout__DevDesc() {
     assert_eq!(
         ::std::mem::size_of::<_DevDesc>(),
-        592usize,
+        640usize,
         concat!("Size of: ", stringify!(_DevDesc))
     );
     assert_eq!(
@@ -7025,8 +7072,68 @@ fn bindgen_test_layout__DevDesc() {
         )
     );
     assert_eq!(
-        unsafe { &(*(::std::ptr::null::<_DevDesc>())).reserved as *const _ as usize },
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).defineGroup as *const _ as usize },
         528usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(defineGroup)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).useGroup as *const _ as usize },
+        536usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(useGroup)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).releaseGroup as *const _ as usize },
+        544usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(releaseGroup)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).stroke as *const _ as usize },
+        552usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(stroke)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).fill as *const _ as usize },
+        560usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(fill)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).fillStroke as *const _ as usize },
+        568usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(fillStroke)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).reserved as *const _ as usize },
+        576usize,
         concat!(
             "Offset of field: ",
             stringify!(_DevDesc),
@@ -7204,6 +7311,7 @@ pub struct _GEDevDesc {
     pub recordGraphics: Rboolean,
     pub gesd: [*mut GESystemDesc; 24usize],
     pub ask: Rboolean,
+    pub appending: Rboolean,
 }
 #[test]
 fn bindgen_test_layout__GEDevDesc() {
@@ -7305,6 +7413,16 @@ fn bindgen_test_layout__GEDevDesc() {
             stringify!(_GEDevDesc),
             "::",
             stringify!(ask)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_GEDevDesc>())).appending as *const _ as usize },
+        244usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_GEDevDesc),
+            "::",
+            stringify!(appending)
         )
     );
 }
@@ -7819,6 +7937,18 @@ extern "C" {
 }
 extern "C" {
     pub fn R_GE_tilingPatternExtend(pattern: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_GE_clipPathFillRule(path: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn GEStroke(path: SEXP, gc: pGEcontext, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEFill(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn GEFillStroke(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pGEDevDesc);
 }
 pub type __builtin_va_list = [__va_list_tag; 1usize];
 #[repr(C)]
