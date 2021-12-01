@@ -254,6 +254,13 @@ pub const NAMEDMAX: u32 = 7;
 pub const R_XDR_DOUBLE_SIZE: u32 = 8;
 pub const R_XDR_INTEGER_SIZE: u32 = 4;
 pub const R_CODESET_MAX: u32 = 63;
+pub const IDENT_NUM_AS_BITS: u32 = 1;
+pub const IDENT_NA_AS_BITS: u32 = 2;
+pub const IDENT_ATTR_BY_ORDER: u32 = 4;
+pub const IDENT_USE_BYTECODE: u32 = 8;
+pub const IDENT_USE_CLOENV: u32 = 16;
+pub const IDENT_USE_SRCREF: u32 = 32;
+pub const IDENT_EXTPTR_AS_REF: u32 = 64;
 pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
 pub const R_VERSION: u32 = 262656;
@@ -263,8 +270,8 @@ pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
 pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
 pub const R_MONTH: &'static [u8; 3usize] = b"11\0";
-pub const R_DAY: &'static [u8; 3usize] = b"26\0";
-pub const R_SVN_REVISION: u32 = 81252;
+pub const R_DAY: &'static [u8; 3usize] = b"30\0";
+pub const R_SVN_REVISION: u32 = 81267;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -316,6 +323,8 @@ pub const R_GE_compositeDifference: u32 = 24;
 pub const R_GE_compositeExclusion: u32 = 25;
 pub const R_GE_nonZeroWindingRule: u32 = 1;
 pub const R_GE_evenOddRule: u32 = 2;
+pub const R_GE_alphaMask: u32 = 1;
+pub const R_GE_luminanceMask: u32 = 2;
 pub type size_t = ::std::os::raw::c_ulong;
 pub type wchar_t = ::std::os::raw::c_int;
 pub type max_align_t = u128;
@@ -7652,6 +7661,9 @@ extern "C" {
 }
 extern "C" {
     pub fn GEFillStroke(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn R_GE_maskType(mask: SEXP) -> ::std::os::raw::c_int;
 }
 pub type __builtin_va_list = [__va_list_tag; 1usize];
 #[repr(C)]
