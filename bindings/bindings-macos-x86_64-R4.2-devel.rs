@@ -269,9 +269,9 @@ pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
 pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
 pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
-pub const R_MONTH: &'static [u8; 3usize] = b"11\0";
-pub const R_DAY: &'static [u8; 3usize] = b"30\0";
-pub const R_SVN_REVISION: u32 = 81267;
+pub const R_MONTH: &'static [u8; 3usize] = b"12\0";
+pub const R_DAY: &'static [u8; 3usize] = b"03\0";
+pub const R_SVN_REVISION: u32 = 81290;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -325,6 +325,18 @@ pub const R_GE_nonZeroWindingRule: u32 = 1;
 pub const R_GE_evenOddRule: u32 = 2;
 pub const R_GE_alphaMask: u32 = 1;
 pub const R_GE_luminanceMask: u32 = 2;
+pub const R_GE_capability_semiTransparency: u32 = 0;
+pub const R_GE_capability_transparentBackground: u32 = 1;
+pub const R_GE_capability_rasterImage: u32 = 2;
+pub const R_GE_capability_capture: u32 = 3;
+pub const R_GE_capability_locator: u32 = 4;
+pub const R_GE_capability_events: u32 = 5;
+pub const R_GE_capability_patterns: u32 = 6;
+pub const R_GE_capability_clippingPaths: u32 = 7;
+pub const R_GE_capability_masks: u32 = 8;
+pub const R_GE_capability_compositing: u32 = 9;
+pub const R_GE_capability_transformations: u32 = 10;
+pub const R_GE_capability_paths: u32 = 11;
 pub type size_t = ::std::os::raw::c_ulong;
 pub type wchar_t = ::std::os::raw::c_int;
 pub type max_align_t = u128;
@@ -6027,13 +6039,14 @@ pub struct _DevDesc {
     pub fillStroke: ::std::option::Option<
         unsafe extern "C" fn(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pDevDesc),
     >,
+    pub capabilities: ::std::option::Option<unsafe extern "C" fn(cap: SEXP) -> SEXP>,
     pub reserved: [::std::os::raw::c_char; 64usize],
 }
 #[test]
 fn bindgen_test_layout__DevDesc() {
     assert_eq!(
         ::std::mem::size_of::<_DevDesc>(),
-        640usize,
+        648usize,
         concat!("Size of: ", stringify!(_DevDesc))
     );
     assert_eq!(
@@ -6844,8 +6857,18 @@ fn bindgen_test_layout__DevDesc() {
         )
     );
     assert_eq!(
-        unsafe { &(*(::std::ptr::null::<_DevDesc>())).reserved as *const _ as usize },
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).capabilities as *const _ as usize },
         576usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(capabilities)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).reserved as *const _ as usize },
+        584usize,
         concat!(
             "Offset of field: ",
             stringify!(_DevDesc),
