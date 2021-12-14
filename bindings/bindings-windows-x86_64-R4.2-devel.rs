@@ -311,8 +311,8 @@ pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
 pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
 pub const R_MONTH: &'static [u8; 3usize] = b"12\0";
-pub const R_DAY: &'static [u8; 3usize] = b"06\0";
-pub const R_SVN_REVISION: u32 = 81300;
+pub const R_DAY: &'static [u8; 3usize] = b"13\0";
+pub const R_SVN_REVISION: u32 = 81357;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -6022,7 +6022,7 @@ extern "C" {
     pub fn R_isHashtable(h: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn R_mkhashtab(type_: ::std::os::raw::c_int) -> R_hashtab_t;
+    pub fn R_mkhashtab(type_: ::std::os::raw::c_int, K: ::std::os::raw::c_int) -> R_hashtab_t;
 }
 extern "C" {
     pub fn R_gethash(h: R_hashtab_t, key: SEXP, nomatch: SEXP) -> SEXP;
