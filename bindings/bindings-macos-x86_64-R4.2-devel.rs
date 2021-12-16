@@ -343,8 +343,8 @@ pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
 pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
 pub const R_MONTH: &'static [u8; 3usize] = b"12\0";
-pub const R_DAY: &'static [u8; 3usize] = b"13\0";
-pub const R_SVN_REVISION: u32 = 81356;
+pub const R_DAY: &'static [u8; 3usize] = b"16\0";
+pub const R_SVN_REVISION: u32 = 81384;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -4713,65 +4713,66 @@ pub const KNOWN_UNSORTED: _bindgen_ty_1 = 0;
 pub type _bindgen_ty_1 = i32;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct R_hashtab_t {
+pub struct R_hashtab_type {
     pub cell: SEXP,
 }
 #[test]
-fn bindgen_test_layout_R_hashtab_t() {
+fn bindgen_test_layout_R_hashtab_type() {
     assert_eq!(
-        ::std::mem::size_of::<R_hashtab_t>(),
+        ::std::mem::size_of::<R_hashtab_type>(),
         8usize,
-        concat!("Size of: ", stringify!(R_hashtab_t))
+        concat!("Size of: ", stringify!(R_hashtab_type))
     );
     assert_eq!(
-        ::std::mem::align_of::<R_hashtab_t>(),
+        ::std::mem::align_of::<R_hashtab_type>(),
         8usize,
-        concat!("Alignment of ", stringify!(R_hashtab_t))
+        concat!("Alignment of ", stringify!(R_hashtab_type))
     );
     assert_eq!(
-        unsafe { &(*(::std::ptr::null::<R_hashtab_t>())).cell as *const _ as usize },
+        unsafe { &(*(::std::ptr::null::<R_hashtab_type>())).cell as *const _ as usize },
         0usize,
         concat!(
             "Offset of field: ",
-            stringify!(R_hashtab_t),
+            stringify!(R_hashtab_type),
             "::",
             stringify!(cell)
         )
     );
 }
 extern "C" {
-    pub fn R_asHashtable(h: SEXP) -> R_hashtab_t;
+    pub fn R_asHashtable(h: SEXP) -> R_hashtab_type;
 }
 extern "C" {
-    pub fn R_HashtabSEXP(h: R_hashtab_t) -> SEXP;
+    pub fn R_HashtabSEXP(h: R_hashtab_type) -> SEXP;
 }
 extern "C" {
     pub fn R_isHashtable(h: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn R_mkhashtab(type_: ::std::os::raw::c_int, K: ::std::os::raw::c_int) -> R_hashtab_t;
+    pub fn R_mkhashtab(type_: ::std::os::raw::c_int, arg1: ::std::os::raw::c_int)
+        -> R_hashtab_type;
 }
 extern "C" {
-    pub fn R_gethash(h: R_hashtab_t, key: SEXP, nomatch: SEXP) -> SEXP;
+    pub fn R_gethash(h: R_hashtab_type, key: SEXP, nomatch: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn R_sethash(h: R_hashtab_t, key: SEXP, value: SEXP) -> SEXP;
+    pub fn R_sethash(h: R_hashtab_type, key: SEXP, value: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn R_remhash(h: R_hashtab_t, key: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_remhash(h: R_hashtab_type, key: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn R_numhash(h: R_hashtab_t) -> ::std::os::raw::c_int;
+    pub fn R_numhash(h: R_hashtab_type) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn R_typhash(h: R_hashtab_t) -> ::std::os::raw::c_int;
+    pub fn R_typhash(h: R_hashtab_type) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn R_maphash(h: R_hashtab_t, FUN: SEXP) -> SEXP;
+    pub fn R_maphash(h: R_hashtab_type, FUN: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn R_maphashC(
-        h: R_hashtab_t,
+        h: R_hashtab_type,
         FUN: ::std::option::Option<
             unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_void),
         >,
@@ -4779,7 +4780,7 @@ extern "C" {
     );
 }
 extern "C" {
-    pub fn R_clrhash(h: R_hashtab_t);
+    pub fn R_clrhash(h: R_hashtab_type);
 }
 extern "C" {
     pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
