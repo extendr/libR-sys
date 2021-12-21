@@ -55,6 +55,9 @@ pub const __MAC_10_16: u32 = 101600;
 pub const __MAC_11_0: u32 = 110000;
 pub const __MAC_11_1: u32 = 110100;
 pub const __MAC_11_3: u32 = 110300;
+pub const __MAC_11_4: u32 = 110400;
+pub const __MAC_11_5: u32 = 110500;
+pub const __MAC_12_0: u32 = 120000;
 pub const __IPHONE_2_0: u32 = 20000;
 pub const __IPHONE_2_1: u32 = 20100;
 pub const __IPHONE_2_2: u32 = 20200;
@@ -107,6 +110,10 @@ pub const __IPHONE_14_1: u32 = 140100;
 pub const __IPHONE_14_2: u32 = 140200;
 pub const __IPHONE_14_3: u32 = 140300;
 pub const __IPHONE_14_5: u32 = 140500;
+pub const __IPHONE_14_6: u32 = 140600;
+pub const __IPHONE_14_7: u32 = 140700;
+pub const __IPHONE_14_8: u32 = 140800;
+pub const __IPHONE_15_0: u32 = 150000;
 pub const __TVOS_9_0: u32 = 90000;
 pub const __TVOS_9_1: u32 = 90100;
 pub const __TVOS_9_2: u32 = 90200;
@@ -133,6 +140,9 @@ pub const __TVOS_14_1: u32 = 140100;
 pub const __TVOS_14_2: u32 = 140200;
 pub const __TVOS_14_3: u32 = 140300;
 pub const __TVOS_14_5: u32 = 140500;
+pub const __TVOS_14_6: u32 = 140600;
+pub const __TVOS_14_7: u32 = 140700;
+pub const __TVOS_15_0: u32 = 150000;
 pub const __WATCHOS_1_0: u32 = 10000;
 pub const __WATCHOS_2_0: u32 = 20000;
 pub const __WATCHOS_2_1: u32 = 20100;
@@ -157,6 +167,9 @@ pub const __WATCHOS_7_1: u32 = 70100;
 pub const __WATCHOS_7_2: u32 = 70200;
 pub const __WATCHOS_7_3: u32 = 70300;
 pub const __WATCHOS_7_4: u32 = 70400;
+pub const __WATCHOS_7_5: u32 = 70500;
+pub const __WATCHOS_7_6: u32 = 70600;
+pub const __WATCHOS_8_0: u32 = 80000;
 pub const MAC_OS_X_VERSION_10_0: u32 = 1000;
 pub const MAC_OS_X_VERSION_10_1: u32 = 1010;
 pub const MAC_OS_X_VERSION_10_2: u32 = 1020;
@@ -190,9 +203,11 @@ pub const MAC_OS_X_VERSION_10_15: u32 = 101500;
 pub const MAC_OS_X_VERSION_10_15_1: u32 = 101501;
 pub const MAC_OS_X_VERSION_10_16: u32 = 101600;
 pub const MAC_OS_VERSION_11_0: u32 = 110000;
+pub const MAC_OS_VERSION_12_0: u32 = 120000;
 pub const __DRIVERKIT_19_0: u32 = 190000;
 pub const __DRIVERKIT_20_0: u32 = 200000;
-pub const __IPHONE_OS_VERSION_MAX_ALLOWED: u32 = 140500;
+pub const __DRIVERKIT_21_0: u32 = 210000;
+pub const __IPHONE_OS_VERSION_MAX_ALLOWED: u32 = 150000;
 pub const __ENABLE_LEGACY_IPHONE_AVAILABILITY: u32 = 1;
 pub const __PTHREAD_SIZE__: u32 = 8176;
 pub const __PTHREAD_ATTR_SIZE__: u32 = 56;
@@ -316,15 +331,15 @@ pub const NAMEDMAX: u32 = 7;
 pub const R_XDR_DOUBLE_SIZE: u32 = 8;
 pub const R_XDR_INTEGER_SIZE: u32 = 4;
 pub const R_CODESET_MAX: u32 = 63;
-pub const R_VERSION: u32 = 262401;
-pub const R_NICK: &'static [u8; 12usize] = b"Kick Things\0";
+pub const R_VERSION: u32 = 262402;
+pub const R_NICK: &'static [u8; 12usize] = b"Bird Hippie\0";
 pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
-pub const R_MINOR: &'static [u8; 4usize] = b"1.1\0";
+pub const R_MINOR: &'static [u8; 4usize] = b"1.2\0";
 pub const R_STATUS: &'static [u8; 1usize] = b"\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
-pub const R_MONTH: &'static [u8; 3usize] = b"08\0";
-pub const R_DAY: &'static [u8; 3usize] = b"10\0";
-pub const R_SVN_REVISION: u32 = 80725;
+pub const R_MONTH: &'static [u8; 3usize] = b"11\0";
+pub const R_DAY: &'static [u8; 3usize] = b"01\0";
+pub const R_SVN_REVISION: u32 = 81115;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_version: u32 = 14;
@@ -1615,13 +1630,6 @@ extern "C" {
         arg2: *const ::std::os::raw::c_char,
         arg3: va_list,
     ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn zopen(
-        arg1: *const ::std::os::raw::c_char,
-        arg2: *const ::std::os::raw::c_char,
-        arg3: ::std::os::raw::c_int,
-    ) -> *mut FILE;
 }
 extern "C" {
     pub fn funopen(

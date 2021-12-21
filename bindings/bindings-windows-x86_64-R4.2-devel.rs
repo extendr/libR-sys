@@ -295,15 +295,24 @@ pub const NAMEDMAX: u32 = 7;
 pub const R_XDR_DOUBLE_SIZE: u32 = 8;
 pub const R_XDR_INTEGER_SIZE: u32 = 4;
 pub const R_CODESET_MAX: u32 = 63;
+pub const IDENT_NUM_AS_BITS: u32 = 1;
+pub const IDENT_NA_AS_BITS: u32 = 2;
+pub const IDENT_ATTR_BY_ORDER: u32 = 4;
+pub const IDENT_USE_BYTECODE: u32 = 8;
+pub const IDENT_USE_CLOENV: u32 = 16;
+pub const IDENT_USE_SRCREF: u32 = 32;
+pub const IDENT_EXTPTR_AS_REF: u32 = 64;
+pub const HT_TYPE_IDENTICAL: u32 = 0;
+pub const HT_TYPE_ADDRESS: u32 = 1;
 pub const R_VERSION: u32 = 262656;
 pub const R_NICK: &'static [u8; 24usize] = b"Unsuffered Consequences\0";
 pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
 pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
 pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
-pub const R_MONTH: &'static [u8; 3usize] = b"10\0";
-pub const R_DAY: &'static [u8; 3usize] = b"31\0";
-pub const R_SVN_REVISION: u32 = 81114;
+pub const R_MONTH: &'static [u8; 3usize] = b"12\0";
+pub const R_DAY: &'static [u8; 3usize] = b"17\0";
+pub const R_SVN_REVISION: u32 = 81389;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -355,6 +364,20 @@ pub const R_GE_compositeDifference: u32 = 24;
 pub const R_GE_compositeExclusion: u32 = 25;
 pub const R_GE_nonZeroWindingRule: u32 = 1;
 pub const R_GE_evenOddRule: u32 = 2;
+pub const R_GE_alphaMask: u32 = 1;
+pub const R_GE_luminanceMask: u32 = 2;
+pub const R_GE_capability_semiTransparency: u32 = 0;
+pub const R_GE_capability_transparentBackground: u32 = 1;
+pub const R_GE_capability_rasterImage: u32 = 2;
+pub const R_GE_capability_capture: u32 = 3;
+pub const R_GE_capability_locator: u32 = 4;
+pub const R_GE_capability_events: u32 = 5;
+pub const R_GE_capability_patterns: u32 = 6;
+pub const R_GE_capability_clippingPaths: u32 = 7;
+pub const R_GE_capability_masks: u32 = 8;
+pub const R_GE_capability_compositing: u32 = 9;
+pub const R_GE_capability_transformations: u32 = 10;
+pub const R_GE_capability_paths: u32 = 11;
 pub type size_t = ::std::os::raw::c_ulonglong;
 pub type wchar_t = ::std::os::raw::c_ushort;
 #[repr(C)]
@@ -5961,6 +5984,77 @@ pub const SORTED_INCR: _bindgen_ty_1 = 1;
 pub const SORTED_INCR_NA_1ST: _bindgen_ty_1 = 2;
 pub const KNOWN_UNSORTED: _bindgen_ty_1 = 0;
 pub type _bindgen_ty_1 = i32;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct R_hashtab_type {
+    pub cell: SEXP,
+}
+#[test]
+fn bindgen_test_layout_R_hashtab_type() {
+    assert_eq!(
+        ::std::mem::size_of::<R_hashtab_type>(),
+        8usize,
+        concat!("Size of: ", stringify!(R_hashtab_type))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<R_hashtab_type>(),
+        8usize,
+        concat!("Alignment of ", stringify!(R_hashtab_type))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<R_hashtab_type>())).cell as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(R_hashtab_type),
+            "::",
+            stringify!(cell)
+        )
+    );
+}
+extern "C" {
+    pub fn R_asHashtable(h: SEXP) -> R_hashtab_type;
+}
+extern "C" {
+    pub fn R_HashtabSEXP(h: R_hashtab_type) -> SEXP;
+}
+extern "C" {
+    pub fn R_isHashtable(h: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_mkhashtab(type_: ::std::os::raw::c_int, arg1: ::std::os::raw::c_int)
+        -> R_hashtab_type;
+}
+extern "C" {
+    pub fn R_gethash(h: R_hashtab_type, key: SEXP, nomatch: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_sethash(h: R_hashtab_type, key: SEXP, value: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_remhash(h: R_hashtab_type, key: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_numhash(h: R_hashtab_type) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_typhash(h: R_hashtab_type) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_maphash(h: R_hashtab_type, FUN: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_maphashC(
+        h: R_hashtab_type,
+        FUN: ::std::option::Option<
+            unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_void),
+        >,
+        data: *mut ::std::os::raw::c_void,
+    );
+}
+extern "C" {
+    pub fn R_clrhash(h: R_hashtab_type);
+}
 extern "C" {
     pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
 }
@@ -6888,13 +6982,14 @@ pub struct _DevDesc {
     pub fillStroke: ::std::option::Option<
         unsafe extern "C" fn(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pDevDesc),
     >,
+    pub capabilities: ::std::option::Option<unsafe extern "C" fn(cap: SEXP) -> SEXP>,
     pub reserved: [::std::os::raw::c_char; 64usize],
 }
 #[test]
 fn bindgen_test_layout__DevDesc() {
     assert_eq!(
         ::std::mem::size_of::<_DevDesc>(),
-        640usize,
+        648usize,
         concat!("Size of: ", stringify!(_DevDesc))
     );
     assert_eq!(
@@ -7705,8 +7800,18 @@ fn bindgen_test_layout__DevDesc() {
         )
     );
     assert_eq!(
-        unsafe { &(*(::std::ptr::null::<_DevDesc>())).reserved as *const _ as usize },
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).capabilities as *const _ as usize },
         576usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(capabilities)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<_DevDesc>())).reserved as *const _ as usize },
+        584usize,
         concat!(
             "Offset of field: ",
             stringify!(_DevDesc),
@@ -8525,6 +8630,9 @@ extern "C" {
 }
 extern "C" {
     pub fn GEFillStroke(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pGEDevDesc);
+}
+extern "C" {
+    pub fn R_GE_maskType(mask: SEXP) -> ::std::os::raw::c_int;
 }
 pub type __builtin_va_list = *mut ::std::os::raw::c_char;
 #[repr(C)]
