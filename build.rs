@@ -163,8 +163,63 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     })
 }
 
+fn str_vec_to_version(input: Vec<String>) -> Option<RVersionInfo> {
+    fn is_str_digit(s: &String) -> bool {
+        s.chars().all(|c| c.is_digit(10))
+    }
+    
+    if input.len() < 3 || input.len() > 4 {
+        return None;
+    }
 
-fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo> {
+    let mut result = RVersionInfo {
+        major: "".into(),
+        minor: "".into(),
+        patch: "".into(),
+        devel: "".into(),
+        version_string: "".into(), // Skip this assignment for now
+    };
+
+    if is_str_digit(&input[0]) {
+        result.major = (&input[0]).to_string();
+    } else {
+        return None
+    }
+
+    if is_str_digit(&input[1]) {
+        result.minor = (&input[1]).to_string();
+    } else {
+        return None
+    }
+
+    if is_str_digit(&input[2]) {
+        result.patch = (&input[2]).to_string();
+    }
+
+    if input.len() == 4 {
+        if input[3] == "devel" {
+            result.devel = "-devel".into();
+        } else {
+            return None;
+        }
+    }
+
+    Some(result)
+}
+
+
+fn get_r_version_from_env(r_version_env_var: &str) -> Option<RVersionInfo> {
+    std::env::var(r_version_env_var)
+        .ok()
+        .map(|v| {
+            v.split(&['.', '-'][..])
+                .map(|s| s.to_string())
+                .collect::<Vec<String>>()
+        })
+        .and_then(str_vec_to_version)
+}
+
+fn get_r_version_from_r(r_paths: &InstallationPaths) -> io::Result<RVersionInfo> {
     let r_binary = if cfg!(target_os = "windows") {
         Path::new(&r_paths.library)
             .join("R.exe")
@@ -234,6 +289,12 @@ fn get_r_version_strings(r_paths: &InstallationPaths) -> io::Result<RVersionInfo
         devel,
         version_string,
     })
+}
+
+fn get_r_version(r_version_env_var: &str, r_paths: &InstallationPaths) -> io::Result<RVersionInfo> {
+    get_r_version_from_env(r_version_env_var)
+    .ok_or(Error::new(ErrorKind::Other, "Cannot determine R version from environement variable"))
+    .or(get_r_version_from_r(r_paths))
 }
 
 #[cfg(feature = "use-bindgen")]
@@ -388,7 +449,7 @@ fn main() {
     println!("cargo:rerun-if-changed=wrapper.h");
 
     // extract version info from R and output for use by downstream crates
-    let version_info = get_r_version_strings(&r_paths).expect("Could not obtain R version");
+    let version_info = get_r_version("R_VERSION", &r_paths).expect("Could not obtain R version");
 
     #[cfg(feature = "use-bindgen")]
         generate_bindings(&r_paths, &version_info);
