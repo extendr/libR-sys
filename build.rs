@@ -294,7 +294,7 @@ fn get_r_version_from_r(r_paths: &InstallationPaths) -> io::Result<RVersionInfo>
 fn get_r_version(r_version_env_var: &str, r_paths: &InstallationPaths) -> io::Result<RVersionInfo> {
     get_r_version_from_env(r_version_env_var)
     .ok_or(Error::new(ErrorKind::Other, "Cannot determine R version from environement variable"))
-    .or(get_r_version_from_r(r_paths))
+    .or_else(|_| get_r_version_from_r(r_paths))
 }
 
 #[cfg(feature = "use-bindgen")]
