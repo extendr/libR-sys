@@ -34,6 +34,11 @@ struct RVersionInfo {
     version_string: String,
 }
 
+#[derive(Debug)]
+enum EnvVarError {
+    NotPresentOrNotUnicode,
+    Invalid,
+}
 
 // frustratingly, something like the following does not exist in an
 // OS-independent way in Rust
@@ -163,13 +168,13 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     })
 }
 
-fn str_vec_to_version(input: Vec<String>) -> Option<RVersionInfo> {
+fn str_vec_to_version(input: Vec<String>) -> Result<RVersionInfo, EnvVarError> {
     fn is_str_digit(s: &String) -> bool {
         s.chars().all(|c| c.is_digit(10))
     }
-    
+
     if input.len() < 3 || input.len() > 4 {
-        return None;
+        return Err(EnvVarError::Invalid);
     }
 
     let mut result = RVersionInfo {
@@ -183,13 +188,13 @@ fn str_vec_to_version(input: Vec<String>) -> Option<RVersionInfo> {
     if is_str_digit(&input[0]) {
         result.major = (&input[0]).to_string();
     } else {
-        return None
+        return Err(EnvVarError::Invalid)
     }
 
     if is_str_digit(&input[1]) {
         result.minor = (&input[1]).to_string();
     } else {
-        return None
+        return Err(EnvVarError::Invalid)
     }
 
     if is_str_digit(&input[2]) {
@@ -200,17 +205,18 @@ fn str_vec_to_version(input: Vec<String>) -> Option<RVersionInfo> {
         if input[3] == "devel" {
             result.devel = "-devel".into();
         } else {
-            return None;
+            return Err(EnvVarError::Invalid);
         }
     }
 
-    Some(result)
+    Ok(result)
 }
 
 
-fn get_r_version_from_env(r_version_env_var: &str) -> Option<RVersionInfo> {
+fn get_r_version_from_env(r_version_env_var:&str) -> Result<RVersionInfo, EnvVarError> {
     std::env::var(r_version_env_var)
-        .ok()
+        // Any error arising from reading env var is converted to this value
+        .map_err(|_| EnvVarError::NotPresentOrNotUnicode)
         .map(|v| {
             v.split(&['.', '-'][..])
                 .map(|s| s.to_string())
@@ -292,9 +298,12 @@ fn get_r_version_from_r(r_paths: &InstallationPaths) -> io::Result<RVersionInfo>
 }
 
 fn get_r_version(r_version_env_var: &str, r_paths: &InstallationPaths) -> io::Result<RVersionInfo> {
-    get_r_version_from_env(r_version_env_var)
-    .ok_or(Error::new(ErrorKind::Other, "Cannot determine R version from environement variable"))
-    .or_else(|_| get_r_version_from_r(r_paths))
+    match get_r_version_from_env(r_version_env_var)
+    {
+        Ok(v) => Ok(v),
+        Err(EnvVarError::Invalid) => Err(Error::new(ErrorKind::Other, "R_VERSION environment variable is invalid")),
+        Err(_) => get_r_version_from_r(r_paths)
+    }
 }
 
 #[cfg(feature = "use-bindgen")]
