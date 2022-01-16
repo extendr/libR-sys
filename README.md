@@ -13,6 +13,9 @@ The recommended way to build this library is to use precomputed bindings, which 
 
 Alternatively, the library can be built from source, in which case it invokes `bindgen` crate, which has extra platform-specific dependencies (including `msys2` for `Windows`).
 
+## Configuration
+`libR-sys` recognizes the following environment variables:
+ - `R_VERSION` If set, it is used to determine the version of R, for which bindings should be generated. `R_VERSION` should be set to one of the supported values, e.g. `4.1.0` or `4.2.0-devel` (the pattern is `major.minor.patch[-devel]`). Malformed `R_VERSION` results in compilation error. If `R_VERSION` is unset, `R` is invoked and its `R.version` is used.
 
 ## Using precomputed bindings (recommended)
 
