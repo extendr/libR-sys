@@ -283,16 +283,6 @@ fn get_r_version_from_r(r_paths: &InstallationPaths) -> Result<RVersionInfo, Env
         _ => return Err(EnvVarError::InvalidROutput("Cannot find R version string")),
     };
 
-    println!("cargo:r_version_major={}", major); // Becomes DEP_R_R_VERSION_MAJOR for clients
-    println!("cargo:r_version_minor={}", minor); // Becomes DEP_R_R_VERSION_MINOR for clients
-    println!("cargo:r_version_patch={}", patch); // Becomes DEP_R_R_VERSION_PATCH for clients
-    if devel.is_empty() {
-        println!("cargo:r_version_devel=false"); // Becomes DEP_R_R_VERSION_DEVEL for clients
-    } else {
-        println!("cargo:r_version_devel=true");
-    }
-    println!(r#"cargo:r_version_string="{}""#, version_string); // Becomes DEP_R_R_VERSION_STRING for clients
-
     Ok(RVersionInfo {
         major,
         minor,
@@ -309,6 +299,18 @@ fn get_r_version(r_version_env_var: &str, r_paths: &InstallationPaths) -> Result
         Err(EnvVarError::InvalidEnvVar(e)) => Err(EnvVarError::InvalidEnvVar(e)),
         Err(_) => get_r_version_from_r(r_paths)
     }
+}
+
+fn set_r_version_vars(ver: &RVersionInfo) {
+    println!("cargo:r_version_major={}", ver.major); // Becomes DEP_R_R_VERSION_MAJOR for clients
+    println!("cargo:r_version_minor={}", ver.minor); // Becomes DEP_R_R_VERSION_MINOR for clients
+    println!("cargo:r_version_patch={}", ver.patch); // Becomes DEP_R_R_VERSION_PATCH for clients
+    if ver.devel.is_empty() {
+        println!("cargo:r_version_devel=false"); // Becomes DEP_R_R_VERSION_DEVEL for clients
+    } else {
+        println!("cargo:r_version_devel=true");
+    }
+    println!(r#"cargo:r_version_string="{}""#, ver.version_string); // Becomes DEP_R_R_VERSION_STRING for clients
 }
 
 #[cfg(feature = "use-bindgen")]
@@ -464,6 +466,8 @@ fn main() {
 
     // extract version info from R and output for use by downstream crates
     let version_info = get_r_version("R_VERSION", &r_paths).expect("Could not obtain R version");
+    set_r_version_vars(&version_info);
+
 
     #[cfg(feature = "use-bindgen")]
         generate_bindings(&r_paths, &version_info);
