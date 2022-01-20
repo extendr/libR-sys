@@ -465,7 +465,7 @@ fn main() {
     println!("cargo:rerun-if-changed=wrapper.h");
 
     // extract version info from R and output for use by downstream crates
-    let version_info = get_r_version("R_VERSION", &r_paths).expect("Could not obtain R version");
+    let version_info = get_r_version("LIBR_SYS_R_VERSION", &r_paths).expect("Could not obtain R version");
     set_r_version_vars(&version_info);
 
 
