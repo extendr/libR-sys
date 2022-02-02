@@ -8,7 +8,7 @@ use std::{
 };
 
 #[cfg(target_family = "unix")]
-use std::{ffi::OsStr, os::unix::ffi::OsStrExt};
+use std::os::unix::ffi::OsStrExt;
 
 #[cfg(target_family = "windows")]
 use std::os::windows::ffi::OsStringExt;
