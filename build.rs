@@ -175,6 +175,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     })
 }
 
+// Parse an R version (e.g. "4.1.2" and "4.2.0-devel") and return the RVersionInfo.
 fn parse_r_version(
     r_version: String,
     version_string: Option<String>,
@@ -287,10 +288,15 @@ fn get_r_version(
     r_version_env_var: &str,
     r_paths: &InstallationPaths,
 ) -> Result<RVersionInfo, EnvVarError> {
+    // Try looking for the envvar first.
     match get_r_version_from_env(r_version_env_var) {
+        // If the envvar is found and it can be parsed as a valid RVersionInfo, use it.
         Ok(v) => Ok(v),
-        e @ Err(EnvVarError::InvalidEnvVar(_)) => e,
-        Err(_) => get_r_version_from_r(r_paths),
+        // If the envvar is not present, then use the actual R binary to get the version.
+        Err(EnvVarError::EnvVarNotPresent) => get_r_version_from_r(r_paths),
+        // In the case of any other error than the absense of envvar, stop with
+        // that error because it means the envvar is set and something is wrong.
+        e @ Err(_) => e,
     }
 }
 
