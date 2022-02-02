@@ -445,7 +445,8 @@ fn main() {
 
     println!("cargo:rustc-env=R_HOME={}", r_paths.r_home.display());
     println!("cargo:r_home={}", r_paths.r_home.display()); // Becomes DEP_R_R_HOME for clients
-                                                           // make sure cargo links properly against library
+
+    // make sure cargo links properly against library
     println!("cargo:rustc-link-search={}", r_paths.library.display());
     println!("cargo:rustc-link-lib=dylib=R");
 
