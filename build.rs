@@ -226,52 +226,65 @@ fn get_r_version_from_env(r_version_env_var:&str) -> Result<RVersionInfo, EnvVar
 }
 
 fn get_r_version_from_r(r_paths: &InstallationPaths) -> Result<RVersionInfo, EnvVarError> {
-    let r_binary = if cfg!(target_os = "windows") {
-        Path::new(&r_paths.library)
-            .join("R.exe")
+    let r_binary = if cfg!(windows) {
+        Path::new(&r_paths.library).join("R.exe")
     } else {
-        Path::new(&r_paths.r_home)
-            .join("bin")
-            .join("R")
+        Path::new(&r_paths.r_home).join("bin").join("R")
     };
 
-    let out = Command::new(&r_binary)
-        .args(&[
-            "-s",
-            "-e",
-            r#"v <- strsplit(R.version$minor, '.', fixed = TRUE)[[1]];devel <- isTRUE(grepl('devel', R.version$status, fixed = TRUE));cat(R.version$major, v[1], paste0(v[2:length(v)], collapse = '.'), devel, R.version$version.string, sep = '\n')"#
-        ])
-        .output()
-        .map_err(|e| EnvVarError::RInvocationError(e))?;
+    // This R script prints two lines; the first line contains the R version ,
+    // and the second line is `TRUE` when the installed R is the development
+    // build.
+    //
+    // Example 1) R 4.1.2 (released version)
+    //
+    // ```
+    // 4.1.2
+    // FALSE
+    // ```
+    //
+    // Example 2) R 4.2.0 (devel version)
+    //
+    // ```
+    // 4.1.2
+    // TRUE
+    // ```
+    let out = r_command(
+        &r_binary,
+        r#"cat(sprintf("%s.%s\n", R.version$major, R.version$minor)); cat(isTRUE(grepl("devel", R.version$status, fixed = TRUE)))"#,
+    )
+        .map_err(EnvVarError::RInvocationError)?;
 
-    let out = byte_array_to_os_string(&out.stdout)
-        .as_os_str()
-        .to_string_lossy()
-        .into_owned();
+    let out = out.as_os_str().to_string_lossy().into_owned();
     let mut lines = out.lines();
 
-    let major = match lines.next() {
-        Some(line) => line.to_string(),
-        _ => return Err(EnvVarError::InvalidROutput("Cannot find R major version")),
+    // Process the first line of the output
+    let r_vers = match lines.next() {
+        Some(v) => v,
+        None => return Err(EnvVarError::InvalidROutput("Cannot find R version")),
     };
 
-    let minor = match lines.next() {
-        Some(line) => line.to_string(),
-        _ => return Err(EnvVarError::InvalidROutput("Cannot find R minor version")),
+    let mut r_vers = r_vers.split('.');
+    let (major, minor, patch) = match (r_vers.next(), r_vers.next(), r_vers.next()) {
+        // If the line contains all the three versions as expected, use the result
+        (Some(major), Some(minor), Some(patch)) => {
+            (major.to_string(), minor.to_string(), patch.to_string())
+        }
+        // Otherwise, return the corresponding errors.
+        (None, _, _) => return Err(EnvVarError::InvalidROutput("Cannot find R major version")),
+        (_, None, _) => return Err(EnvVarError::InvalidROutput("Cannot find R minor version")),
+        (_, _, None) => return Err(EnvVarError::InvalidROutput("Cannot find R patch level")),
     };
 
-    let patch = match lines.next() {
-        Some(line) => line.to_string(),
-        _ => return Err(EnvVarError::InvalidROutput("Cannot find R patch level")),
-    };
-
+    // Process the second line of the output
     let devel = match lines.next() {
-        Some(line) => if line == "TRUE" {
-            "-devel".to_string()
-        } else {
-            "".to_string()
-        },
-        _ => return Err(EnvVarError::InvalidROutput("Cannot find R development status")),
+        Some("TRUE") => "-devel".to_string(),
+        Some(_) => "".to_string(),
+        _ => {
+            return Err(EnvVarError::InvalidROutput(
+                "Cannot find R development status",
+            ))
+        }
     };
 
     let version_string = match lines.next() {
