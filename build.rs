@@ -128,7 +128,7 @@ fn get_r_library(r_home: &Path) -> PathBuf {
     match (cfg!(windows), pkg_target_arch.as_str()) {
         // For Windows
         (true, "x86_64") => Path::new(r_home).join("bin").join("x64"),
-        (true, "i386") => Path::new(r_home).join("bin").join("i386"),
+        (true, "x86") => Path::new(r_home).join("bin").join("i386"),
         (true, _) => panic!("Unknown architecture"),
         // For Unix-alike
         (false, _) => Path::new(r_home).join("lib"),
