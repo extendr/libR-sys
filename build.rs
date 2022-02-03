@@ -192,7 +192,15 @@ fn parse_r_version(
     let r_version_split = r_version
         .split('.')
         .map(|s| {
-            if s.chars().all(|c| c.is_digit(10)) {
+            // Good:
+            //   - "4.1.2"
+            //   - "4.2.0-devel"
+            //
+            // Bad:
+            //   - "4.1.foo" (contains non-digit character)
+            //   - "4.1." (some part is missing)
+            //   - "4.1.0-deve" (the devel part is invalid)
+            if !s.is_empty() && s.chars().all(|c| c.is_digit(10)) {
                 Some(s)
             } else {
                 None
