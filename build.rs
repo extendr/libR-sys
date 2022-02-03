@@ -180,7 +180,7 @@ fn parse_r_version(
     r_version: String,
     version_string: Option<String>,
 ) -> Result<RVersionInfo, EnvVarError> {
-    // Split "<major>.<minor>.<patch>-devel" to "<major>.<minor>.<patch>" and "devel"
+    // First, split "<major>.<minor>.<patch>-devel" to "<major>.<minor>.<patch>" and "devel"
     let (r_version, devel) = match *r_version.split('-').collect::<Vec<&str>>().as_slice() {
         [r_version, devel] => (r_version, Some(devel)),
         [r_version] => (r_version, None),
@@ -188,18 +188,16 @@ fn parse_r_version(
         _ => return Err(EnvVarError::InvalidEnvVar("Invalid format")),
     };
 
-    // Split "<major>.<minor>.<patch>-devel" to "<major>", "<minor>", and "<patch>"
+    // Split "<major>.<minor>.<patch>" to "<major>", "<minor>", and "<patch>"
     let r_version_split = r_version
         .split('.')
         .map(|s| {
             // Good:
             //   - "4.1.2"
-            //   - "4.2.0-devel"
             //
             // Bad:
-            //   - "4.1.foo" (contains non-digit character)
+            //   - "4.1.foo" (some part contains any non-digit characters)
             //   - "4.1." (some part is missing)
-            //   - "4.1.0-deve" (the devel part is invalid)
             if !s.is_empty() && s.chars().all(|c| c.is_digit(10)) {
                 Some(s)
             } else {
