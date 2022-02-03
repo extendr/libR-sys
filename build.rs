@@ -13,6 +13,35 @@ use std::os::unix::ffi::OsStrExt;
 #[cfg(target_family = "windows")]
 use std::os::windows::ffi::OsStringExt;
 
+//
+// Environmental variables
+//
+
+// The environmental variables that are usually set by R. These might be needed
+// to set manually if we compile libR-sys outside of an R session.
+//
+// c.f., https://stat.ethz.ch/R-manual/R-devel/library/base/html/EnvVar.html
+const ENVVAR_R_INCLUDE_DIR: &str = "R_INCLUDE_DIR";
+const ENVVAR_R_HOME: &str = "R_HOME";
+
+// An R version (e.g., "4.1.2" or "4.2.0-devel"). When this is set, the actual R
+// binary is not executed. This might be useful in some cases of cross-compile.
+// c.f., https://github.com/extendr/libR-sys/issues/85
+const ENVVAR_R_VERSION: &str = "LIBR_SYS_R_VERSION";
+
+// A path to a dir containing pre-computed bindings (default: "bindings").
+const ENVVAR_BINDINGS_PATH: &str = "LIBRSYS_BINDINGS_PATH";
+
+// A path to libclang toolchain. If this is set, the path is added to the
+// compiler arguments on executing bindgen.
+#[cfg(feature = "use-bindgen")]
+const ENVVAR_LIBCLANG_INCLUDE_PATH: &str = "LIBRSYS_LIBCLANG_INCLUDE_PATH";
+
+// A path to an output dir of bindings in addition to the default "bindings"
+// dir. If this is set, generated bindings are also put there.
+#[cfg(feature = "use-bindgen")]
+const ENVVAR_BINDINGS_OUTPUT_PATH: &str = "LIBRSYS_BINDINGS_OUTPUT_PATH";
+
 #[allow(dead_code)]
 struct InstallationPaths {
     r_home: PathBuf,
@@ -107,7 +136,7 @@ fn r_command<S: AsRef<OsStr>>(r_binary: S, script: &str) -> io::Result<OsString>
 // Get the path to the R home either from an envvar or by executing the actual R binary on PATH.
 fn get_r_home() -> io::Result<PathBuf> {
     // If the environment variable R_HOME is set we use it
-    if let Some(r_home) = env::var_os("R_HOME") {
+    if let Some(r_home) = env::var_os(ENVVAR_R_HOME) {
         return Ok(PathBuf::from(r_home));
     }
 
@@ -138,7 +167,7 @@ fn get_r_library(r_home: &Path) -> PathBuf {
 // Get the path to the R include either from an envvar or by executing the actual R binary.
 fn get_r_include(r_home: &Path, library: &Path) -> io::Result<PathBuf> {
     // If the environment variable R_INCLUDE_DIR is set we use it
-    if let Some(include) = env::var_os("R_INCLUDE_DIR") {
+    if let Some(include) = env::var_os(ENVVAR_R_INCLUDE_DIR) {
         return Ok(PathBuf::from(include));
     }
 
@@ -355,7 +384,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     ]);
 
     // allow injection of an alternative include path to libclang
-    if let Some(alt_include) = env::var_os("LIBRSYS_LIBCLANG_INCLUDE_PATH") {
+    if let Some(alt_include) = env::var_os(ENVVAR_LIBCLANG_INCLUDE_PATH) {
         bindgen_builder =
             bindgen_builder.clang_arg(format!("-I{}", PathBuf::from(alt_include).display()));
     }
@@ -384,7 +413,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .expect("Couldn't write bindings to default output path!");
 
     // Also write the bindings to a folder specified by LIBRSYS_BINDINGS_OUTPUT_PATH, if defined
-    if let Some(alt_target) = env::var_os("LIBRSYS_BINDINGS_OUTPUT_PATH") {
+    if let Some(alt_target) = env::var_os(ENVVAR_BINDINGS_OUTPUT_PATH) {
         let out_path = PathBuf::from(alt_target);
         // if folder doesn't exist, try to create it
         if !out_path.exists() {
@@ -411,7 +440,7 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
     let bindings_path = PathBuf::from(
-        env::var_os("LIBRSYS_BINDINGS_PATH").unwrap_or_else(|| OsString::from("bindings")),
+        env::var_os(ENVVAR_BINDINGS_PATH).unwrap_or_else(|| OsString::from("bindings")),
     );
 
     // we try a few different file names, from more specific to less specific
@@ -468,7 +497,7 @@ fn main() {
 
     // extract version info from R and output for use by downstream crates
     let version_info =
-        get_r_version("LIBR_SYS_R_VERSION", &r_paths).expect("Could not obtain R version");
+        get_r_version(ENVVAR_R_VERSION, &r_paths).expect("Could not obtain R version");
     set_r_version_vars(&version_info);
 
     #[cfg(feature = "use-bindgen")]
