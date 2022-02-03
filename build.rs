@@ -410,8 +410,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-    let bindings_path =
-        PathBuf::from(env::var_os("LIBRSYS_BINDINGS_PATH").unwrap_or(OsString::from("bindings")));
+    let bindings_path = PathBuf::from(
+        env::var_os("LIBRSYS_BINDINGS_PATH").unwrap_or_else(|| OsString::from("bindings")),
+    );
 
     // we try a few different file names, from more specific to less specific
     let bindings_file_full = PathBuf::from(format!(
