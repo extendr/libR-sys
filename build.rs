@@ -339,11 +339,7 @@ fn set_r_version_vars(ver: &RVersionInfo) {
     println!("cargo:r_version_major={}", ver.major); // Becomes DEP_R_R_VERSION_MAJOR for clients
     println!("cargo:r_version_minor={}", ver.minor); // Becomes DEP_R_R_VERSION_MINOR for clients
     println!("cargo:r_version_patch={}", ver.patch); // Becomes DEP_R_R_VERSION_PATCH for clients
-    if ver.devel {
-        println!("cargo:r_version_devel=false"); // Becomes DEP_R_R_VERSION_DEVEL for clients
-    } else {
-        println!("cargo:r_version_devel=true");
-    }
+    println!("cargo:r_version_devel={}", ver.devel); // Becomes DEP_R_R_VERSION_DEVEL for clients
     if let Some(version_string) = ver.version_string.clone() {
         println!(r#"cargo:r_version_string="{}""#, version_string); // Becomes DEP_R_R_VERSION_STRING for clients
     }
