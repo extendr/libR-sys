@@ -174,7 +174,7 @@ fn get_r_library(r_home: &Path) -> PathBuf {
     }
 }
 
-// Get the path to the R include either from an envvar or by executing the actual R binary.
+// Get the path to the R include directory either from an envvar or by executing the actual R binary.
 fn get_r_include(r_home: &Path, library: &Path) -> io::Result<PathBuf> {
     // If the environment variable R_INCLUDE_DIR is set we use it
     if let Some(include) = env::var_os(ENVVAR_R_INCLUDE_DIR) {
