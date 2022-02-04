@@ -27,7 +27,7 @@ const ENVVAR_R_HOME: &str = "R_HOME";
 // An R version (e.g., "4.1.2" or "4.2.0-devel"). When this is set, the actual R
 // binary is not executed. This might be useful in some cases of cross-compile.
 // c.f., https://github.com/extendr/libR-sys/issues/85
-const ENVVAR_R_VERSION: &str = "LIBR_SYS_R_VERSION";
+const ENVVAR_R_VERSION: &str = "LIBRSYS_R_VERSION";
 
 // A path to a dir containing pre-computed bindings (default: "bindings").
 const ENVVAR_BINDINGS_PATH: &str = "LIBRSYS_BINDINGS_PATH";
