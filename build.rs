@@ -49,6 +49,16 @@ struct InstallationPaths {
     library: PathBuf,
 }
 
+impl InstallationPaths {
+    fn get_r_binary(&self) -> PathBuf {
+        if cfg!(windows) {
+            Path::new(&self.library).join("R.exe")
+        } else {
+            Path::new(&self.r_home).join("bin").join("R")
+        }
+    }
+}
+
 #[allow(dead_code)]
 #[derive(Debug)]
 struct RVersionInfo {
@@ -173,11 +183,12 @@ fn get_r_include(r_home: &Path, library: &Path) -> io::Result<PathBuf> {
 
     // Otherwise, we try to execute `R` to find the include dir. Here,
     // we're using the R home we found earlier, to make sure we're consistent.
-    let r_binary = if cfg!(windows) {
-        Path::new(&library).join("R.exe")
-    } else {
-        Path::new(&r_home).join("bin").join("R")
-    };
+    let r_binary = InstallationPaths {
+        r_home: r_home.to_path_buf(),
+        include: PathBuf::new(), // get_r_binary() doesn't use `include` so fill with an empty PathBuf.
+        library: library.to_path_buf(),
+    }
+    .get_r_binary();
 
     let rout = r_command(&r_binary, r#"cat(normalizePath(R.home('include')))"#)?;
     if !rout.is_empty() {
@@ -275,11 +286,7 @@ fn get_r_version_from_env(r_version_env_var: &str) -> Result<RVersionInfo, EnvVa
 }
 
 fn get_r_version_from_r(r_paths: &InstallationPaths) -> Result<RVersionInfo, EnvVarError> {
-    let r_binary = if cfg!(windows) {
-        Path::new(&r_paths.library).join("R.exe")
-    } else {
-        Path::new(&r_paths.r_home).join("bin").join("R")
-    };
+    let r_binary = r_paths.get_r_binary();
 
     // This R script prints two lines; the first line contains the R version,
     // and the second line is the version string.
