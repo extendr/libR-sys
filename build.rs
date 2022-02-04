@@ -66,7 +66,6 @@ struct RVersionInfo {
     minor: String,
     patch: String,
     devel: bool,
-    version_string: Option<String>,
 }
 
 #[derive(Debug)]
@@ -216,10 +215,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 }
 
 // Parse an R version (e.g. "4.1.2" and "4.2.0-devel") and return the RVersionInfo.
-fn parse_r_version(
-    r_version: String,
-    version_string: Option<String>,
-) -> Result<RVersionInfo, EnvVarError> {
+fn parse_r_version(r_version: String) -> Result<RVersionInfo, EnvVarError> {
     // First, split "<major>.<minor>.<patch>-devel" to "<major>.<minor>.<patch>" and "devel"
     let (r_version, devel) = match *r_version.split('-').collect::<Vec<&str>>().as_slice() {
         [r_version, devel] => (r_version, Some(devel)),
@@ -274,7 +270,6 @@ fn parse_r_version(
         minor,
         patch,
         devel,
-        version_string,
     })
 }
 
@@ -282,31 +277,28 @@ fn get_r_version_from_env(r_version_env_var: &str) -> Result<RVersionInfo, EnvVa
     std::env::var(r_version_env_var)
         // Any error arising from reading env var is converted to this value
         .map_err(|_| EnvVarError::EnvVarNotPresent)
-        .and_then(|s| parse_r_version(s, None))
+        .and_then(parse_r_version)
 }
 
 fn get_r_version_from_r(r_paths: &InstallationPaths) -> Result<RVersionInfo, EnvVarError> {
     let r_binary = r_paths.get_r_binary();
 
-    // This R script prints two lines; the first line contains the R version,
-    // and the second line is the version string.
+    // This R script prints the R version to stdout.
     //
     // Example 1) R 4.1.2 (released version)
     //
     // ```
     // 4.1.2
-    // R version 4.1.2 (2021-11-01)
     // ```
     //
     // Example 2) R 4.2.0 (development version)
     //
     // ```
     // 4.2.0-devel
-    // R Under development (unstable) (2022-01-30 r81596 ucrt)
     // ```
     let out = r_command(
         &r_binary,
-        r#"cat(sprintf('%s.%s%s\n', R.version$major, R.version$minor, if(isTRUE(grepl('devel', R.version$status, fixed = TRUE))) '-devel' else '')); cat(R.version$version.string)"#,
+        r#"cat(sprintf('%s.%s%s\n', R.version$major, R.version$minor, if(isTRUE(grepl('devel', R.version$status, fixed = TRUE))) '-devel' else ''))"#,
     )
         .map_err(EnvVarError::RInvocationError)?;
 
@@ -314,16 +306,10 @@ fn get_r_version_from_r(r_paths: &InstallationPaths) -> Result<RVersionInfo, Env
     let mut lines = out.lines();
 
     // Process the first line of the output
-    let r_version = match lines.next() {
-        Some(v) => v.to_string(),
-        None => return Err(EnvVarError::InvalidROutput("Cannot find R version")),
-    };
-    let version_string = match lines.next() {
-        Some(line) => line.to_string(),
-        _ => return Err(EnvVarError::InvalidROutput("Cannot find R version string")),
-    };
-
-    parse_r_version(r_version, Some(version_string))
+    match lines.next() {
+        Some(v) => parse_r_version(v.to_string()),
+        None => Err(EnvVarError::InvalidROutput("Cannot find R version")),
+    }
 }
 
 fn get_r_version(
@@ -347,9 +333,6 @@ fn set_r_version_vars(ver: &RVersionInfo) {
     println!("cargo:r_version_minor={}", ver.minor); // Becomes DEP_R_R_VERSION_MINOR for clients
     println!("cargo:r_version_patch={}", ver.patch); // Becomes DEP_R_R_VERSION_PATCH for clients
     println!("cargo:r_version_devel={}", ver.devel); // Becomes DEP_R_R_VERSION_DEVEL for clients
-    if let Some(version_string) = ver.version_string.clone() {
-        println!(r#"cargo:r_version_string="{}""#, version_string); // Becomes DEP_R_R_VERSION_STRING for clients
-    }
 }
 
 #[cfg(feature = "use-bindgen")]
