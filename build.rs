@@ -336,7 +336,7 @@ fn get_r_version(
         Ok(v) => Ok(v),
         // If the envvar is not present, then use the actual R binary to get the version.
         Err(EnvVarError::EnvVarNotPresent) => get_r_version_from_r(r_paths),
-        // In the case of any other error than the absense of envvar, stop with
+        // In the case of any error other than the absense of envvar, stop with
         // that error because it means the envvar is set and something is wrong.
         e @ Err(_) => e,
     }
