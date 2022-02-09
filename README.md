@@ -84,13 +84,13 @@ To test the build, run `cargo test`.
   * the `R` binary to build against
   * the compiler toolchain that is used for compiling the R itself, i.e., `Rtools`
 
-  Typically, they can be found in the following locations:
+  Typically, they can be found in the following locations (using `PowerShell` syntax):
 
   |                  | R                         | Rtools                             |
   | ---------------- | ------------------------- | ---------------------------------- |
-  | R <= 4.1.x, 64-bit  |  `${env:R_HOME}\bin\x64`  | `${env:RTOOLS40_HOME}\mingw64\bin` |
-  | R <= 4.1.x, 32-bit  |  `${env:R_HOME}\bin\i386` | `${env:RTOOLS40_HOME}\mingw32\bin` |
-  | R 4.2.x, 64-bit    |  `${env:R_HOME}\bin\x64`  | `${env:RTOOLS40_HOME}\ucrt64\bin` (this might be changed when [Rtools42] is released) |
+  | R <= 4.1.x, 64-bit  |  `$env:R_HOME\bin\x64`  | `$env:RTOOLS40_HOME\mingw64\bin` |
+  | R <= 4.1.x, 32-bit  |  `$env:R_HOME\bin\i386` | `$env:RTOOLS40_HOME\mingw32\bin` |
+  | R 4.2.x, 64-bit     |  `$env:R_HOME\bin\x64`  | `$env:RTOOLS40_HOME\ucrt64\bin` (this might be changed when [Rtools42] is released) |
   
   [Rtools42]: https://www.r-project.org/nosvn/winutf8/ucrt3/web/rtools.html
 
@@ -163,7 +163,7 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
   If you want to compile `libR-sys` from within RStudio, you may also have to add the following line to your `.Renviron` file:
 
   ```bash
-  PATH=/usr/local/opt/llvm/bin:${PATH}
+  PATH=/usr/local/opt/llvm/bin:$PATH
   ```
   Build & test using
    ```shell
