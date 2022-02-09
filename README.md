@@ -33,7 +33,7 @@ Once `R` and `rust` are configured, the library can be easily built:
   
   ```Shell
   cargo build --target x86_64-pc-windows-gnu # 64-bit
-  cargo build --target   i686-pc-windows-gnu # 32-bit, not needed for R >=4.2
+  cargo build --target   i686-pc-windows-gnu # 32-bit, not needed for R >= 4.2
   ```
 
   
@@ -44,7 +44,7 @@ Once `R` and `rust` are configured, the library can be easily built:
     ```Shell
     rustup default stable-msvc
     rustup target add x86_64-pc-windows-gnu  # 64-bit
-    rustup target add   i686-pc-windows-gnu  # 32-bit, not needed for R >=4.2
+    rustup target add   i686-pc-windows-gnu  # 32-bit, not needed for R >= 4.2
     ```
 
     `stable-msvc` toolchain requires VS Build Tools. They are usually available on the systems with an installation of Visual Studio.
@@ -88,13 +88,13 @@ To test the build, run `cargo test`.
 
   |                  | R                         | Rtools                             |
   | ---------------- | ------------------------- | ---------------------------------- |
-  | R <=4.1.x, 64-bit  |  `${env:R_HOME}\bin\x64`  | `${env:RTOOLS40_HOME}\mingw64\bin` |
-  | R <=4.1.x, 32-bit  |  `${env:R_HOME}\bin\i386` | `${env:RTOOLS40_HOME}\mingw32\bin` |
+  | R <= 4.1.x, 64-bit  |  `${env:R_HOME}\bin\x64`  | `${env:RTOOLS40_HOME}\mingw64\bin` |
+  | R <= 4.1.x, 32-bit  |  `${env:R_HOME}\bin\i386` | `${env:RTOOLS40_HOME}\mingw32\bin` |
   | R 4.2.x, 64-bit    |  `${env:R_HOME}\bin\x64`  | `${env:RTOOLS40_HOME}\ucrt64\bin` (this might be changed when [Rtools42] gets released) |
   
   [Rtools42]: https://www.r-project.org/nosvn/winutf8/ucrt3/web/rtools.html
 
-  So, for example, if the target is 64-bit R (<=4.1.x), add the following to the `PATH` (using `PowerShell` syntax). Note that this shows how to "apeend" these for minimum side effect, but, if `PATH` already contains another version of `R` or compiler toolchain, these should be prepended to overwrite the existing ones.
+  So, for example, if the target is 64-bit R (<= 4.1.x), add the following to the `PATH` (using `PowerShell` syntax). Note that this shows how to "apeend" these for minimum side effect, but, if `PATH` already contains another version of `R` or compiler toolchain, these should be prepended to overwrite the existing ones.
   ```pwsh
   $env:PATH += ";$env:R_HOME\bin\x64;$env:RTOOLS40_HOME\mingw64\bin"
   ```
@@ -103,7 +103,7 @@ To test the build, run `cargo test`.
   cargo test --target x86_64-pc-windows-gnu
   ```
 
-  For 32-bit R (<=4.1.x), 
+  For 32-bit R (<= 4.1.x), 
   ```pwsh
   $env:PATH += ";$env:R_HOME\bin\i386;$env:RTOOLS40_HOME\mingw32\bin"
   ```
@@ -184,12 +184,12 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
 
     ```pwsh
     &"$env:MSYS_ROOT\usr\bin\bash" -l -c "pacman -S --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain"      # 64-bit
-    &"$env:MSYS_ROOT\usr\bin\bash" -l -c "pacman -S --noconfirm mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain"  # 32-bit, not needed for R >=4.2
+    &"$env:MSYS_ROOT\usr\bin\bash" -l -c "pacman -S --noconfirm mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain"  # 32-bit, not needed for R >= 4.2
     ```
     
   </details>
 
-  For 64-bit R (<=4.1.x), add the following to the `PATH` (using `PowerShell` syntax):
+  For 64-bit R (<= 4.1.x), add the following to the `PATH` (using `PowerShell` syntax):
   ```pwsh
   $env:PATH += ";$env:R_HOME\bin\x64;$env:MSYS_ROOT\mingw64\bin"
   ```
@@ -199,7 +199,7 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
   cargo  test --target x86_64-pc-windows-gnu --features use-bindgen
   ```
 
-  For 32-bit R (<=4.1.x), 
+  For 32-bit R (<= 4.1.x), 
   ```pwsh
   $env:PATH += ";$env:R_HOME\bin\i386;$env:MSYS_ROOT\mingw64\bin$env:MSYS_ROOT\mingw32\bin"
   ```
