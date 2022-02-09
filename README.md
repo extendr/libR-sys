@@ -77,28 +77,31 @@ To test the build, run `cargo test`.
   ```
 - **Windows**
   
-  On Windows, first, ensure that `R_HOME` points to `R` home, e.g. `C:\Program Files\R\R-4.1.0` (on an R session, this should be set by R).
+  On Windows, first, ensure that `R_HOME` points to `R` home, e.g. `C:\Program Files\R\R-4.1.0` (in an R session, this should be set by R).
   
-  Then, also ensure `PATH` is properly configured that the following executables are available:
+  Second, ensure that `PATH` is properly configured that the following executables are available:
   
   * the `R` binary to build against
   * the compiler toolchain that is used for compiling the R itself, i.e., `Rtools`
 
-  Typically, these are in the following locations:
+  Typically, they can be found in the following locations:
 
   |                  | R                         | Rtools                             |
   | ---------------- | ------------------------- | ---------------------------------- |
   | R <= 4.1.x, 64-bit  |  `${env:R_HOME}\bin\x64`  | `${env:RTOOLS40_HOME}\mingw64\bin` |
   | R <= 4.1.x, 32-bit  |  `${env:R_HOME}\bin\i386` | `${env:RTOOLS40_HOME}\mingw32\bin` |
-  | R 4.2.x, 64-bit    |  `${env:R_HOME}\bin\x64`  | `${env:RTOOLS40_HOME}\ucrt64\bin` (this might be changed when [Rtools42] gets released) |
+  | R 4.2.x, 64-bit    |  `${env:R_HOME}\bin\x64`  | `${env:RTOOLS40_HOME}\ucrt64\bin` (this might be changed when [Rtools42] is released) |
   
   [Rtools42]: https://www.r-project.org/nosvn/winutf8/ucrt3/web/rtools.html
 
-  So, for example, if the target is 64-bit R (<= 4.1.x), add the following to the `PATH` (using `PowerShell` syntax). Note that this shows how to "apeend" these for minimum side effect, but, if `PATH` already contains another version of `R` or compiler toolchain, these should be prepended to overwrite the existing ones.
+  So, for example, if the target is 64-bit R (<= 4.1.x), add the following to the `PATH` (using `PowerShell` syntax). 
   ```pwsh
   $env:PATH += ";$env:R_HOME\bin\x64;$env:RTOOLS40_HOME\mingw64\bin"
   ```
-  then test with 
+  
+  Note that the above shows how to "append" these for minimum side effect, but, if `PATH` already contains another version of `R` or compiler toolchain, the new ones should be prepended to override the existing ones.
+  
+  After configuring the `PATH`, test with 
   ```pwsh
   cargo test --target x86_64-pc-windows-gnu
   ```
@@ -230,9 +233,9 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
   ```
   </details>
 
-  For 64-bit R (4.2.x), we typically need to place Rtools' UCRT toolchain before
+  For 64-bit R (>= 4.2), we typically need to place Rtools' UCRT toolchain before
   MSYS's mingw64 toolchain. Otherwise, the mingw64 toolchain gets mistakenly used
-  for linking Rust code as well.
+  for linking Rust code.
   ```pwsh
   $env:PATH += ";$env:R_HOME\bin\x64;$env:RTOOLS40_HOME\ucrt64\bin;$env:MSYS_ROOT\mingw64\bin"
   ```
