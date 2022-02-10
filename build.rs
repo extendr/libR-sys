@@ -68,6 +68,16 @@ struct RVersionInfo {
     devel: bool,
 }
 
+impl RVersionInfo {
+    fn get_r_bindings_filename(&self, target_os: &str, target_arch: &str) -> PathBuf {
+        let devel_suffix = if self.devel { "-devel" } else { "" };
+        PathBuf::from(format!(
+            "bindings-{}-{}-R{}.{}{}.rs",
+            target_os, target_arch, self.major, self.minor, devel_suffix
+        ))
+    }
+}
+
 #[derive(Debug)]
 enum EnvVarError {
     EnvVarNotPresent,
@@ -409,10 +419,8 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             ));
         }
 
-        let out_file = out_path.join(format!(
-            "bindings-{}-{}-R{}.{}{}.rs",
-            target_os, target_arch, version_info.major, version_info.minor, version_info.devel
-        ));
+        let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
+        let out_file = out_path.join(bindings_file_full);
 
         bindings
             .write_to_file(&out_file)
@@ -430,10 +438,7 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
     );
 
     // we try a few different file names, from more specific to less specific
-    let bindings_file_full = PathBuf::from(format!(
-        "bindings-{}-{}-R{}.{}{}.rs",
-        target_os, target_arch, version_info.major, version_info.minor, version_info.devel
-    ));
+    let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
     let bindings_file_novers = PathBuf::from(format!("bindings-{}-{}.rs", target_os, target_arch));
 
     let mut from = bindings_path.join(bindings_file_full);
