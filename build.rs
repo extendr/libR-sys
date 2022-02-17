@@ -348,16 +348,100 @@ fn set_r_version_vars(ver: &RVersionInfo) {
 #[cfg(feature = "use-bindgen")]
 /// Generate bindings by calling bindgen.
 fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
+    use clang::EntityKind::*;
+    use clang::*;
+    use std::io::BufRead;
+
+    // This extract the items from include files in twos steps.
+    // First, extract it using clang-rs. But, as this flatten the
+    // #define macro, we need to extract macro constants (e.g. `#define FOO 1`)
+    // and macro functions (e.g. `#define FOO(x) (x + 1)`) by ourselves.
+    // Bindgen handles these things nicely, but I cannot understand how to do it...
+
+    let clang = Clang::new().unwrap();
+    let index = Index::new(&clang, false, false);
+    let tu = index
+        .parser("wrapper.h")
+        .arguments(&[format!("-I{}", r_paths.include.display())])
+        .parse()
+        .unwrap();
+
+    let mut allowlist = std::collections::HashSet::new();
+    let mut include_files = std::collections::HashSet::new();
+
+    let e = tu
+        .get_entity()
+        .get_children()
+        .into_iter()
+        .filter(|e| match e.get_location() {
+            Some(l) => match l.get_file_location().file {
+                Some(f) => {
+                    let p = f.get_path();
+
+                    if p.starts_with(&r_paths.include) || p.to_string_lossy() == "wrapper.h" {
+                        include_files.insert(p);
+                        true
+                    } else {
+                        false
+                    }
+                }
+                None => false,
+            },
+            None => false,
+        })
+        .collect::<Vec<_>>();
+
+    for e in e {
+        match e.get_kind() {
+            EnumDecl | FunctionDecl | StructDecl | TypedefDecl | VarDecl => {
+                if let Some(n) = e.get_name() {
+                    allowlist.insert(n);
+                }
+            }
+            ek => panic!("Unknown kind: {:?}", ek),
+        }
+    }
+
+    // manual addition
+    include_files.insert(r_paths.include.join("Rversion.h"));
+
+    // case 1) numeric literals
+    //
+    //     #define FOO 1
+    //
+    // case 2) string literals
+    //
+    //     #define FOO "foo"
+    //
+    // case 3) inline function
+    //
+    //     #define FOO(x) (x + 1)
+    //
+    let re = regex::Regex::new(r#"^\s*#\s*define\s+([^\s\(]+)(\s*\(|\s+-?[0-9"])"#).unwrap();
+
+    for include_file in include_files {
+        let file = std::fs::File::open(include_file).unwrap();
+        for line in io::BufReader::new(file).lines() {
+            if let Some(cap) = re.captures(line.unwrap().as_str()) {
+                allowlist.insert(cap[1].to_string());
+            }
+        }
+    }
+
+    // Cannot detect when the #define-ed constats are aliased in another #define
+    // c.f. https://github.com/wch/r-source/blob/9f284035b7e503aebe4a804579e9e80a541311bb/src/include/R_ext/GraphicsEngine.h#L93
+    allowlist.insert("R_GE_version".to_string());
+
+    let allowlist_pattern = allowlist.into_iter().collect::<Vec<String>>().join("|");
+
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let mut bindgen_builder = bindgen::Builder::default()
         // These constants from libm break bindgen.
-        .blacklist_item("FP_NAN")
-        .blacklist_item("FP_INFINITE")
-        .blacklist_item("FP_ZERO")
-        .blacklist_item("FP_SUBNORMAL")
-        .blacklist_item("FP_NORMAL")
+        .allowlist_function(&allowlist_pattern)
+        .allowlist_var(&allowlist_pattern)
+        .allowlist_type(&allowlist_pattern)
         // The input header we would like to generate
         // bindings for.
         .header("wrapper.h")
@@ -385,14 +469,14 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             bindgen_builder.clang_arg(format!("-I{}", PathBuf::from(alt_include).display()));
     }
 
-    // Blacklist some types on i686
+    // Blocklist some types on i686
     // https://github.com/rust-lang/rust-bindgen/issues/1823
     // https://github.com/rust-lang/rust/issues/54341
     // https://github.com/extendr/libR-sys/issues/39
     if target_os == "windows" && target_arch == "x86" {
         bindgen_builder = bindgen_builder
-            .blacklist_item("max_align_t")
-            .blacklist_item("__mingw_ldbl_type_t");
+            .blocklist_item("max_align_t")
+            .blocklist_item("__mingw_ldbl_type_t");
     }
 
     // Finish the builder and generate the bindings.
