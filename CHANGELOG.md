@@ -8,6 +8,7 @@
   there will be no 32-bit version of R as of R 4.2.0.  
   To be clear, libR-sys (and extendr) crate will keep supporting 32-bit on R <
   4.2 for a year or so.
+- libR-sys no longer sets `DEP_R_R_VERSION_STRING` environmental variable.
 
 ## libR-sys 0.2.2
 
