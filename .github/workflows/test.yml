@@ -87,7 +87,23 @@ jobs:
           echo "RUST_TARGETS=$env:RUST_TARGETS"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
-      
+
+      - name: MINGW64
+        if: startsWith(runner.os, 'Windows')
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          install: mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain
+          release: false
+
+      - name: MINGW32
+        if: startsWith(runner.os, 'Windows') && contains(join(matrix.config.targets, ','), 'i686')
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw32
+          install: mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain
+          release: false
+
       # All configurations for Windows go here
       # Rust toolchain is used to determine target architecture
       - name: Configure Windows
@@ -104,7 +120,9 @@ jobs:
             echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
-          
+        env:
+          RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
+
 
       # macOS configurations, mainly llvm and path to libclang
       # Because of this R installation issue on macOS-11.0 
