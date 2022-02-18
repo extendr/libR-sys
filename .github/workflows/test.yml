@@ -35,18 +35,18 @@ jobs:
           - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu']}
           - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
 
-          - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
-          - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
-          - {os: macOS-latest,   r: 'devel',   rust-version: 'stable'}
-          - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable'}
+          # - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
+          # - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
+          # - {os: macOS-latest,   r: 'devel',   rust-version: 'stable'}
+          # - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable'}
           # TODO: Remove no-test-targets when aarch64 runner is available
-          - {os: macOS-11,       r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
+          # - {os: macOS-11,       r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
 
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          # - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          # - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           # R-devel requires LD_LIBRARY_PATH
-          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
-          - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          # - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          # - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
 
 
 
