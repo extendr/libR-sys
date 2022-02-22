@@ -35,12 +35,12 @@ jobs:
           - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu']}
           - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
 
-          - {os: macOS-latest,   r: 'release', rust-version: 'stable'}
+          #- {os: macOS-latest,   r: 'release', rust-version: 'stable'}
           - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
           - {os: macOS-latest,   r: 'devel',   rust-version: 'stable'}
           - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable'}
           # TODO: Remove no-test-targets when aarch64 runner is available
-          - {os: macOS-11,       r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
+          - {os: macOS-latest,       r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
 
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
@@ -87,7 +87,23 @@ jobs:
           echo "RUST_TARGETS=$env:RUST_TARGETS"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
-      
+
+      - name: MINGW64
+        if: startsWith(runner.os, 'Windows')
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          install: mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain
+          release: false
+
+      - name: MINGW32
+        if: startsWith(runner.os, 'Windows') && contains(join(matrix.config.targets, ','), 'i686')
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw32
+          install: mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain
+          release: false
+
       # All configurations for Windows go here
       # Rust toolchain is used to determine target architecture
       - name: Configure Windows
@@ -104,7 +120,9 @@ jobs:
             echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
-          
+        env:
+          RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
+
 
       # macOS configurations, mainly llvm and path to libclang
       # Because of this R installation issue on macOS-11.0 
