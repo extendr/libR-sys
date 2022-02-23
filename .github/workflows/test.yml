@@ -320,9 +320,6 @@ jobs:
           git switch -c generated_bindings
         fi
 
-        # TODO: workaround for https://github.com/extendr/libR-sys/pull/60#issuecomment-864483474
-        rm generated_binding-macOS-11-R-release-rust-stable/bindings-macos-x86_64-*.rs
-
         # Update or add the bindings
         cp generated_binding-*/*.rs bindings/
 
