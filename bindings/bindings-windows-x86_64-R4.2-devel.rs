@@ -311,8 +311,8 @@ pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
 pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2022\0";
 pub const R_MONTH: &'static [u8; 3usize] = b"03\0";
-pub const R_DAY: &'static [u8; 3usize] = b"18\0";
-pub const R_SVN_REVISION: u32 = 81938;
+pub const R_DAY: &'static [u8; 3usize] = b"21\0";
+pub const R_SVN_REVISION: u32 = 81954;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1392,6 +1392,12 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn _vscprintf(
+        _Format: *const ::std::os::raw::c_char,
+        _ArgList: va_list,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
     pub fn tmpfile() -> *mut FILE;
 }
 extern "C" {
@@ -1414,12 +1420,6 @@ extern "C" {
         _Count: size_t,
         _Format: *const ::std::os::raw::c_char,
         _Args: va_list,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _vscprintf(
-        _Format: *const ::std::os::raw::c_char,
-        _ArgList: va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
