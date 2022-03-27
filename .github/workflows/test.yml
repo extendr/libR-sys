@@ -274,7 +274,7 @@ jobs:
       # All configurations for Windows go here
       # Rust toolchain is used to determine target architecture
       - name: Configure Windows for Rtools 42
-        if: runner.os == 'Windows' && matrix.configrtools-version == '42'
+        if: runner.os == 'Windows' && matrix.config.rtools-version == '42'
         # 1. Put rtools' mingw on PATH
         # 2. Add R's i386/x64 to PATH
         run: |
@@ -283,7 +283,7 @@ jobs:
           echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
 
       - name: Configure Windows for Rtools 40
-        if: runner.os == 'Windows' && matrix.configrtools-version != '42'
+        if: runner.os == 'Windows' && matrix.config.rtools-version != '42'
         # 1. Put rtools' mingw on PATH
         # 2. Add R's i386/x64 to PATH
         run: |
