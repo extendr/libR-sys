@@ -43,11 +43,11 @@ jobs:
           # TODO: Remove no-test-targets when aarch64 runner is available
           - {os: macOS-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
 
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable'}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly'}
           # R-devel requires LD_LIBRARY_PATH
-          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
-          - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable'}   
+          - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable'}   
 
 
 
@@ -67,6 +67,7 @@ jobs:
         uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
+          use-public-rspm: true
           rtools-version: ${{ matrix.config.rtools-version }}
 
       - name: Set up Rust
