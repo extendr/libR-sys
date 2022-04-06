@@ -296,15 +296,15 @@ pub const NAMEDMAX: u32 = 7;
 pub const R_XDR_DOUBLE_SIZE: u32 = 8;
 pub const R_XDR_INTEGER_SIZE: u32 = 4;
 pub const R_CODESET_MAX: u32 = 63;
-pub const R_VERSION: u32 = 262402;
-pub const R_NICK: &'static [u8; 12usize] = b"Bird Hippie\0";
+pub const R_VERSION: u32 = 262403;
+pub const R_NICK: &'static [u8; 12usize] = b"One Push-Up\0";
 pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
-pub const R_MINOR: &'static [u8; 4usize] = b"1.2\0";
+pub const R_MINOR: &'static [u8; 4usize] = b"1.3\0";
 pub const R_STATUS: &'static [u8; 1usize] = b"\0";
-pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
-pub const R_MONTH: &'static [u8; 3usize] = b"11\0";
-pub const R_DAY: &'static [u8; 3usize] = b"01\0";
-pub const R_SVN_REVISION: u32 = 81115;
+pub const R_YEAR: &'static [u8; 5usize] = b"2022\0";
+pub const R_MONTH: &'static [u8; 3usize] = b"03\0";
+pub const R_DAY: &'static [u8; 3usize] = b"10\0";
+pub const R_SVN_REVISION: u32 = 81868;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_version: u32 = 14;
@@ -1342,6 +1342,12 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn _vscprintf(
+        _Format: *const ::std::os::raw::c_char,
+        _ArgList: va_list,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
     pub fn tmpfile() -> *mut FILE;
 }
 extern "C" {
@@ -1364,12 +1370,6 @@ extern "C" {
         _Count: size_t,
         _Format: *const ::std::os::raw::c_char,
         _Args: va_list,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _vscprintf(
-        _Format: *const ::std::os::raw::c_char,
-        _ArgList: va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {

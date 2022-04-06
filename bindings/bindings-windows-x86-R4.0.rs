@@ -1285,6 +1285,12 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn _vscprintf(
+        _Format: *const ::std::os::raw::c_char,
+        _ArgList: va_list,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
     pub fn tmpfile() -> *mut FILE;
 }
 extern "C" {
@@ -1307,12 +1313,6 @@ extern "C" {
         _Count: size_t,
         _Format: *const ::std::os::raw::c_char,
         _Args: va_list,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _vscprintf(
-        _Format: *const ::std::os::raw::c_char,
-        _ArgList: va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {

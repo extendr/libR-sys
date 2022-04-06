@@ -295,10 +295,10 @@ pub const R_NICK: &'static [u8; 24usize] = b"Unsuffered Consequences\0";
 pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
 pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
 pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
-pub const R_YEAR: &'static [u8; 5usize] = b"2021\0";
-pub const R_MONTH: &'static [u8; 3usize] = b"12\0";
-pub const R_DAY: &'static [u8; 3usize] = b"17\0";
-pub const R_SVN_REVISION: u32 = 81389;
+pub const R_YEAR: &'static [u8; 5usize] = b"2022\0";
+pub const R_MONTH: &'static [u8; 3usize] = b"03\0";
+pub const R_DAY: &'static [u8; 3usize] = b"20\0";
+pub const R_SVN_REVISION: u32 = 81946;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -3622,6 +3622,9 @@ extern "C" {
 }
 extern "C" {
     pub static mut R_AsCharacterSymbol: SEXP;
+}
+extern "C" {
+    pub static mut R_AtsignSymbol: SEXP;
 }
 extern "C" {
     pub static mut R_baseSymbol: SEXP;
