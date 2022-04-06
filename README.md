@@ -157,7 +157,7 @@ To test the build, run `cargo test`.
   cargo +stable-msvc test --target x86_64-pc-windows-gnu
   ```
 
-  For 32-bit R (< 4.2), 
+  For 32-bit R, 
   ```pwsh
   $env:PATH += ";$env:R_HOME\bin\i386;$env:RTOOLS40_HOME\mingw32\bin"
   ```
