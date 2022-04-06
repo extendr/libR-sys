@@ -62,7 +62,7 @@ Once `R` and `rust` are configured, the library can be easily built:
     ```Shell
     rustup toolchain install stable-msvc
     rustup target add x86_64-pc-windows-gnu  # 64-bit
-    rustup target add   i686-pc-windows-gnu  # 32-bit, not needed for R >= 4.2
+    rustup target add   i686-pc-windows-gnu  # 32-bit
     ```
 
     `stable-msvc` toolchain requires VS Build Tools. They are usually available on the systems with an installation of Visual Studio.
