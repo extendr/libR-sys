@@ -269,16 +269,50 @@ jobs:
         env:
           RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
       
-      # All configurations for Windows go here
-      # Rust toolchain is used to determine target architecture
       - name: Configure Windows for Rtools 42
         if: runner.os == 'Windows' && matrix.config.rtools-version == '42'
-        # 1. Put rtools' mingw on PATH
-        # 2. Add R's i386/x64 to PATH
         run: |
           echo "C:\rtools42\x86_64-w64-mingw32.static.posix\bin"           | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           echo "C:\rtools42\usr\bin"                                       | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+
+          # NOTE: Unlike extendr, libR-sys can be compiled with non-Rtools' toolchain
+          #       without any problem. But, for consistency (and in order to detect
+          #       the possible problem), we anyway add the tweak.
+
+          # The following lines add two tweaks:
+          #
+          #  1. Change the linker name to "x86_64-w64-mingw32.static.posix-gcc.exe".
+          #  2. Add empty libgcc_s.a and libgcc_eh.a, and add them to the compiler's
+          #     library search paths via `LIBRARY_PATH` envvar.
+          # 
+          # The first tweak is needed because Rtools42 doesn't contain 
+          # "x86_64-w64-mingw32-gcc," which `rustc` uses as the default linker 
+          # for the `x86_64-pc-windows-gnu` target.
+          #  
+          # If we use the Rtools' toolchain, the second tweak is also required.
+          # `rustc` adds `-lgcc_eh` and `-lgcc_s` flags to the compiler, but
+          # Rtools' GCC doesn't have `libgcc_eh` or `libgcc_a` due to the 
+          # compilation settings. So, in order to please the compiler, we need
+          # to add empty `libgcc_eh` or `libgcc_a` to the library search paths.
+          # 
+          # For more details, please refer to https://github.com/r-windows/rtools-packages/blob/2407b23f1e0925bbb20a4162c963600105236318/mingw-w64-gcc/PKGBUILD#L313-L316
+
+          New-Item -Path libgcc_mock -Type Directory
+          New-Item -Path libgcc_mock\gcc.c -Type File
+          x86_64-w64-mingw32.static.posix-gcc.exe -c libgcc_mock\gcc.c -o libgcc_mock\gcc.o
+          x86_64-w64-mingw32.static.posix-ar.exe -r libgcc_mock\libgcc_eh.a libgcc_mock\gcc.o
+          x86_64-w64-mingw32.static.posix-ar.exe -r libgcc_mock\libgcc_s.a libgcc_mock\gcc.o
+
+          New-Item -Path .cargo -ItemType Directory -Force
+          $pwd_slash = echo "${PWD}" | % {$_ -replace '\\','/'}
+          @"
+          [target.x86_64-pc-windows-gnu]
+          linker = "x86_64-w64-mingw32.static.posix-gcc.exe"
+
+          [env]
+          LIBRARY_PATH = "${pwd_slash}/libgcc_mock"
+          "@ | Out-File -FilePath .cargo/config.toml -Encoding utf8 -Append ;
 
       - name: Configure Windows for Rtools 40
         if: runner.os == 'Windows' && matrix.config.rtools-version != '42'
