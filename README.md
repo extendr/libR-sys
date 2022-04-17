@@ -9,7 +9,7 @@ Low-level R library bindings
 
 ## Installation
 
-The recommended way to build this library is to use precomputed bindings, which are available for `Linux`, `macOS`, and `Windows`.
+The recommended way to build this library is to use precompiled bindings, which are available for `Linux`, `macOS`, and `Windows`.
 
 Alternatively, the library can be built from source, in which case it invokes `bindgen` crate, which has extra platform-specific dependencies (including `msys2` for `Windows`).
 
@@ -17,7 +17,7 @@ Alternatively, the library can be built from source, in which case it invokes `b
 `libR-sys` recognizes the following environment variables:
  - `LIBRSYS_R_VERSION` If set, it is used to determine the version of R, for which bindings should be generated. `LIBRSYS_R_VERSION` should be set to one of the supported values, e.g. `4.2.0` or `4.3.0-devel` (the pattern is `major.minor.patch[-devel]`). Malformed `LIBRSYS_R_VERSION` results in compilation error. If `LIBRSYS_R_VERSION` is unset, `R` is invoked and its `R.version` is used.
 
-## Using precomputed bindings (recommended)
+## Using precompiled bindings (recommended)
 
 Two components are required to build the library:
 1. [R](https://cran.r-project.org/): It needs to be installed and available in the search path.
