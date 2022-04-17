@@ -32,7 +32,7 @@ jobs:
           #   - emit-bindings: If 'true', emit binding no matter which Rust version is used (by default, the bindings are emitted only with stable Rust).
           - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
           - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu']}
+          - {os: windows-latest, r: 'devel',   rust-version: 'stable-gnu',   targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
           - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
 
           #- {os: macOS-latest,   r: 'release', rust-version: 'stable'}
@@ -40,13 +40,13 @@ jobs:
           - {os: macOS-latest,   r: 'devel',   rust-version: 'stable'}
           - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable'}
           # TODO: Remove no-test-targets when aarch64 runner is available
-          - {os: macOS-latest,       r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
 
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable'}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly'}
           # R-devel requires LD_LIBRARY_PATH
-          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
-          - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}   
+          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable'}   
+          - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable'}   
 
 
 
@@ -66,6 +66,8 @@ jobs:
         uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
+          use-public-rspm: true
+          rtools-version: ${{ matrix.config.rtools-version }}
 
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
@@ -219,14 +221,14 @@ jobs:
   test_windows_rtools:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) \w RTOOLSv2
+    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) \w Rtools
               
     strategy:
       fail-fast: false
       matrix:
         config:
           - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
-
+          - {os: windows-latest, r: 'devel',   rust-version: 'stable-gnu',   targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
     env:
       RSPM: ${{ matrix.config.rspm }}
 
@@ -243,7 +245,9 @@ jobs:
         uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
-
+          use-public-rspm: true
+          rtools-version: ${{ matrix.config.rtools-version }}
+          
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -265,10 +269,53 @@ jobs:
         env:
           RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
       
-      # All configurations for Windows go here
-      # Rust toolchain is used to determine target architecture
-      - name: Configure Windows
-        if: runner.os == 'Windows'
+      - name: Configure Windows for Rtools 42
+        if: runner.os == 'Windows' && matrix.config.rtools-version == '42'
+        run: |
+          echo "C:\rtools42\x86_64-w64-mingw32.static.posix\bin"           | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          echo "C:\rtools42\usr\bin"                                       | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+
+          # NOTE: Unlike extendr, libR-sys can be compiled with non-Rtools' toolchain
+          #       without any problem. But, for consistency (and in order to detect
+          #       the possible problem), we anyway add the tweak.
+
+          # The following lines add two tweaks:
+          #
+          #  1. Change the linker name to "x86_64-w64-mingw32.static.posix-gcc.exe".
+          #  2. Add empty libgcc_s.a and libgcc_eh.a, and add them to the compiler's
+          #     library search paths via `LIBRARY_PATH` envvar.
+          # 
+          # The first tweak is needed because Rtools42 doesn't contain 
+          # "x86_64-w64-mingw32-gcc," which `rustc` uses as the default linker 
+          # for the `x86_64-pc-windows-gnu` target.
+          #  
+          # If we use the Rtools' toolchain, the second tweak is also required.
+          # `rustc` adds `-lgcc_eh` and `-lgcc_s` flags to the compiler, but
+          # Rtools' GCC doesn't have `libgcc_eh` or `libgcc_a` due to the 
+          # compilation settings. So, in order to please the compiler, we need
+          # to add empty `libgcc_eh` or `libgcc_a` to the library search paths.
+          # 
+          # For more details, please refer to https://github.com/r-windows/rtools-packages/blob/2407b23f1e0925bbb20a4162c963600105236318/mingw-w64-gcc/PKGBUILD#L313-L316
+
+          New-Item -Path libgcc_mock -Type Directory
+          New-Item -Path libgcc_mock\gcc.c -Type File
+          x86_64-w64-mingw32.static.posix-gcc.exe -c libgcc_mock\gcc.c -o libgcc_mock\gcc.o
+          x86_64-w64-mingw32.static.posix-ar.exe -r libgcc_mock\libgcc_eh.a libgcc_mock\gcc.o
+          x86_64-w64-mingw32.static.posix-ar.exe -r libgcc_mock\libgcc_s.a libgcc_mock\gcc.o
+
+          New-Item -Path .cargo -ItemType Directory -Force
+          $pwd_slash = echo "${PWD}" | % {$_ -replace '\\','/'}
+          @"
+          [target.x86_64-pc-windows-gnu]
+          linker = "x86_64-w64-mingw32.static.posix-gcc.exe"
+
+          [env]
+          LIBRARY_PATH = "${pwd_slash}/libgcc_mock"
+          "@ | Out-File -FilePath .cargo/config.toml -Encoding utf8 -Append ;
+
+      - name: Configure Windows for Rtools 40
+        if: runner.os == 'Windows' && matrix.config.rtools-version != '42'
         # 1. Put rtools' mingw on PATH
         # 2. Add R's i386/x64 to PATH
         run: |
@@ -280,7 +327,6 @@ jobs:
             echo "C:\rtools40\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
-          
 
       # Run tests again using different bindings
       - name: Run tests on precomputed bindings shipped with libR-sys
