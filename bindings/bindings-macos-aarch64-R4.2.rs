@@ -81,15 +81,13 @@ where
         }
     }
 }
-pub const __DARWIN_ONLY_64_BIT_INO_T: u32 = 0;
+pub const __DARWIN_ONLY_64_BIT_INO_T: u32 = 1;
 pub const __DARWIN_ONLY_UNIX_CONFORMANCE: u32 = 1;
-pub const __DARWIN_ONLY_VERS_1050: u32 = 0;
+pub const __DARWIN_ONLY_VERS_1050: u32 = 1;
 pub const __DARWIN_UNIX03: u32 = 1;
 pub const __DARWIN_64_BIT_INO_T: u32 = 1;
 pub const __DARWIN_VERS_1050: u32 = 1;
 pub const __DARWIN_NON_CANCELABLE: u32 = 0;
-pub const __DARWIN_SUF_64_BIT_INO_T: &'static [u8; 9usize] = b"$INODE64\0";
-pub const __DARWIN_SUF_1050: &'static [u8; 6usize] = b"$1050\0";
 pub const __DARWIN_SUF_EXTSN: &'static [u8; 14usize] = b"$DARWIN_EXTSN\0";
 pub const __DARWIN_C_ANSI: u32 = 4096;
 pub const __DARWIN_C_FULL: u32 = 900000;
@@ -97,6 +95,8 @@ pub const __DARWIN_C_LEVEL: u32 = 900000;
 pub const __STDC_WANT_LIB_EXT1__: u32 = 1;
 pub const __DARWIN_NO_LONG_LONG: u32 = 0;
 pub const _DARWIN_FEATURE_64_BIT_INODE: u32 = 1;
+pub const _DARWIN_FEATURE_ONLY_64_BIT_INODE: u32 = 1;
+pub const _DARWIN_FEATURE_ONLY_VERS_1050: u32 = 1;
 pub const _DARWIN_FEATURE_ONLY_UNIX_CONFORMANCE: u32 = 1;
 pub const _DARWIN_FEATURE_UNIX_CONFORMANCE: u32 = 3;
 pub const __API_TO_BE_DEPRECATED: u32 = 100000;
@@ -296,8 +296,8 @@ pub const MAC_OS_VERSION_12_0: u32 = 120000;
 pub const __DRIVERKIT_19_0: u32 = 190000;
 pub const __DRIVERKIT_20_0: u32 = 200000;
 pub const __DRIVERKIT_21_0: u32 = 210000;
-pub const __MAC_OS_X_VERSION_MAX_ALLOWED: u32 = 120100;
-pub const __ENABLE_LEGACY_MAC_AVAILABILITY: u32 = 1;
+pub const __IPHONE_OS_VERSION_MAX_ALLOWED: u32 = 150200;
+pub const __ENABLE_LEGACY_IPHONE_AVAILABILITY: u32 = 1;
 pub const __PTHREAD_SIZE__: u32 = 8176;
 pub const __PTHREAD_ATTR_SIZE__: u32 = 56;
 pub const __PTHREAD_MUTEXATTR_SIZE__: u32 = 8;
@@ -345,6 +345,9 @@ pub const L_ctermid: u32 = 1024;
 pub const _USE_FORTIFY_LEVEL: u32 = 2;
 pub const MB_LEN_MAX: u32 = 1;
 pub const FP_SUPERNORMAL: u32 = 6;
+pub const FP_FAST_FMA: u32 = 1;
+pub const FP_FAST_FMAF: u32 = 1;
+pub const FP_FAST_FMAL: u32 = 1;
 pub const FP_ILOGB0: i32 = -2147483648;
 pub const FP_ILOGBNAN: i32 = -2147483648;
 pub const MATH_ERRNO: u32 = 1;
@@ -426,15 +429,15 @@ pub const IDENT_EXTPTR_AS_REF: u32 = 64;
 pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
 pub const RSTART_VERSION: u32 = 1;
-pub const R_VERSION: u32 = 262912;
-pub const R_NICK: &'static [u8; 24usize] = b"Unsuffered Consequences\0";
+pub const R_VERSION: u32 = 262656;
+pub const R_NICK: &'static [u8; 22usize] = b"Vigorous Calisthenics\0";
 pub const R_MAJOR: &'static [u8; 2usize] = b"4\0";
-pub const R_MINOR: &'static [u8; 4usize] = b"3.0\0";
-pub const R_STATUS: &'static [u8; 29usize] = b"Under development (unstable)\0";
+pub const R_MINOR: &'static [u8; 4usize] = b"2.0\0";
+pub const R_STATUS: &'static [u8; 1usize] = b"\0";
 pub const R_YEAR: &'static [u8; 5usize] = b"2022\0";
 pub const R_MONTH: &'static [u8; 3usize] = b"04\0";
-pub const R_DAY: &'static [u8; 3usize] = b"01\0";
-pub const R_SVN_REVISION: u32 = 82059;
+pub const R_DAY: &'static [u8; 3usize] = b"22\0";
+pub const R_SVN_REVISION: u32 = 82229;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -502,7 +505,7 @@ pub const R_GE_capability_transformations: u32 = 10;
 pub const R_GE_capability_paths: u32 = 11;
 pub type size_t = ::std::os::raw::c_ulong;
 pub type wchar_t = ::std::os::raw::c_int;
-pub type max_align_t = u128;
+pub type max_align_t = f64;
 #[doc = " <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
 pub type __int8_t = ::std::os::raw::c_schar;
@@ -1553,20 +1556,20 @@ extern "C" {
     pub fn vfprintf(
         arg1: *mut FILE,
         arg2: *const ::std::os::raw::c_char,
-        arg3: *mut __va_list_tag,
+        arg3: __builtin_va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn vprintf(
         arg1: *const ::std::os::raw::c_char,
-        arg2: *mut __va_list_tag,
+        arg2: __builtin_va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn vsprintf(
         arg1: *mut ::std::os::raw::c_char,
         arg2: *const ::std::os::raw::c_char,
-        arg3: *mut __va_list_tag,
+        arg3: __builtin_va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1594,7 +1597,7 @@ extern "C" {
     pub fn __svfscanf(
         arg1: *mut FILE,
         arg2: *const ::std::os::raw::c_char,
-        arg3: *mut __va_list_tag,
+        arg3: va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1656,13 +1659,13 @@ extern "C" {
     pub fn vfscanf(
         __stream: *mut FILE,
         __format: *const ::std::os::raw::c_char,
-        arg1: *mut __va_list_tag,
+        arg1: __builtin_va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn vscanf(
         __format: *const ::std::os::raw::c_char,
-        arg1: *mut __va_list_tag,
+        arg1: __builtin_va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1670,14 +1673,14 @@ extern "C" {
         __str: *mut ::std::os::raw::c_char,
         __size: ::std::os::raw::c_ulong,
         __format: *const ::std::os::raw::c_char,
-        arg1: *mut __va_list_tag,
+        arg1: __builtin_va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn vsscanf(
         __str: *const ::std::os::raw::c_char,
         __format: *const ::std::os::raw::c_char,
-        arg1: *mut __va_list_tag,
+        arg1: __builtin_va_list,
     ) -> ::std::os::raw::c_int;
 }
 pub type ssize_t = __darwin_ssize_t;
@@ -1692,7 +1695,7 @@ extern "C" {
     pub fn vdprintf(
         arg1: ::std::os::raw::c_int,
         arg2: *const ::std::os::raw::c_char,
-        arg3: *mut __va_list_tag,
+        arg3: va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1765,7 +1768,7 @@ extern "C" {
     pub fn vasprintf(
         arg1: *mut *mut ::std::os::raw::c_char,
         arg2: *const ::std::os::raw::c_char,
-        arg3: *mut __va_list_tag,
+        arg3: va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1822,7 +1825,7 @@ extern "C" {
         arg2: ::std::os::raw::c_int,
         arg3: size_t,
         arg4: *const ::std::os::raw::c_char,
-        arg5: *mut __va_list_tag,
+        arg5: va_list,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1832,7 +1835,7 @@ extern "C" {
         arg3: ::std::os::raw::c_int,
         arg4: size_t,
         arg5: *const ::std::os::raw::c_char,
-        arg6: *mut __va_list_tag,
+        arg6: va_list,
     ) -> ::std::os::raw::c_int;
 }
 pub type float_t = f32;
@@ -1847,7 +1850,7 @@ extern "C" {
     pub fn __fpclassifyd(arg1: f64) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn __fpclassifyl(arg1: u128) -> ::std::os::raw::c_int;
+    pub fn __fpclassifyl(arg1: f64) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn acosf(arg1: f32) -> f32;
@@ -1856,7 +1859,7 @@ extern "C" {
     pub fn acos(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn acosl(arg1: u128) -> u128;
+    pub fn acosl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn asinf(arg1: f32) -> f32;
@@ -1865,7 +1868,7 @@ extern "C" {
     pub fn asin(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn asinl(arg1: u128) -> u128;
+    pub fn asinl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn atanf(arg1: f32) -> f32;
@@ -1874,7 +1877,7 @@ extern "C" {
     pub fn atan(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn atanl(arg1: u128) -> u128;
+    pub fn atanl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn atan2f(arg1: f32, arg2: f32) -> f32;
@@ -1883,7 +1886,7 @@ extern "C" {
     pub fn atan2(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn atan2l(arg1: u128, arg2: u128) -> u128;
+    pub fn atan2l(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn cosf(arg1: f32) -> f32;
@@ -1892,7 +1895,7 @@ extern "C" {
     pub fn cos(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn cosl(arg1: u128) -> u128;
+    pub fn cosl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn sinf(arg1: f32) -> f32;
@@ -1901,7 +1904,7 @@ extern "C" {
     pub fn sin(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn sinl(arg1: u128) -> u128;
+    pub fn sinl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn tanf(arg1: f32) -> f32;
@@ -1910,7 +1913,7 @@ extern "C" {
     pub fn tan(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn tanl(arg1: u128) -> u128;
+    pub fn tanl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn acoshf(arg1: f32) -> f32;
@@ -1919,7 +1922,7 @@ extern "C" {
     pub fn acosh(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn acoshl(arg1: u128) -> u128;
+    pub fn acoshl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn asinhf(arg1: f32) -> f32;
@@ -1928,7 +1931,7 @@ extern "C" {
     pub fn asinh(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn asinhl(arg1: u128) -> u128;
+    pub fn asinhl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn atanhf(arg1: f32) -> f32;
@@ -1937,7 +1940,7 @@ extern "C" {
     pub fn atanh(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn atanhl(arg1: u128) -> u128;
+    pub fn atanhl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn coshf(arg1: f32) -> f32;
@@ -1946,7 +1949,7 @@ extern "C" {
     pub fn cosh(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn coshl(arg1: u128) -> u128;
+    pub fn coshl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn sinhf(arg1: f32) -> f32;
@@ -1955,7 +1958,7 @@ extern "C" {
     pub fn sinh(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn sinhl(arg1: u128) -> u128;
+    pub fn sinhl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn tanhf(arg1: f32) -> f32;
@@ -1964,7 +1967,7 @@ extern "C" {
     pub fn tanh(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn tanhl(arg1: u128) -> u128;
+    pub fn tanhl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn expf(arg1: f32) -> f32;
@@ -1973,7 +1976,7 @@ extern "C" {
     pub fn exp(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn expl(arg1: u128) -> u128;
+    pub fn expl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn exp2f(arg1: f32) -> f32;
@@ -1982,7 +1985,7 @@ extern "C" {
     pub fn exp2(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn exp2l(arg1: u128) -> u128;
+    pub fn exp2l(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn expm1f(arg1: f32) -> f32;
@@ -1991,7 +1994,7 @@ extern "C" {
     pub fn expm1(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn expm1l(arg1: u128) -> u128;
+    pub fn expm1l(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn logf(arg1: f32) -> f32;
@@ -2000,7 +2003,7 @@ extern "C" {
     pub fn log(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn logl(arg1: u128) -> u128;
+    pub fn logl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn log10f(arg1: f32) -> f32;
@@ -2009,7 +2012,7 @@ extern "C" {
     pub fn log10(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn log10l(arg1: u128) -> u128;
+    pub fn log10l(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn log2f(arg1: f32) -> f32;
@@ -2018,7 +2021,7 @@ extern "C" {
     pub fn log2(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn log2l(arg1: u128) -> u128;
+    pub fn log2l(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn log1pf(arg1: f32) -> f32;
@@ -2027,7 +2030,7 @@ extern "C" {
     pub fn log1p(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn log1pl(arg1: u128) -> u128;
+    pub fn log1pl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn logbf(arg1: f32) -> f32;
@@ -2036,7 +2039,7 @@ extern "C" {
     pub fn logb(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn logbl(arg1: u128) -> u128;
+    pub fn logbl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn modff(arg1: f32, arg2: *mut f32) -> f32;
@@ -2045,7 +2048,7 @@ extern "C" {
     pub fn modf(arg1: f64, arg2: *mut f64) -> f64;
 }
 extern "C" {
-    pub fn modfl(arg1: u128, arg2: *mut u128) -> u128;
+    pub fn modfl(arg1: f64, arg2: *mut f64) -> f64;
 }
 extern "C" {
     pub fn ldexpf(arg1: f32, arg2: ::std::os::raw::c_int) -> f32;
@@ -2054,7 +2057,7 @@ extern "C" {
     pub fn ldexp(arg1: f64, arg2: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
-    pub fn ldexpl(arg1: u128, arg2: ::std::os::raw::c_int) -> u128;
+    pub fn ldexpl(arg1: f64, arg2: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
     pub fn frexpf(arg1: f32, arg2: *mut ::std::os::raw::c_int) -> f32;
@@ -2063,7 +2066,7 @@ extern "C" {
     pub fn frexp(arg1: f64, arg2: *mut ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
-    pub fn frexpl(arg1: u128, arg2: *mut ::std::os::raw::c_int) -> u128;
+    pub fn frexpl(arg1: f64, arg2: *mut ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
     pub fn ilogbf(arg1: f32) -> ::std::os::raw::c_int;
@@ -2072,7 +2075,7 @@ extern "C" {
     pub fn ilogb(arg1: f64) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn ilogbl(arg1: u128) -> ::std::os::raw::c_int;
+    pub fn ilogbl(arg1: f64) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn scalbnf(arg1: f32, arg2: ::std::os::raw::c_int) -> f32;
@@ -2081,7 +2084,7 @@ extern "C" {
     pub fn scalbn(arg1: f64, arg2: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
-    pub fn scalbnl(arg1: u128, arg2: ::std::os::raw::c_int) -> u128;
+    pub fn scalbnl(arg1: f64, arg2: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
     pub fn scalblnf(arg1: f32, arg2: ::std::os::raw::c_long) -> f32;
@@ -2090,7 +2093,7 @@ extern "C" {
     pub fn scalbln(arg1: f64, arg2: ::std::os::raw::c_long) -> f64;
 }
 extern "C" {
-    pub fn scalblnl(arg1: u128, arg2: ::std::os::raw::c_long) -> u128;
+    pub fn scalblnl(arg1: f64, arg2: ::std::os::raw::c_long) -> f64;
 }
 extern "C" {
     pub fn fabsf(arg1: f32) -> f32;
@@ -2099,7 +2102,7 @@ extern "C" {
     pub fn fabs(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn fabsl(arg1: u128) -> u128;
+    pub fn fabsl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn cbrtf(arg1: f32) -> f32;
@@ -2108,7 +2111,7 @@ extern "C" {
     pub fn cbrt(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn cbrtl(arg1: u128) -> u128;
+    pub fn cbrtl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn hypotf(arg1: f32, arg2: f32) -> f32;
@@ -2117,7 +2120,7 @@ extern "C" {
     pub fn hypot(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn hypotl(arg1: u128, arg2: u128) -> u128;
+    pub fn hypotl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn powf(arg1: f32, arg2: f32) -> f32;
@@ -2126,7 +2129,7 @@ extern "C" {
     pub fn pow(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn powl(arg1: u128, arg2: u128) -> u128;
+    pub fn powl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn sqrtf(arg1: f32) -> f32;
@@ -2135,7 +2138,7 @@ extern "C" {
     pub fn sqrt(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn sqrtl(arg1: u128) -> u128;
+    pub fn sqrtl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn erff(arg1: f32) -> f32;
@@ -2144,7 +2147,7 @@ extern "C" {
     pub fn erf(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn erfl(arg1: u128) -> u128;
+    pub fn erfl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn erfcf(arg1: f32) -> f32;
@@ -2153,7 +2156,7 @@ extern "C" {
     pub fn erfc(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn erfcl(arg1: u128) -> u128;
+    pub fn erfcl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn lgammaf(arg1: f32) -> f32;
@@ -2162,7 +2165,7 @@ extern "C" {
     pub fn lgamma(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn lgammal(arg1: u128) -> u128;
+    pub fn lgammal(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn tgammaf(arg1: f32) -> f32;
@@ -2171,7 +2174,7 @@ extern "C" {
     pub fn tgamma(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn tgammal(arg1: u128) -> u128;
+    pub fn tgammal(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn ceilf(arg1: f32) -> f32;
@@ -2180,7 +2183,7 @@ extern "C" {
     pub fn ceil(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn ceill(arg1: u128) -> u128;
+    pub fn ceill(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn floorf(arg1: f32) -> f32;
@@ -2189,7 +2192,7 @@ extern "C" {
     pub fn floor(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn floorl(arg1: u128) -> u128;
+    pub fn floorl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn nearbyintf(arg1: f32) -> f32;
@@ -2198,7 +2201,7 @@ extern "C" {
     pub fn nearbyint(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn nearbyintl(arg1: u128) -> u128;
+    pub fn nearbyintl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn rintf(arg1: f32) -> f32;
@@ -2207,7 +2210,7 @@ extern "C" {
     pub fn rint(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn rintl(arg1: u128) -> u128;
+    pub fn rintl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn lrintf(arg1: f32) -> ::std::os::raw::c_long;
@@ -2216,7 +2219,7 @@ extern "C" {
     pub fn lrint(arg1: f64) -> ::std::os::raw::c_long;
 }
 extern "C" {
-    pub fn lrintl(arg1: u128) -> ::std::os::raw::c_long;
+    pub fn lrintl(arg1: f64) -> ::std::os::raw::c_long;
 }
 extern "C" {
     pub fn roundf(arg1: f32) -> f32;
@@ -2225,7 +2228,7 @@ extern "C" {
     pub fn round(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn roundl(arg1: u128) -> u128;
+    pub fn roundl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn lroundf(arg1: f32) -> ::std::os::raw::c_long;
@@ -2234,7 +2237,7 @@ extern "C" {
     pub fn lround(arg1: f64) -> ::std::os::raw::c_long;
 }
 extern "C" {
-    pub fn lroundl(arg1: u128) -> ::std::os::raw::c_long;
+    pub fn lroundl(arg1: f64) -> ::std::os::raw::c_long;
 }
 extern "C" {
     pub fn llrintf(arg1: f32) -> ::std::os::raw::c_longlong;
@@ -2243,7 +2246,7 @@ extern "C" {
     pub fn llrint(arg1: f64) -> ::std::os::raw::c_longlong;
 }
 extern "C" {
-    pub fn llrintl(arg1: u128) -> ::std::os::raw::c_longlong;
+    pub fn llrintl(arg1: f64) -> ::std::os::raw::c_longlong;
 }
 extern "C" {
     pub fn llroundf(arg1: f32) -> ::std::os::raw::c_longlong;
@@ -2252,7 +2255,7 @@ extern "C" {
     pub fn llround(arg1: f64) -> ::std::os::raw::c_longlong;
 }
 extern "C" {
-    pub fn llroundl(arg1: u128) -> ::std::os::raw::c_longlong;
+    pub fn llroundl(arg1: f64) -> ::std::os::raw::c_longlong;
 }
 extern "C" {
     pub fn truncf(arg1: f32) -> f32;
@@ -2261,7 +2264,7 @@ extern "C" {
     pub fn trunc(arg1: f64) -> f64;
 }
 extern "C" {
-    pub fn truncl(arg1: u128) -> u128;
+    pub fn truncl(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn fmodf(arg1: f32, arg2: f32) -> f32;
@@ -2270,7 +2273,7 @@ extern "C" {
     pub fn fmod(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn fmodl(arg1: u128, arg2: u128) -> u128;
+    pub fn fmodl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn remainderf(arg1: f32, arg2: f32) -> f32;
@@ -2279,7 +2282,7 @@ extern "C" {
     pub fn remainder(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn remainderl(arg1: u128, arg2: u128) -> u128;
+    pub fn remainderl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn remquof(arg1: f32, arg2: f32, arg3: *mut ::std::os::raw::c_int) -> f32;
@@ -2288,7 +2291,7 @@ extern "C" {
     pub fn remquo(arg1: f64, arg2: f64, arg3: *mut ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
-    pub fn remquol(arg1: u128, arg2: u128, arg3: *mut ::std::os::raw::c_int) -> u128;
+    pub fn remquol(arg1: f64, arg2: f64, arg3: *mut ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
     pub fn copysignf(arg1: f32, arg2: f32) -> f32;
@@ -2297,7 +2300,7 @@ extern "C" {
     pub fn copysign(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn copysignl(arg1: u128, arg2: u128) -> u128;
+    pub fn copysignl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn nanf(arg1: *const ::std::os::raw::c_char) -> f32;
@@ -2306,7 +2309,7 @@ extern "C" {
     pub fn nan(arg1: *const ::std::os::raw::c_char) -> f64;
 }
 extern "C" {
-    pub fn nanl(arg1: *const ::std::os::raw::c_char) -> u128;
+    pub fn nanl(arg1: *const ::std::os::raw::c_char) -> f64;
 }
 extern "C" {
     pub fn nextafterf(arg1: f32, arg2: f32) -> f32;
@@ -2315,16 +2318,16 @@ extern "C" {
     pub fn nextafter(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn nextafterl(arg1: u128, arg2: u128) -> u128;
+    pub fn nextafterl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn nexttoward(arg1: f64, arg2: u128) -> f64;
+    pub fn nexttoward(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn nexttowardf(arg1: f32, arg2: u128) -> f32;
+    pub fn nexttowardf(arg1: f32, arg2: f64) -> f32;
 }
 extern "C" {
-    pub fn nexttowardl(arg1: u128, arg2: u128) -> u128;
+    pub fn nexttowardl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn fdimf(arg1: f32, arg2: f32) -> f32;
@@ -2333,7 +2336,7 @@ extern "C" {
     pub fn fdim(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn fdiml(arg1: u128, arg2: u128) -> u128;
+    pub fn fdiml(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn fmaxf(arg1: f32, arg2: f32) -> f32;
@@ -2342,7 +2345,7 @@ extern "C" {
     pub fn fmax(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn fmaxl(arg1: u128, arg2: u128) -> u128;
+    pub fn fmaxl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn fminf(arg1: f32, arg2: f32) -> f32;
@@ -2351,7 +2354,7 @@ extern "C" {
     pub fn fmin(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn fminl(arg1: u128, arg2: u128) -> u128;
+    pub fn fminl(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn fmaf(arg1: f32, arg2: f32, arg3: f32) -> f32;
@@ -2360,19 +2363,7 @@ extern "C" {
     pub fn fma(arg1: f64, arg2: f64, arg3: f64) -> f64;
 }
 extern "C" {
-    pub fn fmal(arg1: u128, arg2: u128, arg3: u128) -> u128;
-}
-extern "C" {
-    pub fn __inff() -> f32;
-}
-extern "C" {
-    pub fn __inf() -> f64;
-}
-extern "C" {
-    pub fn __infl() -> u128;
-}
-extern "C" {
-    pub fn __nan() -> f32;
+    pub fn fmal(arg1: f64, arg2: f64, arg3: f64) -> f64;
 }
 extern "C" {
     pub fn __exp10f(arg1: f32) -> f32;
@@ -2398,96 +2389,6 @@ extern "C" {
 extern "C" {
     pub fn __tanpi(arg1: f64) -> f64;
 }
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct __float2 {
-    pub __sinval: f32,
-    pub __cosval: f32,
-}
-#[test]
-fn bindgen_test_layout___float2() {
-    assert_eq!(
-        ::std::mem::size_of::<__float2>(),
-        8usize,
-        concat!("Size of: ", stringify!(__float2))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<__float2>(),
-        4usize,
-        concat!("Alignment of ", stringify!(__float2))
-    );
-    assert_eq!(
-        unsafe { &(*(::std::ptr::null::<__float2>())).__sinval as *const _ as usize },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__float2),
-            "::",
-            stringify!(__sinval)
-        )
-    );
-    assert_eq!(
-        unsafe { &(*(::std::ptr::null::<__float2>())).__cosval as *const _ as usize },
-        4usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__float2),
-            "::",
-            stringify!(__cosval)
-        )
-    );
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct __double2 {
-    pub __sinval: f64,
-    pub __cosval: f64,
-}
-#[test]
-fn bindgen_test_layout___double2() {
-    assert_eq!(
-        ::std::mem::size_of::<__double2>(),
-        16usize,
-        concat!("Size of: ", stringify!(__double2))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<__double2>(),
-        8usize,
-        concat!("Alignment of ", stringify!(__double2))
-    );
-    assert_eq!(
-        unsafe { &(*(::std::ptr::null::<__double2>())).__sinval as *const _ as usize },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__double2),
-            "::",
-            stringify!(__sinval)
-        )
-    );
-    assert_eq!(
-        unsafe { &(*(::std::ptr::null::<__double2>())).__cosval as *const _ as usize },
-        8usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__double2),
-            "::",
-            stringify!(__cosval)
-        )
-    );
-}
-extern "C" {
-    pub fn __sincosf_stret(arg1: f32) -> __float2;
-}
-extern "C" {
-    pub fn __sincos_stret(arg1: f64) -> __double2;
-}
-extern "C" {
-    pub fn __sincospif_stret(arg1: f32) -> __float2;
-}
-extern "C" {
-    pub fn __sincospi_stret(arg1: f64) -> __double2;
-}
 extern "C" {
     pub fn j0(arg1: f64) -> f64;
 }
@@ -2511,24 +2412,6 @@ extern "C" {
 }
 extern "C" {
     pub static mut signgam: ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn rinttol(arg1: f64) -> ::std::os::raw::c_long;
-}
-extern "C" {
-    pub fn roundtol(arg1: f64) -> ::std::os::raw::c_long;
-}
-extern "C" {
-    pub fn drem(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn finite(arg1: f64) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn gamma(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn significand(arg1: f64) -> f64;
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -2699,7 +2582,7 @@ extern "C" {
     pub fn R_alloc(arg1: size_t, arg2: ::std::os::raw::c_int) -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
-    pub fn R_allocLD(nelem: size_t) -> *mut u128;
+    pub fn R_allocLD(nelem: size_t) -> *mut f64;
 }
 extern "C" {
     pub fn S_alloc(
@@ -2890,10 +2773,10 @@ extern "C" {
     pub fn REprintf(arg1: *const ::std::os::raw::c_char, ...);
 }
 extern "C" {
-    pub fn Rvprintf(arg1: *const ::std::os::raw::c_char, arg2: *mut __va_list_tag);
+    pub fn Rvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
 }
 extern "C" {
-    pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: *mut __va_list_tag);
+    pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
 }
 pub type DL_FUNC = ::std::option::Option<unsafe extern "C" fn() -> *mut ::std::os::raw::c_void>;
 pub type R_NativePrimitiveArgType = ::std::os::raw::c_uint;
@@ -7886,65 +7769,4 @@ extern "C" {
 extern "C" {
     pub fn R_GE_maskType(mask: SEXP) -> ::std::os::raw::c_int;
 }
-pub type __builtin_va_list = [__va_list_tag; 1usize];
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct __va_list_tag {
-    pub gp_offset: ::std::os::raw::c_uint,
-    pub fp_offset: ::std::os::raw::c_uint,
-    pub overflow_arg_area: *mut ::std::os::raw::c_void,
-    pub reg_save_area: *mut ::std::os::raw::c_void,
-}
-#[test]
-fn bindgen_test_layout___va_list_tag() {
-    assert_eq!(
-        ::std::mem::size_of::<__va_list_tag>(),
-        24usize,
-        concat!("Size of: ", stringify!(__va_list_tag))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<__va_list_tag>(),
-        8usize,
-        concat!("Alignment of ", stringify!(__va_list_tag))
-    );
-    assert_eq!(
-        unsafe { &(*(::std::ptr::null::<__va_list_tag>())).gp_offset as *const _ as usize },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__va_list_tag),
-            "::",
-            stringify!(gp_offset)
-        )
-    );
-    assert_eq!(
-        unsafe { &(*(::std::ptr::null::<__va_list_tag>())).fp_offset as *const _ as usize },
-        4usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__va_list_tag),
-            "::",
-            stringify!(fp_offset)
-        )
-    );
-    assert_eq!(
-        unsafe { &(*(::std::ptr::null::<__va_list_tag>())).overflow_arg_area as *const _ as usize },
-        8usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__va_list_tag),
-            "::",
-            stringify!(overflow_arg_area)
-        )
-    );
-    assert_eq!(
-        unsafe { &(*(::std::ptr::null::<__va_list_tag>())).reg_save_area as *const _ as usize },
-        16usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__va_list_tag),
-            "::",
-            stringify!(reg_save_area)
-        )
-    );
-}
+pub type __builtin_va_list = *mut ::std::os::raw::c_char;
