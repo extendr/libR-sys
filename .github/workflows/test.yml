@@ -3,7 +3,17 @@ name: Tests
 on:
   push:
     branches:
-      - tmp-force-generate-bindings-for-4.2
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  # Run this once per three days
+  schedule:
+    - cron: '29 17 */3 * *'
+  # This can also manually run
+  workflow_dispatch: {}
 
 jobs:
 
@@ -33,8 +43,8 @@ jobs:
           # TODO: Remove no-test-targets when aarch64 runner is available
           - {os: macOS-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
 
-          - {os: ubuntu-20.04,   r: '4.2', rust-version: 'stable'}
-          - {os: ubuntu-20.04,   r: '4.2', rust-version: 'nightly'}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable'}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly'}
           # R-devel requires LD_LIBRARY_PATH
           - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable'}   
           - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable'}   
@@ -342,6 +352,8 @@ jobs:
   commit_generated_bindings:
     needs: test_with_bindgen
     runs-on: ubuntu-latest
+    # Do not run this on pull request
+    if: github.ref == 'refs/heads/master'
     steps:
     - uses: actions/checkout@v2
 
