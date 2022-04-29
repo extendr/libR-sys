@@ -330,13 +330,17 @@ Rust-analyzer might need some settings. For example, if you are using VS Code, y
 
 ``` json
 {
+    // Change the default toolchain to stable-gnu
     "rust-analyzer.server.extraEnv": {
         "RUSTUP_TOOLCHAIN": "stable-gnu"
     },
+    // This is needed when we compile with R < 4.1
     "rust-analyzer.cargo.target": "x86_64-pc-windows-gnu",
+    // Specify "use-bindgen" for developing R-devel.
+    "rust-analyzer.cargo.features": [],
     "terminal.integrated.env.windows": {
         "R_HOME": "C:/Program Files/R/R-4.2.0",
-        "PATH": "${env:R_HOME}/bin/x64;${env:RTOOLS42_HOME}/x86_64-w64-mingw32.static.posix/bin;${env:RTOOLS42_HOME}/usr/bin;${env:PATH}"
+        "PATH": "${env:R_HOME}/bin/x64;C:/rtools42/x86_64-w64-mingw32.static.posix/bin;C:/rtools42/usr/bin;${env:PATH}"
     }
 }
 ```
