@@ -322,6 +322,27 @@ by adding the following lines to `.cargo/config.toml`:
 LIBRARY_PATH = "path/to/libgcc_mock"
 ```
 
+#### Editor settings
+
+<details>
+
+Rust-analyzer might need some settings. For example, if you are using VS Code, you probably need to add the following options to `.vscode/settings.json`.
+
+``` json
+{
+    "rust-analyzer.server.extraEnv": {
+        "RUSTUP_TOOLCHAIN": "stable-gnu"
+    },
+    "rust-analyzer.cargo.target": "x86_64-pc-windows-gnu",
+    "terminal.integrated.env.windows": {
+        "R_HOME": "C:/Program Files/R/R-4.2.0",
+        "PATH": "${env:R_HOME}/bin/x64;${env:RTOOLS42_HOME}/x86_64-w64-mingw32.static.posix/bin;${env:RTOOLS42_HOME}/usr/bin;${env:PATH}"
+    }
+}
+```
+
+</details>
+
 ### Windows (R < 4.2)
 
 <details>
