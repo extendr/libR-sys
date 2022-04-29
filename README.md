@@ -324,6 +324,8 @@ LIBRARY_PATH = "path/to/libgcc_mock"
 
 ### Windows (R < 4.2)
 
+<details>
+
 #### Install the `msvc` toolchain of Rust
 
 When building for `Windows` with older versions of R, the `msvc` toolchain and
@@ -406,3 +408,5 @@ $env:PATH = "${env:R_HOME}\bin\i386;${env:RTOOLS40_HOME}\mingw32\bin;${env:PATH}
 Note that the above prepends, rather than appends, because otherwise the wrong
 toolchain might be accidentally chosen if the `PATH` already contains another
 version of `R` or compiler toolchain.
+
+</details>
