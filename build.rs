@@ -88,7 +88,7 @@ enum EnvVarError {
 
 // frustratingly, something like the following does not exist in an
 // OS-independent way in Rust
-#[cfg(target_family = "unix")]
+#[cfg(all(target_family = "unix", feature = "invoke-r-command"))]
 fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
     let os_str = OsStr::from_bytes(bytes);
     os_str.to_os_string()
