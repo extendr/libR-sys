@@ -22,12 +22,12 @@ bindgen = { version = "0.53.2", optional = true }
 regex = { version = "1", optional = true }
 
 [features]
-default = ["winapi"]
-no-r-command = []
+default = ["invoke-r-command"]
+invoke-r-command = ["winapi"]
 
 # By default, we use pre-computed bindings that ship with the library. This may fail!
 # Turn on the 'use-bindgen' feature to generate bindings on the fly for your platform.
-use-bindgen = ["winapi", "bindgen", "regex"]
+use-bindgen = ["invoke-r-command", "bindgen", "regex"]
 
 [target.'cfg(windows)'.build-dependencies]
 winapi = { version = "0.3", features = ["consoleapi", "stringapiset"], optional = true }
