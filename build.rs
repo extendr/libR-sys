@@ -4,14 +4,14 @@ use std::{
     fs, io,
     io::{Error, ErrorKind},
     path::{Path, PathBuf},
-    process::{exit, Command},
+    process::exit,
 };
 
 #[cfg(target_family = "unix")]
-use std::os::unix::ffi::OsStrExt;
+use {std::os::unix::ffi::OsStrExt, std::process::Command};
 
-#[cfg(target_family = "windows")]
-use std::os::windows::ffi::OsStringExt;
+#[cfg(all(target_family = "windows", winapi))]
+use {std::os::windows::ffi::OsStringExt, std::process::Command};
 
 //
 // Environmental variables
@@ -96,7 +96,7 @@ fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
 
 // convert bytes to wide-encoded characters on Windows
 // from: https://stackoverflow.com/a/40456495/4975218
-#[cfg(target_family = "windows")]
+#[cfg(all(target_family = "windows", winapi))]
 fn wide_from_console_string(bytes: &[u8]) -> Vec<u16> {
     assert!(bytes.len() < std::i32::MAX as usize);
     let mut wide;
@@ -125,7 +125,7 @@ fn wide_from_console_string(bytes: &[u8]) -> Vec<u16> {
     wide
 }
 
-#[cfg(target_family = "windows")]
+#[cfg(all(target_family = "windows", winapi))]
 fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
     // first, use Windows API to convert to wide encoded
     let wide = wide_from_console_string(bytes);
@@ -134,6 +134,7 @@ fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
 }
 
 // Execute an R script and return the captured output
+#[cfg(all(target_family = "windows", winapi))]
 fn r_command<S: AsRef<OsStr>>(r_binary: S, script: &str) -> io::Result<OsString> {
     let out = Command::new(r_binary)
         .args(&["-s", "-e", script])
@@ -150,6 +151,11 @@ fn r_command<S: AsRef<OsStr>>(r_binary: S, script: &str) -> io::Result<OsString>
     }
 
     Ok(byte_array_to_os_string(&out.stdout))
+}
+
+#[cfg(all(target_family = "windows", not(winapi)))]
+fn r_command<S: AsRef<OsStr>>(_: S, _: &str) -> io::Result<OsString> {
+    panic!("R command should not be invoked when no_winapi feature is specified!");
 }
 
 // Get the path to the R home either from an envvar or by executing the actual R binary on PATH.
