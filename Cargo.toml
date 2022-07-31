@@ -25,13 +25,9 @@ regex = { version = "1", optional = true }
 winapi = { version = "0.3", features = ["consoleapi", "stringapiset"], optional = true }
 
 [features]
-default = []
+default = ["winapi"]
+no_r_command = []
 
 # By default, we use pre-computed bindings that ship with the library. This may fail!
 # Turn on the 'use-bindgen' feature to generate bindings on the fly for your platform.
-use-bindgen = ["default", "bindgen", "regex"]
-
-no_winapi = []
-
-[target.'cfg(windows)'.features]
-default = ["winapi"]
+use-bindgen = ["winapi", "bindgen", "regex"]
