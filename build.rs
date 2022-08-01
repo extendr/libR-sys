@@ -155,7 +155,7 @@ fn r_command<S: AsRef<OsStr>>(r_binary: S, script: &str) -> io::Result<OsString>
 
 #[cfg(not(feature = "invoke-r-command"))]
 fn r_command<S: AsRef<OsStr>>(_: S, _: &str) -> io::Result<OsString> {
-    panic!("R command should not be invoked when no_winapi feature is specified!");
+    panic!("R command should not be invoked when invoke-r-command feature is not specified!");
 }
 
 // Get the path to the R home either from an envvar or by executing the actual R binary on PATH.
@@ -163,6 +163,12 @@ fn get_r_home() -> io::Result<PathBuf> {
     // If the environment variable R_HOME is set we use it
     if let Some(r_home) = env::var_os(ENVVAR_R_HOME) {
         return Ok(PathBuf::from(r_home));
+    }
+
+    // When the user doesn't want to invoke the actual R command, return empty string.
+    if cfg!(not(feature = "invoke-r-command")) {
+        println!("Warning: {} envvar is not available", ENVVAR_R_HOME);
+        return Ok(PathBuf::from(""));
     }
 
     // Otherwise, we try to execute `R` to find `R_HOME`. Note that this is
@@ -194,6 +200,12 @@ fn get_r_include(r_home: &Path, library: &Path) -> io::Result<PathBuf> {
     // If the environment variable R_INCLUDE_DIR is set we use it
     if let Some(include) = env::var_os(ENVVAR_R_INCLUDE_DIR) {
         return Ok(PathBuf::from(include));
+    }
+
+    // When the user doesn't want to invoke the actual R command, return empty string.
+    if cfg!(not(feature = "invoke-r-command")) {
+        println!("Warning: {} envvar is not available", ENVVAR_R_INCLUDE_DIR);
+        return Ok(PathBuf::from(""));
     }
 
     // Otherwise, we try to execute `R` to find the include dir. Here,
