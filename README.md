@@ -147,7 +147,7 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
 
   Add the following to the `PATH` (using `PowerShell` syntax). 
   ```pwsh
-  $env:PATH = "${env:R_HOME}\bin\x64;C:\rtools42\usr\bin;C:\rtools42\x86_64-w64-mingw32.static.posix\bin:${env:MSYS_ROOT}\mingw64\bin"
+  $env:PATH = "${env:R_HOME}\bin\x64;C:\rtools42\usr\bin;C:\rtools42\x86_64-w64-mingw32.static.posix\bin;${env:MSYS_ROOT}\mingw64\bin;${env:PATH}"
   ```
   then build & test with 
   ```pwsh

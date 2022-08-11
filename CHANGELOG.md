@@ -9,6 +9,7 @@
   To be clear, libR-sys (and extendr) crate will keep supporting 32-bit on R <
   4.2 for a year or so.
 - libR-sys no longer sets `DEP_R_R_VERSION_STRING` environmental variable.
+- [`Windows`] Dropped build-time dependency on `winapi`
 
 ## libR-sys 0.2.2
 
