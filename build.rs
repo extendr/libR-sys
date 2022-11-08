@@ -94,6 +94,15 @@ fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
     os_str.to_os_string()
 }
 
+#[link(name = "kernel32")]
+#[cfg(target_family = "windows")]
+extern "system" {
+    #[link_name = "GetConsoleCP"]
+    fn get_console_code_page() -> u32;
+    #[link_name = "MultiByteToWideChar"]
+    fn multi_byte_to_wide_char(CodePage: u32, dwFlags : u32, lpMultiByteStr : *const u8, cbMultiByte : i32, lpWideCharStr : *mut u16, cchWideChar : i32) -> i32;
+}
+
 // convert bytes to wide-encoded characters on Windows
 // from: https://stackoverflow.com/a/40456495/4975218
 #[cfg(target_family = "windows")]
@@ -102,20 +111,20 @@ fn wide_from_console_string(bytes: &[u8]) -> Vec<u16> {
     let mut wide;
     let mut len;
     unsafe {
-        let cp = winapi::um::consoleapi::GetConsoleCP();
-        len = winapi::um::stringapiset::MultiByteToWideChar(
+        let cp = get_console_code_page();
+        len = multi_byte_to_wide_char(
             cp,
             0,
-            bytes.as_ptr() as *const i8,
+            bytes.as_ptr() as *const u8,
             bytes.len() as i32,
             std::ptr::null_mut(),
             0,
         );
         wide = Vec::with_capacity(len as usize);
-        len = winapi::um::stringapiset::MultiByteToWideChar(
+        len = multi_byte_to_wide_char(
             cp,
             0,
-            bytes.as_ptr() as *const i8,
+            bytes.as_ptr() as *const u8,
             bytes.len() as i32,
             wide.as_mut_ptr(),
             len,
