@@ -20,7 +20,7 @@ documentation = "https://docs.rs/libR-sys/latest/libR_sys/"
 [build-dependencies]
 bindgen = { version = "0.63", optional = true }
 regex = { version = "1", optional = true }
-clang = { version = "1", features = ["runtime"] }
+clang = { version = "2", features = ["runtime"] }
 
 [features]
 # By default, we use pre-computed bindings that ship with the library. This may fail!
