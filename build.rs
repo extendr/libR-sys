@@ -100,7 +100,14 @@ extern "system" {
     #[link_name = "GetConsoleCP"]
     fn get_console_code_page() -> u32;
     #[link_name = "MultiByteToWideChar"]
-    fn multi_byte_to_wide_char(CodePage: u32, dwFlags : u32, lpMultiByteStr : *const u8, cbMultiByte : i32, lpWideCharStr : *mut u16, cchWideChar : i32) -> i32;
+    fn multi_byte_to_wide_char(
+        CodePage: u32,
+        dwFlags: u32,
+        lpMultiByteStr: *const u8,
+        cbMultiByte: i32,
+        lpWideCharStr: *mut u16,
+        cchWideChar: i32,
+    ) -> i32;
 }
 
 // convert bytes to wide-encoded characters on Windows
@@ -361,23 +368,29 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     use clang::*;
     use std::io::BufRead;
 
-    // This extract the items from include files in twos steps.
-    // First, extract it using clang-rs. But, as this flatten the
-    // #define macro, we need to extract macro constants (e.g. `#define FOO 1`)
-    // and macro functions (e.g. `#define FOO(x) (x + 1)`) by ourselves.
-    // Bindgen handles these things nicely, but I cannot understand how to do it...
+    // This extract the items from the #include files in twos steps. First, use
+    // clang-rs; it parses the C files and extract the items automagically.
+    // However, this is not enough. Since clang-rs flattens the #define macro,
+    //
+    //   - macro constants (e.g. `#define FOO 1`)
+    //   - macro functions (e.g. `#define FOO(x) (x + 1)`)
+    //
+    // are not caught by this. So, we need to extract them by ourselves using
+    // some regex-fu. We might have some better approach, but this just works.
 
     let clang = Clang::new().unwrap();
     let index = Index::new(&clang, false, false);
+
+    // Parse wrapper.h
     let tu = index
         .parser("wrapper.h")
         .arguments(&[format!("-I{}", r_paths.include.display())])
         .parse()
         .unwrap();
 
-    let mut allowlist = std::collections::HashSet::new();
+    // Extract all the AST entities into `e`, as well as listing up all the
+    // include files in a chain into `inclide_files`.
     let mut include_files = std::collections::HashSet::new();
-
     let e = tu
         .get_entity()
         .get_children()
@@ -400,6 +413,11 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         })
         .collect::<Vec<_>>();
 
+    // Add more include files manually
+    include_files.insert(r_paths.include.join("Rversion.h"));
+
+    // Put all the symbols into allowlist
+    let mut allowlist = std::collections::HashSet::new();
     for e in e {
         match e.get_kind() {
             EnumDecl | FunctionDecl | StructDecl | TypedefDecl | VarDecl => {
@@ -411,9 +429,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         }
     }
 
-    // manual addition
-    include_files.insert(r_paths.include.join("Rversion.h"));
-
+    // Do some regex-fu agaist the text content of all the include files. This
+    // handles these 3 cases:
+    //
     // case 1) numeric literals
     //
     //     #define FOO 1
@@ -437,17 +455,17 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         }
     }
 
-    // Cannot detect when the #define-ed constats are aliased in another #define
+    // This cannot be detected because the #define-ed constats are aliased in another #define
     // c.f. https://github.com/wch/r-source/blob/9f284035b7e503aebe4a804579e9e80a541311bb/src/include/R_ext/GraphicsEngine.h#L93
     allowlist.insert("R_GE_version".to_string());
 
+    // Join into a regex pattern to supply into bindgen::Builder.
     let allowlist_pattern = allowlist.into_iter().collect::<Vec<String>>().join("|");
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let mut bindgen_builder = bindgen::Builder::default()
-        // These constants from libm break bindgen.
         .allowlist_function(&allowlist_pattern)
         .allowlist_var(&allowlist_pattern)
         .allowlist_type(&allowlist_pattern)
