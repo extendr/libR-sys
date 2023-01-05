@@ -29,16 +29,16 @@ jobs:
           # On Windows,
           #
           # * for R >= 4.2, both the MSVC toolchain and the GNU toolchain should
-          #   work. Since our main support is on MSVC, we mainly test MSVC here.
+          #   work. Since we primarily support MSVC, we focus on testing MSVC here.
           #   Also, at least one GNU case should be included so that we can
           #   detect when something gets broken. 
           # * for R < 4.2, the MSVC toolchain must be used to support
-          #   cross-compilation for the 32-bit. 
+          #   cross-compilation to 32-bit. 
           # 
           # options:
           #   - targets: Targets to build and run tests against. If not specified, 'default' will be used. 
           #   - no-test-targets: Targets to skip tests.
-          #   - emit-bindings: do not emit bindings if 'false'
+          #   - emit-bindings: if 'true', emit bindings
           - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
           - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
           - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
@@ -240,11 +240,11 @@ jobs:
           # On Windows,
           #
           # * for R >= 4.2, both the MSVC toolchain and the GNU toolchain should
-          #   work. Since our main support is on MSVC, we mainly test MSVC here.
+          #   work. Since we primarily support MSVC, we focus on testing MSVC here.
           #   Also, at least one GNU case should be included so that we can
           #   detect when something gets broken. 
           # * for R < 4.2, the MSVC toolchain must be used to support
-          #   cross-compilation for the 32-bit. 
+          #   cross-compilation to 32-bit. 
           - {os: windows-latest, r: 'release', rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
           - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
           - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
