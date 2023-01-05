@@ -1,12 +1,13 @@
 [package]
 name = "libR-sys"
-version = "0.2.2"
+version = "0.3.0"
 authors = [
     "andy-thomason <andy@andythomason.com>",
     "Thomas Down",
     "Mossa Merhi Reimert <mossa@sund.ku.dk>",
     "Claus O. Wilke <wilke@austin.utexas.edu>",
-    "Ilia Kosenkov <ilia.kosenkov.at.gm@gmail.com>"
+    "Ilia Kosenkov <ilia.kosenkov.at.gm@gmail.com>",
+    "Hiroaki Yutani",
 ]
 edition = "2018"
 description = "Low level bindings to the R programming language."
@@ -24,6 +25,3 @@ regex = { version = "1", optional = true }
 # By default, we use pre-computed bindings that ship with the library. This may fail!
 # Turn on the 'use-bindgen' feature to generate bindings on the fly for your platform.
 use-bindgen = ["bindgen", "regex"]
-
-[target.'cfg(windows)'.build-dependencies]
-winapi = { version = "0.3", features = ["consoleapi", "stringapiset"] }
