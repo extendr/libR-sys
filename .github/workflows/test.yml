@@ -29,34 +29,35 @@ jobs:
           # On Windows,
           #
           # * for R >= 4.2, both the MSVC toolchain and the GNU toolchain should
-          #   work. Since we primarily support MSVC, we focus on testing MSVC here.
-          #   Also, at least one GNU case should be included so that we can
-          #   detect when something gets broken. 
+          #   work. Since we primarily support MSVC, we focus on testing MSVC
+          #   here. Also, at least one GNU case should be included so that we
+          #   can detect when something gets broken. 
           # * for R < 4.2, the MSVC toolchain must be used to support
           #   cross-compilation to 32-bit. 
-          # 
+          #
           # options:
-          #   - targets: Targets to build and run tests against. If not specified, 'default' will be used. 
+          #   - targets: Targets to build and run tests against. If not
+          #     specified, 'default' will be used. 
           #   - no-test-targets: Targets to skip tests.
-          #   - emit-bindings: if 'true', emit bindings
-          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
+          #   - emit-bindings: If 'true', emit bindings. In principle, we choose
+          #     only one stable Rust toolchain per combination of a platform and
+          #     an R version (e.g. Windows and R-release) to emit bindings.
+          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42',  emit-bindings: 'true'}
           - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
-          - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   targets: ['x86_64-pc-windows-gnu'], rtools-version: '42', emit-bindings: 'false'}
-          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
+          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42',  emit-bindings: 'true'}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
+          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu'], emit-bindings: 'true'}
 
-          #- {os: macOS-latest,   r: 'release', rust-version: 'stable'}
           - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
-          - {os: macOS-latest,   r: 'devel',   rust-version: 'stable'}
-          - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable'}
+          - {os: macOS-latest,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
+          - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
           # TODO: Remove no-test-targets when aarch64 runner is available
-          - {os: macOS-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin', emit-bindings: 'true'}
 
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable'}
+          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable',  emit-bindings: 'true'}
           - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly'}
-          # R-devel requires LD_LIBRARY_PATH
-          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable'}   
-          - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable'}   
+          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
+          - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
 
 
 
@@ -206,8 +207,7 @@ jobs:
         if: 
           steps.build.outcome == 'success' && 
           steps.test.outcome == 'success' && 
-          ((startsWith(matrix.config.rust-version, 'stable') && matrix.config.emit-bindings != 'false') ||
-            (matrix.config.emit-bindings == 'true'))
+          matrix.config.emit-bindings == 'true'
         uses: actions/upload-artifact@main
         with:
           name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}
