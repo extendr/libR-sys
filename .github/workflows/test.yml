@@ -29,16 +29,19 @@ jobs:
           # On Windows,
           #
           # * for R >= 4.2, both the MSVC toolchain and the GNU toolchain should
-          #   work. Since we primarily support MSVC, we focus on testing MSVC here.
-          #   Also, at least one GNU case should be included so that we can
-          #   detect when something gets broken. 
+          #   work. Since we primarily support MSVC, we focus on testing MSVC
+          #   here. Also, at least one GNU case should be included so that we
+          #   can detect when something gets broken. 
           # * for R < 4.2, the MSVC toolchain must be used to support
           #   cross-compilation to 32-bit. 
-          # 
+          #
           # options:
-          #   - targets: Targets to build and run tests against. If not specified, 'default' will be used. 
+          #   - targets: Targets to build and run tests against. If not
+          #     specified, 'default' will be used. 
           #   - no-test-targets: Targets to skip tests.
-          #   - emit-bindings: if 'true', emit bindings; we use the stable Rust toolchain to generate bindings
+          #   - emit-bindings: If 'true', emit bindings. In principle, we choose
+          #     only one stable Rust toolchain per combination of a platform and
+          #     an R version (e.g. Windows and R-release) to emit bindings.
           - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42',  emit-bindings: 'true'}
           - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
           - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42',  emit-bindings: 'true'}
