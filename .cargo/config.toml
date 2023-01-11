@@ -1,2 +1,0 @@
-[env]
-LIBRSYS_BINDINGS_OUTPUT_PATH = { value = "bindings", relative = true }
