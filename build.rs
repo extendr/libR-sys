@@ -536,6 +536,10 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         bindings
             .write_to_file(&out_file)
             .expect(&format!("Couldn't write bindings: {}", out_file.display()));
+    } else {
+        println!(
+            "Warning: Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
+        );
     }
 }
 
