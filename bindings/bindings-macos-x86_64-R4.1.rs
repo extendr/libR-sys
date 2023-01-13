@@ -69,6 +69,7 @@ pub const R_GE_patternExtendPad: u32 = 1;
 pub const R_GE_patternExtendRepeat: u32 = 2;
 pub const R_GE_patternExtendReflect: u32 = 3;
 pub const R_GE_patternExtendNone: u32 = 4;
+pub const R_PROBLEM_BUFSIZE: u32 = 4096;
 #[doc = " <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
 pub type __int64_t = ::std::os::raw::c_longlong;
@@ -5914,6 +5915,1194 @@ extern "C" {
 }
 extern "C" {
     pub fn R_GE_tilingPatternExtend(pattern: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_chk_calloc(arg1: usize, arg2: usize) -> *mut ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn R_chk_realloc(
+        arg1: *mut ::std::os::raw::c_void,
+        arg2: usize,
+    ) -> *mut ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn R_chk_free(arg1: *mut ::std::os::raw::c_void);
+}
+extern "C" {
+    pub fn call_R(
+        arg1: *mut ::std::os::raw::c_char,
+        arg2: ::std::os::raw::c_long,
+        arg3: *mut *mut ::std::os::raw::c_void,
+        arg4: *mut *mut ::std::os::raw::c_char,
+        arg5: *mut ::std::os::raw::c_long,
+        arg6: *mut *mut ::std::os::raw::c_char,
+        arg7: ::std::os::raw::c_long,
+        arg8: *mut *mut ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn dasum_(
+        n: *const ::std::os::raw::c_int,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+    ) -> f64;
+}
+extern "C" {
+    pub fn daxpy_(
+        n: *const ::std::os::raw::c_int,
+        da: *const f64,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dcopy_(
+        n: *const ::std::os::raw::c_int,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn ddot_(
+        n: *const ::std::os::raw::c_int,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *const f64,
+        incy: *const ::std::os::raw::c_int,
+    ) -> f64;
+}
+extern "C" {
+    pub fn dnrm2_(
+        n: *const ::std::os::raw::c_int,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+    ) -> f64;
+}
+extern "C" {
+    pub fn drot_(
+        n: *const ::std::os::raw::c_int,
+        dx: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+        c: *const f64,
+        s: *const f64,
+    );
+}
+extern "C" {
+    pub fn drotg_(a: *const f64, b: *const f64, c: *mut f64, s: *mut f64);
+}
+extern "C" {
+    pub fn drotm_(
+        n: *const ::std::os::raw::c_int,
+        dx: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+        dparam: *const f64,
+    );
+}
+extern "C" {
+    pub fn drotmg_(
+        dd1: *const f64,
+        dd2: *const f64,
+        dx1: *const f64,
+        dy1: *const f64,
+        param: *mut f64,
+    );
+}
+extern "C" {
+    pub fn dscal_(
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        dx: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dswap_(
+        n: *const ::std::os::raw::c_int,
+        dx: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn idamax_(
+        n: *const ::std::os::raw::c_int,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn dgbmv_(
+        trans: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        kl: *const ::std::os::raw::c_int,
+        ku: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        beta: *const f64,
+        y: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dgemv_(
+        trans: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        beta: *const f64,
+        y: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dsbmv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        beta: *const f64,
+        y: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dspmv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        ap: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        beta: *const f64,
+        y: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dsymv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        beta: *const f64,
+        y: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dtbmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dtpmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        ap: *const f64,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dtrmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dtbsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dtpsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        ap: *const f64,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dtrsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dger_(
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        y: *const f64,
+        incy: *const ::std::os::raw::c_int,
+        a: *mut f64,
+        lda: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dsyr_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        a: *mut f64,
+        lda: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dspr_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        ap: *mut f64,
+    );
+}
+extern "C" {
+    pub fn dsyr2_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        y: *const f64,
+        incy: *const ::std::os::raw::c_int,
+        a: *mut f64,
+        lda: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dspr2_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        y: *const f64,
+        incy: *const ::std::os::raw::c_int,
+        ap: *mut f64,
+    );
+}
+extern "C" {
+    pub fn dgemm_(
+        transa: *const ::std::os::raw::c_char,
+        transb: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        b: *const f64,
+        ldb: *const ::std::os::raw::c_int,
+        beta: *const f64,
+        c: *mut f64,
+        ldc: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dtrsm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        transa: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        b: *mut f64,
+        ldb: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dtrmm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        transa: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        b: *mut f64,
+        ldb: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dsymm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        b: *const f64,
+        ldb: *const ::std::os::raw::c_int,
+        beta: *const f64,
+        c: *mut f64,
+        ldc: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dsyrk_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        beta: *const f64,
+        c: *mut f64,
+        ldc: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dsyr2k_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        b: *const f64,
+        ldb: *const ::std::os::raw::c_int,
+        beta: *const f64,
+        c: *mut f64,
+        ldc: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dcabs1_(z: *const Rcomplex) -> f64;
+}
+extern "C" {
+    pub fn dzasum_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    ) -> f64;
+}
+extern "C" {
+    pub fn dznrm2_(
+        n: *const ::std::os::raw::c_int,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    ) -> f64;
+}
+extern "C" {
+    pub fn izamax_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn zaxpy_(
+        n: *const ::std::os::raw::c_int,
+        za: *const Rcomplex,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zcopy_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zdotc_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    ) -> Rcomplex;
+}
+extern "C" {
+    pub fn zdotu_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    ) -> Rcomplex;
+}
+extern "C" {
+    pub fn zdrot_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+        c: *const f64,
+        s: *const f64,
+    );
+}
+extern "C" {
+    pub fn zdscal_(
+        n: *const ::std::os::raw::c_int,
+        da: *const f64,
+        zx: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zgbmv_(
+        trans: *const ::std::os::raw::c_char,
+        m: *mut ::std::os::raw::c_int,
+        n: *mut ::std::os::raw::c_int,
+        kl: *mut ::std::os::raw::c_int,
+        ku: *mut ::std::os::raw::c_int,
+        alpha: *mut Rcomplex,
+        a: *mut Rcomplex,
+        lda: *mut ::std::os::raw::c_int,
+        x: *mut Rcomplex,
+        incx: *mut ::std::os::raw::c_int,
+        beta: *mut Rcomplex,
+        y: *mut Rcomplex,
+        incy: *mut ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zgemm_(
+        transa: *const ::std::os::raw::c_char,
+        transb: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        b: *const Rcomplex,
+        ldb: *const ::std::os::raw::c_int,
+        beta: *const Rcomplex,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zgemv_(
+        trans: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        beta: *const Rcomplex,
+        y: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zgerc_(
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        y: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+        a: *mut Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zgeru_(
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        y: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+        a: *mut Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zhbmv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        beta: *const Rcomplex,
+        y: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zhemm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        b: *const Rcomplex,
+        ldb: *const ::std::os::raw::c_int,
+        beta: *const Rcomplex,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zhemv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        beta: *const Rcomplex,
+        y: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zher_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        a: *mut Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zher2_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        y: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+        a: *mut Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zher2k_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        b: *const Rcomplex,
+        ldb: *const ::std::os::raw::c_int,
+        beta: *const f64,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zherk_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        beta: *const f64,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zhpmv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        ap: *const Rcomplex,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        beta: *const Rcomplex,
+        y: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zhpr_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        ap: *mut Rcomplex,
+    );
+}
+extern "C" {
+    pub fn zhpr2_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        y: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+        ap: *mut Rcomplex,
+    );
+}
+extern "C" {
+    pub fn zrotg_(ca: *const Rcomplex, cb: *const Rcomplex, c: *mut f64, s: *mut Rcomplex);
+}
+extern "C" {
+    pub fn zscal_(
+        n: *const ::std::os::raw::c_int,
+        za: *const Rcomplex,
+        zx: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zswap_(
+        n: *const ::std::os::raw::c_int,
+        zx: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zsymm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        b: *const Rcomplex,
+        ldb: *const ::std::os::raw::c_int,
+        beta: *const Rcomplex,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zsyr2k_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        alpha: *mut Rcomplex,
+        a: *mut Rcomplex,
+        lda: *mut ::std::os::raw::c_int,
+        b: *mut Rcomplex,
+        ldb: *mut ::std::os::raw::c_int,
+        beta: *mut Rcomplex,
+        c: *mut Rcomplex,
+        ldc: *mut ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn zsyrk_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        beta: *const Rcomplex,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn ztbmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn ztbsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn ztpmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        ap: *const Rcomplex,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn ztpsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        ap: *const Rcomplex,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn ztrmm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        transa: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        b: *mut Rcomplex,
+        ldb: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn ztrmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn ztrsm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        transa: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        m: *mut ::std::os::raw::c_int,
+        n: *mut ::std::os::raw::c_int,
+        alpha: *mut Rcomplex,
+        a: *mut Rcomplex,
+        lda: *mut ::std::os::raw::c_int,
+        b: *mut Rcomplex,
+        ldb: *mut ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn ztrsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+}
+pub type integr_fn = ::std::option::Option<
+    unsafe extern "C" fn(x: *mut f64, n: ::std::os::raw::c_int, ex: *mut ::std::os::raw::c_void),
+>;
+extern "C" {
+    pub fn Rdqags(
+        f: integr_fn,
+        ex: *mut ::std::os::raw::c_void,
+        a: *mut f64,
+        b: *mut f64,
+        epsabs: *mut f64,
+        epsrel: *mut f64,
+        result: *mut f64,
+        abserr: *mut f64,
+        neval: *mut ::std::os::raw::c_int,
+        ier: *mut ::std::os::raw::c_int,
+        limit: *mut ::std::os::raw::c_int,
+        lenw: *mut ::std::os::raw::c_int,
+        last: *mut ::std::os::raw::c_int,
+        iwork: *mut ::std::os::raw::c_int,
+        work: *mut f64,
+    );
+}
+extern "C" {
+    pub fn Rdqagi(
+        f: integr_fn,
+        ex: *mut ::std::os::raw::c_void,
+        bound: *mut f64,
+        inf: *mut ::std::os::raw::c_int,
+        epsabs: *mut f64,
+        epsrel: *mut f64,
+        result: *mut f64,
+        abserr: *mut f64,
+        neval: *mut ::std::os::raw::c_int,
+        ier: *mut ::std::os::raw::c_int,
+        limit: *mut ::std::os::raw::c_int,
+        lenw: *mut ::std::os::raw::c_int,
+        last: *mut ::std::os::raw::c_int,
+        iwork: *mut ::std::os::raw::c_int,
+        work: *mut f64,
+    );
+}
+pub type optimfn = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: ::std::os::raw::c_int,
+        arg2: *mut f64,
+        arg3: *mut ::std::os::raw::c_void,
+    ) -> f64,
+>;
+pub type optimgr = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: ::std::os::raw::c_int,
+        arg2: *mut f64,
+        arg3: *mut f64,
+        arg4: *mut ::std::os::raw::c_void,
+    ),
+>;
+extern "C" {
+    pub fn vmmin(
+        n: ::std::os::raw::c_int,
+        b: *mut f64,
+        Fmin: *mut f64,
+        fn_: optimfn,
+        gr: optimgr,
+        maxit: ::std::os::raw::c_int,
+        trace: ::std::os::raw::c_int,
+        mask: *mut ::std::os::raw::c_int,
+        abstol: f64,
+        reltol: f64,
+        nREPORT: ::std::os::raw::c_int,
+        ex: *mut ::std::os::raw::c_void,
+        fncount: *mut ::std::os::raw::c_int,
+        grcount: *mut ::std::os::raw::c_int,
+        fail: *mut ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn nmmin(
+        n: ::std::os::raw::c_int,
+        Bvec: *mut f64,
+        X: *mut f64,
+        Fmin: *mut f64,
+        fn_: optimfn,
+        fail: *mut ::std::os::raw::c_int,
+        abstol: f64,
+        intol: f64,
+        ex: *mut ::std::os::raw::c_void,
+        alpha: f64,
+        bet: f64,
+        gamm: f64,
+        trace: ::std::os::raw::c_int,
+        fncount: *mut ::std::os::raw::c_int,
+        maxit: ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn cgmin(
+        n: ::std::os::raw::c_int,
+        Bvec: *mut f64,
+        X: *mut f64,
+        Fmin: *mut f64,
+        fn_: optimfn,
+        gr: optimgr,
+        fail: *mut ::std::os::raw::c_int,
+        abstol: f64,
+        intol: f64,
+        ex: *mut ::std::os::raw::c_void,
+        type_: ::std::os::raw::c_int,
+        trace: ::std::os::raw::c_int,
+        fncount: *mut ::std::os::raw::c_int,
+        grcount: *mut ::std::os::raw::c_int,
+        maxit: ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn lbfgsb(
+        n: ::std::os::raw::c_int,
+        m: ::std::os::raw::c_int,
+        x: *mut f64,
+        l: *mut f64,
+        u: *mut f64,
+        nbd: *mut ::std::os::raw::c_int,
+        Fmin: *mut f64,
+        fn_: optimfn,
+        gr: optimgr,
+        fail: *mut ::std::os::raw::c_int,
+        ex: *mut ::std::os::raw::c_void,
+        factr: f64,
+        pgtol: f64,
+        fncount: *mut ::std::os::raw::c_int,
+        grcount: *mut ::std::os::raw::c_int,
+        maxit: ::std::os::raw::c_int,
+        msg: *mut ::std::os::raw::c_char,
+        trace: ::std::os::raw::c_int,
+        nREPORT: ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn samin(
+        n: ::std::os::raw::c_int,
+        pb: *mut f64,
+        yb: *mut f64,
+        fn_: optimfn,
+        maxit: ::std::os::raw::c_int,
+        tmax: ::std::os::raw::c_int,
+        ti: f64,
+        trace: ::std::os::raw::c_int,
+        ex: *mut ::std::os::raw::c_void,
+    );
+}
+extern "C" {
+    pub fn dqrqty_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        qty: *mut f64,
+    );
+}
+extern "C" {
+    pub fn dqrqy_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        qy: *mut f64,
+    );
+}
+extern "C" {
+    pub fn dqrcf_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        b: *mut f64,
+        info: *mut ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dqrrsd_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        rsd: *mut f64,
+    );
+}
+extern "C" {
+    pub fn dqrxb_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        xb: *mut f64,
+    );
+}
+extern "C" {
+    pub fn R_pretty(
+        lo: *mut f64,
+        up: *mut f64,
+        ndiv: *mut ::std::os::raw::c_int,
+        min_n: ::std::os::raw::c_int,
+        shrink_sml: f64,
+        high_u_fact: *const f64,
+        eps_correction: ::std::os::raw::c_int,
+        return_bounds: ::std::os::raw::c_int,
+    ) -> f64;
+}
+pub type fcn_p = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: ::std::os::raw::c_int,
+        arg2: *mut f64,
+        arg3: *mut f64,
+        arg4: *mut ::std::os::raw::c_void,
+    ),
+>;
+pub type d2fcn_p = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: ::std::os::raw::c_int,
+        arg2: ::std::os::raw::c_int,
+        arg3: *mut f64,
+        arg4: *mut f64,
+        arg5: *mut ::std::os::raw::c_void,
+    ),
+>;
+extern "C" {
+    pub fn fdhess(
+        n: ::std::os::raw::c_int,
+        x: *mut f64,
+        fval: f64,
+        fun: fcn_p,
+        state: *mut ::std::os::raw::c_void,
+        h: *mut f64,
+        nfd: ::std::os::raw::c_int,
+        step: *mut f64,
+        f: *mut f64,
+        ndigit: ::std::os::raw::c_int,
+        typx: *mut f64,
+    );
+}
+extern "C" {
+    pub fn optif9(
+        nr: ::std::os::raw::c_int,
+        n: ::std::os::raw::c_int,
+        x: *mut f64,
+        fcn: fcn_p,
+        d1fcn: fcn_p,
+        d2fcn: d2fcn_p,
+        state: *mut ::std::os::raw::c_void,
+        typsiz: *mut f64,
+        fscale: f64,
+        method: ::std::os::raw::c_int,
+        iexp: ::std::os::raw::c_int,
+        msg: *mut ::std::os::raw::c_int,
+        ndigit: ::std::os::raw::c_int,
+        itnlim: ::std::os::raw::c_int,
+        iagflg: ::std::os::raw::c_int,
+        iahflg: ::std::os::raw::c_int,
+        dlt: f64,
+        gradtl: f64,
+        stepmx: f64,
+        steptl: f64,
+        xpls: *mut f64,
+        fpls: *mut f64,
+        gpls: *mut f64,
+        itrmcd: *mut ::std::os::raw::c_int,
+        a: *mut f64,
+        wrk: *mut f64,
+        itncnt: *mut ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn dqrdc2_(
+        x: *mut f64,
+        ldx: *mut ::std::os::raw::c_int,
+        n: *mut ::std::os::raw::c_int,
+        p: *mut ::std::os::raw::c_int,
+        tol: *mut f64,
+        rank: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        pivot: *mut ::std::os::raw::c_int,
+        work: *mut f64,
+    );
+}
+extern "C" {
+    pub fn dqrls_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        p: *mut ::std::os::raw::c_int,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        tol: *mut f64,
+        b: *mut f64,
+        rsd: *mut f64,
+        qty: *mut f64,
+        k: *mut ::std::os::raw::c_int,
+        jpvt: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        work: *mut f64,
+    );
 }
 pub type __builtin_va_list = [__va_list_tag; 1usize];
 #[repr(C)]
