@@ -14,12 +14,15 @@ The recommended way to build this library is to use precompiled bindings, which 
 Alternatively, the library can be built from source, in which case it invokes `bindgen` crate, which has extra platform-specific dependencies (including `msys2` for `Windows`).
 
 ## Configuration
+
 `libR-sys` recognizes the following environment variables:
- - `LIBRSYS_R_VERSION` If set, it is used to determine the version of R, for which bindings should be generated. `LIBRSYS_R_VERSION` should be set to one of the supported values, e.g. `4.2.0` or `4.3.0-devel` (the pattern is `major.minor.patch[-devel]`). Malformed `LIBRSYS_R_VERSION` results in compilation error. If `LIBRSYS_R_VERSION` is unset, `R` is invoked and its `R.version` is used.
+
+- `LIBRSYS_R_VERSION` If set, it is used to determine the version of R, for which bindings should be generated. `LIBRSYS_R_VERSION` should be set to one of the supported values, e.g. `4.2.0` or `4.3.0-devel` (the pattern is `major.minor.patch[-devel]`). Malformed `LIBRSYS_R_VERSION` results in compilation error. If `LIBRSYS_R_VERSION` is unset, `R` is invoked and its `R.version` is used.
 
 ## Using precompiled bindings (recommended)
 
 Two components are required to build the library:
+
 1. [`R`](https://cran.r-project.org/): It needs to be installed and available in the search path.
 2. [`Rust`](https://www.rust-lang.org/learn/get-started): It is recommended to install `Rust` using `rustup`; search path should include `Rust` binaries.
 
@@ -49,13 +52,13 @@ cargo test --target x86_64-pc-windows-gnu
 
 **Note: On Windows, R < 4.2 requires a more complex setup in order to support the 32-bit version. Please refer to [README-old-windows.md](./README-old-windows.md) for more details.**
 
-The bindings can be generated using [bindgen](https://github.com/rust-lang/rust-bindgen), special `Rust` crate. 
+The bindings can be generated using [`bindgen`](https://github.com/rust-lang/rust-bindgen), special `Rust` crate.
 `bindgen` usage is enabled via `use-bindgen` feature flag.
 
-`bindgen` requires [libclang](https://clang.llvm.org/docs/Tooling.html), which should be installed first. 
+`bindgen` requires [`libclang`](https://clang.llvm.org/docs/Tooling.html), which should be installed first.
 This library relies on `LIBCLANG_PATH` environment variable to determine path to the appropriate version of `libclang`.
 
-The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_PATH` environment variable.
+The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_PATH` environment variable, thus make sure it is set to e.g `bindings`.
 
 - **Linux**
 
@@ -86,8 +89,10 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
   ```bash
   PATH=/usr/local/opt/llvm/bin:$PATH
   ```
+
   Build & test using
-   ```shell
+  
+  ```shell
   cargo build --features use-bindgen
   cargo test  --features use-bindgen 
   ```
@@ -97,26 +102,31 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
   Make sure the environment variable `MSYS_ROOT` points to `MSYS2` root, e.g., `C:\tools\msys64`.
 
   <details>
-    <summary>Installing and configuring MSYS2</summary>
+    <summary>Installing and configuring `MSYS2`</summary>
 
     Install `MSYS2`. Here is an example using `chocolatey`:
-    ```Shell
+
+    ```shell
     choco install msys2 -y
     ```
+
     Set up `MSYS_ROOT` environment variable.
     Install `clang` and `mingw`-toolchains (assuming `PowerShell` syntax)
 
     ```pwsh
     &"$env:MSYS_ROOT\usr\bin\bash" -l -c "pacman -S --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain"
     ```
-    
+
   </details>
 
-  Add the following to the `PATH` (using `PowerShell` syntax). 
+  Add the following to the `PATH` (using `PowerShell` syntax).
+
   ```pwsh
   $env:PATH = "${env:R_HOME}\bin\x64;C:\rtools42\usr\bin;C:\rtools42\x86_64-w64-mingw32.static.posix\bin;${env:MSYS_ROOT}\mingw64\bin;${env:PATH}"
   ```
-  then build & test with 
+
+  then build & test with
+
   ```pwsh
   cargo build --target x86_64-pc-windows-gnu --features use-bindgen
   ```
@@ -134,7 +144,7 @@ libR-sys, but we recommend the MSVC toolchain because we mainly use it.
 With either toolchain, since the R itself is built with the GNU toolchain, the
 target must be GNU. So, the GNU target needs to be installed.
 
-```Shell
+```shell
 rustup target add x86_64-pc-windows-gnu
 ```
 
@@ -145,12 +155,12 @@ will eventually be available on `chocolatey`.
 
 [rtools_website]: https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html
 
-```Shell
+```shell
 ## TODO: Rtools42 is not yet on chocolatey
 # choco install rtools -y
 ```
 
-### Setup `R_HOME` and  `PATH` envvars
+### Setup `R_HOME` and  `PATH` Environment Variables
 
 First, ensure that `R_HOME` points to `R` home, e.g. `C:\Program Files\R\R-4.2.0`
 (in an R session, this should be automatically set by R).
@@ -158,8 +168,8 @@ First, ensure that `R_HOME` points to `R` home, e.g. `C:\Program Files\R\R-4.2.0
 Second, ensure that `PATH` is properly configured that the following executables
 are available:
 
-* the `R` binary to build against
-* the compiler toolchain that is used for compiling the R itself, i.e., `Rtools`
+- the `R` binary to build against
+- the compiler toolchain that is used for compiling the R itself, i.e., `Rtools`
 
 Typically, the following paths need to be added to the head of `PATH` (using
 `PowerShell` syntax).
@@ -179,7 +189,7 @@ assumption of Rust, we need the following tweaks:
 
 1. Change the linker name to `x86_64-w64-mingw32.static.posix-gcc.exe`.
 2. Add empty `libgcc_s.a` and `libgcc_eh.a`, and add them to the compiler's
-   library search paths via `LIBRARY_PATH` envvar.
+   library search paths via `LIBRARY_PATH` environment variables.
 
 The first tweak is needed because Rtools42 doesn't contain
 `x86_64-w64-mingw32-gcc`, which `rustc` uses as the default linker for the
@@ -216,7 +226,7 @@ New-Item -Path libgcc_mock\libgcc_eh.a -Type File
 New-Item -Path libgcc_mock\libgcc_s.a -Type File
 ```
 
-Then, add the directory to `LIBRARY_PATH` envvar. For example, this can be done
+Then, add the directory to `LIBRARY_PATH` environment variables. For example, this can be done
 by adding the following lines to `.cargo/config.toml`:
 
 ``` toml
