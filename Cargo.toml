@@ -14,6 +14,7 @@ description = "Low level bindings to the R programming language."
 license = "MIT"
 links = "R"
 documentation = "https://docs.rs/libR-sys/latest/libR_sys/"
+repository = "https://github.com/extendr/libR-sys"
 
 [dependencies]
 
