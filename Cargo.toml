@@ -9,7 +9,7 @@ authors = [
     "Ilia Kosenkov <ilia.kosenkov.at.gm@gmail.com>",
     "Hiroaki Yutani",
 ]
-edition = "2018"
+edition = "2021"
 description = "Low level bindings to the R programming language."
 license = "MIT"
 links = "R"
