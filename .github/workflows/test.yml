@@ -44,7 +44,7 @@ jobs:
           #     an R version (e.g. Windows and R-release) to emit bindings.
           - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42',  emit-bindings: 'true'}
           - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42',  emit-bindings: 'true'}
+          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'],                        emit-bindings: 'true'}
           - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
           - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu'], emit-bindings: 'true'}
 
@@ -246,7 +246,7 @@ jobs:
           # * for R < 4.2, the MSVC toolchain must be used to support
           #   cross-compilation to 32-bit. 
           - {os: windows-latest, r: 'release', rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
+          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu']}
           - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
           - {os: windows-latest, r: '4.1',     rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
 
@@ -290,11 +290,17 @@ jobs:
         env:
           RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
       
-      - name: Configure Windows for Rtools 42
+      - name: Configure Windows for Rtools (R >= 4.2)
         if: runner.os == 'Windows' && matrix.config.r != '4.1'
         run: |
-          echo "C:\rtools42\x86_64-w64-mingw32.static.posix\bin"           | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-          echo "C:\rtools42\usr\bin"                                       | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          if ("${{ matrix.config.rtools-version }}" -eq "42") {
+            $rtools_home = "C:\rtools42"   # for R 4.2
+          } else {
+            $rtools_home = "C:\rtools43"   # for R >= 4.3
+          }
+
+          echo "${rtools_home}\x86_64-w64-mingw32.static.posix\bin"        | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          echo "${rtools_home}\usr\bin"                                    | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
 
           # NOTE: Unlike extendr, libR-sys can be compiled with non-Rtools' toolchain
@@ -307,7 +313,7 @@ jobs:
           #  2. Add empty libgcc_s.a and libgcc_eh.a, and add them to the compiler's
           #     library search paths via `LIBRARY_PATH` envvar.
           # 
-          # The first tweak is needed because Rtools42 doesn't contain 
+          # The first tweak is needed because Rtools42 and Rtools43 don't contain 
           # "x86_64-w64-mingw32-gcc," which `rustc` uses as the default linker 
           # for the `x86_64-pc-windows-gnu` target.
           #  
@@ -334,7 +340,7 @@ jobs:
           "@ | Out-File -FilePath .cargo/config.toml -Encoding utf8 -Append ;
 
       # TODO: Remove this step when we drop the support for R < 4.2
-      - name: Configure Windows for Rtools 40
+      - name: Configure Windows for Rtools (R < 4.2)
         if: runner.os == 'Windows' && matrix.config.r == '4.1'
         run: |
           if ($env:RUST_TARGETS -like "*x86_64*") {
