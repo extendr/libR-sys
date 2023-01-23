@@ -122,7 +122,10 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
   Add the following to the `PATH` (using `PowerShell` syntax).
 
   ```pwsh
-  $env:PATH = "${env:R_HOME}\bin\x64;C:\rtools42\usr\bin;C:\rtools42\x86_64-w64-mingw32.static.posix\bin;${env:MSYS_ROOT}\mingw64\bin;${env:PATH}"
+  # for R >= 4.3, this should be "C:\rtools43"
+  $rtools_home = "C:\rtools42"
+  
+  $env:PATH = "${env:R_HOME}\bin\x64;${rtools_home}\usr\bin;${rtools_home}\x86_64-w64-mingw32.static.posix\bin;${env:MSYS_ROOT}\mingw64\bin;${env:PATH}"
   ```
 
   then build & test with
@@ -148,12 +151,15 @@ target must be GNU. So, the GNU target needs to be installed.
 rustup target add x86_64-pc-windows-gnu
 ```
 
-### Install Rtools42
+### Install Rtools42 (or Rtools43)
 
-Rtools42 can be downloaded from [here][rtools_website]. Alternatively, `Rtools`
-will eventually be available on `chocolatey`.
+Rtools42 can be downloaded from [here][rtools42_website]. For R >= 4.3, download
+Rtools43 from [here][rtools43_website]. Alternatively, `Rtools` will eventually
+be available on `chocolatey`.
 
-[rtools_website]: https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html
+[rtools42_website]: https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html
+[rtools43_website]: https://cran.r-project.org/bin/windows/Rtools/rtools43/rtools.html
+
 
 ```shell
 ## TODO: Rtools42 is not yet on chocolatey
@@ -175,7 +181,10 @@ Typically, the following paths need to be added to the head of `PATH` (using
 `PowerShell` syntax).
 
 ```pwsh
-$env:PATH = "${env:R_HOME}\bin\x64;C:\rtools42\usr\bin;C:\rtools42\x86_64-w64-mingw32.static.posix\bin;${env:PATH}"
+# for R >= 4.3, this should be "C:\rtools43"
+$rtools_home = "C:\rtools42"
+
+$env:PATH = "${env:R_HOME}\bin\x64;${rtools_home}\usr\bin;${rtools_home}\x86_64-w64-mingw32.static.posix\bin;${env:PATH}"
 ```
 
 Note that the above prepends, rather than appends, because otherwise the wrong
@@ -191,7 +200,7 @@ assumption of Rust, we need the following tweaks:
 2. Add empty `libgcc_s.a` and `libgcc_eh.a`, and add them to the compiler's
    library search paths via `LIBRARY_PATH` environment variables.
 
-The first tweak is needed because Rtools42 doesn't contain
+The first tweak is needed because Rtools42 and Rtools43 don't contain
 `x86_64-w64-mingw32-gcc`, which `rustc` uses as the default linker for the
 `x86_64-pc-windows-gnu` target. This can be done by adding `.cargo/config.toml`
 with the following lines on the root directory of the project:
