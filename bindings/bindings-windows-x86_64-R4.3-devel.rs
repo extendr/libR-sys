@@ -52,12 +52,13 @@ pub const R_MINOR: &[u8; 4usize] = b"3.0\0";
 pub const R_STATUS: &[u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5usize] = b"2023\0";
 pub const R_MONTH: &[u8; 3usize] = b"01\0";
-pub const R_DAY: &[u8; 3usize] = b"12\0";
-pub const R_SVN_REVISION: u32 = 83603;
+pub const R_DAY: &[u8; 3usize] = b"25\0";
+pub const R_SVN_REVISION: u32 = 83685;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
-pub const R_GE_version: u32 = 15;
+pub const R_GE_glyphs: u32 = 16;
+pub const R_GE_version: u32 = 16;
 pub const MAX_GRAPHICS_SYSTEMS: u32 = 24;
 pub const R_USE_PROTOTYPES: u32 = 1;
 pub const leftButton: u32 = 1;
@@ -119,6 +120,10 @@ pub const R_GE_capability_masks: u32 = 8;
 pub const R_GE_capability_compositing: u32 = 9;
 pub const R_GE_capability_transformations: u32 = 10;
 pub const R_GE_capability_paths: u32 = 11;
+pub const R_GE_capability_glyphs: u32 = 12;
+pub const R_GE_text_style_normal: u32 = 1;
+pub const R_GE_text_style_italic: u32 = 2;
+pub const R_GE_text_style_oblique: u32 = 3;
 #[doc = " <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
 pub type __gnuc_va_list = __builtin_va_list;
@@ -3443,6 +3448,19 @@ pub struct _DevDesc {
         unsafe extern "C" fn(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pDevDesc),
     >,
     pub capabilities: ::std::option::Option<unsafe extern "C" fn(cap: SEXP) -> SEXP>,
+    pub glyph: ::std::option::Option<
+        unsafe extern "C" fn(
+            n: ::std::os::raw::c_int,
+            glyphs: *mut ::std::os::raw::c_int,
+            x: *mut f64,
+            y: *mut f64,
+            font: SEXP,
+            size: f64,
+            colour: ::std::os::raw::c_int,
+            rot: f64,
+            dd: pDevDesc,
+        ),
+    >,
     pub reserved: [::std::os::raw::c_char; 64usize],
 }
 #[test]
@@ -3451,7 +3469,7 @@ fn bindgen_test_layout__DevDesc() {
     let ptr = UNINIT.as_ptr();
     assert_eq!(
         ::std::mem::size_of::<_DevDesc>(),
-        648usize,
+        656usize,
         concat!("Size of: ", stringify!(_DevDesc))
     );
     assert_eq!(
@@ -4270,8 +4288,18 @@ fn bindgen_test_layout__DevDesc() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).reserved) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr).glyph) as usize - ptr as usize },
         584usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(glyph)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).reserved) as usize - ptr as usize },
+        592usize,
         concat!(
             "Offset of field: ",
             stringify!(_DevDesc),
@@ -5097,6 +5125,61 @@ extern "C" {
 }
 extern "C" {
     pub fn R_GE_maskType(mask: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_GE_glyphInfoGlyphs(glyphInfo: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphInfoFonts(glyphInfo: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphID(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphX(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphY(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphFont(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphSize(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphColour(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphFontFile(glyphFont: SEXP) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn R_GE_glyphFontIndex(glyphFont: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_GE_glyphFontFamily(glyphFont: SEXP) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn R_GE_glyphFontWeight(glyphFont: SEXP) -> f64;
+}
+extern "C" {
+    pub fn R_GE_glyphFontStyle(glyphFont: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_GE_glyphFontPSname(glyphFont: SEXP) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn GEGlyph(
+        n: ::std::os::raw::c_int,
+        glyphs: *mut ::std::os::raw::c_int,
+        x: *mut f64,
+        y: *mut f64,
+        font: SEXP,
+        size: f64,
+        colour: ::std::os::raw::c_int,
+        rot: f64,
+        dd: pGEDevDesc,
+    );
 }
 extern "C" {
     pub fn R_chk_calloc(arg1: usize, arg2: usize) -> *mut ::std::os::raw::c_void;
