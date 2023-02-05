@@ -51,9 +51,9 @@ pub const R_MAJOR: &[u8; 2usize] = b"4\0";
 pub const R_MINOR: &[u8; 4usize] = b"3.0\0";
 pub const R_STATUS: &[u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5usize] = b"2023\0";
-pub const R_MONTH: &[u8; 3usize] = b"01\0";
-pub const R_DAY: &[u8; 3usize] = b"25\0";
-pub const R_SVN_REVISION: u32 = 83685;
+pub const R_MONTH: &[u8; 3usize] = b"02\0";
+pub const R_DAY: &[u8; 3usize] = b"03\0";
+pub const R_SVN_REVISION: u32 = 83757;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -2644,6 +2644,12 @@ extern "C" {
     pub fn get_R_HOME() -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
+    pub fn freeRUser(arg1: *mut ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn free_R_HOME(arg1: *mut ::std::os::raw::c_char);
+}
+extern "C" {
     pub fn setup_term_ui();
 }
 extern "C" {
@@ -5151,13 +5157,13 @@ extern "C" {
     pub fn R_GE_glyphColour(glyphs: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn R_GE_glyphFontFile(glyphFont: SEXP) -> *mut ::std::os::raw::c_char;
+    pub fn R_GE_glyphFontFile(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
     pub fn R_GE_glyphFontIndex(glyphFont: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn R_GE_glyphFontFamily(glyphFont: SEXP) -> *mut ::std::os::raw::c_char;
+    pub fn R_GE_glyphFontFamily(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
     pub fn R_GE_glyphFontWeight(glyphFont: SEXP) -> f64;
@@ -5166,7 +5172,7 @@ extern "C" {
     pub fn R_GE_glyphFontStyle(glyphFont: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn R_GE_glyphFontPSname(glyphFont: SEXP) -> *mut ::std::os::raw::c_char;
+    pub fn R_GE_glyphFontPSname(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
     pub fn GEGlyph(
@@ -6448,5 +6454,61 @@ extern "C" {
         qraux: *mut f64,
         work: *mut f64,
     );
+}
+pub const RNGtype_WICHMANN_HILL: RNGtype = 0;
+pub const RNGtype_MARSAGLIA_MULTICARRY: RNGtype = 1;
+pub const RNGtype_SUPER_DUPER: RNGtype = 2;
+pub const RNGtype_MERSENNE_TWISTER: RNGtype = 3;
+pub const RNGtype_KNUTH_TAOCP: RNGtype = 4;
+pub const RNGtype_USER_UNIF: RNGtype = 5;
+pub const RNGtype_KNUTH_TAOCP2: RNGtype = 6;
+pub const RNGtype_LECUYER_CMRG: RNGtype = 7;
+pub type RNGtype = ::std::os::raw::c_uint;
+pub const N01type_BUGGY_KINDERMAN_RAMAGE: N01type = 0;
+pub const N01type_AHRENS_DIETER: N01type = 1;
+pub const N01type_BOX_MULLER: N01type = 2;
+pub const N01type_USER_NORM: N01type = 3;
+pub const N01type_INVERSION: N01type = 4;
+pub const N01type_KINDERMAN_RAMAGE: N01type = 5;
+pub type N01type = ::std::os::raw::c_uint;
+pub const Sampletype_ROUNDING: Sampletype = 0;
+pub const Sampletype_REJECTION: Sampletype = 1;
+pub type Sampletype = ::std::os::raw::c_uint;
+extern "C" {
+    pub fn R_sample_kind() -> Sampletype;
+}
+extern "C" {
+    pub fn GetRNGstate();
+}
+extern "C" {
+    pub fn PutRNGstate();
+}
+extern "C" {
+    pub fn unif_rand() -> f64;
+}
+extern "C" {
+    pub fn R_unif_index(arg1: f64) -> f64;
+}
+extern "C" {
+    pub fn norm_rand() -> f64;
+}
+extern "C" {
+    pub fn exp_rand() -> f64;
+}
+pub type Int32 = ::std::os::raw::c_uint;
+extern "C" {
+    pub fn user_unif_rand() -> *mut f64;
+}
+extern "C" {
+    pub fn user_unif_init(arg1: Int32);
+}
+extern "C" {
+    pub fn user_unif_nseed() -> *mut ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn user_unif_seedloc() -> *mut ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn user_norm_rand() -> *mut f64;
 }
 pub type __builtin_va_list = *mut ::std::os::raw::c_char;
