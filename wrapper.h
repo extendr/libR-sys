@@ -30,3 +30,4 @@ typedef ptrdiff_t R_xlen_t_rust;
 #include <R_ext/Altrep.h>
 #include <R_ext/GraphicsEngine.h>
 #include <R_ext/Applic.h>
+#include <R_ext/Random.h>
