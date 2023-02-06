@@ -86,6 +86,10 @@ jobs:
           toolchain: ${{ matrix.config.rust-version }}
           components: rustfmt, clippy
 
+      - run: |
+          echo CARGO_INCREMENTAL= >> $GITHUB_ENV
+        shell: bash
+
       - name: Configure targets
         run: |
           if ($env:RUST_TARGETS -eq '') {
