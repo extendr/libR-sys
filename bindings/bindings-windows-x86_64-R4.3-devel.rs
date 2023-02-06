@@ -51,9 +51,9 @@ pub const R_MAJOR: &[u8; 2usize] = b"4\0";
 pub const R_MINOR: &[u8; 4usize] = b"3.0\0";
 pub const R_STATUS: &[u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5usize] = b"2023\0";
-pub const R_MONTH: &[u8; 3usize] = b"01\0";
-pub const R_DAY: &[u8; 3usize] = b"25\0";
-pub const R_SVN_REVISION: u32 = 83685;
+pub const R_MONTH: &[u8; 3usize] = b"02\0";
+pub const R_DAY: &[u8; 3usize] = b"03\0";
+pub const R_SVN_REVISION: u32 = 83757;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -2644,6 +2644,12 @@ extern "C" {
     pub fn get_R_HOME() -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
+    pub fn freeRUser(arg1: *mut ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn free_R_HOME(arg1: *mut ::std::os::raw::c_char);
+}
+extern "C" {
     pub fn setup_term_ui();
 }
 extern "C" {
@@ -5151,13 +5157,13 @@ extern "C" {
     pub fn R_GE_glyphColour(glyphs: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn R_GE_glyphFontFile(glyphFont: SEXP) -> *mut ::std::os::raw::c_char;
+    pub fn R_GE_glyphFontFile(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
     pub fn R_GE_glyphFontIndex(glyphFont: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn R_GE_glyphFontFamily(glyphFont: SEXP) -> *mut ::std::os::raw::c_char;
+    pub fn R_GE_glyphFontFamily(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
     pub fn R_GE_glyphFontWeight(glyphFont: SEXP) -> f64;
@@ -5166,7 +5172,7 @@ extern "C" {
     pub fn R_GE_glyphFontStyle(glyphFont: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn R_GE_glyphFontPSname(glyphFont: SEXP) -> *mut ::std::os::raw::c_char;
+    pub fn R_GE_glyphFontPSname(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
     pub fn GEGlyph(
