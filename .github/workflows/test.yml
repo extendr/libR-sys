@@ -81,10 +81,9 @@ jobs:
           rtools-version: ${{ matrix.config.rtools-version }}
 
       - name: Set up Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.config.rust-version }}
-          default: true
           components: rustfmt, clippy
 
       - name: Configure targets
@@ -270,10 +269,9 @@ jobs:
           rtools-version: ${{ matrix.config.rtools-version }}
           
       - name: Set up Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.config.rust-version }}
-          default: true
           components: rustfmt, clippy
 
       - name: Configure targets
