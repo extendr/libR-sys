@@ -54,10 +54,10 @@ jobs:
           # TODO: Remove no-test-targets when aarch64 runner is available
           - {os: macOS-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin', emit-bindings: 'true'}
 
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'stable',  emit-bindings: 'true'}
-          - {os: ubuntu-20.04,   r: 'release', rust-version: 'nightly'}
-          - {os: ubuntu-20.04,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
-          - {os: ubuntu-20.04,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'release', rust-version: 'stable',  emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
+          - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
 
 
 
