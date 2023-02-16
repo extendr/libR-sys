@@ -396,24 +396,27 @@ jobs:
     - uses: actions/checkout@v2
 
     - uses: actions/download-artifact@v2
-        
-    - name: Push the generated bindings
+
+    - name: Switch branch
+      if: github.event_name != 'issue_comment'
       run: |
-        if [ '${{ github.event_name }}' = 'issue_comment' ]; then
-          GEN_TARGET_BRANCH='${{ github.event.issue.pull_request.head_ref.name }}'
+        # 1) If there's already generated_bindings branch, checkout it.
+        # 2) If generated_binding branch is not created, create it from the default branch.
+        if git ls-remote --exit-code --heads origin generated_bindings 2>&1 >/dev/null; then
+          git fetch origin --no-tags --prune --depth=1 generated_bindings
+          git checkout generated_bindings
         else
-          GEN_TARGET_BRANCH=generated_bindings
-          # 1) If there's already generated_bindings branch, checkout it.
-          # 2) If generated_binding branch is not created, create it from the default branch.
-          if git ls-remote --exit-code --heads origin "${GEN_TARGET_BRANCH}" 2>&1 >/dev/null; then
-            git fetch origin --no-tags --prune --depth=1 "${GEN_TARGET_BRANCH}"
-            git checkout "${GEN_TARGET_BRANCH}"
-          else
-            git switch -c "${GEN_TARGET_BRANCH}"
-          fi
+          git switch -c generated_bindings
         fi
 
+    - name: Switch branch (/bindings command)
+      if: github.event_name == 'issue_comment'
+      uses: r-lib/actions/pr-fetch@v2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Commit the generated bindings
+      run: |
         # Update or add the bindings
         cp generated_binding-*/*.rs bindings/
 
@@ -431,10 +434,17 @@ jobs:
         if ! git diff-index --quiet HEAD -- bindings/; then
           git config --local user.name "${GITHUB_ACTOR}"
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git commit -m "Update bindings [skip ci]"
-          
-          # cf. https://github.com/r-lib/actions/blob/ac4564fd0531646b1471781c2d4cdf83704cabf8/pr-push/src/main.ts#L26-L29
-          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.event.issue.pull_request.head_repository.name }}" "${GEN_TARGET_BRANCH}"
+          git commit -m "Update bindings [skip ci]"          
         else
           echo "No changes"
         fi
+
+    - name: Push
+      if: github.event_name != 'issue_comment'
+      run: git push origin generated_bindings
+
+    - name: Push (/bindings command)
+      if: github.event_name == 'issue_comment'
+      uses: r-lib/actions/pr-push@v2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
