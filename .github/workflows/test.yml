@@ -432,7 +432,9 @@ jobs:
           git config --local user.name "${GITHUB_ACTOR}"
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git commit -m "Update bindings [skip ci]"
-          git push '${{ github.repositoryUrl }}' "${GEN_TARGET_BRANCH}"
+          
+          # cf. https://github.com/r-lib/actions/blob/ac4564fd0531646b1471781c2d4cdf83704cabf8/pr-push/src/main.ts#L26-L29
+          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}" "${GEN_TARGET_BRANCH}"
         else
           echo "No changes"
         fi
