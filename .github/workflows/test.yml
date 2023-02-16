@@ -399,8 +399,8 @@ jobs:
         
     - name: Push the generated bindings
       run: |
-        if [ "${GITHUB_EVENT_NAME}" = 'issue_comment' ]; then
-          GEN_TARGET_BRANCH="${GITHUB_HEAD_REF}"
+        if [ '${{ github.event_name }}' = 'issue_comment' ]; then
+          GEN_TARGET_BRANCH='${{ github.event.issue.pull_request.head_ref.name }}'
         else
           GEN_TARGET_BRANCH=generated_bindings
           # 1) If there's already generated_bindings branch, checkout it.
@@ -434,7 +434,7 @@ jobs:
           git commit -m "Update bindings [skip ci]"
           
           # cf. https://github.com/r-lib/actions/blob/ac4564fd0531646b1471781c2d4cdf83704cabf8/pr-push/src/main.ts#L26-L29
-          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}" "${GEN_TARGET_BRANCH}"
+          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.event.issue.pull_request.head_repository.name }}" "${GEN_TARGET_BRANCH}"
         else
           echo "No changes"
         fi
