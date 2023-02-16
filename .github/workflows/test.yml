@@ -399,7 +399,7 @@ jobs:
         
     - name: Push the generated bindings
       run: |
-        if [ "${GITHUB_EVENT_NAME}" != 'issue_comment' ]; then
+        if [ "${GITHUB_EVENT_NAME}" = 'issue_comment' ]; then
           GEN_TARGET_BRANCH="${GITHUB_HEAD_REF}"
         else
           GEN_TARGET_BRANCH=generated_bindings
