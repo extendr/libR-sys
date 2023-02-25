@@ -1,6 +1,17 @@
 # Changelog
 
-## libR-sys (unreleased)
+## libR-sys 0.4.0
+
+- Update the default precomuted bindings to R 4.2.0.
+- [`Windows`] Dropped build-time dependency on `winapi`.
+- Remove bindings for the symbols that are not the part of R's API. [[#96]](https://github.com/extendr/libR-sys/pull/96)
+- Add bindings for the following header files:
+  - `R_ext/Applic.h` [[#117]](https://github.com/extendr/libR-sys/pull/117)
+  - `R_ext/Random.h` [[#123]](https://github.com/extendr/libR-sys/pull/123)
+  - `Rmath.h` [[#124]](https://github.com/extendr/libR-sys/pull/124)
+- [`Linux`] Provide precomuted bindings for linux-aarch64. [[#133]](https://github.com/extendr/libR-sys/pull/133)
+
+## libR-sys 0.3.0
 
 - Drop support for 32-bit Windows with R >= 4.2. As
   [the release note of R 4.1.0](https://stat.ethz.ch/pipermail/r-announce/2021/000670.html)
@@ -9,7 +20,6 @@
   To be clear, libR-sys (and extendr) crate will keep supporting 32-bit on R <
   4.2 for a year or so.
 - libR-sys no longer sets `DEP_R_R_VERSION_STRING` environmental variable.
-- [`Windows`] Dropped build-time dependency on `winapi`
 
 ## libR-sys 0.2.2
 
