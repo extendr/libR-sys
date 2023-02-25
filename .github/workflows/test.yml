@@ -197,6 +197,9 @@ jobs:
       - name: Build & Emit bindings
         id: build
         run: |
+          # Update the non-API list first, but not check here in order not to prevent the tests run
+          Rscript.exe -e "cat(tools:::nonAPI, sep = '\n')" | Sort-Object | Get-Unique | Out-File ./nonAPI.txt
+
           . ./ci-cargo.ps1
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
             ci-cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -ActionName "Building for target: $target"
@@ -219,8 +222,18 @@ jobs:
           }
         env: 
           NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
-            
 
+      - name: Check nonAPI.txt
+        run: |
+          # detect changes (the code is derived from https://stackoverflow.com/a/3879077)
+          git add ./nonAPI.txt
+          git update-index --refresh
+          git diff-index --quiet HEAD -- ./nonAPI.txt
+          if($LASTEXITCODE -ne 0) {
+            echo "::warning:: nonAPI.txt is changed! Please review the diff"
+            git diff --staged
+            exit $LASTEXITCODE
+          }
 
       # If success
       # AND (either rust is stable and 'emit-bindings' != 'false'
