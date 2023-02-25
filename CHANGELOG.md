@@ -4,7 +4,7 @@
 
 - Update the default precomuted bindings to R 4.2.0.
 - [`Windows`] Dropped build-time dependency on `winapi`.
-- Remove bindings for the symbols that are not the part of R's API. [[#96]](https://github.com/extendr/libR-sys/pull/96)
+- Remove bindings for the symbols that are not part of R API. [[#96]](https://github.com/extendr/libR-sys/pull/96)
 - Add bindings for the following header files:
   - `R_ext/Applic.h` [[#117]](https://github.com/extendr/libR-sys/pull/117)
   - `R_ext/Random.h` [[#123]](https://github.com/extendr/libR-sys/pull/123)
