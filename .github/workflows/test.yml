@@ -198,7 +198,7 @@ jobs:
         id: build
         run: |
           # Update the non-API list first, but not check here in order not to prevent the tests run
-          Rscript.exe -e "cat(tools:::nonAPI, sep = '\n')" | Sort-Object | Get-Unique | Out-File ./nonAPI.txt
+          Rscript -e "cat(tools:::nonAPI, sep = '\n')" | Sort-Object | Get-Unique | Out-File ./nonAPI.txt
 
           . ./ci-cargo.ps1
           foreach ($target in ($env:RUST_TARGETS).Split(",")) {
