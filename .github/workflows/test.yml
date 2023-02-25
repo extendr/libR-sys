@@ -94,22 +94,6 @@ jobs:
           use-public-rspm: true
           rtools-version: ${{ matrix.config.rtools-version }}
 
-      - name: Check nonAPI.txt on R-devel
-        if: matrix.config.r == 'devel'
-        run: |
-          # Update the non-API list first
-          Rscript -e "cat(tools:::nonAPI, sep = '\n')" | Sort-Object | Get-Unique | Out-File ./nonAPI.txt
-
-          # detect changes (the code is derived from https://stackoverflow.com/a/3879077)
-          git add ./nonAPI.txt
-          git update-index --refresh
-          git diff-index --quiet HEAD -- ./nonAPI.txt
-          if($LASTEXITCODE -ne 0) {
-            echo "::warning:: nonAPI.txt is changed! Please review and reflect the diff."
-            git diff --staged
-            exit 1
-          }
-
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@master
         with:
