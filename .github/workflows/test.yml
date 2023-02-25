@@ -441,7 +441,7 @@ jobs:
 
         # Replace the default bindings
         cd bindings
-        for x in linux-x86_64 macos-aarch64 macos-x86_64 windows-x86 windows-x86_64; do
+        for x in linux-aarch64 linux-x86_64 macos-aarch64 macos-x86_64 windows-x86 windows-x86_64; do
           # Choose the newest version except for devel
           ln --force -s "$(ls -1 ./bindings-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-${x}.rs
         done
