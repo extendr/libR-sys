@@ -78,10 +78,10 @@ jobs:
           git push origin update_nonAPI_txt
 
           # create the pull request
-          gh pr create --title "Update nonAPI.txt" --body "Please review the diff and run /bindings command manually."
+          # gh pr create --title "Update nonAPI.txt" --body "Please review the diff and run /bindings command manually."
+          gh pr create --title "Update nonAPI.txt" --body "Please review the diff and run /bindings command manually." --base refactor/remove-non-API-calls
         else
           echo "No changes"
         fi
-
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
