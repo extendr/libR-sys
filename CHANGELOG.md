@@ -6,10 +6,10 @@
 - [`Windows`] Dropped build-time dependency on `winapi`.
 - Remove bindings for the symbols that are not part of R API. [[#96]](https://github.com/extendr/libR-sys/pull/96)
 - Add bindings for the following header files:
-  - `R_ext/Applic.h` [[#117]](https://github.com/extendr/libR-sys/pull/117)
-  - `R_ext/Random.h` [[#123]](https://github.com/extendr/libR-sys/pull/123)
-  - `Rmath.h` [[#124]](https://github.com/extendr/libR-sys/pull/124)
-- [`Linux`] Provide precomuted bindings for linux-aarch64. [[#133]](https://github.com/extendr/libR-sys/pull/133)
+  - `R_ext/Applic.h`: optimisation functions [[#117]](https://github.com/extendr/libR-sys/pull/117)
+  - `R_ext/Random.h`: random number generator state wrappers [[#123]](https://github.com/extendr/libR-sys/pull/123)
+  - `Rmath.h`: distribution functions [[#124]](https://github.com/extendr/libR-sys/pull/124)
+- [`Linux`] Provide precomuted bindings for linux-aarch64 (aka ARM64). [[#133]](https://github.com/extendr/libR-sys/pull/133)
 
 ## libR-sys 0.3.0
 
