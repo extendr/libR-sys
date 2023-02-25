@@ -32,7 +32,7 @@ jobs:
       - name: Update nonAPI.txt
         run: |
           # Update the non-API list first
-          Rscript -e 'cat(tools:::nonAPI, sep = "\n")' | sort -u | tee ./nonAPI.txt
+          Rscript -e 'cat(tools:::nonAPI, sep = "\n")' | tr -d '\r' | sort -u | tee ./nonAPI.txt
         shell: bash
 
       - name: Upload nonAPI.txt
@@ -65,7 +65,7 @@ jobs:
     - name: Commit and create a pull request
       run: |
         # Merge all nonAPI.txt 
-        cat nonAPI-*/nonAPI.txt | sort -u | tee nonAPI.txt
+        cat nonAPI-*/nonAPI.txt | tr -d '\r' | sort -u | tee nonAPI.txt
 
         # detect changes (the code is derived from https://stackoverflow.com/a/3879077)
         git add nonAPI.txt
