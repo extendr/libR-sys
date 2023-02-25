@@ -1,11 +1,7 @@
 name: Update nonAPI.txt
 
 on:
-  # TODO: remove this after confirming a pull request is created
-  push:
-    branches:
-      - refactor/*
-  # Run this once per three days
+  # Run this weekly
   schedule:
     - cron: '42 12 * * 1'
   # This can also manually run
@@ -44,8 +40,7 @@ jobs:
   commit_nonAPI_txt:
     needs: update_nonAPI_txt
     runs-on: ubuntu-latest
-    # TODO: Uncomment this
-    # if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     steps:
     - uses: actions/checkout@v3
 
@@ -80,8 +75,7 @@ jobs:
           git push origin update_nonAPI_txt
 
           # create the pull request
-          # gh pr create --title "Update nonAPI.txt" --body "Please review the diff and run /bindings command manually."
-          gh pr create --title "Update nonAPI.txt" --body "Please review the diff and run /bindings command manually." --base refactor/remove-non-API-calls
+          gh pr create --title "Update nonAPI.txt" --body "Please review the diff and run /bindings command manually."
         else
           echo "No changes"
         fi
