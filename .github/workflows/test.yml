@@ -9,6 +9,9 @@ on:
     branches:
       - main
       - master
+  issue_comment:
+    types:
+      - created
   # Run this once per three days
   schedule:
     - cron: '29 17 */3 * *'
@@ -18,6 +21,16 @@ on:
 jobs:
 
   test_with_bindgen:
+    # When the event is not issue_comment, always run the tests. When it is,
+    # check if (1) the comment is on pull request, (2) the comment author is the
+    # member of the organization, and (3) the comment starts with '/bindings'.
+    #
+    # ref.
+    # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#issue_comment
+    if: |
+      github.event_name != 'issue_comment'
+      || (github.event.issue.pull_request && github.event.comment.author_association == 'MEMBER' && startsWith(github.event.comment.body, '/bindings'))
+
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }})
@@ -239,6 +252,9 @@ jobs:
           NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
 
   test_windows_rtools:
+    # This doesn't need to be run on /bindings command
+    if: github.event_name != 'issue_comment'
+
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) \w Rtools
@@ -381,14 +397,17 @@ jobs:
   commit_generated_bindings:
     needs: test_with_bindgen
     runs-on: ubuntu-latest
-    # Do not run this on pull request
-    if: github.ref == 'refs/heads/master'
+    # In the case of /bindings command, we don't need to check anything else
+    # because it should have checked in test_with_bindings job. In the other
+    # cases, we only want to invoke this on the master branch.
+    if: github.event_name == 'issue_comment' || github.ref == 'refs/heads/master'
     steps:
     - uses: actions/checkout@v2
 
     - uses: actions/download-artifact@v2
-        
-    - name: Push the generated bindings
+
+    - name: Switch branch
+      if: github.event_name != 'issue_comment'
       run: |
         # 1) If there's already generated_bindings branch, checkout it.
         # 2) If generated_binding branch is not created, create it from the default branch.
@@ -399,6 +418,14 @@ jobs:
           git switch -c generated_bindings
         fi
 
+    - name: Switch branch (/bindings command)
+      if: github.event_name == 'issue_comment'
+      uses: r-lib/actions/pr-fetch@v2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Commit the generated bindings
+      run: |
         # Update or add the bindings
         cp generated_binding-*/*.rs bindings/
 
@@ -416,8 +443,17 @@ jobs:
         if ! git diff-index --quiet HEAD -- bindings/; then
           git config --local user.name "${GITHUB_ACTOR}"
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git commit -m "Update bindings [skip ci]"
-          git push origin generated_bindings
+          git commit -m "Update bindings [skip ci]"          
         else
           echo "No changes"
         fi
+
+    - name: Push
+      if: github.event_name != 'issue_comment'
+      run: git push origin generated_bindings
+
+    - name: Push (/bindings command)
+      if: github.event_name == 'issue_comment'
+      uses: r-lib/actions/pr-push@v2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
