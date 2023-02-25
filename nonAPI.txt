@@ -1,3 +1,4 @@
+addInputHandler
 AllDevicesKilled
 baseRegisterIndex
 Brent_fmin

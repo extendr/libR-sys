@@ -105,7 +105,7 @@ jobs:
           git update-index --refresh
           git diff-index --quiet HEAD -- ./nonAPI.txt
           if($LASTEXITCODE -ne 0) {
-            echo "::warning:: nonAPI.txt is changed! Please review the diff"
+            echo "::warning:: nonAPI.txt is changed! Please review and reflect the diff."
             git diff --staged
             exit 1
           }
