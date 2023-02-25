@@ -14,7 +14,7 @@ on:
 jobs:
   update_nonAPI_txt:
     runs-on: ${{ matrix.config.os }}
-    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }})              
+    name: Update nonAPI.txt on ${{ matrix.config.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -32,7 +32,7 @@ jobs:
       - name: Update nonAPI.txt
         run: |
           # Update the non-API list first
-          Rscript -e 'cat(tools:::nonAPI, sep = "\n")'' | sort -u | tee ./nonAPI.txt
+          Rscript -e 'cat(tools:::nonAPI, sep = "\n")' | sort -u | tee ./nonAPI.txt
         shell: bash
 
       - name: Upload nonAPI.txt
