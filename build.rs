@@ -591,6 +591,7 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
 #[derive(Debug)]
 struct RCallbacks;
 
+#[cfg(feature = "use-bindgen")]
 impl bindgen::callbacks::ParseCallbacks for RCallbacks {
     fn process_comment(&self, comment: &str) -> Option<String> {
         let trim_comment = comment.trim();
