@@ -510,6 +510,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
         .generate_comments(true)
+        .parse_callbacks(Box::new(RCallbacks))
         .clang_arg("-fparse-all-comments")
         .clang_arg("-fretain-comments-from-system-headers")
         .generate()
@@ -584,6 +585,17 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
     )
     .expect("No precomputed bindings available!");
     println!("cargo:rerun-if-changed={}", from.display());
+}
+
+/// Provide extra cleaning of the processed elements in the headers.
+#[derive(Debug)]
+struct RCallbacks;
+
+impl bindgen::callbacks::ParseCallbacks for RCallbacks {
+    fn process_comment(&self, comment: &str) -> Option<String> {
+        let trim_comment = comment.trim();
+        Some(trim_comment.to_string())
+    }
 }
 
 fn main() {
