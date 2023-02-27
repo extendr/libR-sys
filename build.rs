@@ -484,7 +484,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         "Generating bindings for target: {}, os: {}, architecture: {}",
         target, target_os, target_arch
     );
-    
+
     // Point to the correct headers
     bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", r_paths.include.display()),
@@ -509,6 +509,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
+        .generate_comments(true)
+        .clang_arg("-fparse-all-comments")
+        .clang_arg("-fretain-comments-from-system-headers")
         .generate()
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
