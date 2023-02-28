@@ -100,14 +100,13 @@ pub const R_GE_patternExtendRepeat: u32 = 2;
 pub const R_GE_patternExtendReflect: u32 = 3;
 pub const R_GE_patternExtendNone: u32 = 4;
 pub const R_PROBLEM_BUFSIZE: u32 = 4096;
-#[doc = " R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
+#[doc = "R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
 pub type __int64_t = ::std::os::raw::c_longlong;
 pub type __darwin_va_list = __builtin_va_list;
 pub type __darwin_off_t = __int64_t;
 pub type va_list = __darwin_va_list;
 pub type fpos_t = __darwin_off_t;
-#[doc = " stdio buffers"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __sbuf {
@@ -149,31 +148,21 @@ fn bindgen_test_layout___sbuf() {
         )
     );
 }
-#[doc = " hold a buncha junk that would grow the ABI"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __sFILEX {
     _unused: [u8; 0],
 }
-#[doc = " stdio state variables.\n\n The following always hold:\n\n\tif (_flags&(__SLBF|__SWR)) == (__SLBF|__SWR),\n\t\t_lbfsize is -_bf._size, else _lbfsize is 0\n\tif _flags&__SRD, _w is 0\n\tif _flags&__SWR, _r is 0\n\n This ensures that the getc and putc macros (or inline functions) never\n try to write or read from a file that is in `read' or `write' mode.\n (Moreover, they can, and do, automatically switch from read mode to\n write mode, and back, on \"r+\" and \"w+\" files.)\n\n _lbfsize is used only to make the inline line-buffered output stream\n code as compact as possible.\n\n _ub, _up, and _ur are used when ungetc() pushes back more characters\n than fit in the current _bf, or when ungetc() pushes back a character\n that does not match the previous one in _bf.  When this happens,\n _ub._base becomes non-nil (i.e., a stream has ungetc() data iff\n _ub._base!=NULL) and _up and _ur save the current values of _p and _r.\n\n NB: see WARNING above before changing the layout of this structure!"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __sFILE {
-    #[doc = " current position in (some) buffer"]
     pub _p: *mut ::std::os::raw::c_uchar,
-    #[doc = " read space left for getc()"]
     pub _r: ::std::os::raw::c_int,
-    #[doc = " write space left for putc()"]
     pub _w: ::std::os::raw::c_int,
-    #[doc = " flags, below; this FILE is free if 0"]
     pub _flags: ::std::os::raw::c_short,
-    #[doc = " fileno, if Unix descriptor, else -1"]
     pub _file: ::std::os::raw::c_short,
-    #[doc = " the buffer (at least 1 byte, if !NULL)"]
     pub _bf: __sbuf,
-    #[doc = " 0 or -_bf._size, for inline putc"]
     pub _lbfsize: ::std::os::raw::c_int,
-    #[doc = " cookie passed to io functions"]
     pub _cookie: *mut ::std::os::raw::c_void,
     pub _close: ::std::option::Option<
         unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_int,
@@ -199,21 +188,13 @@ pub struct __sFILE {
             arg3: ::std::os::raw::c_int,
         ) -> ::std::os::raw::c_int,
     >,
-    #[doc = " ungetc buffer"]
     pub _ub: __sbuf,
-    #[doc = " additions to FILE to not break ABI"]
     pub _extra: *mut __sFILEX,
-    #[doc = " saved _r when _r is counting ungetc data"]
     pub _ur: ::std::os::raw::c_int,
-    #[doc = " guarantee an ungetc() buffer"]
     pub _ubuf: [::std::os::raw::c_uchar; 3usize],
-    #[doc = " guarantee a getc() buffer"]
     pub _nbuf: [::std::os::raw::c_uchar; 1usize],
-    #[doc = " buffer for fgetln()"]
     pub _lb: __sbuf,
-    #[doc = " stat.st_blksize (may be != _bf._size)"]
     pub _blksize: ::std::os::raw::c_int,
-    #[doc = " current lseek offset (see WARNING)"]
     pub _offset: fpos_t,
 }
 #[test]
@@ -431,30 +412,29 @@ fn bindgen_test_layout___sFILE() {
         )
     );
 }
-#[doc = " stdio state variables.\n\n The following always hold:\n\n\tif (_flags&(__SLBF|__SWR)) == (__SLBF|__SWR),\n\t\t_lbfsize is -_bf._size, else _lbfsize is 0\n\tif _flags&__SRD, _w is 0\n\tif _flags&__SWR, _r is 0\n\n This ensures that the getc and putc macros (or inline functions) never\n try to write or read from a file that is in `read' or `write' mode.\n (Moreover, they can, and do, automatically switch from read mode to\n write mode, and back, on \"r+\" and \"w+\" files.)\n\n _lbfsize is used only to make the inline line-buffered output stream\n code as compact as possible.\n\n _ub, _up, and _ur are used when ungetc() pushes back more characters\n than fit in the current _bf, or when ungetc() pushes back a character\n that does not match the previous one in _bf.  When this happens,\n _ub._base becomes non-nil (i.e., a stream has ungetc() data iff\n _ub._base!=NULL) and _up and _ur save the current values of _p and _r.\n\n NB: see WARNING above before changing the layout of this structure!"]
 pub type FILE = __sFILE;
 extern "C" {
-    #[doc = " IEEE NaN"]
+    #[doc = "IEEE NaN"]
     pub static mut R_NaN: f64;
 }
 extern "C" {
-    #[doc = " IEEE Inf"]
+    #[doc = "IEEE Inf"]
     pub static mut R_PosInf: f64;
 }
 extern "C" {
-    #[doc = " IEEE -Inf"]
+    #[doc = "IEEE -Inf"]
     pub static mut R_NegInf: f64;
 }
 extern "C" {
-    #[doc = " NA_REAL: IEEE"]
+    #[doc = "NA_REAL: IEEE"]
     pub static mut R_NaReal: f64;
 }
 extern "C" {
-    #[doc = " NA_INTEGER:= INT_MIN currently"]
+    #[doc = "NA_INTEGER:= INT_MIN currently"]
     pub static mut R_NaInt: ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " NA_STRING is a SEXP, so defined in Rinternals.h"]
+    #[doc = "NA_STRING is a SEXP, so defined in Rinternals.h"]
     pub fn R_IsNA(arg1: f64) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -569,7 +549,7 @@ extern "C" {
     ) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
-    #[doc = " ../../main/sort.c :"]
+    #[doc = "../../main/sort.c :"]
     pub fn R_isort(arg1: *mut ::std::os::raw::c_int, arg2: ::std::os::raw::c_int);
 }
 extern "C" {
@@ -606,7 +586,7 @@ extern "C" {
     pub fn Rf_cPsort(arg1: *mut Rcomplex, arg2: ::std::os::raw::c_int, arg3: ::std::os::raw::c_int);
 }
 extern "C" {
-    #[doc = " ../../main/qsort.c : */\n/* dummy renamed to II to avoid problems with g++ on Solaris"]
+    #[doc = "../../main/qsort.c : */\n/* dummy renamed to II to avoid problems with g++ on Solaris"]
     pub fn R_qsort(v: *mut f64, i: usize, j: usize);
 }
 extern "C" {
@@ -629,7 +609,7 @@ extern "C" {
     );
 }
 extern "C" {
-    #[doc = " ../../main/util.c  and others :"]
+    #[doc = "../../main/util.c  and others :"]
     pub fn R_ExpandFileName(arg1: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
@@ -652,7 +632,7 @@ extern "C" {
     pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
 }
 extern "C" {
-    #[doc = " These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
+    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
 }
 extern "C" {
@@ -685,7 +665,7 @@ extern "C" {
     pub fn R_CheckStack2(arg1: usize);
 }
 extern "C" {
-    #[doc = " ../../appl/interv.c: also in Applic.h"]
+    #[doc = "../../appl/interv.c: also in Applic.h"]
     pub fn findInterval(
         xt: *mut f64,
         n: ::std::os::raw::c_int,
@@ -720,7 +700,7 @@ extern "C" {
     );
 }
 extern "C" {
-    #[doc = " ../../appl/maxcol.c: also in Applic.h"]
+    #[doc = "../../appl/maxcol.c: also in Applic.h"]
     pub fn R_max_col(
         matrix: *mut f64,
         nr: *mut ::std::os::raw::c_int,
@@ -741,7 +721,7 @@ extern "C" {
 extern "C" {
     pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: *mut __va_list_tag);
 }
-#[doc = " called with a variable argument set"]
+#[doc = "called with a variable argument set"]
 pub type DL_FUNC = ::std::option::Option<unsafe extern "C" fn() -> *mut ::std::os::raw::c_void>;
 pub type R_NativePrimitiveArgType = ::std::os::raw::c_uint;
 #[doc = "These are very similar to those in Rdynpriv.h,\nbut we maintain them separately to give us more freedom to do\nsome computations on the internal versions that are derived from\nthese definitions."]
@@ -888,7 +868,7 @@ extern "C" {
     pub fn R_getDllInfo(name: *const ::std::os::raw::c_char) -> *mut DllInfo;
 }
 extern "C" {
-    #[doc = " To be used by applications embedding R to register their symbols\nthat are not related to any dynamic module"]
+    #[doc = "To be used by applications embedding R to register their symbols\nthat are not related to any dynamic module"]
     pub fn R_getEmbeddingDllInfo() -> *mut DllInfo;
 }
 #[repr(C)]
@@ -911,7 +891,7 @@ extern "C" {
     ) -> DL_FUNC;
 }
 extern "C" {
-    #[doc = " Interface for exporting and importing functions from one package\nfor use from C code in a package.  The registration part probably\nought to be integrated with the other registrations.  The naming of\nthese routines may be less than ideal."]
+    #[doc = "Interface for exporting and importing functions from one package\nfor use from C code in a package.  The registration part probably\nought to be integrated with the other registrations.  The naming of\nthese routines may be less than ideal."]
     pub fn R_RegisterCCallable(
         package: *const ::std::os::raw::c_char,
         name: *const ::std::os::raw::c_char,
@@ -925,9 +905,9 @@ extern "C" {
     ) -> DL_FUNC;
 }
 pub type Rbyte = ::std::os::raw::c_uchar;
-#[doc = " type for length of (standard, not long) vectors etc"]
+#[doc = "type for length of (standard, not long) vectors etc"]
 pub type R_len_t = ::std::os::raw::c_int;
-#[doc = " NOT YET using enum:\n  1)\tThe SEXPREC struct below has 'SEXPTYPE type : 5'\n\t(making FUNSXP and CLOSXP equivalent in there),\n\tgiving (-Wall only ?) warnings all over the place\n 2)\tMany switch(type) { case ... } statements need a final `default:'\n\tadded in order to avoid warnings like [e.g. l.170 of ../main/util.c]\n\t  \"enumeration value `FUNSXP' not handled in switch\""]
+#[doc = "NOT YET using enum:\n  1)\tThe SEXPREC struct below has 'SEXPTYPE type : 5'\n\t(making FUNSXP and CLOSXP equivalent in there),\n\tgiving (-Wall only ?) warnings all over the place\n 2)\tMany switch(type) { case ... } statements need a final `default:'\n\tadded in order to avoid warnings like [e.g. l.170 of ../main/util.c]\n\t  \"enumeration value `FUNSXP' not handled in switch\""]
 pub type SEXPTYPE = ::std::os::raw::c_uint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -939,7 +919,7 @@ extern "C" {
     pub fn R_CHAR(x: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
-    #[doc = " Various tests with macro versions in the second USE_RINTERNALS section"]
+    #[doc = "Various tests with macro versions in the second USE_RINTERNALS section"]
     pub fn Rf_isNull(s: SEXP) -> Rboolean;
 }
 extern "C" {
@@ -967,7 +947,7 @@ extern "C" {
     pub fn Rf_isObject(s: SEXP) -> Rboolean;
 }
 extern "C" {
-    #[doc = " General Cons Cell Attributes"]
+    #[doc = "General Cons Cell Attributes"]
     pub fn ATTRIB(x: SEXP) -> SEXP;
 }
 extern "C" {
@@ -1046,7 +1026,7 @@ extern "C" {
     pub fn MARK_ASSIGNMENT_CALL(x: SEXP);
 }
 extern "C" {
-    #[doc = " S4 object testing"]
+    #[doc = "S4 object testing"]
     pub fn IS_S4_OBJECT(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1056,7 +1036,7 @@ extern "C" {
     pub fn UNSET_S4_OBJECT(x: SEXP);
 }
 extern "C" {
-    #[doc = " JIT optimization support"]
+    #[doc = "JIT optimization support"]
     pub fn NOJIT(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1072,14 +1052,14 @@ extern "C" {
     pub fn UNSET_MAYBEJIT(x: SEXP);
 }
 extern "C" {
-    #[doc = " Growable vector support"]
+    #[doc = "Growable vector support"]
     pub fn IS_GROWABLE(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn SET_GROWABLE_BIT(x: SEXP);
 }
 extern "C" {
-    #[doc = " Vector Access Functions"]
+    #[doc = "Vector Access Functions"]
     pub fn LENGTH(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1153,7 +1133,7 @@ extern "C" {
     pub fn VECTOR_PTR(x: SEXP) -> !;
 }
 extern "C" {
-    #[doc = " ALTREP support"]
+    #[doc = "ALTREP support"]
     pub fn STDVEC_DATAPTR(x: SEXP) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
@@ -1218,7 +1198,7 @@ extern "C" {
     pub fn ALTVEC_EXTRACT_SUBSET(x: SEXP, indx: SEXP, call: SEXP) -> SEXP;
 }
 extern "C" {
-    #[doc = " data access"]
+    #[doc = "data access"]
     pub fn ALTINTEGER_ELT(x: SEXP, i: R_xlen_t) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1280,7 +1260,7 @@ extern "C" {
     pub fn RAW_GET_REGION(sx: SEXP, i: R_xlen_t, n: R_xlen_t, buf: *mut Rbyte) -> R_xlen_t;
 }
 extern "C" {
-    #[doc = " metadata access"]
+    #[doc = "metadata access"]
     pub fn INTEGER_IS_SORTED(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1305,7 +1285,7 @@ extern "C" {
     pub fn STRING_NO_NA(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " invoking ALTREP class methods"]
+    #[doc = "invoking ALTREP class methods"]
     pub fn ALTINTEGER_SUM(x: SEXP, narm: Rboolean) -> SEXP;
 }
 extern "C" {
@@ -1353,7 +1333,7 @@ extern "C" {
     pub fn ALTLOGICAL_SUM(x: SEXP, narm: Rboolean) -> SEXP;
 }
 extern "C" {
-    #[doc = " constructors for internal ALTREP classes"]
+    #[doc = "constructors for internal ALTREP classes"]
     pub fn R_compact_intrange(n1: R_xlen_t, n2: R_xlen_t) -> SEXP;
 }
 extern "C" {
@@ -1472,7 +1452,7 @@ extern "C" {
     pub fn CONS_NR(a: SEXP, b: SEXP) -> SEXP;
 }
 extern "C" {
-    #[doc = " Closure Access Functions"]
+    #[doc = "Closure Access Functions"]
     pub fn FORMALS(x: SEXP) -> SEXP;
 }
 extern "C" {
@@ -1509,7 +1489,7 @@ extern "C" {
     pub fn SET_CLOENV(x: SEXP, v: SEXP);
 }
 extern "C" {
-    #[doc = " Symbol Access Functions"]
+    #[doc = "Symbol Access Functions"]
     pub fn PRINTNAME(x: SEXP) -> SEXP;
 }
 extern "C" {
@@ -1534,7 +1514,7 @@ extern "C" {
     pub fn SET_INTERNAL(x: SEXP, v: SEXP);
 }
 extern "C" {
-    #[doc = " Environment Access Functions"]
+    #[doc = "Environment Access Functions"]
     pub fn FRAME(x: SEXP) -> SEXP;
 }
 extern "C" {
@@ -1559,7 +1539,7 @@ extern "C" {
     pub fn SET_HASHTAB(x: SEXP, v: SEXP);
 }
 extern "C" {
-    #[doc = " Promise Access Functions */\n/* First five have macro versions in Defn.h"]
+    #[doc = "Promise Access Functions */\n/* First five have macro versions in Defn.h"]
     pub fn PRCODE(x: SEXP) -> SEXP;
 }
 extern "C" {
@@ -1584,7 +1564,7 @@ extern "C" {
     pub fn SET_PRCODE(x: SEXP, v: SEXP);
 }
 extern "C" {
-    #[doc = " Hashing Functions */\n/* There are macro versions in Defn.h"]
+    #[doc = "Hashing Functions */\n/* There are macro versions in Defn.h"]
     pub fn HASHASH(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1596,229 +1576,229 @@ extern "C" {
 extern "C" {
     pub fn SET_HASHVALUE(x: SEXP, v: ::std::os::raw::c_int);
 }
-#[doc = " We sometimes need to coerce a protected value and place the new\ncoerced value under protection.  For these cases PROTECT_WITH_INDEX\nsaves an index of the protection location that can be used to\nreplace the protected value using REPROTECT."]
+#[doc = "We sometimes need to coerce a protected value and place the new\ncoerced value under protection.  For these cases PROTECT_WITH_INDEX\nsaves an index of the protection location that can be used to\nreplace the protected value using REPROTECT."]
 pub type PROTECT_INDEX = ::std::os::raw::c_int;
 extern "C" {
-    #[doc = " The \"global\" environment"]
+    #[doc = "The \"global\" environment"]
     pub static mut R_GlobalEnv: SEXP;
 }
 extern "C" {
-    #[doc = " An empty environment at the root of the\nenvironment tree"]
+    #[doc = "An empty environment at the root of the\nenvironment tree"]
     pub static mut R_EmptyEnv: SEXP;
 }
 extern "C" {
-    #[doc = " The base environment; formerly R_NilValue"]
+    #[doc = "The base environment; formerly R_NilValue"]
     pub static mut R_BaseEnv: SEXP;
 }
 extern "C" {
-    #[doc = " The (fake) namespace for base"]
+    #[doc = "The (fake) namespace for base"]
     pub static mut R_BaseNamespace: SEXP;
 }
 extern "C" {
-    #[doc = " Registry for registered namespaces"]
+    #[doc = "Registry for registered namespaces"]
     pub static mut R_NamespaceRegistry: SEXP;
 }
 extern "C" {
-    #[doc = " Current srcref, for debuggers"]
+    #[doc = "Current srcref, for debuggers"]
     pub static mut R_Srcref: SEXP;
 }
 extern "C" {
-    #[doc = " The nil object"]
+    #[doc = "The nil object"]
     pub static mut R_NilValue: SEXP;
 }
 extern "C" {
-    #[doc = " Unbound marker"]
+    #[doc = "Unbound marker"]
     pub static mut R_UnboundValue: SEXP;
 }
 extern "C" {
-    #[doc = " Missing argument marker"]
+    #[doc = "Missing argument marker"]
     pub static mut R_MissingArg: SEXP;
 }
 extern "C" {
-    #[doc = " To be found in BC interp. state\n(marker)"]
+    #[doc = "To be found in BC interp. state\n(marker)"]
     pub static mut R_InBCInterpreter: SEXP;
 }
 extern "C" {
-    #[doc = " Use current expression (marker)"]
+    #[doc = "Use current expression (marker)"]
     pub static mut R_CurrentExpression: SEXP;
 }
 extern "C" {
-    #[doc = " Marker for restarted function calls"]
+    #[doc = "Marker for restarted function calls"]
     pub static mut R_RestartToken: SEXP;
 }
 extern "C" {
-    #[doc = " \"as.character\""]
+    #[doc = "\"as.character\""]
     pub static mut R_AsCharacterSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " <-- backcompatible version of:"]
+    #[doc = "<-- backcompatible version of:"]
     pub static mut R_baseSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"base\""]
+    #[doc = "\"base\""]
     pub static mut R_BaseSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"{\""]
+    #[doc = "\"{\""]
     pub static mut R_BraceSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"[[\""]
+    #[doc = "\"[[\""]
     pub static mut R_Bracket2Symbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"[\""]
+    #[doc = "\"[\""]
     pub static mut R_BracketSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"class\""]
+    #[doc = "\"class\""]
     pub static mut R_ClassSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \".Device\""]
+    #[doc = "\".Device\""]
     pub static mut R_DeviceSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"dimnames\""]
+    #[doc = "\"dimnames\""]
     pub static mut R_DimNamesSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"dim\""]
+    #[doc = "\"dim\""]
     pub static mut R_DimSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"$\""]
+    #[doc = "\"$\""]
     pub static mut R_DollarSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"...\""]
+    #[doc = "\"...\""]
     pub static mut R_DotsSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"::\""]
+    #[doc = "\"::\""]
     pub static mut R_DoubleColonSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"drop\""]
+    #[doc = "\"drop\""]
     pub static mut R_DropSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"eval\""]
+    #[doc = "\"eval\""]
     pub static mut R_EvalSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"function\""]
+    #[doc = "\"function\""]
     pub static mut R_FunctionSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \".Last.value\""]
+    #[doc = "\".Last.value\""]
     pub static mut R_LastvalueSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"levels\""]
+    #[doc = "\"levels\""]
     pub static mut R_LevelsSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"mode\""]
+    #[doc = "\"mode\""]
     pub static mut R_ModeSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"na.rm\""]
+    #[doc = "\"na.rm\""]
     pub static mut R_NaRmSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"name\""]
+    #[doc = "\"name\""]
     pub static mut R_NameSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"names\""]
+    #[doc = "\"names\""]
     pub static mut R_NamesSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \".__NAMESPACE__.\""]
+    #[doc = "\".__NAMESPACE__.\""]
     pub static mut R_NamespaceEnvSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"package\""]
+    #[doc = "\"package\""]
     pub static mut R_PackageSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"previous\""]
+    #[doc = "\"previous\""]
     pub static mut R_PreviousSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"quote\""]
+    #[doc = "\"quote\""]
     pub static mut R_QuoteSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"row.names\""]
+    #[doc = "\"row.names\""]
     pub static mut R_RowNamesSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \".Random.seed\""]
+    #[doc = "\".Random.seed\""]
     pub static mut R_SeedsSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"sort.list\""]
+    #[doc = "\"sort.list\""]
     pub static mut R_SortListSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"source\""]
+    #[doc = "\"source\""]
     pub static mut R_SourceSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"spec\""]
+    #[doc = "\"spec\""]
     pub static mut R_SpecSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \":::\""]
+    #[doc = "\":::\""]
     pub static mut R_TripleColonSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \"tsp\""]
+    #[doc = "\"tsp\""]
     pub static mut R_TspSymbol: SEXP;
 }
 extern "C" {
-    #[doc = " \".defined\""]
+    #[doc = "\".defined\""]
     pub static mut R_dot_defined: SEXP;
 }
 extern "C" {
-    #[doc = " \".Method\""]
+    #[doc = "\".Method\""]
     pub static mut R_dot_Method: SEXP;
 }
 extern "C" {
-    #[doc = " \".packageName\""]
+    #[doc = "\".packageName\""]
     pub static mut R_dot_packageName: SEXP;
 }
 extern "C" {
-    #[doc = " \".target\""]
+    #[doc = "\".target\""]
     pub static mut R_dot_target: SEXP;
 }
 extern "C" {
-    #[doc = " \".Generic\""]
+    #[doc = "\".Generic\""]
     pub static mut R_dot_Generic: SEXP;
 }
 extern "C" {
-    #[doc = " NA_STRING as a CHARSXP"]
+    #[doc = "NA_STRING as a CHARSXP"]
     pub static mut R_NaString: SEXP;
 }
 extern "C" {
-    #[doc = " \"\" as a CHARSXP"]
+    #[doc = "\"\" as a CHARSXP"]
     pub static mut R_BlankString: SEXP;
 }
 extern "C" {
-    #[doc = " \"\" as a STRSXP"]
+    #[doc = "\"\" as a STRSXP"]
     pub static mut R_BlankScalarString: SEXP;
 }
 extern "C" {
-    #[doc = " srcref related functions"]
+    #[doc = "srcref related functions"]
     pub fn R_GetCurrentSrcref(arg1: ::std::os::raw::c_int) -> SEXP;
 }
 extern "C" {
     pub fn R_GetSrcFilename(arg1: SEXP) -> SEXP;
 }
 extern "C" {
-    #[doc = " Type Coercions of all kinds"]
+    #[doc = "Type Coercions of all kinds"]
     pub fn Rf_asChar(arg1: SEXP) -> SEXP;
 }
 extern "C" {
@@ -1864,7 +1844,7 @@ pub const warn_type_iWARN: warn_type = 1;
 pub const warn_type_iERROR: warn_type = 2;
 pub type warn_type = ::std::os::raw::c_uint;
 extern "C" {
-    #[doc = " Other Internally Used Functions, excluding those which are inline-able"]
+    #[doc = "Other Internally Used Functions, excluding those which are inline-able"]
     pub fn Rf_acopy_string(arg1: *const ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
@@ -2002,7 +1982,7 @@ extern "C" {
     pub fn Rf_lazy_duplicate(arg1: SEXP) -> SEXP;
 }
 extern "C" {
-    #[doc = " the next really should not be here and is also in Defn.h"]
+    #[doc = "the next really should not be here and is also in Defn.h"]
     pub fn Rf_duplicated(arg1: SEXP, arg2: Rboolean) -> SEXP;
 }
 extern "C" {
@@ -2155,7 +2135,7 @@ extern "C" {
 pub const nchar_type_Bytes: nchar_type = 0;
 pub const nchar_type_Chars: nchar_type = 1;
 pub const nchar_type_Width: nchar_type = 2;
-#[doc = " ../main/character.c :"]
+#[doc = "../main/character.c :"]
 pub type nchar_type = ::std::os::raw::c_uint;
 extern "C" {
     pub fn R_nchar(
@@ -2286,7 +2266,7 @@ pub const cetype_t_CE_LATIN1: cetype_t = 2;
 pub const cetype_t_CE_BYTES: cetype_t = 3;
 pub const cetype_t_CE_SYMBOL: cetype_t = 5;
 pub const cetype_t_CE_ANY: cetype_t = 99;
-#[doc = " cetype_t is an identifier reseved by POSIX, but it is\nwell established as public.  Could remap by a #define though"]
+#[doc = "cetype_t is an identifier reseved by POSIX, but it is\nwell established as public.  Could remap by a #define though"]
 pub type cetype_t = ::std::os::raw::c_uint;
 extern "C" {
     pub fn Rf_getCharCE(arg1: SEXP) -> cetype_t;
@@ -2310,11 +2290,11 @@ extern "C" {
     ) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
-    #[doc = " Calling a function with arguments evaluated"]
+    #[doc = "Calling a function with arguments evaluated"]
     pub fn R_forceAndCall(e: SEXP, n: ::std::os::raw::c_int, rho: SEXP) -> SEXP;
 }
 extern "C" {
-    #[doc = " External pointer interface"]
+    #[doc = "External pointer interface"]
     pub fn R_MakeExternalPtr(p: *mut ::std::os::raw::c_void, tag: SEXP, prot: SEXP) -> SEXP;
 }
 extern "C" {
@@ -2339,13 +2319,13 @@ extern "C" {
     pub fn R_SetExternalPtrProtected(s: SEXP, p: SEXP);
 }
 extern "C" {
-    #[doc = " Added in R 3.4.0"]
+    #[doc = "Added in R 3.4.0"]
     pub fn R_MakeExternalPtrFn(p: DL_FUNC, tag: SEXP, prot: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn R_ExternalPtrAddrFn(s: SEXP) -> DL_FUNC;
 }
-#[doc = " Finalization interface"]
+#[doc = "Finalization interface"]
 pub type R_CFinalizer_t = ::std::option::Option<unsafe extern "C" fn(arg1: SEXP)>;
 extern "C" {
     pub fn R_RegisterFinalizer(s: SEXP, fun: SEXP);
@@ -2363,7 +2343,7 @@ extern "C" {
     pub fn R_RunPendingFinalizers();
 }
 extern "C" {
-    #[doc = " Weak reference interface"]
+    #[doc = "Weak reference interface"]
     pub fn R_MakeWeakRef(key: SEXP, val: SEXP, fin: SEXP, onexit: Rboolean) -> SEXP;
 }
 extern "C" {
@@ -2412,7 +2392,7 @@ extern "C" {
     pub fn R_reinit_altrep_classes(arg1: *mut DllInfo);
 }
 extern "C" {
-    #[doc = " Protected evaluation"]
+    #[doc = "Protected evaluation"]
     pub fn R_ToplevelExec(
         fun: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
         data: *mut ::std::os::raw::c_void,
@@ -2483,7 +2463,7 @@ extern "C" {
     ) -> SEXP;
 }
 extern "C" {
-    #[doc = " Environment and Binding Features"]
+    #[doc = "Environment and Binding Features"]
     pub fn R_NewEnv(arg1: SEXP, arg2: ::std::os::raw::c_int, arg3: ::std::os::raw::c_int) -> SEXP;
 }
 extern "C" {
@@ -2863,7 +2843,7 @@ extern "C" {
     pub fn R_SerializeInfo(ips: R_inpstream_t) -> SEXP;
 }
 extern "C" {
-    #[doc = " slot management (in attrib.c)"]
+    #[doc = "slot management (in attrib.c)"]
     pub fn R_do_slot(obj: SEXP, name: SEXP) -> SEXP;
 }
 extern "C" {
@@ -2873,11 +2853,11 @@ extern "C" {
     pub fn R_has_slot(obj: SEXP, name: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " S3-S4 class (inheritance), attrib.c"]
+    #[doc = "S3-S4 class (inheritance), attrib.c"]
     pub fn R_S4_extends(klass: SEXP, useTable: SEXP) -> SEXP;
 }
 extern "C" {
-    #[doc = " class definition, new objects (objects.c)"]
+    #[doc = "class definition, new objects (objects.c)"]
     pub fn R_do_MAKE_CLASS(what: *const ::std::os::raw::c_char) -> SEXP;
 }
 extern "C" {
@@ -2899,7 +2879,7 @@ extern "C" {
     pub fn R_do_new_object(class_def: SEXP) -> SEXP;
 }
 extern "C" {
-    #[doc = " supporting  a C-level version of  is(., .) :"]
+    #[doc = "supporting  a C-level version of  is(., .) :"]
     pub fn R_check_class_and_super(
         x: SEXP,
         valid: *mut *const ::std::os::raw::c_char,
@@ -2913,7 +2893,7 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " preserve objects across GCs"]
+    #[doc = "preserve objects across GCs"]
     pub fn R_PreserveObject(arg1: SEXP);
 }
 extern "C" {
@@ -2932,7 +2912,7 @@ extern "C" {
     pub fn R_ReleaseMSet(mset: SEXP, keepSize: ::std::os::raw::c_int);
 }
 extern "C" {
-    #[doc = " Shutdown actions"]
+    #[doc = "Shutdown actions"]
     pub fn R_dot_Last();
 }
 extern "C" {
@@ -2942,14 +2922,14 @@ extern "C" {
     pub fn R_system(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " R_compute_identical:  C version of identical() function\nThe third arg to R_compute_identical() consists of bitmapped flags for non-default options:\ncurrently the first 4 default to TRUE, so the flag is set for FALSE values:\n1 = !NUM_EQ\n2 = !SINGLE_NA\n4 = !ATTR_AS_SET\n8 = !IGNORE_BYTECODE\n16 = !IGNORE_ENV\nDefault from R's default: 16"]
+    #[doc = "R_compute_identical:  C version of identical() function\nThe third arg to R_compute_identical() consists of bitmapped flags for non-default options:\ncurrently the first 4 default to TRUE, so the flag is set for FALSE values:\n1 = !NUM_EQ\n2 = !SINGLE_NA\n4 = !ATTR_AS_SET\n8 = !IGNORE_BYTECODE\n16 = !IGNORE_ENV\nDefault from R's default: 16"]
     pub fn R_compute_identical(arg1: SEXP, arg2: SEXP, arg3: ::std::os::raw::c_int) -> Rboolean;
 }
 extern "C" {
     pub fn R_body_no_src(x: SEXP) -> SEXP;
 }
 extern "C" {
-    #[doc = " C version of R's  indx <- order(..., na.last, decreasing) :\ne.g.  arglist = Rf_lang2(x,y)  or  Rf_lang3(x,y,z)"]
+    #[doc = "C version of R's  indx <- order(..., na.last, decreasing) :\ne.g.  arglist = Rf_lang2(x,y)  or  Rf_lang3(x,y,z)"]
     pub fn R_orderVector(
         indx: *mut ::std::os::raw::c_int,
         n: ::std::os::raw::c_int,
@@ -2959,7 +2939,7 @@ extern "C" {
     );
 }
 extern "C" {
-    #[doc = " C version of R's  indx <- order(x, na.last, decreasing) :"]
+    #[doc = "C version of R's  indx <- order(x, na.last, decreasing) :"]
     pub fn R_orderVector1(
         indx: *mut ::std::os::raw::c_int,
         n: ::std::os::raw::c_int,
@@ -3285,11 +3265,11 @@ extern "C" {
     );
 }
 extern "C" {
-    #[doc = " TRUE during interactive use"]
+    #[doc = "TRUE during interactive use"]
     pub static mut R_Interactive: Rboolean;
 }
 extern "C" {
-    #[doc = " do not echo R code"]
+    #[doc = "do not echo R code"]
     pub static mut R_NoEcho: Rboolean;
 }
 extern "C" {
@@ -3317,7 +3297,7 @@ extern "C" {
     pub fn R_HomeDir() -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
-    #[doc = " Current image dirty"]
+    #[doc = "Current image dirty"]
     pub static mut R_DirtyImage: ::std::os::raw::c_int;
 }
 extern "C" {
@@ -3327,19 +3307,19 @@ extern "C" {
     pub fn R_setupHistory();
 }
 extern "C" {
-    #[doc = " Name of the history file"]
+    #[doc = "Name of the history file"]
     pub static mut R_HistoryFile: *mut ::std::os::raw::c_char;
 }
 extern "C" {
-    #[doc = " Size of the history file"]
+    #[doc = "Size of the history file"]
     pub static mut R_HistorySize: ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " restore the history file?"]
+    #[doc = "restore the history file?"]
     pub static mut R_RestoreHistory: ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " Root of the R tree"]
+    #[doc = "Root of the R tree"]
     pub static mut R_Home: *mut ::std::os::raw::c_char;
 }
 extern "C" {
@@ -3355,7 +3335,7 @@ extern "C" {
     pub fn Rf_onintrNoResume();
 }
 extern "C" {
-    #[doc = " Need opaque pointer type for export"]
+    #[doc = "Need opaque pointer type for export"]
     pub static mut R_GlobalContext: *mut ::std::os::raw::c_void;
 }
 extern "C" {
@@ -3374,34 +3354,34 @@ extern "C" {
     pub static mut R_Outputfile: *mut FILE;
 }
 extern "C" {
-    #[doc = " in ../unix/sys-unix.c"]
+    #[doc = "in ../unix/sys-unix.c"]
     pub fn R_setStartTime();
 }
 extern "C" {
     pub fn fpu_setup(arg1: Rboolean);
 }
 extern "C" {
-    #[doc = " in ../unix/system.c"]
+    #[doc = "in ../unix/system.c"]
     pub static mut R_running_as_main_program: ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " C stack limit"]
+    #[doc = "C stack limit"]
     pub static mut R_CStackLimit: usize;
 }
 extern "C" {
-    #[doc = " Initial stack address"]
+    #[doc = "Initial stack address"]
     pub static mut R_CStackStart: usize;
 }
-#[doc = " = 0"]
+#[doc = "= 0"]
 pub const SA_TYPE_SA_NORESTORE: SA_TYPE = 0;
 pub const SA_TYPE_SA_RESTORE: SA_TYPE = 1;
-#[doc = " was === SA_RESTORE"]
+#[doc = "was === SA_RESTORE"]
 pub const SA_TYPE_SA_DEFAULT: SA_TYPE = 2;
 pub const SA_TYPE_SA_NOSAVE: SA_TYPE = 3;
 pub const SA_TYPE_SA_SAVE: SA_TYPE = 4;
 pub const SA_TYPE_SA_SAVEASK: SA_TYPE = 5;
 pub const SA_TYPE_SA_SUICIDE: SA_TYPE = 6;
-#[doc = " Startup Actions"]
+#[doc = "Startup Actions"]
 pub type SA_TYPE = ::std::os::raw::c_uint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -3709,7 +3689,7 @@ extern "C" {
         ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP)>;
 }
 extern "C" {
-    #[doc = " added in 3.0.0"]
+    #[doc = "added in 3.0.0"]
     pub static mut ptr_R_EditFiles: ::std::option::Option<
         unsafe extern "C" fn(
             arg1: ::std::os::raw::c_int,
@@ -3720,7 +3700,7 @@ extern "C" {
     >;
 }
 extern "C" {
-    #[doc = " naming follows earlier versions in R.app"]
+    #[doc = "naming follows earlier versions in R.app"]
     pub static mut ptr_do_selectlist: ::std::option::Option<
         unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP) -> SEXP,
     >;
@@ -3739,7 +3719,7 @@ extern "C" {
     pub static mut ptr_R_ProcessEvents: ::std::option::Option<unsafe extern "C" fn()>;
 }
 extern "C" {
-    #[doc = " These two are not used by R itself, but are used by the tcltk package"]
+    #[doc = "These two are not used by R itself, but are used by the tcltk package"]
     pub static mut R_timeout_handler:
         ::std::option::Option<unsafe extern "C" fn() -> ::std::os::raw::c_int>;
 }
@@ -3783,14 +3763,14 @@ extern "C" {
     pub static mut R_TempDir: *mut ::std::os::raw::c_char;
 }
 extern "C" {
-    #[doc = " R's versions with !R_FINITE checks"]
+    #[doc = "R's versions with !R_FINITE checks"]
     pub fn R_pow(x: f64, y: f64) -> f64;
 }
 extern "C" {
     pub fn R_pow_di(arg1: f64, arg2: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
-    #[doc = " Random Number Generators"]
+    #[doc = "Random Number Generators"]
     pub fn norm_rand() -> f64;
 }
 extern "C" {
@@ -4560,7 +4540,7 @@ pub const ParseStatus_PARSE_OK: ParseStatus = 1;
 pub const ParseStatus_PARSE_INCOMPLETE: ParseStatus = 2;
 pub const ParseStatus_PARSE_ERROR: ParseStatus = 3;
 pub const ParseStatus_PARSE_EOF: ParseStatus = 4;
-#[doc = " PARSE_NULL will not be returned by R_ParseVector"]
+#[doc = "PARSE_NULL will not be returned by R_ParseVector"]
 pub type ParseStatus = ::std::os::raw::c_uint;
 extern "C" {
     pub fn R_ParseVector(
@@ -4927,73 +4907,73 @@ extern "C" {
 extern "C" {
     pub fn R_GE_checkVersionOrDie(version: ::std::os::raw::c_int);
 }
-#[doc = " native device coordinates (rasters)"]
+#[doc = "native device coordinates (rasters)"]
 pub const GEUnit_GE_DEVICE: GEUnit = 0;
-#[doc = " normalised device coordinates x=(0,1), y=(0,1)"]
+#[doc = "normalised device coordinates x=(0,1), y=(0,1)"]
 pub const GEUnit_GE_NDC: GEUnit = 1;
 pub const GEUnit_GE_INCHES: GEUnit = 2;
 pub const GEUnit_GE_CM: GEUnit = 3;
-#[doc = " The graphics engine will only accept locations and dimensions\n in native device coordinates, but it provides the following functions\n for converting between a couple of simple alternative coordinate\n systems and device coordinates:\n    DEVICE = native units of the device\n    NDC = Normalised device coordinates\n    INCHES = inches (!)\n    CM = centimetres (!!)"]
+#[doc = "The graphics engine will only accept locations and dimensions\n in native device coordinates, but it provides the following functions\n for converting between a couple of simple alternative coordinate\n systems and device coordinates:\n    DEVICE = native units of the device\n    NDC = Normalised device coordinates\n    INCHES = inches (!)\n    CM = centimetres (!!)"]
 pub type GEUnit = ::std::os::raw::c_uint;
-#[doc = " In response to this event, the registered graphics system\n should allocate and initialise the systemSpecific structure\n\n Should return R_NilValue on failure so that engine\n can tidy up memory allocation"]
+#[doc = "In response to this event, the registered graphics system\n should allocate and initialise the systemSpecific structure\n\n Should return R_NilValue on failure so that engine\n can tidy up memory allocation"]
 pub const GEevent_GE_InitState: GEevent = 0;
-#[doc = " This event gives the registered system a chance to undo\n anything done in the initialisation."]
+#[doc = "This event gives the registered system a chance to undo\n anything done in the initialisation."]
 pub const GEevent_GE_FinaliseState: GEevent = 1;
-#[doc = " This is sent by the graphics engine prior to initialising\n the display list.  It give the graphics system the chance\n to squirrel away information it will need for redrawing the\n the display list"]
+#[doc = "This is sent by the graphics engine prior to initialising\n the display list.  It give the graphics system the chance\n to squirrel away information it will need for redrawing the\n the display list"]
 pub const GEevent_GE_SaveState: GEevent = 2;
-#[doc = " This is sent by the graphics engine prior to replaying the\n display list.  It gives the graphics system the chance to\n restore any information it saved on the GE_SaveState event"]
+#[doc = "This is sent by the graphics engine prior to replaying the\n display list.  It gives the graphics system the chance to\n restore any information it saved on the GE_SaveState event"]
 pub const GEevent_GE_RestoreState: GEevent = 6;
-#[doc = " Copy system state information to the current device.\n This is used when copying graphics from one device to another\n so all the graphics system needs to do is to copy across\n the bits required for the display list to draw faithfully\n on the new device."]
+#[doc = "Copy system state information to the current device.\n This is used when copying graphics from one device to another\n so all the graphics system needs to do is to copy across\n the bits required for the display list to draw faithfully\n on the new device."]
 pub const GEevent_GE_CopyState: GEevent = 3;
-#[doc = " Create a snapshot of the system state that is sufficient\n for the current \"image\" to be reproduced"]
+#[doc = "Create a snapshot of the system state that is sufficient\n for the current \"image\" to be reproduced"]
 pub const GEevent_GE_SaveSnapshotState: GEevent = 4;
-#[doc = " Restore the system state that is saved by GE_SaveSnapshotState"]
+#[doc = "Restore the system state that is saved by GE_SaveSnapshotState"]
 pub const GEevent_GE_RestoreSnapshotState: GEevent = 5;
-#[doc = " When replaying the display list, the graphics engine\n checks, after each replayed action, that the action\n produced valid output.  This is the graphics system's\n chance to say that the output is crap (in which case the\n graphics engine will abort the display list replay)."]
+#[doc = "When replaying the display list, the graphics engine\n checks, after each replayed action, that the action\n produced valid output.  This is the graphics system's\n chance to say that the output is crap (in which case the\n graphics engine will abort the display list replay)."]
 pub const GEevent_GE_CheckPlot: GEevent = 7;
-#[doc = " The device wants to scale the current pointsize\n (for scaling an image)\n This is not a nice general solution, but a quick fix for\n the Windows device."]
+#[doc = "The device wants to scale the current pointsize\n (for scaling an image)\n This is not a nice general solution, but a quick fix for\n the Windows device."]
 pub const GEevent_GE_ScalePS: GEevent = 8;
 pub type GEevent = ::std::os::raw::c_uint;
 pub const R_GE_lineend_GE_ROUND_CAP: R_GE_lineend = 1;
 pub const R_GE_lineend_GE_BUTT_CAP: R_GE_lineend = 2;
 pub const R_GE_lineend_GE_SQUARE_CAP: R_GE_lineend = 3;
-#[doc = "  Some line end/join constants"]
+#[doc = "Some line end/join constants"]
 pub type R_GE_lineend = ::std::os::raw::c_uint;
 pub const R_GE_linejoin_GE_ROUND_JOIN: R_GE_linejoin = 1;
 pub const R_GE_linejoin_GE_MITRE_JOIN: R_GE_linejoin = 2;
 pub const R_GE_linejoin_GE_BEVEL_JOIN: R_GE_linejoin = 3;
 pub type R_GE_linejoin = ::std::os::raw::c_uint;
-#[doc = " A structure containing graphical parameters\n\n This is how graphical parameters are passed from graphics systems\n to the graphics engine AND from the graphics engine to graphics\n devices.\n\n Devices are not *required* to honour graphical parameters\n (e.g., alpha transparency is going to be tough for some)"]
+#[doc = "A structure containing graphical parameters\n\n This is how graphical parameters are passed from graphics systems\n to the graphics engine AND from the graphics engine to graphics\n devices.\n\n Devices are not *required* to honour graphical parameters\n (e.g., alpha transparency is going to be tough for some)"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct R_GE_gcontext {
-    #[doc = " pen colour (lines, text, borders, ...)"]
+    #[doc = "pen colour (lines, text, borders, ...)"]
     pub col: ::std::os::raw::c_int,
-    #[doc = " fill colour (for polygons, circles, rects, ...)"]
+    #[doc = "fill colour (for polygons, circles, rects, ...)"]
     pub fill: ::std::os::raw::c_int,
-    #[doc = " Gamma correction"]
+    #[doc = "Gamma correction"]
     pub gamma: f64,
-    #[doc = " Line width (roughly number of pixels)"]
+    #[doc = "Line width (roughly number of pixels)"]
     pub lwd: f64,
-    #[doc = " Line type (solid, dashed, dotted, ...)"]
+    #[doc = "Line type (solid, dashed, dotted, ...)"]
     pub lty: ::std::os::raw::c_int,
-    #[doc = " Line end"]
+    #[doc = "Line end"]
     pub lend: R_GE_lineend,
-    #[doc = " line join"]
+    #[doc = "line join"]
     pub ljoin: R_GE_linejoin,
-    #[doc = " line mitre"]
+    #[doc = "line mitre"]
     pub lmitre: f64,
-    #[doc = " Character expansion (font size = fontsize*cex)"]
+    #[doc = "Character expansion (font size = fontsize*cex)"]
     pub cex: f64,
-    #[doc = " Font size in points"]
+    #[doc = "Font size in points"]
     pub ps: f64,
-    #[doc = " Line height (multiply by font size)"]
+    #[doc = "Line height (multiply by font size)"]
     pub lineheight: f64,
-    #[doc = " Font face (plain, italic, bold, ...)"]
+    #[doc = "Font face (plain, italic, bold, ...)"]
     pub fontface: ::std::os::raw::c_int,
-    #[doc = " Font family"]
+    #[doc = "Font family"]
     pub fontfamily: [::std::os::raw::c_char; 201usize],
-    #[doc = " Reference to a pattern fill"]
+    #[doc = "Reference to a pattern fill"]
     pub patternFill: SEXP,
 }
 #[test]
@@ -5152,67 +5132,67 @@ fn bindgen_test_layout_R_GE_gcontext() {
     );
 }
 pub type pGEcontext = *mut R_GE_gcontext;
-#[doc = " --------- New (in 1.4.0) device driver structure ---------\n NOTES:\n 1. All locations and dimensions are in device coordinates.\n 2. I found this comment in the doc for dev_Open -- looks nasty\n    Any known instances of such a thing happening?  Should be\n    replaced by a function to query the device for preferred gpars\n    settings? (to be called when the device is initialised)\n\n NOTE that it is perfectly acceptable for this\n function to set generic graphics parameters too\n (i.e., override the generic parameter settings\n which GInit sets up) all at the author's own risk\n of course :)\n\n 3. Do we really need dev_StrWidth as well as dev_MetricInfo?\n    I can see the difference between the two -- its just a\n    question of whether dev_MetricInfo should just return\n    what dev_StrWidth would give if font metric information is\n    not available.  I guess having both allows the developer\n    to decide when to ask for which sort of value, and to decide\n    what to do when font metric information is not available.\n    And why not a dev_StrHeight?\n 4. Should \"ipr\", \"asp\", and \"cra\" be in the device description?\n    If not, then where?\n    I guess they don't need to be if no device makes use of them.\n    On the other hand, they would need to be replaced by a device\n    call that R base graphics could use to get enough information\n    to figure them out.  (e.g., some sort of dpi() function to\n    complement the size() function.)"]
+#[doc = "--------- New (in 1.4.0) device driver structure ---------\n NOTES:\n 1. All locations and dimensions are in device coordinates.\n 2. I found this comment in the doc for dev_Open -- looks nasty\n    Any known instances of such a thing happening?  Should be\n    replaced by a function to query the device for preferred gpars\n    settings? (to be called when the device is initialised)\n\n NOTE that it is perfectly acceptable for this\n function to set generic graphics parameters too\n (i.e., override the generic parameter settings\n which GInit sets up) all at the author's own risk\n of course :)\n\n 3. Do we really need dev_StrWidth as well as dev_MetricInfo?\n    I can see the difference between the two -- its just a\n    question of whether dev_MetricInfo should just return\n    what dev_StrWidth would give if font metric information is\n    not available.  I guess having both allows the developer\n    to decide when to ask for which sort of value, and to decide\n    what to do when font metric information is not available.\n    And why not a dev_StrHeight?\n 4. Should \"ipr\", \"asp\", and \"cra\" be in the device description?\n    If not, then where?\n    I guess they don't need to be if no device makes use of them.\n    On the other hand, they would need to be replaced by a device\n    call that R base graphics could use to get enough information\n    to figure them out.  (e.g., some sort of dpi() function to\n    complement the size() function.)"]
 pub type DevDesc = _DevDesc;
 pub type pDevDesc = *mut DevDesc;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _DevDesc {
-    #[doc = " left raster coordinate"]
+    #[doc = "left raster coordinate"]
     pub left: f64,
-    #[doc = " right raster coordinate"]
+    #[doc = "right raster coordinate"]
     pub right: f64,
-    #[doc = " bottom raster coordinate"]
+    #[doc = "bottom raster coordinate"]
     pub bottom: f64,
-    #[doc = " top raster coordinate"]
+    #[doc = "top raster coordinate"]
     pub top: f64,
-    #[doc = " R only has the notion of a rectangular clipping region"]
+    #[doc = "R only has the notion of a rectangular clipping region"]
     pub clipLeft: f64,
     pub clipRight: f64,
     pub clipBottom: f64,
     pub clipTop: f64,
-    #[doc = " x character addressing offset - unused"]
+    #[doc = "x character addressing offset - unused"]
     pub xCharOffset: f64,
-    #[doc = " y character addressing offset"]
+    #[doc = "y character addressing offset"]
     pub yCharOffset: f64,
-    #[doc = " 1/2 interline space as frac of line height"]
+    #[doc = "1/2 interline space as frac of line height"]
     pub yLineBias: f64,
-    #[doc = " Inches per raster; [0]=x, [1]=y"]
+    #[doc = "Inches per raster; [0]=x, [1]=y"]
     pub ipr: [f64; 2usize],
-    #[doc = " Character size in rasters; [0]=x, [1]=y"]
+    #[doc = "Character size in rasters; [0]=x, [1]=y"]
     pub cra: [f64; 2usize],
-    #[doc = " (initial) Device Gamma Correction"]
+    #[doc = "(initial) Device Gamma Correction"]
     pub gamma: f64,
-    #[doc = " Device-level clipping"]
+    #[doc = "Device-level clipping"]
     pub canClip: Rboolean,
-    #[doc = " can the gamma factor be modified?"]
+    #[doc = "can the gamma factor be modified?"]
     pub canChangeGamma: Rboolean,
-    #[doc = " Can do at least some horiz adjust of text\n0 = none, 1 = {0,0.5,1}, 2 = [0,1]"]
+    #[doc = "Can do at least some horiz adjust of text\n0 = none, 1 = {0,0.5,1}, 2 = [0,1]"]
     pub canHAdj: ::std::os::raw::c_int,
-    #[doc = " Device initial settings\n/\n/* These are things that the device must set up when it is created.\n The graphics system can modify them and track current values,"]
+    #[doc = "Device initial settings\n/\n/* These are things that the device must set up when it is created.\n The graphics system can modify them and track current values,"]
     pub startps: f64,
-    #[doc = " sets par(\"fg\"), par(\"col\") and gpar(\"col\")"]
+    #[doc = "sets par(\"fg\"), par(\"col\") and gpar(\"col\")"]
     pub startcol: ::std::os::raw::c_int,
-    #[doc = " sets par(\"bg\") and gpar(\"fill\")"]
+    #[doc = "sets par(\"bg\") and gpar(\"fill\")"]
     pub startfill: ::std::os::raw::c_int,
     pub startlty: ::std::os::raw::c_int,
     pub startfont: ::std::os::raw::c_int,
     pub startgamma: f64,
-    #[doc = " pointer to device specific parameters"]
+    #[doc = "pointer to device specific parameters"]
     pub deviceSpecific: *mut ::std::os::raw::c_void,
-    #[doc = " toggle for initial display list status"]
+    #[doc = "toggle for initial display list status"]
     pub displayListOn: Rboolean,
-    #[doc = " can the device generate mousedown events"]
+    #[doc = "can the device generate mousedown events"]
     pub canGenMouseDown: Rboolean,
-    #[doc = " can the device generate mousemove events"]
+    #[doc = "can the device generate mousemove events"]
     pub canGenMouseMove: Rboolean,
-    #[doc = " can the device generate mouseup events"]
+    #[doc = "can the device generate mouseup events"]
     pub canGenMouseUp: Rboolean,
-    #[doc = " can the device generate keyboard events"]
+    #[doc = "can the device generate keyboard events"]
     pub canGenKeybd: Rboolean,
-    #[doc = " can the device generate idle events"]
+    #[doc = "can the device generate idle events"]
     pub canGenIdle: Rboolean,
-    #[doc = " This is set while getGraphicsEvent\nis actively looking for events"]
+    #[doc = "This is set while getGraphicsEvent\nis actively looking for events"]
     pub gettingEvent: Rboolean,
     pub activate: ::std::option::Option<unsafe extern "C" fn(arg1: pDevDesc)>,
     pub circle: ::std::option::Option<
@@ -5318,12 +5298,12 @@ pub struct _DevDesc {
         ),
     >,
     pub onExit: ::std::option::Option<unsafe extern "C" fn(dd: pDevDesc)>,
-    #[doc = " device_getEvent is no longer used, but the slot is kept for back\n compatibility of the structure."]
+    #[doc = "device_getEvent is no longer used, but the slot is kept for back\n compatibility of the structure."]
     pub getEvent: ::std::option::Option<
         unsafe extern "C" fn(arg1: SEXP, arg2: *const ::std::os::raw::c_char) -> SEXP,
     >,
     pub newFrameConfirm: ::std::option::Option<unsafe extern "C" fn(dd: pDevDesc) -> Rboolean>,
-    #[doc = " and strWidthUTF8"]
+    #[doc = "and strWidthUTF8"]
     pub hasTextUTF8: Rboolean,
     pub textUTF8: ::std::option::Option<
         unsafe extern "C" fn(
@@ -5344,24 +5324,24 @@ pub struct _DevDesc {
         ) -> f64,
     >,
     pub wantSymbolUTF8: Rboolean,
-    #[doc = " Is rotated text good enough to be preferable to Hershey in\ncontour labels?  Old default was FALSE."]
+    #[doc = "Is rotated text good enough to be preferable to Hershey in\ncontour labels?  Old default was FALSE."]
     pub useRotatedTextInContour: Rboolean,
-    #[doc = " This is an environment holding event handlers."]
+    #[doc = "This is an environment holding event handlers."]
     pub eventEnv: SEXP,
     pub eventHelper:
         ::std::option::Option<unsafe extern "C" fn(dd: pDevDesc, code: ::std::os::raw::c_int)>,
     pub holdflush: ::std::option::Option<
         unsafe extern "C" fn(dd: pDevDesc, level: ::std::os::raw::c_int) -> ::std::os::raw::c_int,
     >,
-    #[doc = " 1 = no, 2 = yes"]
+    #[doc = "1 = no, 2 = yes"]
     pub haveTransparency: ::std::os::raw::c_int,
-    #[doc = " 1 = no, 2 = fully, 3 = semi"]
+    #[doc = "1 = no, 2 = fully, 3 = semi"]
     pub haveTransparentBg: ::std::os::raw::c_int,
-    #[doc = " 1 = no, 2 = yes, 3 = except for missing values"]
+    #[doc = "1 = no, 2 = yes, 3 = except for missing values"]
     pub haveRaster: ::std::os::raw::c_int,
-    #[doc = " 1 = no, 2 = yes"]
+    #[doc = "1 = no, 2 = yes"]
     pub haveCapture: ::std::os::raw::c_int,
-    #[doc = " 1 = no, 2 = yes"]
+    #[doc = "1 = no, 2 = yes"]
     pub haveLocator: ::std::os::raw::c_int,
     pub setPattern:
         ::std::option::Option<unsafe extern "C" fn(pattern: SEXP, dd: pDevDesc) -> SEXP>,
@@ -5372,11 +5352,11 @@ pub struct _DevDesc {
     pub setMask:
         ::std::option::Option<unsafe extern "C" fn(path: SEXP, ref_: SEXP, dd: pDevDesc) -> SEXP>,
     pub releaseMask: ::std::option::Option<unsafe extern "C" fn(ref_: SEXP, dd: pDevDesc)>,
-    #[doc = " This should match R_GE_version,\n BUT it does not have to.\n It give the graphics engine a chance to work with\n graphics device packages BEFORE they update to\n changes in R_GE_version."]
+    #[doc = "This should match R_GE_version,\n BUT it does not have to.\n It give the graphics engine a chance to work with\n graphics device packages BEFORE they update to\n changes in R_GE_version."]
     pub deviceVersion: ::std::os::raw::c_int,
-    #[doc = " This can be used to OVERRIDE canClip so that graphics engine\n leaves ALL clipping to the graphics device"]
+    #[doc = "This can be used to OVERRIDE canClip so that graphics engine\n leaves ALL clipping to the graphics device"]
     pub deviceClip: Rboolean,
-    #[doc = " Area for future expansion.\nBy zeroing this, devices are more likely to work if loaded\ninto a later version of R than that they were compiled under."]
+    #[doc = "Area for future expansion.\nBy zeroing this, devices are more likely to work if loaded\ninto a later version of R than that they were compiled under."]
     pub reserved: [::std::os::raw::c_char; 64usize],
 }
 #[test]
@@ -6151,7 +6131,7 @@ extern "C" {
     pub fn Rf_NumDevices() -> ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " Check for an available device slot"]
+    #[doc = "Check for an available device slot"]
     pub fn R_CheckDeviceAvailable();
 }
 extern "C" {
@@ -6201,12 +6181,12 @@ pub const R_KeyName_knEND: R_KeyName = 18;
 pub const R_KeyName_knHOME: R_KeyName = 19;
 pub const R_KeyName_knINS: R_KeyName = 20;
 pub const R_KeyName_knDEL: R_KeyName = 21;
-#[doc = " These give the indices of some known keys"]
+#[doc = "These give the indices of some known keys"]
 pub type R_KeyName = ::std::os::raw::c_int;
 pub const R_MouseEvent_meMouseDown: R_MouseEvent = 0;
 pub const R_MouseEvent_meMouseUp: R_MouseEvent = 1;
 pub const R_MouseEvent_meMouseMove: R_MouseEvent = 2;
-#[doc = " These are the three possible mouse events"]
+#[doc = "These are the three possible mouse events"]
 pub type R_MouseEvent = ::std::os::raw::c_uint;
 extern "C" {
     pub fn Rf_doMouseEvent(
@@ -6259,7 +6239,7 @@ extern "C" {
     ) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
-    #[doc = " Translates Unicode point to UTF-8"]
+    #[doc = "Translates Unicode point to UTF-8"]
     pub fn Rf_ucstoutf8(s: *mut ::std::os::raw::c_char, c: ::std::os::raw::c_uint) -> usize;
 }
 pub type GEDevDesc = _GEDevDesc;
@@ -6269,9 +6249,9 @@ pub type GEcallback = ::std::option::Option<
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct GESystemDesc {
-    #[doc = " An array of information about each graphics system that\n has registered with the graphics engine.\n This is used to store graphics state for each graphics\n system on each device."]
+    #[doc = "An array of information about each graphics system that\n has registered with the graphics engine.\n This is used to store graphics state for each graphics\n system on each device."]
     pub systemSpecific: *mut ::std::os::raw::c_void,
-    #[doc = " An array of function pointers, one per graphics system that\n has registered with the graphics engine.\n\n system_Callback is called when the graphics engine wants\n to give a graphics system the chance to play with its\n device-specific information (stored in systemSpecific)\n There are two parameters:  an \"event\" to tell the graphics\n system why the graphics engine has called this function,\n and the systemSpecific pointer.  The graphics engine\n has to pass the systemSpecific pointer because only\n the graphics engine will know what array index to use."]
+    #[doc = "An array of function pointers, one per graphics system that\n has registered with the graphics engine.\n\n system_Callback is called when the graphics engine wants\n to give a graphics system the chance to play with its\n device-specific information (stored in systemSpecific)\n There are two parameters:  an \"event\" to tell the graphics\n system why the graphics engine has called this function,\n and the systemSpecific pointer.  The graphics engine\n has to pass the systemSpecific pointer because only\n the graphics engine will know what array index to use."]
     pub callback: GEcallback,
 }
 #[test]
@@ -6312,23 +6292,23 @@ fn bindgen_test_layout_GESystemDesc() {
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _GEDevDesc {
-    #[doc = " Stuff that the devices can see (and modify).\n All detailed in GraphicsDevice.h"]
+    #[doc = "Stuff that the devices can see (and modify).\n All detailed in GraphicsDevice.h"]
     pub dev: pDevDesc,
-    #[doc = " toggle for display list status"]
+    #[doc = "toggle for display list status"]
     pub displayListOn: Rboolean,
-    #[doc = " display list"]
+    #[doc = "display list"]
     pub displayList: SEXP,
-    #[doc = " A pointer to the end of the display list\nto avoid tranversing pairlists"]
+    #[doc = "A pointer to the end of the display list\nto avoid tranversing pairlists"]
     pub DLlastElt: SEXP,
-    #[doc = " The last element of the display list\n just prior to when the display list\n was last initialised"]
+    #[doc = "The last element of the display list\n just prior to when the display list\n was last initialised"]
     pub savedSnapshot: SEXP,
-    #[doc = " Has the device received any output?"]
+    #[doc = "Has the device received any output?"]
     pub dirty: Rboolean,
-    #[doc = " Should a graphics call be stored\n on the display list?\n Set to FALSE by do_recordGraphics,\n do_dotcallgr, and do_Externalgr\n so that nested calls are not\n recorded on the display list"]
+    #[doc = "Should a graphics call be stored\n on the display list?\n Set to FALSE by do_recordGraphics,\n do_dotcallgr, and do_Externalgr\n so that nested calls are not\n recorded on the display list"]
     pub recordGraphics: Rboolean,
-    #[doc = " Stuff about the device that only graphics systems see.\n The graphics engine has no idea what is in here.\n Used by graphics systems to store system state per device."]
+    #[doc = "Stuff about the device that only graphics systems see.\n The graphics engine has no idea what is in here.\n Used by graphics systems to store system state per device."]
     pub gesd: [*mut GESystemDesc; 24usize],
-    #[doc = " per-device setting for 'ask' (use NewFrameConfirm)"]
+    #[doc = "per-device setting for 'ask' (use NewFrameConfirm)"]
     pub ask: Rboolean,
 }
 #[test]
@@ -6522,7 +6502,7 @@ extern "C" {
     pub fn Rf_col2name(col: rcolor) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
-    #[doc = " Convert either a name or a #RRGGBB[AA] string to internal.\nBecause people were using it, it also converts \"1\", \"2\" ...\nto a colour in the palette, and \"0\" to transparent white."]
+    #[doc = "Convert either a name or a #RRGGBB[AA] string to internal.\nBecause people were using it, it also converts \"1\", \"2\" ...\nto a colour in the palette, and \"0\" to transparent white."]
     pub fn R_GE_str2col(s: *const ::std::os::raw::c_char) -> rcolor;
 }
 extern "C" {
@@ -6689,7 +6669,7 @@ extern "C" {
     pub fn GE_LTYget(arg1: ::std::os::raw::c_uint) -> SEXP;
 }
 extern "C" {
-    #[doc = " Raster operations"]
+    #[doc = "Raster operations"]
     pub fn R_GE_rasterScale(
         sraster: *mut ::std::os::raw::c_uint,
         sw: ::std::os::raw::c_int,
@@ -6751,7 +6731,7 @@ extern "C" {
     );
 }
 extern "C" {
-    #[doc = " From plotmath.c"]
+    #[doc = "From plotmath.c"]
     pub fn GEExpressionWidth(expr: SEXP, gc: pGEcontext, dd: pGEDevDesc) -> f64;
 }
 extern "C" {
@@ -6780,7 +6760,7 @@ extern "C" {
     );
 }
 extern "C" {
-    #[doc = " From plot3d.c : used in package clines"]
+    #[doc = "From plot3d.c : used in package clines"]
     pub fn GEcontourLines(
         x: *mut f64,
         nx: ::std::os::raw::c_int,
@@ -6792,7 +6772,7 @@ extern "C" {
     ) -> SEXP;
 }
 extern "C" {
-    #[doc = " From vfonts.c"]
+    #[doc = "From vfonts.c"]
     pub fn R_GE_VStrWidth(
         s: *const ::std::os::raw::c_char,
         enc: cetype_t,
@@ -6878,7 +6858,7 @@ extern "C" {
     );
 }
 extern "C" {
-    #[doc = " Patterns - from ../../main/patterns.c"]
+    #[doc = "Patterns - from ../../main/patterns.c"]
     pub fn R_GE_isPattern(x: SEXP) -> Rboolean;
 }
 extern "C" {
@@ -6957,7 +6937,7 @@ extern "C" {
     pub fn R_GE_tilingPatternExtend(pattern: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    #[doc = " S Like Memory Management"]
+    #[doc = "S Like Memory Management"]
     pub fn R_chk_calloc(arg1: usize, arg2: usize) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
@@ -7835,12 +7815,12 @@ extern "C" {
         incx: *const ::std::os::raw::c_int,
     );
 }
-#[doc = " ../../appl/integrate.c"]
+#[doc = "../../appl/integrate.c"]
 pub type integr_fn = ::std::option::Option<
     unsafe extern "C" fn(x: *mut f64, n: ::std::os::raw::c_int, ex: *mut ::std::os::raw::c_void),
 >;
 extern "C" {
-    #[doc = " vectorizing function   f(x[1:n], ...) -> x[]  {overwriting x[]}."]
+    #[doc = "vectorizing function   f(x[1:n], ...) -> x[]  {overwriting x[]}."]
     pub fn Rdqags(
         f: integr_fn,
         ex: *mut ::std::os::raw::c_void,
@@ -7878,7 +7858,7 @@ extern "C" {
         work: *mut f64,
     );
 }
-#[doc = " main/optim.c"]
+#[doc = "main/optim.c"]
 pub type optimfn = ::std::option::Option<
     unsafe extern "C" fn(
         arg1: ::std::os::raw::c_int,
@@ -8044,7 +8024,7 @@ extern "C" {
     );
 }
 extern "C" {
-    #[doc = " appl/pretty.c: for use in engine.c and util.c"]
+    #[doc = "appl/pretty.c: for use in engine.c and util.c"]
     pub fn R_pretty(
         lo: *mut f64,
         up: *mut f64,
@@ -8056,7 +8036,7 @@ extern "C" {
         return_bounds: ::std::os::raw::c_int,
     ) -> f64;
 }
-#[doc = " type of pointer to the target and gradient functions"]
+#[doc = "type of pointer to the target and gradient functions"]
 pub type fcn_p = ::std::option::Option<
     unsafe extern "C" fn(
         arg1: ::std::os::raw::c_int,
@@ -8065,7 +8045,7 @@ pub type fcn_p = ::std::option::Option<
         arg4: *mut ::std::os::raw::c_void,
     ),
 >;
-#[doc = " type of pointer to the hessian functions"]
+#[doc = "type of pointer to the hessian functions"]
 pub type d2fcn_p = ::std::option::Option<
     unsafe extern "C" fn(
         arg1: ::std::os::raw::c_int,
@@ -8091,7 +8071,7 @@ extern "C" {
     );
 }
 extern "C" {
-    #[doc = " Also used in packages nlme, pcaPP"]
+    #[doc = "Also used in packages nlme, pcaPP"]
     pub fn optif9(
         nr: ::std::os::raw::c_int,
         n: ::std::os::raw::c_int,
@@ -8167,11 +8147,11 @@ pub const N01type_BOX_MULLER: N01type = 2;
 pub const N01type_USER_NORM: N01type = 3;
 pub const N01type_INVERSION: N01type = 4;
 pub const N01type_KINDERMAN_RAMAGE: N01type = 5;
-#[doc = " Different kinds of \"N(0,1)\" generators :"]
+#[doc = "Different kinds of \"N(0,1)\" generators :"]
 pub type N01type = ::std::os::raw::c_uint;
 pub const Sampletype_ROUNDING: Sampletype = 0;
 pub const Sampletype_REJECTION: Sampletype = 1;
-#[doc = " Different ways to generate discrete uniform samples"]
+#[doc = "Different ways to generate discrete uniform samples"]
 pub type Sampletype = ::std::os::raw::c_uint;
 extern "C" {
     pub fn R_sample_kind() -> Sampletype;
