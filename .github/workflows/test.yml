@@ -229,8 +229,6 @@ jobs:
           }
         env: 
           NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
-            
-
 
       # If success
       # AND (either rust is stable and 'emit-bindings' != 'false'

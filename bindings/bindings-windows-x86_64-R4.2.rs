@@ -2719,12 +2719,6 @@ extern "C" {
     pub static mut R_CStackLimit: usize;
 }
 extern "C" {
-    pub fn Rf_initEmbeddedR(
-        argc: ::std::os::raw::c_int,
-        argv: *mut *mut ::std::os::raw::c_char,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
     pub fn Rf_endEmbeddedR(fatal: ::std::os::raw::c_int);
 }
 extern "C" {
@@ -2737,52 +2731,16 @@ extern "C" {
     pub fn setup_Rmainloop();
 }
 extern "C" {
-    pub fn R_ReplDLLinit();
-}
-extern "C" {
-    pub fn R_ReplDLLdo1() -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_setStartTime();
-}
-extern "C" {
     pub fn CleanEd();
 }
 extern "C" {
-    pub fn Rf_KillAllDevices();
-}
-extern "C" {
-    pub static mut R_DirtyImage: ::std::os::raw::c_int;
-}
-extern "C" {
     pub fn R_CleanTempDir();
-}
-extern "C" {
-    pub static mut R_TempDir: *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn R_SaveGlobalEnv();
-}
-extern "C" {
-    pub fn getDLLVersion() -> *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn getRUser() -> *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn get_R_HOME() -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
     pub fn setup_term_ui();
 }
 extern "C" {
     pub static mut UserBreak: ::std::os::raw::c_int;
-}
-extern "C" {
-    pub static mut AllDevicesKilled: Rboolean;
-}
-extern "C" {
-    pub fn editorcleanall();
 }
 extern "C" {
     pub fn GA_initapp(
@@ -2792,9 +2750,6 @@ extern "C" {
 }
 extern "C" {
     pub fn GA_appcleanup();
-}
-extern "C" {
-    pub fn readconsolecfg();
 }
 extern "C" {
     #[doc = "R's versions with !R_FINITE checks"]
@@ -7153,28 +7108,6 @@ extern "C" {
     );
 }
 extern "C" {
-    pub fn dqrrsd_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        rsd: *mut f64,
-    );
-}
-extern "C" {
-    pub fn dqrxb_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        xb: *mut f64,
-    );
-}
-extern "C" {
     #[doc = "appl/pretty.c: for use in engine.c and util.c"]
     pub fn R_pretty(
         lo: *mut f64,
@@ -7206,21 +7139,6 @@ pub type d2fcn_p = ::std::option::Option<
         arg5: *mut ::std::os::raw::c_void,
     ),
 >;
-extern "C" {
-    pub fn fdhess(
-        n: ::std::os::raw::c_int,
-        x: *mut f64,
-        fval: f64,
-        fun: fcn_p,
-        state: *mut ::std::os::raw::c_void,
-        h: *mut f64,
-        nfd: ::std::os::raw::c_int,
-        step: *mut f64,
-        f: *mut f64,
-        ndigit: ::std::os::raw::c_int,
-        typx: *mut f64,
-    );
-}
 extern "C" {
     #[doc = "Also used in packages nlme, pcaPP"]
     pub fn optif9(
