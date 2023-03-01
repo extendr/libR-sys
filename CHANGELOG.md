@@ -1,5 +1,9 @@
 # Changelog
 
+## libR-sys (unreleased)
+
+- Exclude "non-API" calls [[#135]](https://github.com/extendr/libR-sys/pull/135)
+
 ## libR-sys 0.4.0
 
 - Update the default precomuted bindings to R 4.2.0.
