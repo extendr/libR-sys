@@ -162,9 +162,9 @@ pub const R_MAJOR: &[u8; 2usize] = b"4\0";
 pub const R_MINOR: &[u8; 4usize] = b"3.0\0";
 pub const R_STATUS: &[u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5usize] = b"2023\0";
-pub const R_MONTH: &[u8; 3usize] = b"02\0";
-pub const R_DAY: &[u8; 3usize] = b"27\0";
-pub const R_SVN_REVISION: u32 = 83911;
+pub const R_MONTH: &[u8; 3usize] = b"03\0";
+pub const R_DAY: &[u8; 3usize] = b"01\0";
+pub const R_SVN_REVISION: u32 = 83918;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -3014,68 +3014,7 @@ extern "C" {
     pub fn R_tryWrap(arg1: SEXP) -> SEXP;
 }
 extern "C" {
-    #[doc = "TRUE during interactive use"]
-    pub static mut R_Interactive: Rboolean;
-}
-extern "C" {
-    #[doc = "do not echo R code"]
-    pub static mut R_NoEcho: Rboolean;
-}
-extern "C" {
-    pub fn R_RestoreGlobalEnv();
-}
-extern "C" {
-    pub fn R_RestoreGlobalEnvFromFile(arg1: *const ::std::os::raw::c_char, arg2: Rboolean);
-}
-extern "C" {
-    pub fn R_SaveGlobalEnv();
-}
-extern "C" {
-    pub fn R_SaveGlobalEnvToFile(arg1: *const ::std::os::raw::c_char);
-}
-extern "C" {
     pub fn R_FlushConsole();
-}
-extern "C" {
-    pub fn R_ClearerrConsole();
-}
-extern "C" {
-    pub fn R_Suicide(arg1: *const ::std::os::raw::c_char);
-}
-extern "C" {
-    pub fn R_HomeDir() -> *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    #[doc = "Current image dirty"]
-    pub static mut R_DirtyImage: ::std::os::raw::c_int;
-}
-extern "C" {
-    pub static mut R_GUIType: *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn R_setupHistory();
-}
-extern "C" {
-    #[doc = "Name of the history file"]
-    pub static mut R_HistoryFile: *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    #[doc = "Size of the history file"]
-    pub static mut R_HistorySize: ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "restore the history file?"]
-    pub static mut R_RestoreHistory: ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "Root of the R tree"]
-    pub static mut R_Home: *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn Rf_jump_to_toplevel();
-}
-extern "C" {
-    pub fn Rf_mainloop();
 }
 extern "C" {
     pub fn Rf_onintr();
@@ -3084,42 +3023,8 @@ extern "C" {
     pub fn Rf_onintrNoResume();
 }
 extern "C" {
-    #[doc = "Need opaque pointer type for export"]
-    pub static mut R_GlobalContext: *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn process_site_Renviron();
-}
-extern "C" {
-    pub fn process_system_Renviron();
-}
-extern "C" {
-    pub fn process_user_Renviron();
-}
-extern "C" {
-    pub static mut R_Consolefile: *mut FILE;
-}
-extern "C" {
-    pub static mut R_Outputfile: *mut FILE;
-}
-extern "C" {
-    #[doc = "in ../unix/sys-unix.c"]
-    pub fn R_setStartTime();
-}
-extern "C" {
-    pub fn fpu_setup(arg1: Rboolean);
-}
-extern "C" {
-    #[doc = "in ../unix/system.c"]
-    pub static mut R_running_as_main_program: ::std::os::raw::c_int;
-}
-extern "C" {
     #[doc = "C stack limit"]
     pub static mut R_CStackLimit: usize;
-}
-extern "C" {
-    #[doc = "Initial stack address"]
-    pub static mut R_CStackStart: usize;
 }
 #[doc = "= 0"]
 pub const SA_TYPE_SA_NORESTORE: SA_TYPE = 0;
@@ -3350,25 +3255,6 @@ impl structRstart {
 }
 pub type Rstart = *mut structRstart;
 extern "C" {
-    pub fn R_DefParams(arg1: Rstart);
-}
-extern "C" {
-    pub fn R_DefParamsEx(arg1: Rstart, arg2: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "New code should always use R_DefParamsEx(Rstart, RSTART_VERSION) to\ninform R about the version of the structure used. R_DefParams(Rstart)\nonly supports version 0 of the structure."]
-    pub fn R_SetParams(arg1: Rstart);
-}
-extern "C" {
-    pub fn R_DefCallbacks(arg1: Rstart, arg2: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn R_SetWin32(arg1: Rstart);
-}
-extern "C" {
-    pub fn R_SizeFromEnv(arg1: Rstart);
-}
-extern "C" {
     pub fn R_common_command_line(
         arg1: *mut ::std::os::raw::c_int,
         arg2: *mut *mut ::std::os::raw::c_char,
@@ -3377,145 +3263,6 @@ extern "C" {
 }
 extern "C" {
     pub fn setup_Rmainloop();
-}
-extern "C" {
-    pub static mut ptr_R_Suicide:
-        ::std::option::Option<unsafe extern "C" fn(arg1: *const ::std::os::raw::c_char)>;
-}
-extern "C" {
-    pub static mut ptr_R_ShowMessage:
-        ::std::option::Option<unsafe extern "C" fn(arg1: *const ::std::os::raw::c_char)>;
-}
-extern "C" {
-    pub static mut ptr_R_ReadConsole: ::std::option::Option<
-        unsafe extern "C" fn(
-            arg1: *const ::std::os::raw::c_char,
-            arg2: *mut ::std::os::raw::c_uchar,
-            arg3: ::std::os::raw::c_int,
-            arg4: ::std::os::raw::c_int,
-        ) -> ::std::os::raw::c_int,
-    >;
-}
-extern "C" {
-    pub static mut ptr_R_WriteConsole: ::std::option::Option<
-        unsafe extern "C" fn(arg1: *const ::std::os::raw::c_char, arg2: ::std::os::raw::c_int),
-    >;
-}
-extern "C" {
-    pub static mut ptr_R_WriteConsoleEx: ::std::option::Option<
-        unsafe extern "C" fn(
-            arg1: *const ::std::os::raw::c_char,
-            arg2: ::std::os::raw::c_int,
-            arg3: ::std::os::raw::c_int,
-        ),
-    >;
-}
-extern "C" {
-    pub static mut ptr_R_ResetConsole: ::std::option::Option<unsafe extern "C" fn()>;
-}
-extern "C" {
-    pub static mut ptr_R_FlushConsole: ::std::option::Option<unsafe extern "C" fn()>;
-}
-extern "C" {
-    pub static mut ptr_R_ClearerrConsole: ::std::option::Option<unsafe extern "C" fn()>;
-}
-extern "C" {
-    pub static mut ptr_R_Busy:
-        ::std::option::Option<unsafe extern "C" fn(arg1: ::std::os::raw::c_int)>;
-}
-extern "C" {
-    pub static mut ptr_R_CleanUp: ::std::option::Option<
-        unsafe extern "C" fn(
-            arg1: SA_TYPE,
-            arg2: ::std::os::raw::c_int,
-            arg3: ::std::os::raw::c_int,
-        ),
-    >;
-}
-extern "C" {
-    pub static mut ptr_R_ShowFiles: ::std::option::Option<
-        unsafe extern "C" fn(
-            arg1: ::std::os::raw::c_int,
-            arg2: *mut *const ::std::os::raw::c_char,
-            arg3: *mut *const ::std::os::raw::c_char,
-            arg4: *const ::std::os::raw::c_char,
-            arg5: Rboolean,
-            arg6: *const ::std::os::raw::c_char,
-        ) -> ::std::os::raw::c_int,
-    >;
-}
-extern "C" {
-    pub static mut ptr_R_ChooseFile: ::std::option::Option<
-        unsafe extern "C" fn(
-            arg1: ::std::os::raw::c_int,
-            arg2: *mut ::std::os::raw::c_char,
-            arg3: ::std::os::raw::c_int,
-        ) -> ::std::os::raw::c_int,
-    >;
-}
-extern "C" {
-    pub static mut ptr_R_EditFile: ::std::option::Option<
-        unsafe extern "C" fn(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int,
-    >;
-}
-extern "C" {
-    pub static mut ptr_R_loadhistory:
-        ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP)>;
-}
-extern "C" {
-    pub static mut ptr_R_savehistory:
-        ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP)>;
-}
-extern "C" {
-    pub static mut ptr_R_addhistory:
-        ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP)>;
-}
-extern "C" {
-    #[doc = "added in 3.0.0"]
-    pub static mut ptr_R_EditFiles: ::std::option::Option<
-        unsafe extern "C" fn(
-            arg1: ::std::os::raw::c_int,
-            arg2: *mut *const ::std::os::raw::c_char,
-            arg3: *mut *const ::std::os::raw::c_char,
-            arg4: *const ::std::os::raw::c_char,
-        ) -> ::std::os::raw::c_int,
-    >;
-}
-extern "C" {
-    #[doc = "naming follows earlier versions in R.app"]
-    pub static mut ptr_do_selectlist: ::std::option::Option<
-        unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP) -> SEXP,
-    >;
-}
-extern "C" {
-    pub static mut ptr_do_dataentry: ::std::option::Option<
-        unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP) -> SEXP,
-    >;
-}
-extern "C" {
-    pub static mut ptr_do_dataviewer: ::std::option::Option<
-        unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP) -> SEXP,
-    >;
-}
-extern "C" {
-    pub static mut ptr_R_ProcessEvents: ::std::option::Option<unsafe extern "C" fn()>;
-}
-extern "C" {
-    #[doc = "These two are not used by R itself, but are used by the tcltk package"]
-    pub static mut R_timeout_handler:
-        ::std::option::Option<unsafe extern "C" fn() -> ::std::os::raw::c_int>;
-}
-extern "C" {
-    pub static mut R_timeout_val: ::std::os::raw::c_long;
-}
-extern "C" {
-    pub static mut R_SignalHandlers: ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_initEmbeddedR(
-        argc: ::std::os::raw::c_int,
-        argv: *mut *mut ::std::os::raw::c_char,
-    ) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn Rf_endEmbeddedR(fatal: ::std::os::raw::c_int);
@@ -3531,9 +3278,6 @@ extern "C" {
 }
 extern "C" {
     pub fn R_CleanTempDir();
-}
-extern "C" {
-    pub static mut R_TempDir: *mut ::std::os::raw::c_char;
 }
 extern "C" {
     #[doc = "R's versions with !R_FINITE checks"]
@@ -4408,6 +4152,13 @@ extern "C" {
     ) -> R_altrep_class_t;
 }
 extern "C" {
+    pub fn R_make_altlist_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+}
+extern "C" {
     pub fn R_altrep_inherits(x: SEXP, arg1: R_altrep_class_t) -> Rboolean;
 }
 pub type R_altrep_UnserializeEX_method_t = ::std::option::Option<
@@ -4530,6 +4281,10 @@ pub type R_altstring_Is_sorted_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
 pub type R_altstring_No_NA_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+pub type R_altlist_Elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t) -> SEXP>;
+pub type R_altlist_Set_elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t, arg3: SEXP)>;
 extern "C" {
     pub fn R_set_altrep_UnserializeEX_method(
         cls: R_altrep_class_t,
@@ -4682,6 +4437,12 @@ extern "C" {
 }
 extern "C" {
     pub fn R_set_altstring_No_NA_method(cls: R_altrep_class_t, fun: R_altstring_No_NA_method_t);
+}
+extern "C" {
+    pub fn R_set_altlist_Elt_method(cls: R_altrep_class_t, fun: R_altlist_Elt_method_t);
+}
+extern "C" {
+    pub fn R_set_altlist_Set_elt_method(cls: R_altrep_class_t, fun: R_altlist_Set_elt_method_t);
 }
 extern "C" {
     pub fn R_GE_getVersion() -> ::std::os::raw::c_int;
@@ -8059,28 +7820,6 @@ extern "C" {
     );
 }
 extern "C" {
-    pub fn dqrrsd_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        rsd: *mut f64,
-    );
-}
-extern "C" {
-    pub fn dqrxb_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        xb: *mut f64,
-    );
-}
-extern "C" {
     #[doc = "appl/pretty.c: for use in engine.c and util.c"]
     pub fn R_pretty(
         lo: *mut f64,
@@ -8112,21 +7851,6 @@ pub type d2fcn_p = ::std::option::Option<
         arg5: *mut ::std::os::raw::c_void,
     ),
 >;
-extern "C" {
-    pub fn fdhess(
-        n: ::std::os::raw::c_int,
-        x: *mut f64,
-        fval: f64,
-        fun: fcn_p,
-        state: *mut ::std::os::raw::c_void,
-        h: *mut f64,
-        nfd: ::std::os::raw::c_int,
-        step: *mut f64,
-        f: *mut f64,
-        ndigit: ::std::os::raw::c_int,
-        typx: *mut f64,
-    );
-}
 extern "C" {
     #[doc = "Also used in packages nlme, pcaPP"]
     pub fn optif9(

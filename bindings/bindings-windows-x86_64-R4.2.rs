@@ -2752,9 +2752,6 @@ extern "C" {
     pub fn GA_appcleanup();
 }
 extern "C" {
-    pub fn readconsolecfg();
-}
-extern "C" {
     #[doc = "R's versions with !R_FINITE checks"]
     pub fn R_pow(x: f64, y: f64) -> f64;
 }
@@ -7111,28 +7108,6 @@ extern "C" {
     );
 }
 extern "C" {
-    pub fn dqrrsd_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        rsd: *mut f64,
-    );
-}
-extern "C" {
-    pub fn dqrxb_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        xb: *mut f64,
-    );
-}
-extern "C" {
     #[doc = "appl/pretty.c: for use in engine.c and util.c"]
     pub fn R_pretty(
         lo: *mut f64,
@@ -7164,21 +7139,6 @@ pub type d2fcn_p = ::std::option::Option<
         arg5: *mut ::std::os::raw::c_void,
     ),
 >;
-extern "C" {
-    pub fn fdhess(
-        n: ::std::os::raw::c_int,
-        x: *mut f64,
-        fval: f64,
-        fun: fcn_p,
-        state: *mut ::std::os::raw::c_void,
-        h: *mut f64,
-        nfd: ::std::os::raw::c_int,
-        step: *mut f64,
-        f: *mut f64,
-        ndigit: ::std::os::raw::c_int,
-        typx: *mut f64,
-    );
-}
 extern "C" {
     #[doc = "Also used in packages nlme, pcaPP"]
     pub fn optif9(
