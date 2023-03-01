@@ -348,7 +348,7 @@ fn get_r_version(
         Ok(v) => Ok(v),
         // If the envvar is not present, then use the actual R binary to get the version.
         Err(EnvVarError::EnvVarNotPresent) => get_r_version_from_r(r_paths),
-        // In the case of any error other than the absense of envvar, stop with
+        // In the case of any error other than the absence of envvar, stop with
         // that error because it means the envvar is set and something is wrong.
         e @ Err(_) => e,
     }
@@ -413,7 +413,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .unwrap();
 
     // Extract all the AST entities into `e`, as well as listing up all the
-    // include files in a chain into `inclide_files`.
+    // include files in a chain into `include_files`.
     let mut include_files = std::collections::HashSet::new();
     let e = tu
         .get_entity()
@@ -452,7 +452,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         }
     }
 
-    // Do some regex-fu agaist the text content of all the include files. This
+    // Do some regex-fu against the text content of all the include files. This
     // handles these 3 cases:
     //
     // case 1) numeric literals
@@ -478,7 +478,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         }
     }
 
-    // This cannot be detected because the #define-ed constats are aliased in another #define
+    // This cannot be detected because the #define-ed constants are aliased in another #define
     // c.f. https://github.com/wch/r-source/blob/9f284035b7e503aebe4a804579e9e80a541311bb/src/include/R_ext/GraphicsEngine.h#L93
     allowlist.insert("R_GE_version".to_string());
 
@@ -511,6 +511,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         "Generating bindings for target: {}, os: {}, architecture: {}",
         target, target_os, target_arch
     );
+
     // Point to the correct headers
     bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", r_paths.include.display()),
@@ -535,9 +536,14 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
+        .generate_comments(true)
+        .parse_callbacks(Box::new(RCallbacks))
+        .clang_arg("-fparse-all-comments")
         .generate()
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
+
+    bindings.emit_warnings();
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
@@ -546,7 +552,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings to default output path!");
 
-    // Also write the bindings to a folder specified by LIBRSYS_BINDINGS_OUTPUT_PATH, if defined
+    // Also write the bindings to a folder specified by `LIBRSYS_BINDINGS_OUTPUT_PATH`, if defined
     if let Some(alt_target) = env::var_os(ENVVAR_BINDINGS_OUTPUT_PATH) {
         let out_path = PathBuf::from(alt_target);
         // if folder doesn't exist, try to create it
@@ -605,6 +611,18 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
     )
     .expect("No precomputed bindings available!");
     println!("cargo:rerun-if-changed={}", from.display());
+}
+
+/// Provide extra cleaning of the processed elements in the headers.
+#[derive(Debug)]
+struct RCallbacks;
+
+#[cfg(feature = "use-bindgen")]
+impl bindgen::callbacks::ParseCallbacks for RCallbacks {
+    fn process_comment(&self, comment: &str) -> Option<String> {
+        let trim_comment = comment.trim();
+        Some(trim_comment.to_string())
+    }
 }
 
 fn main() {
