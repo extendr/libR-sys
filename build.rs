@@ -512,7 +512,6 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .generate_comments(true)
         .parse_callbacks(Box::new(RCallbacks))
         .clang_arg("-fparse-all-comments")
-        // .clang_arg("-fretain-comments-from-system-headers")
         .generate()
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
