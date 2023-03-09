@@ -547,10 +547,11 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
-
-    bindings
-        .write_to_file(out_path.join("bindings.rs"))
-        .expect("Couldn't write bindings to default output path!");
+    let outfile_path = out_path.join("bindings.rs");
+    write_bindings_to_file(&outfile_path, &bindings).expect(&format!(
+        "Unable to write bindings to file {:}",
+        outfile_path.display()
+    ));
 
     // Also write the bindings to a folder specified by `LIBRSYS_BINDINGS_OUTPUT_PATH`, if defined
     if let Some(alt_target) = env::var_os(ENVVAR_BINDINGS_OUTPUT_PATH) {
@@ -565,15 +566,33 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
         let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
         let out_file = out_path.join(bindings_file_full);
-
-        bindings
-            .write_to_file(&out_file)
-            .expect(&format!("Couldn't write bindings: {}", out_file.display()));
+        write_bindings_to_file(&out_file, &bindings).expect(&format!(
+            "Unable to write bindings to file {:}",
+            outfile_path.display()
+        ));
     } else {
         println!(
             "Warning: Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
         );
     }
+}
+
+#[cfg(feature = "use-bindgen")]
+fn write_bindings_to_file(outfile_path: &PathBuf, bindings: &bindgen::Bindings) -> Result<(), std::io::Error> {
+    use std::io::Write;
+
+    let mut outfile = std::fs::File::options()
+        .write(true)
+        .truncate(true)
+        .append(false)
+        .create(true)
+        .open(outfile_path)?;
+    writeln!(outfile, "/* {} */", clang::get_version())?;
+    
+    let bindings_string = bindings.to_string();
+    outfile.write_all(bindings_string.as_bytes())?;
+    outfile.flush()?;
+    Ok(())
 }
 
 #[allow(dead_code)]
