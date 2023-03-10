@@ -10,6 +10,8 @@ typedef ptrdiff_t R_xlen_t_rust;
 // #define HAVE_UINTPTR_T
 #define CSTACK_DEFNS
 
+#define NORET __attribute__((__noreturn__))
+
 // Currently, I'm adding these on as-needed basis
 // but we may simply throw the whole lot in in the future.
 #include <Rinternals.h>
