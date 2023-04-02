@@ -443,7 +443,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let mut allowlist = std::collections::HashSet::new();
     for e in e {
         match e.get_kind() {
-            EnumDecl | FunctionDecl | StructDecl | TypedefDecl | VarDecl => {
+            EnumDecl | FunctionDecl | StructDecl | TypedefDecl | VarDecl | UnionDecl => {
                 if let Some(n) = e.get_name() {
                     allowlist.insert(n);
                 }
