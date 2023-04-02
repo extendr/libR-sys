@@ -80,6 +80,12 @@ where
         }
     }
 }
+#[derive(PartialEq, Copy, Clone, Hash, Debug, Default)]
+#[repr(C)]
+pub struct __BindgenComplex<T> {
+    pub re: T,
+    pub im: T,
+}
 pub const M_E: f64 = 2.718281828459045;
 pub const M_LOG2E: f64 = 1.4426950408889634;
 pub const M_LOG10E: f64 = 0.4342944819032518;
@@ -140,7 +146,7 @@ pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
 pub const RSTART_VERSION: u32 = 1;
 pub const __STDC_WANT_IEC_60559_FUNCS_EXT__: u32 = 1;
-pub const R_VERSION_STRING: &[u8; 6usize] = b"4.2.3\0";
+pub const R_VERSION_STRING: &[u8; 6usize] = b"4.4.0\0";
 pub const HAVE_EXPM1: u32 = 1;
 pub const HAVE_HYPOT: u32 = 1;
 pub const HAVE_LOG1P: u32 = 1;
@@ -156,19 +162,20 @@ pub const M_LN_2PI: f64 = 1.8378770664093456;
 pub const M_LN_SQRT_PI: f64 = 0.5723649429247001;
 pub const M_LN_SQRT_2PI: f64 = 0.9189385332046728;
 pub const M_LN_SQRT_PId2: f64 = 0.22579135264472744;
-pub const R_VERSION: u32 = 262659;
-pub const R_NICK: &[u8; 17usize] = b"Shortstop Beagle\0";
+pub const R_VERSION: u32 = 263168;
+pub const R_NICK: &[u8; 24usize] = b"Unsuffered Consequences\0";
 pub const R_MAJOR: &[u8; 2usize] = b"4\0";
-pub const R_MINOR: &[u8; 4usize] = b"2.3\0";
-pub const R_STATUS: &[u8; 1usize] = b"\0";
+pub const R_MINOR: &[u8; 4usize] = b"4.0\0";
+pub const R_STATUS: &[u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5usize] = b"2023\0";
 pub const R_MONTH: &[u8; 3usize] = b"03\0";
-pub const R_DAY: &[u8; 3usize] = b"15\0";
-pub const R_SVN_REVISION: u32 = 83980;
+pub const R_DAY: &[u8; 3usize] = b"31\0";
+pub const R_SVN_REVISION: u32 = 84137;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
-pub const R_GE_version: u32 = 15;
+pub const R_GE_glyphs: u32 = 16;
+pub const R_GE_version: u32 = 16;
 pub const MAX_GRAPHICS_SYSTEMS: u32 = 24;
 pub const R_USE_PROTOTYPES: u32 = 1;
 pub const leftButton: u32 = 1;
@@ -230,305 +237,287 @@ pub const R_GE_capability_masks: u32 = 8;
 pub const R_GE_capability_compositing: u32 = 9;
 pub const R_GE_capability_transformations: u32 = 10;
 pub const R_GE_capability_paths: u32 = 11;
+pub const R_GE_capability_glyphs: u32 = 12;
+pub const R_GE_text_style_normal: u32 = 1;
+pub const R_GE_text_style_italic: u32 = 2;
+pub const R_GE_text_style_oblique: u32 = 3;
 #[doc = "R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
-pub type __int64_t = ::std::os::raw::c_longlong;
-pub type __darwin_va_list = __builtin_va_list;
-pub type __darwin_off_t = __int64_t;
-pub type va_list = __darwin_va_list;
-pub type fpos_t = __darwin_off_t;
+pub type va_list = [u64; 4usize];
+pub type __off_t = ::std::os::raw::c_long;
+pub type __off64_t = ::std::os::raw::c_long;
+pub type FILE = _IO_FILE;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct __sbuf {
-    pub _base: *mut ::std::os::raw::c_uchar,
-    pub _size: ::std::os::raw::c_int,
-}
-#[test]
-fn bindgen_test_layout___sbuf() {
-    const UNINIT: ::std::mem::MaybeUninit<__sbuf> = ::std::mem::MaybeUninit::uninit();
-    let ptr = UNINIT.as_ptr();
-    assert_eq!(
-        ::std::mem::size_of::<__sbuf>(),
-        16usize,
-        concat!("Size of: ", stringify!(__sbuf))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<__sbuf>(),
-        8usize,
-        concat!("Alignment of ", stringify!(__sbuf))
-    );
-    assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._base) as usize - ptr as usize },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__sbuf),
-            "::",
-            stringify!(_base)
-        )
-    );
-    assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._size) as usize - ptr as usize },
-        8usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__sbuf),
-            "::",
-            stringify!(_size)
-        )
-    );
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct __sFILEX {
+pub struct _IO_marker {
     _unused: [u8; 0],
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct __sFILE {
-    pub _p: *mut ::std::os::raw::c_uchar,
-    pub _r: ::std::os::raw::c_int,
-    pub _w: ::std::os::raw::c_int,
-    pub _flags: ::std::os::raw::c_short,
-    pub _file: ::std::os::raw::c_short,
-    pub _bf: __sbuf,
-    pub _lbfsize: ::std::os::raw::c_int,
-    pub _cookie: *mut ::std::os::raw::c_void,
-    pub _close: ::std::option::Option<
-        unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_int,
-    >,
-    pub _read: ::std::option::Option<
-        unsafe extern "C" fn(
-            arg1: *mut ::std::os::raw::c_void,
-            arg2: *mut ::std::os::raw::c_char,
-            arg3: ::std::os::raw::c_int,
-        ) -> ::std::os::raw::c_int,
-    >,
-    pub _seek: ::std::option::Option<
-        unsafe extern "C" fn(
-            arg1: *mut ::std::os::raw::c_void,
-            arg2: fpos_t,
-            arg3: ::std::os::raw::c_int,
-        ) -> fpos_t,
-    >,
-    pub _write: ::std::option::Option<
-        unsafe extern "C" fn(
-            arg1: *mut ::std::os::raw::c_void,
-            arg2: *const ::std::os::raw::c_char,
-            arg3: ::std::os::raw::c_int,
-        ) -> ::std::os::raw::c_int,
-    >,
-    pub _ub: __sbuf,
-    pub _extra: *mut __sFILEX,
-    pub _ur: ::std::os::raw::c_int,
-    pub _ubuf: [::std::os::raw::c_uchar; 3usize],
-    pub _nbuf: [::std::os::raw::c_uchar; 1usize],
-    pub _lb: __sbuf,
-    pub _blksize: ::std::os::raw::c_int,
-    pub _offset: fpos_t,
+pub struct _IO_codecvt {
+    _unused: [u8; 0],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct _IO_wide_data {
+    _unused: [u8; 0],
+}
+pub type _IO_lock_t = ::std::os::raw::c_void;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct _IO_FILE {
+    pub _flags: ::std::os::raw::c_int,
+    pub _IO_read_ptr: *mut ::std::os::raw::c_char,
+    pub _IO_read_end: *mut ::std::os::raw::c_char,
+    pub _IO_read_base: *mut ::std::os::raw::c_char,
+    pub _IO_write_base: *mut ::std::os::raw::c_char,
+    pub _IO_write_ptr: *mut ::std::os::raw::c_char,
+    pub _IO_write_end: *mut ::std::os::raw::c_char,
+    pub _IO_buf_base: *mut ::std::os::raw::c_char,
+    pub _IO_buf_end: *mut ::std::os::raw::c_char,
+    pub _IO_save_base: *mut ::std::os::raw::c_char,
+    pub _IO_backup_base: *mut ::std::os::raw::c_char,
+    pub _IO_save_end: *mut ::std::os::raw::c_char,
+    pub _markers: *mut _IO_marker,
+    pub _chain: *mut _IO_FILE,
+    pub _fileno: ::std::os::raw::c_int,
+    pub _flags2: ::std::os::raw::c_int,
+    pub _old_offset: __off_t,
+    pub _cur_column: ::std::os::raw::c_ushort,
+    pub _vtable_offset: ::std::os::raw::c_schar,
+    pub _shortbuf: [::std::os::raw::c_char; 1usize],
+    pub _lock: *mut _IO_lock_t,
+    pub _offset: __off64_t,
+    pub _codecvt: *mut _IO_codecvt,
+    pub _wide_data: *mut _IO_wide_data,
+    pub _freeres_list: *mut _IO_FILE,
+    pub _freeres_buf: *mut ::std::os::raw::c_void,
+    pub __pad5: usize,
+    pub _mode: ::std::os::raw::c_int,
+    pub _unused2: [::std::os::raw::c_char; 20usize],
 }
 #[test]
-fn bindgen_test_layout___sFILE() {
-    const UNINIT: ::std::mem::MaybeUninit<__sFILE> = ::std::mem::MaybeUninit::uninit();
+fn bindgen_test_layout__IO_FILE() {
+    const UNINIT: ::std::mem::MaybeUninit<_IO_FILE> = ::std::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__sFILE>(),
-        152usize,
-        concat!("Size of: ", stringify!(__sFILE))
+        ::std::mem::size_of::<_IO_FILE>(),
+        216usize,
+        concat!("Size of: ", stringify!(_IO_FILE))
     );
     assert_eq!(
-        ::std::mem::align_of::<__sFILE>(),
+        ::std::mem::align_of::<_IO_FILE>(),
         8usize,
-        concat!("Alignment of ", stringify!(__sFILE))
-    );
-    assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._p) as usize - ptr as usize },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__sFILE),
-            "::",
-            stringify!(_p)
-        )
-    );
-    assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._r) as usize - ptr as usize },
-        8usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__sFILE),
-            "::",
-            stringify!(_r)
-        )
-    );
-    assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._w) as usize - ptr as usize },
-        12usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__sFILE),
-            "::",
-            stringify!(_w)
-        )
+        concat!("Alignment of ", stringify!(_IO_FILE))
     );
     assert_eq!(
         unsafe { ::std::ptr::addr_of!((*ptr)._flags) as usize - ptr as usize },
-        16usize,
+        0usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
             stringify!(_flags)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._file) as usize - ptr as usize },
-        18usize,
+        unsafe { ::std::ptr::addr_of!((*ptr)._IO_read_ptr) as usize - ptr as usize },
+        8usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_file)
+            stringify!(_IO_read_ptr)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._bf) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._IO_read_end) as usize - ptr as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_IO_read_end)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._IO_read_base) as usize - ptr as usize },
         24usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_bf)
+            stringify!(_IO_read_base)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._lbfsize) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._IO_write_base) as usize - ptr as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_IO_write_base)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._IO_write_ptr) as usize - ptr as usize },
         40usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_lbfsize)
+            stringify!(_IO_write_ptr)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._cookie) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._IO_write_end) as usize - ptr as usize },
         48usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_cookie)
+            stringify!(_IO_write_end)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._close) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._IO_buf_base) as usize - ptr as usize },
         56usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_close)
+            stringify!(_IO_buf_base)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._read) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._IO_buf_end) as usize - ptr as usize },
         64usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_read)
+            stringify!(_IO_buf_end)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._seek) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._IO_save_base) as usize - ptr as usize },
         72usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_seek)
+            stringify!(_IO_save_base)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._write) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._IO_backup_base) as usize - ptr as usize },
         80usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_write)
+            stringify!(_IO_backup_base)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._ub) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._IO_save_end) as usize - ptr as usize },
         88usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_ub)
+            stringify!(_IO_save_end)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._extra) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._markers) as usize - ptr as usize },
+        96usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_markers)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._chain) as usize - ptr as usize },
         104usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_extra)
+            stringify!(_chain)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._ur) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._fileno) as usize - ptr as usize },
         112usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_ur)
+            stringify!(_fileno)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._ubuf) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._flags2) as usize - ptr as usize },
         116usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_ubuf)
+            stringify!(_flags2)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._nbuf) as usize - ptr as usize },
-        119usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(__sFILE),
-            "::",
-            stringify!(_nbuf)
-        )
-    );
-    assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._lb) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._old_offset) as usize - ptr as usize },
         120usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_lb)
+            stringify!(_old_offset)
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr)._blksize) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr)._cur_column) as usize - ptr as usize },
+        128usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_cur_column)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._vtable_offset) as usize - ptr as usize },
+        130usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_vtable_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._shortbuf) as usize - ptr as usize },
+        131usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_shortbuf)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._lock) as usize - ptr as usize },
         136usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
-            stringify!(_blksize)
+            stringify!(_lock)
         )
     );
     assert_eq!(
@@ -536,13 +525,82 @@ fn bindgen_test_layout___sFILE() {
         144usize,
         concat!(
             "Offset of field: ",
-            stringify!(__sFILE),
+            stringify!(_IO_FILE),
             "::",
             stringify!(_offset)
         )
     );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._codecvt) as usize - ptr as usize },
+        152usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_codecvt)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._wide_data) as usize - ptr as usize },
+        160usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_wide_data)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._freeres_list) as usize - ptr as usize },
+        168usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_freeres_list)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._freeres_buf) as usize - ptr as usize },
+        176usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_freeres_buf)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).__pad5) as usize - ptr as usize },
+        184usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(__pad5)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._mode) as usize - ptr as usize },
+        192usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_mode)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr)._unused2) as usize - ptr as usize },
+        196usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_IO_FILE),
+            "::",
+            stringify!(_unused2)
+        )
+    );
 }
-pub type FILE = __sFILE;
 extern "C" {
     #[doc = "IEEE NaN"]
     pub static mut R_NaN: f64;
@@ -578,11 +636,54 @@ pub const Rboolean_FALSE: Rboolean = 0;
 #[doc = ", MAYBE"]
 pub const Rboolean_TRUE: Rboolean = 1;
 pub type Rboolean = ::std::os::raw::c_uint;
+#[doc = "This definition uses an anonymous structure, which is defined in C11 (but\nnot C99).  It is, however, supported at least by GCC, clang and icc.  The\nprivate_data_c member should never be used in code, but tells the compiler\nabout type punning when accessing the .r and .i elements, so is safer to use\nwhen interfacing with Fortran COMPLEX*16 or directly C99 _Complex double\n(PR#18430).\n\nThis form of static initialization works with both definitions:\nRcomplex z = { .r = 1, .i = 2 };"]
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union Rcomplex {
+    pub __bindgen_anon_1: Rcomplex__bindgen_ty_1,
+    pub private_data_c: __BindgenComplex<f64>,
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Rcomplex {
+pub struct Rcomplex__bindgen_ty_1 {
     pub r: f64,
     pub i: f64,
+}
+#[test]
+fn bindgen_test_layout_Rcomplex__bindgen_ty_1() {
+    const UNINIT: ::std::mem::MaybeUninit<Rcomplex__bindgen_ty_1> =
+        ::std::mem::MaybeUninit::uninit();
+    let ptr = UNINIT.as_ptr();
+    assert_eq!(
+        ::std::mem::size_of::<Rcomplex__bindgen_ty_1>(),
+        16usize,
+        concat!("Size of: ", stringify!(Rcomplex__bindgen_ty_1))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Rcomplex__bindgen_ty_1>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Rcomplex__bindgen_ty_1))
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).r) as usize - ptr as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Rcomplex__bindgen_ty_1),
+            "::",
+            stringify!(r)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).i) as usize - ptr as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Rcomplex__bindgen_ty_1),
+            "::",
+            stringify!(i)
+        )
+    );
 }
 #[test]
 fn bindgen_test_layout_Rcomplex() {
@@ -599,23 +700,13 @@ fn bindgen_test_layout_Rcomplex() {
         concat!("Alignment of ", stringify!(Rcomplex))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).r) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr).private_data_c) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
             stringify!(Rcomplex),
             "::",
-            stringify!(r)
-        )
-    );
-    assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).i) as usize - ptr as usize },
-        8usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(Rcomplex),
-            "::",
-            stringify!(i)
+            stringify!(private_data_c)
         )
     );
 }
@@ -650,7 +741,7 @@ extern "C" {
     pub fn R_alloc(arg1: usize, arg2: ::std::os::raw::c_int) -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
-    pub fn R_allocLD(nelem: usize) -> *mut f64;
+    pub fn R_allocLD(nelem: usize) -> *mut u128;
 }
 extern "C" {
     pub fn S_alloc(
@@ -1257,6 +1348,9 @@ extern "C" {
     pub fn CAD4R(e: SEXP) -> SEXP;
 }
 extern "C" {
+    pub fn CAD5R(e: SEXP) -> SEXP;
+}
+extern "C" {
     pub fn MISSING(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1846,6 +1940,9 @@ extern "C" {
     pub fn R_ParseEvalString(arg1: *const ::std::os::raw::c_char, arg2: SEXP) -> SEXP;
 }
 extern "C" {
+    pub fn R_ParseString(arg1: *const ::std::os::raw::c_char) -> SEXP;
+}
+extern "C" {
     pub fn Rf_PrintValue(arg1: SEXP);
 }
 extern "C" {
@@ -1934,6 +2031,14 @@ extern "C" {
         x: *const ::std::os::raw::c_char,
         ce_in: cetype_t,
         ce_out: cetype_t,
+        subst: ::std::os::raw::c_int,
+    ) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn Rf_reEnc3(
+        x: *const ::std::os::raw::c_char,
+        fromcode: *const ::std::os::raw::c_char,
+        tocode: *const ::std::os::raw::c_char,
         subst: ::std::os::raw::c_int,
     ) -> *const ::std::os::raw::c_char;
 }
@@ -2136,6 +2241,7 @@ extern "C" {
     pub fn R_HasFancyBindings(rho: SEXP) -> Rboolean;
 }
 extern "C" {
+    #[doc = "../main/errors.c : */\n/* needed for R_load/savehistory handling in front ends"]
     pub fn Rf_errorcall(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...) -> !;
 }
 extern "C" {
@@ -4135,6 +4241,13 @@ extern "C" {
     ) -> R_altrep_class_t;
 }
 extern "C" {
+    pub fn R_make_altlist_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+}
+extern "C" {
     pub fn R_altrep_inherits(x: SEXP, arg1: R_altrep_class_t) -> Rboolean;
 }
 pub type R_altrep_UnserializeEX_method_t = ::std::option::Option<
@@ -4257,6 +4370,10 @@ pub type R_altstring_Is_sorted_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
 pub type R_altstring_No_NA_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+pub type R_altlist_Elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t) -> SEXP>;
+pub type R_altlist_Set_elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t, arg3: SEXP)>;
 extern "C" {
     pub fn R_set_altrep_UnserializeEX_method(
         cls: R_altrep_class_t,
@@ -4409,6 +4526,12 @@ extern "C" {
 }
 extern "C" {
     pub fn R_set_altstring_No_NA_method(cls: R_altrep_class_t, fun: R_altstring_No_NA_method_t);
+}
+extern "C" {
+    pub fn R_set_altlist_Elt_method(cls: R_altrep_class_t, fun: R_altlist_Elt_method_t);
+}
+extern "C" {
+    pub fn R_set_altlist_Set_elt_method(cls: R_altrep_class_t, fun: R_altlist_Set_elt_method_t);
 }
 extern "C" {
     pub fn R_GE_getVersion() -> ::std::os::raw::c_int;
@@ -4885,6 +5008,19 @@ pub struct _DevDesc {
         unsafe extern "C" fn(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pDevDesc),
     >,
     pub capabilities: ::std::option::Option<unsafe extern "C" fn(cap: SEXP) -> SEXP>,
+    pub glyph: ::std::option::Option<
+        unsafe extern "C" fn(
+            n: ::std::os::raw::c_int,
+            glyphs: *mut ::std::os::raw::c_int,
+            x: *mut f64,
+            y: *mut f64,
+            font: SEXP,
+            size: f64,
+            colour: ::std::os::raw::c_int,
+            rot: f64,
+            dd: pDevDesc,
+        ),
+    >,
     #[doc = "Area for future expansion.\nBy zeroing this, devices are more likely to work if loaded\ninto a later version of R than that they were compiled under."]
     pub reserved: [::std::os::raw::c_char; 64usize],
 }
@@ -4894,7 +5030,7 @@ fn bindgen_test_layout__DevDesc() {
     let ptr = UNINIT.as_ptr();
     assert_eq!(
         ::std::mem::size_of::<_DevDesc>(),
-        648usize,
+        656usize,
         concat!("Size of: ", stringify!(_DevDesc))
     );
     assert_eq!(
@@ -5713,8 +5849,18 @@ fn bindgen_test_layout__DevDesc() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).reserved) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr).glyph) as usize - ptr as usize },
         584usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(glyph)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).reserved) as usize - ptr as usize },
+        592usize,
         concat!(
             "Offset of field: ",
             stringify!(_DevDesc),
@@ -6563,6 +6709,61 @@ extern "C" {
     pub fn R_GE_maskType(mask: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn R_GE_glyphInfoGlyphs(glyphInfo: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphInfoFonts(glyphInfo: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphID(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphX(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphY(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphFont(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphSize(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphColour(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphFontFile(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn R_GE_glyphFontIndex(glyphFont: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_GE_glyphFontFamily(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn R_GE_glyphFontWeight(glyphFont: SEXP) -> f64;
+}
+extern "C" {
+    pub fn R_GE_glyphFontStyle(glyphFont: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_GE_glyphFontPSname(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn GEGlyph(
+        n: ::std::os::raw::c_int,
+        glyphs: *mut ::std::os::raw::c_int,
+        x: *mut f64,
+        y: *mut f64,
+        font: SEXP,
+        size: f64,
+        colour: ::std::os::raw::c_int,
+        rot: f64,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
     #[doc = "S Like Memory Management"]
     pub fn R_chk_calloc(arg1: usize, arg2: usize) -> *mut ::std::os::raw::c_void;
 }
@@ -6689,6 +6890,7 @@ extern "C" {
         Rf_beta: *const f64,
         y: *mut f64,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6704,6 +6906,7 @@ extern "C" {
         Rf_beta: *const f64,
         y: *mut f64,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6719,6 +6922,7 @@ extern "C" {
         Rf_beta: *const f64,
         y: *mut f64,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6732,6 +6936,7 @@ extern "C" {
         Rf_beta: *const f64,
         y: *mut f64,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6746,6 +6951,7 @@ extern "C" {
         Rf_beta: *const f64,
         y: *mut f64,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6759,6 +6965,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6770,6 +6979,9 @@ extern "C" {
         ap: *const f64,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6782,6 +6994,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6795,6 +7010,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6806,6 +7024,9 @@ extern "C" {
         ap: *const f64,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6818,6 +7039,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6842,6 +7066,7 @@ extern "C" {
         incx: *const ::std::os::raw::c_int,
         a: *mut f64,
         lda: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6852,6 +7077,7 @@ extern "C" {
         x: *const f64,
         incx: *const ::std::os::raw::c_int,
         ap: *mut f64,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6865,6 +7091,7 @@ extern "C" {
         incy: *const ::std::os::raw::c_int,
         a: *mut f64,
         lda: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6877,6 +7104,7 @@ extern "C" {
         y: *const f64,
         incy: *const ::std::os::raw::c_int,
         ap: *mut f64,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6894,6 +7122,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut f64,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -6909,6 +7139,10 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         b: *mut f64,
         ldb: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
+        arg4: usize,
     );
 }
 extern "C" {
@@ -6924,6 +7158,10 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         b: *mut f64,
         ldb: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
+        arg4: usize,
     );
 }
 extern "C" {
@@ -6940,6 +7178,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut f64,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -6954,6 +7194,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut f64,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -6970,6 +7212,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut f64,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7067,6 +7311,7 @@ extern "C" {
         Rf_beta: *mut Rcomplex,
         y: *mut Rcomplex,
         incy: *mut ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7084,6 +7329,8 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7099,6 +7346,7 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         y: *mut Rcomplex,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7140,6 +7388,7 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         y: *mut Rcomplex,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7156,6 +7405,8 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7170,6 +7421,7 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         y: *mut Rcomplex,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7181,6 +7433,7 @@ extern "C" {
         incx: *const ::std::os::raw::c_int,
         a: *mut Rcomplex,
         lda: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7194,6 +7447,7 @@ extern "C" {
         incy: *const ::std::os::raw::c_int,
         a: *mut Rcomplex,
         lda: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7210,6 +7464,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7224,6 +7480,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7237,6 +7495,7 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         y: *mut Rcomplex,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7247,6 +7506,7 @@ extern "C" {
         x: *const Rcomplex,
         incx: *const ::std::os::raw::c_int,
         ap: *mut Rcomplex,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7259,6 +7519,7 @@ extern "C" {
         y: *const Rcomplex,
         incy: *const ::std::os::raw::c_int,
         ap: *mut Rcomplex,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7295,6 +7556,8 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7311,6 +7574,8 @@ extern "C" {
         Rf_beta: *mut Rcomplex,
         c: *mut Rcomplex,
         ldc: *mut ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7325,6 +7590,8 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7338,6 +7605,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -7351,6 +7621,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -7362,6 +7635,9 @@ extern "C" {
         ap: *const Rcomplex,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -7373,6 +7649,9 @@ extern "C" {
         ap: *const Rcomplex,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -7388,6 +7667,10 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         b: *mut Rcomplex,
         ldb: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
+        arg4: usize,
     );
 }
 extern "C" {
@@ -7400,6 +7683,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -7415,6 +7701,10 @@ extern "C" {
         lda: *mut ::std::os::raw::c_int,
         b: *mut Rcomplex,
         ldb: *mut ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
+        arg4: usize,
     );
 }
 extern "C" {
@@ -7427,6 +7717,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 #[doc = "../../appl/integrate.c"]
@@ -7755,4 +8048,3 @@ extern "C" {
 extern "C" {
     pub fn user_norm_rand() -> *mut f64;
 }
-pub type __builtin_va_list = *mut ::std::os::raw::c_char;

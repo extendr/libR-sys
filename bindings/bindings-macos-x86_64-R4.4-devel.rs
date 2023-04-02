@@ -140,7 +140,7 @@ pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
 pub const RSTART_VERSION: u32 = 1;
 pub const __STDC_WANT_IEC_60559_FUNCS_EXT__: u32 = 1;
-pub const R_VERSION_STRING: &[u8; 6usize] = b"4.2.3\0";
+pub const R_VERSION_STRING: &[u8; 6usize] = b"4.4.0\0";
 pub const HAVE_EXPM1: u32 = 1;
 pub const HAVE_HYPOT: u32 = 1;
 pub const HAVE_LOG1P: u32 = 1;
@@ -156,19 +156,20 @@ pub const M_LN_2PI: f64 = 1.8378770664093456;
 pub const M_LN_SQRT_PI: f64 = 0.5723649429247001;
 pub const M_LN_SQRT_2PI: f64 = 0.9189385332046728;
 pub const M_LN_SQRT_PId2: f64 = 0.22579135264472744;
-pub const R_VERSION: u32 = 262659;
-pub const R_NICK: &[u8; 17usize] = b"Shortstop Beagle\0";
+pub const R_VERSION: u32 = 263168;
+pub const R_NICK: &[u8; 24usize] = b"Unsuffered Consequences\0";
 pub const R_MAJOR: &[u8; 2usize] = b"4\0";
-pub const R_MINOR: &[u8; 4usize] = b"2.3\0";
-pub const R_STATUS: &[u8; 1usize] = b"\0";
+pub const R_MINOR: &[u8; 4usize] = b"4.0\0";
+pub const R_STATUS: &[u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5usize] = b"2023\0";
 pub const R_MONTH: &[u8; 3usize] = b"03\0";
-pub const R_DAY: &[u8; 3usize] = b"15\0";
-pub const R_SVN_REVISION: u32 = 83980;
+pub const R_DAY: &[u8; 3usize] = b"29\0";
+pub const R_SVN_REVISION: u32 = 84123;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
-pub const R_GE_version: u32 = 15;
+pub const R_GE_glyphs: u32 = 16;
+pub const R_GE_version: u32 = 16;
 pub const MAX_GRAPHICS_SYSTEMS: u32 = 24;
 pub const R_USE_PROTOTYPES: u32 = 1;
 pub const leftButton: u32 = 1;
@@ -230,6 +231,10 @@ pub const R_GE_capability_masks: u32 = 8;
 pub const R_GE_capability_compositing: u32 = 9;
 pub const R_GE_capability_transformations: u32 = 10;
 pub const R_GE_capability_paths: u32 = 11;
+pub const R_GE_capability_glyphs: u32 = 12;
+pub const R_GE_text_style_normal: u32 = 1;
+pub const R_GE_text_style_italic: u32 = 2;
+pub const R_GE_text_style_oblique: u32 = 3;
 #[doc = "R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
 pub type __int64_t = ::std::os::raw::c_longlong;
@@ -650,7 +655,7 @@ extern "C" {
     pub fn R_alloc(arg1: usize, arg2: ::std::os::raw::c_int) -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
-    pub fn R_allocLD(nelem: usize) -> *mut f64;
+    pub fn R_allocLD(nelem: usize) -> *mut u128;
 }
 extern "C" {
     pub fn S_alloc(
@@ -846,10 +851,10 @@ extern "C" {
     pub fn REprintf(arg1: *const ::std::os::raw::c_char, ...);
 }
 extern "C" {
-    pub fn Rvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
+    pub fn Rvprintf(arg1: *const ::std::os::raw::c_char, arg2: *mut __va_list_tag);
 }
 extern "C" {
-    pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
+    pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: *mut __va_list_tag);
 }
 #[doc = "Called with a variable argument set after casting to a compatible\nfunction pointer."]
 pub type DL_FUNC = ::std::option::Option<unsafe extern "C" fn() -> *mut ::std::os::raw::c_void>;
@@ -1255,6 +1260,9 @@ extern "C" {
 }
 extern "C" {
     pub fn CAD4R(e: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn CAD5R(e: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn MISSING(x: SEXP) -> ::std::os::raw::c_int;
@@ -1846,6 +1854,9 @@ extern "C" {
     pub fn R_ParseEvalString(arg1: *const ::std::os::raw::c_char, arg2: SEXP) -> SEXP;
 }
 extern "C" {
+    pub fn R_ParseString(arg1: *const ::std::os::raw::c_char) -> SEXP;
+}
+extern "C" {
     pub fn Rf_PrintValue(arg1: SEXP);
 }
 extern "C" {
@@ -1934,6 +1945,14 @@ extern "C" {
         x: *const ::std::os::raw::c_char,
         ce_in: cetype_t,
         ce_out: cetype_t,
+        subst: ::std::os::raw::c_int,
+    ) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn Rf_reEnc3(
+        x: *const ::std::os::raw::c_char,
+        fromcode: *const ::std::os::raw::c_char,
+        tocode: *const ::std::os::raw::c_char,
         subst: ::std::os::raw::c_int,
     ) -> *const ::std::os::raw::c_char;
 }
@@ -2136,6 +2155,7 @@ extern "C" {
     pub fn R_HasFancyBindings(rho: SEXP) -> Rboolean;
 }
 extern "C" {
+    #[doc = "../main/errors.c : */\n/* needed for R_load/savehistory handling in front ends"]
     pub fn Rf_errorcall(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...) -> !;
 }
 extern "C" {
@@ -4135,6 +4155,13 @@ extern "C" {
     ) -> R_altrep_class_t;
 }
 extern "C" {
+    pub fn R_make_altlist_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+}
+extern "C" {
     pub fn R_altrep_inherits(x: SEXP, arg1: R_altrep_class_t) -> Rboolean;
 }
 pub type R_altrep_UnserializeEX_method_t = ::std::option::Option<
@@ -4257,6 +4284,10 @@ pub type R_altstring_Is_sorted_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
 pub type R_altstring_No_NA_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+pub type R_altlist_Elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t) -> SEXP>;
+pub type R_altlist_Set_elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t, arg3: SEXP)>;
 extern "C" {
     pub fn R_set_altrep_UnserializeEX_method(
         cls: R_altrep_class_t,
@@ -4409,6 +4440,12 @@ extern "C" {
 }
 extern "C" {
     pub fn R_set_altstring_No_NA_method(cls: R_altrep_class_t, fun: R_altstring_No_NA_method_t);
+}
+extern "C" {
+    pub fn R_set_altlist_Elt_method(cls: R_altrep_class_t, fun: R_altlist_Elt_method_t);
+}
+extern "C" {
+    pub fn R_set_altlist_Set_elt_method(cls: R_altrep_class_t, fun: R_altlist_Set_elt_method_t);
 }
 extern "C" {
     pub fn R_GE_getVersion() -> ::std::os::raw::c_int;
@@ -4885,6 +4922,19 @@ pub struct _DevDesc {
         unsafe extern "C" fn(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pDevDesc),
     >,
     pub capabilities: ::std::option::Option<unsafe extern "C" fn(cap: SEXP) -> SEXP>,
+    pub glyph: ::std::option::Option<
+        unsafe extern "C" fn(
+            n: ::std::os::raw::c_int,
+            glyphs: *mut ::std::os::raw::c_int,
+            x: *mut f64,
+            y: *mut f64,
+            font: SEXP,
+            size: f64,
+            colour: ::std::os::raw::c_int,
+            rot: f64,
+            dd: pDevDesc,
+        ),
+    >,
     #[doc = "Area for future expansion.\nBy zeroing this, devices are more likely to work if loaded\ninto a later version of R than that they were compiled under."]
     pub reserved: [::std::os::raw::c_char; 64usize],
 }
@@ -4894,7 +4944,7 @@ fn bindgen_test_layout__DevDesc() {
     let ptr = UNINIT.as_ptr();
     assert_eq!(
         ::std::mem::size_of::<_DevDesc>(),
-        648usize,
+        656usize,
         concat!("Size of: ", stringify!(_DevDesc))
     );
     assert_eq!(
@@ -5713,8 +5763,18 @@ fn bindgen_test_layout__DevDesc() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).reserved) as usize - ptr as usize },
+        unsafe { ::std::ptr::addr_of!((*ptr).glyph) as usize - ptr as usize },
         584usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(_DevDesc),
+            "::",
+            stringify!(glyph)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).reserved) as usize - ptr as usize },
+        592usize,
         concat!(
             "Offset of field: ",
             stringify!(_DevDesc),
@@ -6563,6 +6623,61 @@ extern "C" {
     pub fn R_GE_maskType(mask: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn R_GE_glyphInfoGlyphs(glyphInfo: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphInfoFonts(glyphInfo: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphID(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphX(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphY(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphFont(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphSize(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphColour(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphFontFile(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn R_GE_glyphFontIndex(glyphFont: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_GE_glyphFontFamily(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn R_GE_glyphFontWeight(glyphFont: SEXP) -> f64;
+}
+extern "C" {
+    pub fn R_GE_glyphFontStyle(glyphFont: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_GE_glyphFontPSname(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn GEGlyph(
+        n: ::std::os::raw::c_int,
+        glyphs: *mut ::std::os::raw::c_int,
+        x: *mut f64,
+        y: *mut f64,
+        font: SEXP,
+        size: f64,
+        colour: ::std::os::raw::c_int,
+        rot: f64,
+        dd: pGEDevDesc,
+    );
+}
+extern "C" {
     #[doc = "S Like Memory Management"]
     pub fn R_chk_calloc(arg1: usize, arg2: usize) -> *mut ::std::os::raw::c_void;
 }
@@ -6689,6 +6804,7 @@ extern "C" {
         Rf_beta: *const f64,
         y: *mut f64,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6704,6 +6820,7 @@ extern "C" {
         Rf_beta: *const f64,
         y: *mut f64,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6719,6 +6836,7 @@ extern "C" {
         Rf_beta: *const f64,
         y: *mut f64,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6732,6 +6850,7 @@ extern "C" {
         Rf_beta: *const f64,
         y: *mut f64,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6746,6 +6865,7 @@ extern "C" {
         Rf_beta: *const f64,
         y: *mut f64,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6759,6 +6879,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6770,6 +6893,9 @@ extern "C" {
         ap: *const f64,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6782,6 +6908,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6795,6 +6924,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6806,6 +6938,9 @@ extern "C" {
         ap: *const f64,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6818,6 +6953,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut f64,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -6842,6 +6980,7 @@ extern "C" {
         incx: *const ::std::os::raw::c_int,
         a: *mut f64,
         lda: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6852,6 +6991,7 @@ extern "C" {
         x: *const f64,
         incx: *const ::std::os::raw::c_int,
         ap: *mut f64,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6865,6 +7005,7 @@ extern "C" {
         incy: *const ::std::os::raw::c_int,
         a: *mut f64,
         lda: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6877,6 +7018,7 @@ extern "C" {
         y: *const f64,
         incy: *const ::std::os::raw::c_int,
         ap: *mut f64,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -6894,6 +7036,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut f64,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -6909,6 +7053,10 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         b: *mut f64,
         ldb: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
+        arg4: usize,
     );
 }
 extern "C" {
@@ -6924,6 +7072,10 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         b: *mut f64,
         ldb: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
+        arg4: usize,
     );
 }
 extern "C" {
@@ -6940,6 +7092,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut f64,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -6954,6 +7108,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut f64,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -6970,6 +7126,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut f64,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7067,6 +7225,7 @@ extern "C" {
         Rf_beta: *mut Rcomplex,
         y: *mut Rcomplex,
         incy: *mut ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7084,6 +7243,8 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7099,6 +7260,7 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         y: *mut Rcomplex,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7140,6 +7302,7 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         y: *mut Rcomplex,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7156,6 +7319,8 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7170,6 +7335,7 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         y: *mut Rcomplex,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7181,6 +7347,7 @@ extern "C" {
         incx: *const ::std::os::raw::c_int,
         a: *mut Rcomplex,
         lda: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7194,6 +7361,7 @@ extern "C" {
         incy: *const ::std::os::raw::c_int,
         a: *mut Rcomplex,
         lda: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7210,6 +7378,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7224,6 +7394,8 @@ extern "C" {
         Rf_beta: *const f64,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7237,6 +7409,7 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         y: *mut Rcomplex,
         incy: *const ::std::os::raw::c_int,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7247,6 +7420,7 @@ extern "C" {
         x: *const Rcomplex,
         incx: *const ::std::os::raw::c_int,
         ap: *mut Rcomplex,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7259,6 +7433,7 @@ extern "C" {
         y: *const Rcomplex,
         incy: *const ::std::os::raw::c_int,
         ap: *mut Rcomplex,
+        arg1: usize,
     );
 }
 extern "C" {
@@ -7295,6 +7470,8 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7311,6 +7488,8 @@ extern "C" {
         Rf_beta: *mut Rcomplex,
         c: *mut Rcomplex,
         ldc: *mut ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7325,6 +7504,8 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
     );
 }
 extern "C" {
@@ -7338,6 +7519,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -7351,6 +7535,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -7362,6 +7549,9 @@ extern "C" {
         ap: *const Rcomplex,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -7373,6 +7563,9 @@ extern "C" {
         ap: *const Rcomplex,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -7388,6 +7581,10 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         b: *mut Rcomplex,
         ldb: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
+        arg4: usize,
     );
 }
 extern "C" {
@@ -7400,6 +7597,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 extern "C" {
@@ -7415,6 +7615,10 @@ extern "C" {
         lda: *mut ::std::os::raw::c_int,
         b: *mut Rcomplex,
         ldb: *mut ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
+        arg4: usize,
     );
 }
 extern "C" {
@@ -7427,6 +7631,9 @@ extern "C" {
         lda: *const ::std::os::raw::c_int,
         x: *mut Rcomplex,
         incx: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+        arg3: usize,
     );
 }
 #[doc = "../../appl/integrate.c"]
@@ -7755,4 +7962,67 @@ extern "C" {
 extern "C" {
     pub fn user_norm_rand() -> *mut f64;
 }
-pub type __builtin_va_list = *mut ::std::os::raw::c_char;
+pub type __builtin_va_list = [__va_list_tag; 1usize];
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct __va_list_tag {
+    pub gp_offset: ::std::os::raw::c_uint,
+    pub fp_offset: ::std::os::raw::c_uint,
+    pub overflow_arg_area: *mut ::std::os::raw::c_void,
+    pub reg_save_area: *mut ::std::os::raw::c_void,
+}
+#[test]
+fn bindgen_test_layout___va_list_tag() {
+    const UNINIT: ::std::mem::MaybeUninit<__va_list_tag> = ::std::mem::MaybeUninit::uninit();
+    let ptr = UNINIT.as_ptr();
+    assert_eq!(
+        ::std::mem::size_of::<__va_list_tag>(),
+        24usize,
+        concat!("Size of: ", stringify!(__va_list_tag))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<__va_list_tag>(),
+        8usize,
+        concat!("Alignment of ", stringify!(__va_list_tag))
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).gp_offset) as usize - ptr as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__va_list_tag),
+            "::",
+            stringify!(gp_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).fp_offset) as usize - ptr as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__va_list_tag),
+            "::",
+            stringify!(fp_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).overflow_arg_area) as usize - ptr as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__va_list_tag),
+            "::",
+            stringify!(overflow_arg_area)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).reg_save_area) as usize - ptr as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(__va_list_tag),
+            "::",
+            stringify!(reg_save_area)
+        )
+    );
+}

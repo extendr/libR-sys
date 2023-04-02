@@ -140,7 +140,7 @@ pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
 pub const RSTART_VERSION: u32 = 1;
 pub const __STDC_WANT_IEC_60559_FUNCS_EXT__: u32 = 1;
-pub const R_VERSION_STRING: &[u8; 6usize] = b"4.2.2\0";
+pub const R_VERSION_STRING: &[u8; 6usize] = b"4.2.3\0";
 pub const HAVE_EXPM1: u32 = 1;
 pub const HAVE_HYPOT: u32 = 1;
 pub const HAVE_LOG1P: u32 = 1;
@@ -156,15 +156,15 @@ pub const M_LN_2PI: f64 = 1.8378770664093456;
 pub const M_LN_SQRT_PI: f64 = 0.5723649429247001;
 pub const M_LN_SQRT_2PI: f64 = 0.9189385332046728;
 pub const M_LN_SQRT_PId2: f64 = 0.22579135264472744;
-pub const R_VERSION: u32 = 262658;
-pub const R_NICK: &[u8; 22usize] = b"Innocent and Trusting\0";
+pub const R_VERSION: u32 = 262659;
+pub const R_NICK: &[u8; 17usize] = b"Shortstop Beagle\0";
 pub const R_MAJOR: &[u8; 2usize] = b"4\0";
-pub const R_MINOR: &[u8; 4usize] = b"2.2\0";
+pub const R_MINOR: &[u8; 4usize] = b"2.3\0";
 pub const R_STATUS: &[u8; 1usize] = b"\0";
-pub const R_YEAR: &[u8; 5usize] = b"2022\0";
-pub const R_MONTH: &[u8; 3usize] = b"10\0";
-pub const R_DAY: &[u8; 3usize] = b"31\0";
-pub const R_SVN_REVISION: u32 = 83211;
+pub const R_YEAR: &[u8; 5usize] = b"2023\0";
+pub const R_MONTH: &[u8; 3usize] = b"03\0";
+pub const R_DAY: &[u8; 3usize] = b"15\0";
+pub const R_SVN_REVISION: u32 = 83980;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -851,7 +851,7 @@ extern "C" {
 extern "C" {
     pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: *mut __va_list_tag);
 }
-#[doc = "called with a variable argument set"]
+#[doc = "Called with a variable argument set after casting to a compatible\nfunction pointer."]
 pub type DL_FUNC = ::std::option::Option<unsafe extern "C" fn() -> *mut ::std::os::raw::c_void>;
 pub type R_NativePrimitiveArgType = ::std::os::raw::c_uint;
 #[doc = "These are very similar to those in Rdynpriv.h,\nbut we maintain them separately to give us more freedom to do\nsome computations on the internal versions that are derived from\nthese definitions."]
