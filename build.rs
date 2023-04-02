@@ -448,7 +448,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
                     allowlist.insert(n);
                 }
             }
-            ek => panic!("Unknown kind: {:?}", ek),
+            _ => panic!("Unknown kind: {:?}", e),
         }
     }
 
