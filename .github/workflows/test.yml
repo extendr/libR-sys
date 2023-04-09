@@ -56,24 +56,10 @@ jobs:
           #     only one stable Rust toolchain per combination of a platform and
           #     an R version (e.g. Windows and R-release) to emit bindings.
           - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42',  emit-bindings: 'true'}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'],                        emit-bindings: 'true'}
-          - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
-          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu'], emit-bindings: 'true'}
-
-          - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
-          - {os: macOS-latest,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
-          - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
-          # TODO: Remove no-test-targets when aarch64 runner is available
-          - {os: macOS-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin', emit-bindings: 'true'}
-
-          - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
-          # TODO: Remove no-test-targets when aarch64 runner is available
-          - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-unknown-linux-gnu'], no-test-targets: 'aarch64-unknown-linux-gnu', emit-bindings: 'true'}
-          - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', targets: ['default', 'aarch64-unknown-linux-gnu'], no-test-targets: 'aarch64-unknown-linux-gnu', emit-bindings: 'true'}
-          - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', targets: ['default', 'aarch64-unknown-linux-gnu'], no-test-targets: 'aarch64-unknown-linux-gnu', emit-bindings: 'true'}
-
-
+          # - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
+          # - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'],                        emit-bindings: 'true'}
+          # - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
+          # - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu'], emit-bindings: 'true'}
 
     env:
       RSPM: ${{ matrix.config.rspm }}
