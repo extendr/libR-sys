@@ -241,7 +241,7 @@ jobs:
           matrix.config.emit-bindings == 'true'
         uses: actions/upload-artifact@main
         with:
-          name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}
+          name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}-${{ matrix.config.target || 'default'}}
           path: generated_bindings
 
       # Run tests again using different bindings
