@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - master
+      - 152-use-native-llvm
   pull_request:
     branches:
       - main
