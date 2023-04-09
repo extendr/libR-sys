@@ -120,6 +120,15 @@ jobs:
             }
           }
 
+          if ($env:RTOOLS_VERSION -neq '40') {
+            New-Item -Path libgcc_mock -Type Directory
+            New-Item -Path libgcc_mock\libgcc_eh.a -Type File
+            New-Item -Path libgcc_mock\libgcc_s.a -Type File
+
+            $pwd_slash = echo "${PWD}" | % {$_ -replace '\\','/'}
+            echo "LIBRARY_PATH=${pwd_slash}/libgcc_mock" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          }
+
           if ($env:RUST_TARGET -like "x86_64*") {
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
