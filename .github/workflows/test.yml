@@ -56,7 +56,7 @@ jobs:
           #   - emit-bindings: If 'true', emit bindings. In principle, we choose
           #     only one stable Rust toolchain per combination of a platform and
           #     an R version (e.g. Windows and R-release) to emit bindings.
-          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '43', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '42', emit-bindings: 'true'}
           # - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
           # - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'],                        emit-bindings: 'true'}
           # - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
@@ -98,11 +98,6 @@ jobs:
           components: rustfmt, clippy
           targets: ${{ matrix.config.target }}
 
-      - name: LLVM
-        if: startsWith(runner.os, 'Windows')
-        run: |
-          winget install --id LLVM.LLVM --version 15.0.7
-
       # All configurations for Windows go here
       # Rust toolchain is used to determine target architecture
       - name: Configure Windows
@@ -111,6 +106,8 @@ jobs:
         # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
         # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
         run: |
+          winget install --id LLVM.LLVM --version 15.0.7
+
           if ($env:RTOOLS_VERSION -eq '43') {
             $mingw_root = "C:\rtools43\x86_64-w64-mingw32.static.posix"
           } else if ($env:RTOOLS_VERSION -eq '42') {
@@ -146,7 +143,7 @@ jobs:
       # https://github.com/extendr/libR-sys/issues/35
       - name: Configure macOS
         if: runner.os == 'macOS'
-        run: | 
+        run: |
           brew install llvm
           echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           $env:LLVM_CONFIG_PATH = "$(brew --prefix llvm)/bin/llvm-config" 
@@ -170,15 +167,16 @@ jobs:
           Del alias:R
           echo "LD_LIBRARY_PATH=$(R -s -e 'cat(normalizePath(R.home()))')/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Install gcc linux/aarch64 cross compiler
-        if: matrix.config.no-test-targets == 'aarch64-unknown-linux-gnu'
-        run: |
-          sudo apt-get update
-          sudo apt-get install gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
-          # https://github.com/rust-lang/rust-bindgen/issues/1229
-          echo 'BINDGEN_EXTRA_CLANG_ARGS=--sysroot=/usr/aarch64-linux-gnu' >> $GITHUB_ENV
-          # https://github.com/rust-lang/rust/issues/28924
-          echo 'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc' >> $GITHUB_ENV
+          if($env:RUST_TARGET -eq 'aarch64-unknown-linux-gnu') {
+            sudo apt-get update
+            sudo apt-get install gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+            # https://github.com/rust-lang/rust-bindgen/issues/1229
+            echo 'BINDGEN_EXTRA_CLANG_ARGS=--sysroot=/usr/aarch64-linux-gnu' >> $GITHUB_ENV
+            # https://github.com/rust-lang/rust/issues/28924
+            echo 'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc' >> $GITHUB_ENV
+          }
+        env:
+          RUST_TARGET: ${{ matrix.config.target }}
 
       # Build and emit bindings to './generated_bindings'
       - name: Build & Emit bindings
