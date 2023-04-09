@@ -120,12 +120,14 @@ jobs:
           targets: ${{ matrix.config.target }}
 
       # All configurations for Windows go here
-      # Rust toolchain is used to determine target architecture
+      # 1. Configure linker if RTools >= 4.2
+      # 2. Determine mingw root
+      # 3. Create libgcc_eh mock for RTools >= 4.2
+      # 4. Add R bin path to PATH
+      # 5. Add mingw root/bin to PATH (required to find linker)
+      # 6. Add include path (required to resolve standard headers like stdio.h)
       - name: Configure Windows
         if: runner.os == 'Windows'
-        # 1. Configure path to libclang
-        # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
-        # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
         run: |
           choco install llvm --version 15.0.7 -y
 
@@ -230,10 +232,6 @@ jobs:
         env:
           RUST_TARGET: ${{ matrix.config.target }}
 
-      # If success
-      # AND (either rust is stable and 'emit-bindings' != 'false'
-      #      OR rust is any and 'emit-bindings' == 'true'),
-      # upload bindings
       - name: Upload generated bindings
         if:
           steps.build.outcome == 'success' &&
@@ -304,7 +302,7 @@ jobs:
         if ! git diff-index --quiet HEAD -- bindings/; then
           git config --local user.name "${GITHUB_ACTOR}"
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git commit -m "Update bindings [skip ci]"          
+          git commit -m "Update bindings [skip ci]"
         else
           echo "No changes"
         fi
