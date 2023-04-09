@@ -58,7 +58,7 @@ jobs:
           #     an R version (e.g. Windows and R-release) to emit bindings.
           - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '43', emit-bindings: 'true'}
           - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', target: 'x86_64-pc-windows-gnu', rtools-version: '43'}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu',                        emit-bindings: 'true'}
+          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
           - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   target: 'x86_64-pc-windows-gnu', rtools-version: '43'}
           - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '40', emit-bindings: 'true'}
           - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'i686-pc-windows-gnu', rtools-version: '40', emit-bindings: 'true'}
@@ -69,19 +69,19 @@ jobs:
           - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
           # TODO: Remove no-test-targets when aarch64 runner is available
           - {os: macOS-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
-          - {os: macOS-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-apple-darwin', emit-bindings: 'true'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
 
 
           - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
           # TODO: Remove no-test-targets when aarch64 runner is available
           - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
-          - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
           - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', emit-bindings: 'true'}
-          - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
           - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', emit-bindings: 'true'}
-          - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
     env:
       RSPM: ${{ matrix.config.rspm }}
@@ -221,6 +221,7 @@ jobs:
       # Test the result of previous step
       - name: Run tests
         id: test
+        if: matrix.config.skip-tests != 'true'
         run: |
           . ./ci-cargo.ps1
           ci-cargo test -vv --features use-bindgen $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture --test-threads=1 -ActionName "Running bindgen tests for target: $env:RUST_TARGET"
@@ -243,9 +244,76 @@ jobs:
 
       # Run tests again using different bindings
       - name: Run tests on precomputed bindings shipped with libR-sys
+        if: matrix.config.skip-tests != 'true'
         run: |
           . ./ci-cargo.ps1
           ci-cargo test -vv $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture --test-threads=1 -ActionName "Running tests for target: $env:RUST_TARGET"
         env:
           RUST_TARGET: ${{ matrix.config.target }}
+
+  # Gather the generated bindings and push them to generated_bindings branch.
+  # If we need to update the bindings, create a pull request from that branch.
+  commit_generated_bindings:
+    needs: test_with_bindgen
+    runs-on: ubuntu-latest
+    # In the case of /bindings command, we don't need to check anything else
+    # because it should have checked in test_with_bindings job. In the other
+    # cases, we only want to invoke this on the master branch.
+    if: github.event_name == 'issue_comment' || github.ref == 'refs/heads/master'
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/download-artifact@v2
+
+    - name: Switch branch
+      if: github.event_name != 'issue_comment'
+      run: |
+        # 1) If there's already generated_bindings branch, checkout it.
+        # 2) If generated_binding branch is not created, create it from the default branch.
+        if git ls-remote --exit-code --heads origin generated_bindings 2>&1 >/dev/null; then
+          git fetch origin --no-tags --prune --depth=1 generated_bindings
+          git checkout generated_bindings
+        else
+          git switch -c generated_bindings
+        fi
+
+    - name: Switch branch (/bindings command)
+      if: github.event_name == 'issue_comment'
+      uses: r-lib/actions/pr-fetch@v2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Commit the generated bindings
+      run: |
+        # Update or add the bindings
+        cp generated_binding-*/*.rs bindings/
+
+        # Replace the default bindings
+        cd bindings
+        for x in linux-aarch64 linux-x86_64 macos-aarch64 macos-x86_64 windows-x86 windows-x86_64; do
+          # Choose the newest version except for devel
+          ln --force -s "$(ls -1 ./bindings-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-${x}.rs
+        done
+        cd ..
+
+        # detect changes (the code is derived from https://stackoverflow.com/a/3879077)
+        git add bindings/
+        git update-index --refresh
+        if ! git diff-index --quiet HEAD -- bindings/; then
+          git config --local user.name "${GITHUB_ACTOR}"
+          git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git commit -m "Update bindings [skip ci]"          
+        else
+          echo "No changes"
+        fi
+
+    - name: Push
+      if: github.event_name != 'issue_comment'
+      run: git push origin generated_bindings
+
+    - name: Push (/bindings command)
+      if: github.event_name == 'issue_comment'
+      uses: r-lib/actions/pr-push@v2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
 
