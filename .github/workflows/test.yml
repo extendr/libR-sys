@@ -34,7 +34,7 @@ jobs:
 
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }})
+    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }})-${{ matrix.config.target || 'default' }}
 
     strategy:
       fail-fast: false
