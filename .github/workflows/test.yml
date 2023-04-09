@@ -120,7 +120,7 @@ jobs:
             }
           }
 
-          if ($env:RTOOLS_VERSION -neq '40') {
+          if ($env:RTOOLS_VERSION -ne '40') {
             New-Item -Path libgcc_mock -Type Directory
             New-Item -Path libgcc_mock\libgcc_eh.a -Type File
             New-Item -Path libgcc_mock\libgcc_s.a -Type File
