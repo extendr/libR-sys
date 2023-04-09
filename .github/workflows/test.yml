@@ -110,9 +110,9 @@ jobs:
 
           if ($env:RTOOLS_VERSION -eq '43') {
             $mingw_root = "C:\rtools43\x86_64-w64-mingw32.static.posix"
-          } else if ($env:RTOOLS_VERSION -eq '42') {
+          } elseif ($env:RTOOLS_VERSION -eq '42') {
             $mingw_root = "C:\rtools42\x86_64-w64-mingw32.static.posix"
-          } else if ($env:RTOOLS_VERSION -eq '40') {
+          } elseif ($env:RTOOLS_VERSION -eq '40') {
             if ($env:RUST_TARGET -like "x86_64") {
               mingw_root = "C:\rtools40\mingw64"
             } else {
