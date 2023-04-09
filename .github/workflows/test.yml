@@ -234,7 +234,6 @@ jobs:
       - name: Upload generated bindings
         if:
           steps.build.outcome == 'success' &&
-          steps.test.outcome == 'success' &&
           matrix.config.emit-bindings == 'true'
         uses: actions/upload-artifact@main
         with:
