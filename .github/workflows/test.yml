@@ -35,7 +35,7 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }})
-              
+
     strategy:
       fail-fast: false
       matrix:
@@ -106,7 +106,7 @@ jobs:
         # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
         # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
         run: |
-          winget install --id LLVM.LLVM --version 15.0.7
+          choco install llvm --version 15.0.7 -y
 
           if ($env:RTOOLS_VERSION -eq '43') {
             $mingw_root = "C:\rtools43\x86_64-w64-mingw32.static.posix"
