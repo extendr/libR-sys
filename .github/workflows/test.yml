@@ -69,9 +69,9 @@ jobs:
     defaults:
       run:
         shell: pwsh
-      
+
     steps:
-      
+
       - uses: actions/checkout@v3
 
       # When invoked by an issue comment event, the GitHub Actions runner runs
@@ -83,7 +83,7 @@ jobs:
         uses: r-lib/actions/pr-fetch@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
         with:
@@ -96,6 +96,7 @@ jobs:
         with:
           toolchain: ${{ matrix.config.rust-version }}
           components: rustfmt, clippy
+          targets: ${{ matrix.config.target }}
 
       - name: LLVM
         if: startsWith(runner.os, 'Windows')
@@ -187,7 +188,7 @@ jobs:
           ci-cargo build -vv --features use-bindgen $(if ($target -ne '') {"--target=$target"} ) -ActionName "Building for target: $target"
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
-          RUST_TARGET: ${{ matrix.config.rust-target }}
+          RUST_TARGET: ${{ matrix.config.target }}
 
       # Test the result of previous step
       - name: Run tests
@@ -196,16 +197,16 @@ jobs:
           . ./ci-cargo.ps1
           ci-cargo test -vv --features use-bindgen $(if ($target -ne '') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running bindgen tests for target: $target"
         env:
-          RUST_TARGET: ${{ matrix.config.rust-target }}
+          RUST_TARGET: ${{ matrix.config.target }}
 
       # If success
       # AND (either rust is stable and 'emit-bindings' != 'false'
       #      OR rust is any and 'emit-bindings' == 'true'),
       # upload bindings
       - name: Upload generated bindings
-        if: 
-          steps.build.outcome == 'success' && 
-          steps.test.outcome == 'success' && 
+        if:
+          steps.build.outcome == 'success' &&
+          steps.test.outcome == 'success' &&
           matrix.config.emit-bindings == 'true'
         uses: actions/upload-artifact@main
         with:
@@ -218,5 +219,5 @@ jobs:
           . ./ci-cargo.ps1
           ci-cargo test -vv $(if ($target -ne '') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running tests for target: $target"
         env:
-          RUST_TARGET: ${{ matrix.config.rust-target }}
+          RUST_TARGET: ${{ matrix.config.target }}
 
