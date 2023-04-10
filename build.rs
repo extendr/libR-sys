@@ -516,7 +516,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Point to the correct headers
     bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", r_paths.include.display()),
-        format!("--target={}", target),
+        format!("--target={target}"),
     ]);
 
     // allow injection of an alternative include path to libclang
