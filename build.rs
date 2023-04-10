@@ -361,6 +361,7 @@ fn set_r_version_vars(ver: &RVersionInfo) {
     println!("cargo:r_version_devel={}", ver.devel); // Becomes DEP_R_R_VERSION_DEVEL for clients
 }
 
+#[cfg(feature = "use-bindgen")]
 fn get_non_api() -> std::collections::HashSet<String> {
     // Several non-APIs are required for extendr-engine, so we explicitly allow
     // these here. If extendr-engine (or other crate) requires more non-APIs,
