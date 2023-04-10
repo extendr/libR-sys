@@ -539,7 +539,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
         .generate_comments(true)
-        .parse_callbacks(Box::new(RCallbacks))
+        .parse_callbacks(Box::new(TrimCommentsCallbacks))
         .clang_arg("-fparse-all-comments")
         .generate()
         // Unwrap the Result and panic on failure.
@@ -616,11 +616,12 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
 }
 
 /// Provide extra cleaning of the processed elements in the headers.
+#[cfg(feature = "use-bindgen")]
 #[derive(Debug)]
-struct RCallbacks;
+struct TrimCommentsCallbacks;
 
 #[cfg(feature = "use-bindgen")]
-impl bindgen::callbacks::ParseCallbacks for RCallbacks {
+impl bindgen::callbacks::ParseCallbacks for TrimCommentsCallbacks {
     fn process_comment(&self, comment: &str) -> Option<String> {
         let trim_comment = comment.trim();
         Some(trim_comment.to_string())
