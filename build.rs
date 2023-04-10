@@ -489,6 +489,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .map(|s| s.to_owned())
         .collect::<Vec<String>>()
         .join("|");
+    let allowlist_pattern = format!("\"{allowlist_pattern}\"");
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
