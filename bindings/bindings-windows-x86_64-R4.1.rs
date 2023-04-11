@@ -2003,9 +2003,6 @@ extern "C" {
     pub fn Rf_translateChar(arg1: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
-    pub fn Rf_translateChar0(arg1: SEXP) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
     pub fn Rf_translateCharUTF8(arg1: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
@@ -2171,9 +2168,6 @@ extern "C" {
 }
 extern "C" {
     pub fn R_bcEncode(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_bcDecode(arg1: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn R_registerBC(arg1: SEXP, arg2: SEXP);

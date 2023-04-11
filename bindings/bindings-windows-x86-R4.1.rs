@@ -696,12 +696,6 @@ extern "C" {
         fptr: DL_FUNC,
     );
 }
-extern "C" {
-    pub fn R_GetCCallable(
-        package: *const ::std::os::raw::c_char,
-        name: *const ::std::os::raw::c_char,
-    ) -> DL_FUNC;
-}
 pub type Rbyte = ::std::os::raw::c_uchar;
 #[doc = "type for length of (standard, not long) vectors etc"]
 pub type R_len_t = ::std::os::raw::c_int;
@@ -6211,9 +6205,6 @@ extern "C" {
 }
 extern "C" {
     pub fn R_GE_linearGradientNumStops(pattern: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_GE_linearGradientStop(pattern: SEXP, i: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
     pub fn R_GE_linearGradientColour(pattern: SEXP, i: ::std::os::raw::c_int) -> rcolor;
