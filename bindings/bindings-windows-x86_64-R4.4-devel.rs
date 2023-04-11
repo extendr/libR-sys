@@ -551,6 +551,9 @@ extern "C" {
     pub fn R_free_tmpnam(name: *mut ::std::os::raw::c_char);
 }
 extern "C" {
+    pub fn R_CheckUserInterrupt();
+}
+extern "C" {
     pub fn R_CheckStack();
 }
 extern "C" {
@@ -1615,6 +1618,9 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_PrintValue(arg1: SEXP);
+}
+extern "C" {
+    pub fn Rf_setAttrib(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn Rf_setVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);

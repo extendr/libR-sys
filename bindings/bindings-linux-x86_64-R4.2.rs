@@ -2541,6 +2541,9 @@ extern "C" {
     pub fn R_has_methods_attached() -> Rboolean;
 }
 extern "C" {
+    pub fn R_isVirtualClass(class_def: SEXP, env: SEXP) -> Rboolean;
+}
+extern "C" {
     pub fn R_extends(class1: SEXP, class2: SEXP, env: SEXP) -> Rboolean;
 }
 extern "C" {
@@ -4000,6 +4003,9 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_digamma(arg1: f64) -> f64;
+}
+extern "C" {
+    pub fn Rf_trigamma(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn Rf_tetragamma(arg1: f64) -> f64;

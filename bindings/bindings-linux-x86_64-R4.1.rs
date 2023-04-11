@@ -1878,6 +1878,9 @@ extern "C" {
     pub fn Rf_asInteger(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn Rf_asReal(x: SEXP) -> f64;
+}
+extern "C" {
     pub fn Rf_asComplex(x: SEXP) -> Rcomplex;
 }
 #[repr(C)]
@@ -2820,6 +2823,25 @@ fn bindgen_test_layout_R_inpstream_st() {
             "::",
             stringify!(nat2utf8_obj)
         )
+    );
+}
+extern "C" {
+    pub fn R_InitInPStream(
+        stream: R_inpstream_t,
+        data: R_pstream_data_t,
+        type_: R_pstream_format_t,
+        inchar: ::std::option::Option<
+            unsafe extern "C" fn(arg1: R_inpstream_t) -> ::std::os::raw::c_int,
+        >,
+        inbytes: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: R_inpstream_t,
+                arg2: *mut ::std::os::raw::c_void,
+                arg3: ::std::os::raw::c_int,
+            ),
+        >,
+        phook: ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
+        pdata: SEXP,
     );
 }
 extern "C" {

@@ -3948,6 +3948,15 @@ extern "C" {
     pub fn Rf_dnt(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
+    pub fn Rf_pnt(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+}
+extern "C" {
     pub fn Rf_qnt(
         arg1: f64,
         arg2: f64,
@@ -6371,6 +6380,16 @@ extern "C" {
 }
 extern "C" {
     pub fn GEPretty(lo: *mut f64, up: *mut f64, ndiv: *mut ::std::os::raw::c_int);
+}
+extern "C" {
+    pub fn GEMetricInfo(
+        c: ::std::os::raw::c_int,
+        gc: pGEcontext,
+        ascent: *mut f64,
+        descent: *mut f64,
+        width: *mut f64,
+        dd: pGEDevDesc,
+    );
 }
 extern "C" {
     pub fn GEStrWidth(

@@ -215,6 +215,7 @@ pub const R_GE_compositeColorDodge: u32 = 20;
 pub const R_GE_compositeColorBurn: u32 = 21;
 pub const R_GE_compositeHardLight: u32 = 22;
 pub const R_GE_compositeSoftLight: u32 = 23;
+pub const R_GE_compositeDifference: u32 = 24;
 pub const R_GE_compositeExclusion: u32 = 25;
 pub const R_GE_nonZeroWindingRule: u32 = 1;
 pub const R_GE_evenOddRule: u32 = 2;
@@ -5844,6 +5845,9 @@ extern "C" {
         x: f64,
         y: f64,
     );
+}
+extern "C" {
+    pub fn Rf_doKeybd(dd: pDevDesc, rkey: R_KeyName, keyname: *const ::std::os::raw::c_char);
 }
 extern "C" {
     pub fn Rf_doIdle(dd: pDevDesc);

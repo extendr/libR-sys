@@ -1544,6 +1544,9 @@ extern "C" {
     pub fn Rf_ncols(arg1: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn Rf_nrows(arg1: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
     pub fn Rf_nthcdr(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP;
 }
 pub const nchar_type_Bytes: nchar_type = 0;
@@ -1551,6 +1554,15 @@ pub const nchar_type_Chars: nchar_type = 1;
 pub const nchar_type_Width: nchar_type = 2;
 #[doc = "../main/character.c :"]
 pub type nchar_type = ::std::os::raw::c_uint;
+extern "C" {
+    pub fn R_nchar(
+        string: SEXP,
+        type_: nchar_type,
+        allowNA: Rboolean,
+        keepNA: Rboolean,
+        msg_name: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
 extern "C" {
     pub fn R_ParseEvalString(arg1: *const ::std::os::raw::c_char, arg2: SEXP) -> SEXP;
 }

@@ -1985,6 +1985,9 @@ extern "C" {
     pub fn Rf_type2str_nowarn(arg1: SEXPTYPE) -> SEXP;
 }
 extern "C" {
+    pub fn Rf_unprotect_ptr(arg1: SEXP);
+}
+extern "C" {
     pub fn R_tryEval(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_int) -> SEXP;
 }
 extern "C" {
@@ -2808,6 +2811,12 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_nlevels(arg1: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn Rf_stringPositionTr(
+        arg1: SEXP,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn Rf_ScalarComplex(arg1: Rcomplex) -> SEXP;

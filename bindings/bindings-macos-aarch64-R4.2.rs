@@ -208,6 +208,7 @@ pub const R_GE_compositeAdd: u32 = 13;
 pub const R_GE_compositeSaturate: u32 = 14;
 pub const R_GE_compositeMultiply: u32 = 15;
 pub const R_GE_compositeScreen: u32 = 16;
+pub const R_GE_compositeOverlay: u32 = 17;
 pub const R_GE_compositeDarken: u32 = 18;
 pub const R_GE_compositeLighten: u32 = 19;
 pub const R_GE_compositeColorDodge: u32 = 20;
@@ -2507,6 +2508,12 @@ extern "C" {
         x: SEXP,
         valid: *mut *const ::std::os::raw::c_char,
         rho: SEXP,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_check_class_etc(
+        x: SEXP,
+        valid: *mut *const ::std::os::raw::c_char,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {

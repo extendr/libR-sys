@@ -3032,6 +3032,9 @@ extern "C" {
     pub fn RAW0(x: SEXP) -> *mut Rbyte;
 }
 extern "C" {
+    pub fn SET_LOGICAL_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
+}
+extern "C" {
     pub fn SET_INTEGER_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
 }
 extern "C" {

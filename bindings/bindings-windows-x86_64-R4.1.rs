@@ -1056,6 +1056,9 @@ extern "C" {
     ) -> R_xlen_t;
 }
 extern "C" {
+    pub fn COMPLEX_GET_REGION(sx: SEXP, i: R_xlen_t, n: R_xlen_t, buf: *mut Rcomplex) -> R_xlen_t;
+}
+extern "C" {
     pub fn RAW_GET_REGION(sx: SEXP, i: R_xlen_t, n: R_xlen_t, buf: *mut Rbyte) -> R_xlen_t;
 }
 extern "C" {
@@ -2771,6 +2774,9 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_isFunction(arg1: SEXP) -> Rboolean;
+}
+extern "C" {
+    pub fn Rf_isInteger(arg1: SEXP) -> Rboolean;
 }
 extern "C" {
     pub fn Rf_isLanguage(arg1: SEXP) -> Rboolean;

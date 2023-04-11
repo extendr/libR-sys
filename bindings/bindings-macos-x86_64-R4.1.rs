@@ -713,6 +713,9 @@ extern "C" {
     );
 }
 extern "C" {
+    pub fn Rprintf(arg1: *const ::std::os::raw::c_char, ...);
+}
+extern "C" {
     pub fn REprintf(arg1: *const ::std::os::raw::c_char, ...);
 }
 extern "C" {
@@ -6465,6 +6468,10 @@ extern "C" {
         gc: pGEcontext,
         perPixelAlpha: Rboolean,
     );
+}
+extern "C" {
+    #[doc = "From plotmath.c"]
+    pub fn GEExpressionWidth(expr: SEXP, gc: pGEcontext, dd: pGEDevDesc) -> f64;
 }
 extern "C" {
     pub fn GEExpressionHeight(expr: SEXP, gc: pGEcontext, dd: pGEDevDesc) -> f64;

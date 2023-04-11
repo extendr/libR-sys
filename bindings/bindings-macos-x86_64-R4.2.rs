@@ -6172,6 +6172,9 @@ extern "C" {
     ) -> SEXP;
 }
 extern "C" {
+    pub fn GECircle(x: f64, y: f64, radius: f64, gc: pGEcontext, dd: pGEDevDesc);
+}
+extern "C" {
     pub fn GERect(x0: f64, y0: f64, x1: f64, y1: f64, gc: pGEcontext, dd: pGEDevDesc);
 }
 extern "C" {
@@ -6608,6 +6611,13 @@ extern "C" {
         incx: *const ::std::os::raw::c_int,
         dy: *const f64,
         incy: *const ::std::os::raw::c_int,
+    ) -> f64;
+}
+extern "C" {
+    pub fn dnrm2_(
+        n: *const ::std::os::raw::c_int,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
     ) -> f64;
 }
 extern "C" {

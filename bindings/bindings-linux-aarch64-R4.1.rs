@@ -966,6 +966,9 @@ pub struct SEXPREC {
 }
 pub type SEXP = *mut SEXPREC;
 extern "C" {
+    pub fn R_CHAR(x: SEXP) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
     #[doc = "Various tests with macro versions in the second USE_RINTERNALS section"]
     pub fn Rf_isNull(s: SEXP) -> Rboolean;
 }
@@ -1616,6 +1619,9 @@ extern "C" {
 }
 extern "C" {
     pub fn HASHVALUE(x: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn SET_HASHASH(x: SEXP, v: ::std::os::raw::c_int);
 }
 extern "C" {
     pub fn SET_HASHVALUE(x: SEXP, v: ::std::os::raw::c_int);
