@@ -41,7 +41,6 @@ const ENVVAR_LIBCLANG_INCLUDE_PATH: &str = "LIBRSYS_LIBCLANG_INCLUDE_PATH";
 // dir. If this is set, generated bindings are also put there.
 #[cfg(feature = "use-bindgen")]
 const ENVVAR_BINDINGS_OUTPUT_PATH: &str = "LIBRSYS_BINDINGS_OUTPUT_PATH";
-
 #[allow(dead_code)]
 struct InstallationPaths {
     r_home: PathBuf,
