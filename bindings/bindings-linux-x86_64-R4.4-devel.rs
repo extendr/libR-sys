@@ -1914,6 +1914,9 @@ extern "C" {
     pub fn Rf_NonNullStringMatch(arg1: SEXP, arg2: SEXP) -> Rboolean;
 }
 extern "C" {
+    pub fn Rf_ncols(arg1: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
     pub fn Rf_nrows(arg1: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -2101,9 +2104,6 @@ extern "C" {
 }
 extern "C" {
     pub fn R_WeakRefKey(w: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_WeakRefValue(w: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn R_RunWeakRefFinalizer(w: SEXP);
@@ -4008,14 +4008,6 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_dsignrank(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_psignrank(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
 }
 extern "C" {
     pub fn Rf_qsignrank(
@@ -6421,6 +6413,17 @@ extern "C" {
 }
 extern "C" {
     pub fn GE_LTYget(arg1: ::std::os::raw::c_uint) -> SEXP;
+}
+extern "C" {
+    #[doc = "Raster operations"]
+    pub fn R_GE_rasterScale(
+        sraster: *mut ::std::os::raw::c_uint,
+        sw: ::std::os::raw::c_int,
+        sh: ::std::os::raw::c_int,
+        draster: *mut ::std::os::raw::c_uint,
+        dw: ::std::os::raw::c_int,
+        dh: ::std::os::raw::c_int,
+    );
 }
 extern "C" {
     pub fn R_GE_rasterInterpolate(

@@ -568,6 +568,9 @@ extern "C" {
     pub fn R_IsNA(arg1: f64) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn R_IsNaN(arg1: f64) -> ::std::os::raw::c_int;
+}
+extern "C" {
     pub fn R_finite(arg1: f64) -> ::std::os::raw::c_int;
 }
 #[doc = ", MAYBE"]
@@ -3705,9 +3708,6 @@ extern "C" {
     pub fn Rf_rnbinom_mu(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
-    pub fn Rf_dpois_raw(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
     pub fn Rf_dpois(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
@@ -6295,15 +6295,6 @@ extern "C" {
         draster: *mut ::std::os::raw::c_uint,
         dw: ::std::os::raw::c_int,
         dh: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn R_GE_rasterRotatedSize(
-        w: ::std::os::raw::c_int,
-        h: ::std::os::raw::c_int,
-        angle: f64,
-        wnew: *mut ::std::os::raw::c_int,
-        hnew: *mut ::std::os::raw::c_int,
     );
 }
 extern "C" {

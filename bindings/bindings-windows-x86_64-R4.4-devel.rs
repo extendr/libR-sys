@@ -64,7 +64,6 @@ pub const IDENT_USE_SRCREF: u32 = 32;
 pub const IDENT_EXTPTR_AS_REF: u32 = 64;
 pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
-pub const __STDC_WANT_IEC_60559_FUNCS_EXT__: u32 = 1;
 pub const R_VERSION_STRING: &[u8; 6usize] = b"4.4.0\0";
 pub const HAVE_EXPM1: u32 = 1;
 pub const HAVE_HYPOT: u32 = 1;
@@ -153,6 +152,7 @@ pub const R_GE_capability_events: u32 = 5;
 pub const R_GE_capability_patterns: u32 = 6;
 pub const R_GE_capability_clippingPaths: u32 = 7;
 pub const R_GE_capability_masks: u32 = 8;
+pub const R_GE_capability_compositing: u32 = 9;
 pub const R_GE_capability_transformations: u32 = 10;
 pub const R_GE_capability_paths: u32 = 11;
 pub const R_GE_capability_glyphs: u32 = 12;
@@ -2921,9 +2921,6 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_lgamma1p(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_logspace_add(arg1: f64, arg2: f64) -> f64;
 }
 extern "C" {
     pub fn Rf_logspace_sub(arg1: f64, arg2: f64) -> f64;
@@ -6175,6 +6172,9 @@ extern "C" {
 }
 extern "C" {
     pub fn R_GE_glyphColour(glyphs: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_GE_glyphFontFile(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
     pub fn R_GE_glyphFontIndex(glyphFont: SEXP) -> ::std::os::raw::c_int;

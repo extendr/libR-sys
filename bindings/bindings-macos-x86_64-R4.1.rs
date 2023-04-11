@@ -71,7 +71,6 @@ pub const R_VERSION: u32 = 262403;
 pub const R_NICK: &[u8; 12usize] = b"One Push-Up\0";
 pub const R_MAJOR: &[u8; 2usize] = b"4\0";
 pub const R_MINOR: &[u8; 4usize] = b"1.3\0";
-pub const R_STATUS: &[u8; 1usize] = b"\0";
 pub const R_YEAR: &[u8; 5usize] = b"2022\0";
 pub const R_MONTH: &[u8; 3usize] = b"03\0";
 pub const R_DAY: &[u8; 3usize] = b"10\0";
@@ -3072,9 +3071,6 @@ extern "C" {
         -> SEXP;
 }
 extern "C" {
-    pub fn Rf_listAppend(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
     pub fn Rf_mkNamed(arg1: SEXPTYPE, arg2: *mut *const ::std::os::raw::c_char) -> SEXP;
 }
 extern "C" {
@@ -3550,6 +3546,9 @@ extern "C" {
         arg4: ::std::os::raw::c_int,
         arg5: ::std::os::raw::c_int,
     );
+}
+extern "C" {
+    pub fn Rf_dunif(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
     pub fn Rf_punif(
@@ -6620,6 +6619,9 @@ extern "C" {
 }
 extern "C" {
     pub fn R_GE_linearGradientExtend(pattern: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_GE_radialGradientCX1(pattern: SEXP) -> f64;
 }
 extern "C" {
     pub fn R_GE_radialGradientCY1(pattern: SEXP) -> f64;

@@ -288,9 +288,6 @@ extern "C" {
 extern "C" {
     pub fn R_IsNaN(arg1: f64) -> ::std::os::raw::c_int;
 }
-extern "C" {
-    pub fn R_finite(arg1: f64) -> ::std::os::raw::c_int;
-}
 #[doc = ", MAYBE"]
 pub const Rboolean_FALSE: Rboolean = 0;
 #[doc = ", MAYBE"]
@@ -1093,6 +1090,10 @@ extern "C" {
 extern "C" {
     #[doc = "An empty environment at the root of the\nenvironment tree"]
     pub static mut R_EmptyEnv: SEXP;
+}
+extern "C" {
+    #[doc = "The base environment; formerly R_NilValue"]
+    pub static mut R_BaseEnv: SEXP;
 }
 extern "C" {
     #[doc = "The (fake) namespace for base"]
@@ -2394,6 +2395,9 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_list3(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn Rf_list4(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn Rf_list5(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP) -> SEXP;

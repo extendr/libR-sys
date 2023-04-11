@@ -88,7 +88,6 @@ pub const LTY_SOLID: u32 = 0;
 pub const LTY_DASHED: u32 = 68;
 pub const LTY_DOTTED: u32 = 49;
 pub const LTY_DOTDASH: u32 = 13361;
-pub const LTY_LONGDASH: u32 = 55;
 pub const LTY_TWODASH: u32 = 9762;
 pub const DEG2RAD: f64 = 0.017453292519943295;
 pub const R_GE_linearGradientPattern: u32 = 1;
@@ -695,6 +694,12 @@ extern "C" {
         name: *const ::std::os::raw::c_char,
         fptr: DL_FUNC,
     );
+}
+extern "C" {
+    pub fn R_GetCCallable(
+        package: *const ::std::os::raw::c_char,
+        name: *const ::std::os::raw::c_char,
+    ) -> DL_FUNC;
 }
 pub type Rbyte = ::std::os::raw::c_uchar;
 #[doc = "type for length of (standard, not long) vectors etc"]
@@ -2106,9 +2111,6 @@ extern "C" {
 extern "C" {
     #[doc = "Added in R 3.4.0"]
     pub fn R_MakeExternalPtrFn(p: DL_FUNC, tag: SEXP, prot: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_ExternalPtrAddrFn(s: SEXP) -> DL_FUNC;
 }
 #[doc = "Finalization interface"]
 pub type R_CFinalizer_t = ::std::option::Option<unsafe extern "C" fn(arg1: SEXP)>;
@@ -6205,6 +6207,9 @@ extern "C" {
 }
 extern "C" {
     pub fn R_GE_linearGradientNumStops(pattern: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn R_GE_linearGradientStop(pattern: SEXP, i: ::std::os::raw::c_int) -> f64;
 }
 extern "C" {
     pub fn R_GE_linearGradientColour(pattern: SEXP, i: ::std::os::raw::c_int) -> rcolor;

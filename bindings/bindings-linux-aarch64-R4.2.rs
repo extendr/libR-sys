@@ -105,6 +105,7 @@ pub const PROMSXP: u32 = 5;
 pub const LANGSXP: u32 = 6;
 pub const SPECIALSXP: u32 = 7;
 pub const BUILTINSXP: u32 = 8;
+pub const CHARSXP: u32 = 9;
 pub const LGLSXP: u32 = 10;
 pub const INTSXP: u32 = 13;
 pub const REALSXP: u32 = 14;
@@ -1625,10 +1626,6 @@ extern "C" {
 extern "C" {
     #[doc = "\"\" as a CHARSXP"]
     pub static mut R_BlankString: SEXP;
-}
-extern "C" {
-    #[doc = "\"\" as a STRSXP"]
-    pub static mut R_BlankScalarString: SEXP;
 }
 extern "C" {
     #[doc = "srcref related functions"]
@@ -7375,19 +7372,6 @@ extern "C" {
 }
 extern "C" {
     pub fn ztbmv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        x: *mut Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn ztbsv_(
         uplo: *const ::std::os::raw::c_char,
         trans: *const ::std::os::raw::c_char,
         diag: *const ::std::os::raw::c_char,

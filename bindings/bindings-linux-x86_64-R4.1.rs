@@ -1043,6 +1043,9 @@ extern "C" {
     pub fn SETTER_CLEAR_NAMED(x: SEXP);
 }
 extern "C" {
+    pub fn RAISE_NAMED(x: SEXP, n: ::std::os::raw::c_int);
+}
+extern "C" {
     pub fn DECREMENT_REFCNT(x: SEXP);
 }
 extern "C" {
@@ -2535,9 +2538,6 @@ extern "C" {
     pub fn R_LockEnvironment(env: SEXP, bindings: Rboolean);
 }
 extern "C" {
-    pub fn R_EnvironmentIsLocked(env: SEXP) -> Rboolean;
-}
-extern "C" {
     pub fn R_LockBinding(sym: SEXP, env: SEXP);
 }
 extern "C" {
@@ -3193,6 +3193,9 @@ extern "C" {
 }
 extern "C" {
     pub fn DATAPTR_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn LOGICAL_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn INTEGER_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_int;
@@ -5900,9 +5903,6 @@ fn bindgen_test_layout__DevDesc() {
             stringify!(reserved)
         )
     );
-}
-extern "C" {
-    pub fn Rf_ndevNumber(arg1: pDevDesc) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn Rf_NumDevices() -> ::std::os::raw::c_int;

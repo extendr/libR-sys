@@ -105,7 +105,6 @@ pub const R_SHORT_LEN_MAX: u32 = 2147483647;
 pub const NILSXP: u32 = 0;
 pub const SYMSXP: u32 = 1;
 pub const LISTSXP: u32 = 2;
-pub const CLOSXP: u32 = 3;
 pub const ENVSXP: u32 = 4;
 pub const PROMSXP: u32 = 5;
 pub const LANGSXP: u32 = 6;
@@ -1150,6 +1149,9 @@ extern "C" {
     pub fn Rf_isLogical(s: SEXP) -> Rboolean;
 }
 extern "C" {
+    pub fn Rf_isReal(s: SEXP) -> Rboolean;
+}
+extern "C" {
     pub fn Rf_isComplex(s: SEXP) -> Rboolean;
 }
 extern "C" {
@@ -1288,6 +1290,10 @@ extern "C" {
 }
 extern "C" {
     pub fn RAW_GET_REGION(sx: SEXP, i: R_xlen_t, n: R_xlen_t, buf: *mut Rbyte) -> R_xlen_t;
+}
+extern "C" {
+    #[doc = "metadata access"]
+    pub fn INTEGER_IS_SORTED(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn INTEGER_NO_NA(x: SEXP) -> ::std::os::raw::c_int;

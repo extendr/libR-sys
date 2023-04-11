@@ -94,7 +94,6 @@ pub const M_2_SQRTPI: f64 = 1.1283791670955126;
 pub const M_SQRT2: f64 = 1.4142135623730951;
 pub const M_SQRT1_2: f64 = 0.7071067811865476;
 pub const SINGLESXP: u32 = 302;
-pub const R_XLEN_T_MAX: u64 = 4503599627370496;
 pub const R_SHORT_LEN_MAX: u32 = 2147483647;
 pub const NILSXP: u32 = 0;
 pub const SYMSXP: u32 = 1;
@@ -133,7 +132,6 @@ pub const IDENT_NUM_AS_BITS: u32 = 1;
 pub const IDENT_NA_AS_BITS: u32 = 2;
 pub const IDENT_ATTR_BY_ORDER: u32 = 4;
 pub const IDENT_USE_BYTECODE: u32 = 8;
-pub const IDENT_USE_CLOENV: u32 = 16;
 pub const IDENT_USE_SRCREF: u32 = 32;
 pub const IDENT_EXTPTR_AS_REF: u32 = 64;
 pub const HT_TYPE_IDENTICAL: u32 = 0;
@@ -1291,6 +1289,9 @@ extern "C" {
     pub fn CLOENV(x: SEXP) -> SEXP;
 }
 extern "C" {
+    pub fn RDEBUG(x: SEXP) -> ::std::os::raw::c_int;
+}
+extern "C" {
     pub fn RSTEP(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1812,6 +1813,9 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_mkCharLen(arg1: *const ::std::os::raw::c_char, arg2: ::std::os::raw::c_int) -> SEXP;
+}
+extern "C" {
+    pub fn Rf_NonNullStringMatch(arg1: SEXP, arg2: SEXP) -> Rboolean;
 }
 extern "C" {
     pub fn Rf_ncols(arg1: SEXP) -> ::std::os::raw::c_int;

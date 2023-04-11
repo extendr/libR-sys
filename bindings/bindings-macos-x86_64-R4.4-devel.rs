@@ -549,10 +549,6 @@ fn bindgen_test_layout___sFILE() {
 }
 pub type FILE = __sFILE;
 extern "C" {
-    #[doc = "IEEE NaN"]
-    pub static mut R_NaN: f64;
-}
-extern "C" {
     #[doc = "IEEE Inf"]
     pub static mut R_PosInf: f64;
 }
@@ -1963,6 +1959,9 @@ extern "C" {
 extern "C" {
     #[doc = "External pointer interface"]
     pub fn R_MakeExternalPtr(p: *mut ::std::os::raw::c_void, tag: SEXP, prot: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_ExternalPtrAddr(s: SEXP) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
     pub fn R_ExternalPtrTag(s: SEXP) -> SEXP;
@@ -6348,16 +6347,6 @@ extern "C" {
     );
 }
 extern "C" {
-    pub fn R_GE_rasterInterpolate(
-        sraster: *mut ::std::os::raw::c_uint,
-        sw: ::std::os::raw::c_int,
-        sh: ::std::os::raw::c_int,
-        draster: *mut ::std::os::raw::c_uint,
-        dw: ::std::os::raw::c_int,
-        dh: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
     pub fn R_GE_rasterRotatedSize(
         w: ::std::os::raw::c_int,
         h: ::std::os::raw::c_int,
@@ -7467,6 +7456,24 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
+        arg1: usize,
+        arg2: usize,
+    );
+}
+extern "C" {
+    pub fn zsyr2k_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        alpha: *mut Rcomplex,
+        a: *mut Rcomplex,
+        lda: *mut ::std::os::raw::c_int,
+        b: *mut Rcomplex,
+        ldb: *mut ::std::os::raw::c_int,
+        Rf_beta: *mut Rcomplex,
+        c: *mut Rcomplex,
+        ldc: *mut ::std::os::raw::c_int,
         arg1: usize,
         arg2: usize,
     );

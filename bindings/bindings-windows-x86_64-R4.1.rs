@@ -1590,10 +1590,6 @@ extern "C" {
     pub static mut R_BlankScalarString: SEXP;
 }
 extern "C" {
-    #[doc = "srcref related functions"]
-    pub fn R_GetCurrentSrcref(arg1: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
     pub fn R_GetSrcFilename(arg1: SEXP) -> SEXP;
 }
 extern "C" {
@@ -2003,6 +1999,9 @@ extern "C" {
     pub fn Rf_translateChar(arg1: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
+    pub fn Rf_translateChar0(arg1: SEXP) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
     pub fn Rf_translateCharUTF8(arg1: SEXP) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
@@ -2168,6 +2167,9 @@ extern "C" {
 }
 extern "C" {
     pub fn R_bcEncode(arg1: SEXP) -> SEXP;
+}
+extern "C" {
+    pub fn R_bcDecode(arg1: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn R_registerBC(arg1: SEXP, arg2: SEXP);
@@ -3455,9 +3457,6 @@ extern "C" {
         arg3: ::std::os::raw::c_int,
         arg4: ::std::os::raw::c_int,
     ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rgeom(arg1: f64) -> f64;
 }
 extern "C" {
     pub fn Rf_dhyper(
