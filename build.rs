@@ -65,6 +65,7 @@ struct RVersionInfo {
     minor: String,
     patch: String,
     devel: bool,
+    full: String,
 }
 
 impl RVersionInfo {
@@ -241,6 +242,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
 // Parse an R version (e.g. "4.1.2" and "4.2.0-devel") and return the RVersionInfo.
 fn parse_r_version(r_version: String) -> Result<RVersionInfo, EnvVarError> {
+    let full = r_version.clone();
     // First, split "<major>.<minor>.<patch>-devel" to "<major>.<minor>.<patch>" and "devel"
     let (r_version, devel) = match *r_version.split('-').collect::<Vec<&str>>().as_slice() {
         [r_version, devel] => (r_version, Some(devel)),
@@ -295,6 +297,7 @@ fn parse_r_version(r_version: String) -> Result<RVersionInfo, EnvVarError> {
         minor,
         patch,
         devel,
+        full,
     })
 }
 
@@ -574,14 +577,36 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
         let out_file = out_path.join(bindings_file_full);
 
-        bindings
-            .write_to_file(&out_file)
-            .expect(&format!("Couldn't write bindings: {}", out_file.display()));
+        save_bindings_to_file(bindings, version_info, out_file);
     } else {
         println!(
             "Warning: Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
         );
     }
+}
+
+#[cfg(feature = "use-bindgen")]
+fn save_bindings_to_file(
+    bindings: bindgen::Bindings,
+    version_info: &RVersionInfo,
+    out_file: PathBuf,
+) {
+    let clang_version_bindgen = bindgen::clang_version();
+    let clang_rs_version = clang::get_version();
+    let header = [
+        format!(
+            "/* bindgen clang version: {} */",
+            clang_version_bindgen.full
+        ),
+        format!("/* clang-rs version: {} */", clang_rs_version),
+        format!("/* r version: {} */", version_info.full),
+    ];
+    let header = header.join("\n");
+
+    let bindings = bindings.to_string();
+    let bindings = format!("{header}\n{bindings}");
+    std::fs::write(&out_file, bindings)
+        .expect(&format!("Couldn't write bindings: {}", out_file.display()));
 }
 
 #[allow(dead_code)]
