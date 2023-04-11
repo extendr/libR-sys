@@ -568,9 +568,6 @@ extern "C" {
     pub fn R_IsNA(arg1: f64) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn R_IsNaN(arg1: f64) -> ::std::os::raw::c_int;
-}
-extern "C" {
     pub fn R_finite(arg1: f64) -> ::std::os::raw::c_int;
 }
 #[doc = ", MAYBE"]

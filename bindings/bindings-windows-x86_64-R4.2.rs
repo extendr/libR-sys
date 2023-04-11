@@ -1095,10 +1095,6 @@ extern "C" {
     pub static mut R_EmptyEnv: SEXP;
 }
 extern "C" {
-    #[doc = "The base environment; formerly R_NilValue"]
-    pub static mut R_BaseEnv: SEXP;
-}
-extern "C" {
     #[doc = "The (fake) namespace for base"]
     pub static mut R_BaseNamespace: SEXP;
 }
@@ -2398,9 +2394,6 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_list3(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_list4(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP) -> SEXP;
 }
 extern "C" {
     pub fn Rf_list5(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP) -> SEXP;

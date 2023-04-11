@@ -1965,9 +1965,6 @@ extern "C" {
     pub fn R_MakeExternalPtr(p: *mut ::std::os::raw::c_void, tag: SEXP, prot: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn R_ExternalPtrAddr(s: SEXP) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
     pub fn R_ExternalPtrTag(s: SEXP) -> SEXP;
 }
 extern "C" {
@@ -7470,24 +7467,6 @@ extern "C" {
         Rf_beta: *const Rcomplex,
         c: *mut Rcomplex,
         ldc: *const ::std::os::raw::c_int,
-        arg1: usize,
-        arg2: usize,
-    );
-}
-extern "C" {
-    pub fn zsyr2k_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        alpha: *mut Rcomplex,
-        a: *mut Rcomplex,
-        lda: *mut ::std::os::raw::c_int,
-        b: *mut Rcomplex,
-        ldb: *mut ::std::os::raw::c_int,
-        Rf_beta: *mut Rcomplex,
-        c: *mut Rcomplex,
-        ldc: *mut ::std::os::raw::c_int,
         arg1: usize,
         arg2: usize,
     );

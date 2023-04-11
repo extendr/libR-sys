@@ -65,7 +65,6 @@ pub const M_1_SQRT_2PI: f64 = 0.3989422804014327;
 pub const M_SQRT_2dPI: f64 = 0.7978845608028654;
 pub const M_LN_2PI: f64 = 1.8378770664093456;
 pub const M_LN_SQRT_PI: f64 = 0.5723649429247001;
-pub const M_LN_SQRT_2PI: f64 = 0.9189385332046728;
 pub const M_LN_SQRT_PId2: f64 = 0.22579135264472744;
 pub const R_VERSION: u32 = 262403;
 pub const R_NICK: &[u8; 12usize] = b"One Push-Up\0";
@@ -4569,12 +4568,6 @@ extern "C" {
 }
 extern "C" {
     pub fn R_set_altvec_Dataptr_method(cls: R_altrep_class_t, fun: R_altvec_Dataptr_method_t);
-}
-extern "C" {
-    pub fn R_set_altvec_Dataptr_or_null_method(
-        cls: R_altrep_class_t,
-        fun: R_altvec_Dataptr_or_null_method_t,
-    );
 }
 extern "C" {
     pub fn R_set_altvec_Extract_subset_method(

@@ -1291,9 +1291,6 @@ extern "C" {
     pub fn CLOENV(x: SEXP) -> SEXP;
 }
 extern "C" {
-    pub fn RDEBUG(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
     pub fn RSTEP(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -1815,9 +1812,6 @@ extern "C" {
 }
 extern "C" {
     pub fn Rf_mkCharLen(arg1: *const ::std::os::raw::c_char, arg2: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_NonNullStringMatch(arg1: SEXP, arg2: SEXP) -> Rboolean;
 }
 extern "C" {
     pub fn Rf_ncols(arg1: SEXP) -> ::std::os::raw::c_int;

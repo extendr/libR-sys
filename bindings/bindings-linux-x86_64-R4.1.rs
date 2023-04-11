@@ -1043,9 +1043,6 @@ extern "C" {
     pub fn SETTER_CLEAR_NAMED(x: SEXP);
 }
 extern "C" {
-    pub fn RAISE_NAMED(x: SEXP, n: ::std::os::raw::c_int);
-}
-extern "C" {
     pub fn DECREMENT_REFCNT(x: SEXP);
 }
 extern "C" {
@@ -3196,9 +3193,6 @@ extern "C" {
 }
 extern "C" {
     pub fn DATAPTR_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn LOGICAL_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn INTEGER_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_int;

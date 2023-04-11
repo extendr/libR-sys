@@ -105,7 +105,6 @@ pub const PROMSXP: u32 = 5;
 pub const LANGSXP: u32 = 6;
 pub const SPECIALSXP: u32 = 7;
 pub const BUILTINSXP: u32 = 8;
-pub const CHARSXP: u32 = 9;
 pub const LGLSXP: u32 = 10;
 pub const INTSXP: u32 = 13;
 pub const REALSXP: u32 = 14;

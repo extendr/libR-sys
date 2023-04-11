@@ -168,9 +168,9 @@ pub const R_MAJOR: &[u8; 2usize] = b"4\0";
 pub const R_MINOR: &[u8; 4usize] = b"4.0\0";
 pub const R_STATUS: &[u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5usize] = b"2023\0";
-pub const R_MONTH: &[u8; 3usize] = b"03\0";
-pub const R_DAY: &[u8; 3usize] = b"31\0";
-pub const R_SVN_REVISION: u32 = 84137;
+pub const R_MONTH: &[u8; 3usize] = b"04\0";
+pub const R_DAY: &[u8; 3usize] = b"09\0";
+pub const R_SVN_REVISION: u32 = 84210;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -636,7 +636,7 @@ pub const Rboolean_FALSE: Rboolean = 0;
 #[doc = ", MAYBE"]
 pub const Rboolean_TRUE: Rboolean = 1;
 pub type Rboolean = ::std::os::raw::c_uint;
-#[doc = "This definition uses an anonymous structure, which is defined in C11 (but\nnot C99).  It is, however, supported at least by GCC, clang and icc.  The\nprivate_data_c member should never be used in code, but tells the compiler\nabout type punning when accessing the .r and .i elements, so is safer to use\nwhen interfacing with Fortran COMPLEX*16 or directly C99 _Complex double\n(PR#18430).\n\nThis form of static initialization works with both definitions:\nRcomplex z = { .r = 1, .i = 2 };"]
+#[doc = "This definition uses an anonymous structure, which is defined in C11 (but\nnot C99).  It is, however, supported at least by GCC, clang and icc.  The\nprivate_data_c member should never be used in code, but tells the compiler\nabout type punning when accessing the .r and .i elements, so is safer to use\nwhen interfacing with Fortran COMPLEX*16 or directly C99 _Complex double\n(PR#18430).\n\nThis form of static initialization works with both definitions:\nRcomplex z = { .r = 1, .i = 2 };\n\nAnonymous structures and C99 _Complex were not incorporated into C++\nstandard.  While they are usually supported as compiler extensions, warnings\nare typically issued (-pedantic) by a C++ compiler."]
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union Rcomplex {
@@ -1150,9 +1150,6 @@ extern "C" {
     pub fn Rf_isLogical(s: SEXP) -> Rboolean;
 }
 extern "C" {
-    pub fn Rf_isReal(s: SEXP) -> Rboolean;
-}
-extern "C" {
     pub fn Rf_isComplex(s: SEXP) -> Rboolean;
 }
 extern "C" {
@@ -1291,10 +1288,6 @@ extern "C" {
 }
 extern "C" {
     pub fn RAW_GET_REGION(sx: SEXP, i: R_xlen_t, n: R_xlen_t, buf: *mut Rbyte) -> R_xlen_t;
-}
-extern "C" {
-    #[doc = "metadata access"]
-    pub fn INTEGER_IS_SORTED(x: SEXP) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn INTEGER_NO_NA(x: SEXP) -> ::std::os::raw::c_int;
@@ -6043,7 +6036,7 @@ pub struct _GEDevDesc {
     pub displayListOn: Rboolean,
     #[doc = "display list"]
     pub displayList: SEXP,
-    #[doc = "A pointer to the end of the display list\nto avoid tranversing pairlists"]
+    #[doc = "A pointer to the end of the display list\nto avoid traversing pairlists"]
     pub DLlastElt: SEXP,
     #[doc = "The last element of the display list\n just prior to when the display list\n was last initialised"]
     pub savedSnapshot: SEXP,

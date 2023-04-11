@@ -6082,9 +6082,6 @@ extern "C" {
     pub fn GEdeviceNumber(arg1: pGEDevDesc) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn GEgetDevice(arg1: ::std::os::raw::c_int) -> pGEDevDesc;
-}
-extern "C" {
     pub fn GEaddDevice(arg1: pGEDevDesc);
 }
 extern "C" {

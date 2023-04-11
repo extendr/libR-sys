@@ -3552,9 +3552,6 @@ extern "C" {
     );
 }
 extern "C" {
-    pub fn Rf_dunif(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
     pub fn Rf_punif(
         arg1: f64,
         arg2: f64,
@@ -6623,9 +6620,6 @@ extern "C" {
 }
 extern "C" {
     pub fn R_GE_linearGradientExtend(pattern: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_GE_radialGradientCX1(pattern: SEXP) -> f64;
 }
 extern "C" {
     pub fn R_GE_radialGradientCY1(pattern: SEXP) -> f64;
