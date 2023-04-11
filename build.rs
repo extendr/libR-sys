@@ -494,11 +494,11 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
     // Join into a regex pattern to supply into bindgen::Builder.
     let allowlist_pattern = allowlist
-        .difference(&get_non_api()) // Exclude non-API calls
-        .map(|s| s.to_owned())
-        .collect::<Vec<String>>()
-        .join("|");
-    let allowlist_pattern = format!("\"{allowlist_pattern}\"");
+        // Exclude non-API calls
+        .difference(&get_non_api())
+        .cloned()
+        .collect::<Vec<_>>();
+    let allowlist_pattern = allowlist_pattern.join("|");
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
