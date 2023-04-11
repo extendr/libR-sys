@@ -446,7 +446,14 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         match e.get_kind() {
             EnumDecl | FunctionDecl | StructDecl | TypedefDecl | VarDecl | UnionDecl => {
                 if let Some(n) = e.get_name() {
-                    allowlist.insert(n);
+                    // due to a bug in LLVM 16.0.0 on Windows, unnamed
+                    // items are included here
+                    // See
+                    // https://github.com/rust-lang/rust-bindgen/issues/2488
+                    // https://github.com/extendr/libR-sys/issues/151
+                    if !n.contains("(unnamed at") {
+                        allowlist.insert(n);
+                    }
                 }
             }
             _ => panic!("Unknown kind: {:?}", e),
