@@ -54,7 +54,7 @@ choco install llvm -y
 
 To ensure LLVM is successfully installed and configured, run `clang --version`. If `clang` is not on the `PATH`, manually add path to `clang` installation to the `PATH` environement variable.
 
-Install `Rtools` `Rtools40` can be downloaded from [here][rtools40]. Alternatively, `Rtools` can be
+Install `Rtools40`, which can be downloaded from [here][rtools40]. Alternatively, `Rtools` can be
 installed using `chocolatey`
 
 [rtools40]: https://cran.r-project.org/bin/windows/Rtools/rtools40.html
