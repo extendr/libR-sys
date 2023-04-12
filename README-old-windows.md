@@ -75,7 +75,7 @@ $env:LIBRSYS_LIBCLANG_INCLUDE_PATH="$env:RTOOLS40_HOME\mingw64\x86_64-w64-mingw3
 $env:LIBRSYS_LIBCLANG_INCLUDE_PATH="$env:RTOOLS40_HOME\mingw32\i686-w64-mingw32\include"  # 32-bit
 ```
 
-Now, the bindings can be build using the following command:
+Now, the bindings can be built using the following commands:
 
 ```powershell
 cargo build --target x86_64-pc-windows-gnu --features use-bindgen   # 64-bit
