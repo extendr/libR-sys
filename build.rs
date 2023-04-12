@@ -453,7 +453,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
                     // See
                     // https://github.com/rust-lang/rust-bindgen/issues/2488
                     // https://github.com/extendr/libR-sys/issues/151
-                    if !n.contains("(unnamed at") {
+                    if !e.is_anonymous() {
                         allowlist.insert(n);
                     }
                 }
