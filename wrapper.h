@@ -40,3 +40,10 @@ typedef ptrdiff_t R_xlen_t_rust;
 #include <R_ext/GraphicsEngine.h>
 #include <R_ext/Applic.h>
 #include <R_ext/Random.h>
+
+#include <R_ext/Complex.h>
+
+/// Returns [`Rcomplex`] from real part and imaginary part.
+Rcomplex create_rcomplex(double real, double imag) {
+  return (Rcomplex) { .r = real, .i = imag };
+}

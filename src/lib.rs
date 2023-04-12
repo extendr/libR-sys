@@ -66,6 +66,13 @@
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
+impl Rcomplex {
+    #[inline]
+    pub fn new(real: f64, imaginary: f64) -> Self {
+        unsafe { create_rcomplex(real, imaginary) }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
