@@ -1,3 +1,6 @@
+// TEMPORARY fix for https://github.com/extendr/extendr/issues/524
+#define R_LEGACY_RCOMPLEX
+
 #include <stddef.h> // for ptrdiff_t
 
 // R_xlen_t is defined as int on 32-bit platforms, and
