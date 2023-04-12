@@ -41,7 +41,6 @@ const ENVVAR_LIBCLANG_INCLUDE_PATH: &str = "LIBRSYS_LIBCLANG_INCLUDE_PATH";
 // dir. If this is set, generated bindings are also put there.
 #[cfg(feature = "use-bindgen")]
 const ENVVAR_BINDINGS_OUTPUT_PATH: &str = "LIBRSYS_BINDINGS_OUTPUT_PATH";
-
 #[allow(dead_code)]
 struct InstallationPaths {
     r_home: PathBuf,
@@ -66,6 +65,7 @@ struct RVersionInfo {
     minor: String,
     patch: String,
     devel: bool,
+    full: String,
 }
 
 impl RVersionInfo {
@@ -242,6 +242,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
 
 // Parse an R version (e.g. "4.1.2" and "4.2.0-devel") and return the RVersionInfo.
 fn parse_r_version(r_version: String) -> Result<RVersionInfo, EnvVarError> {
+    let full = r_version.clone();
     // First, split "<major>.<minor>.<patch>-devel" to "<major>.<minor>.<patch>" and "devel"
     let (r_version, devel) = match *r_version.split('-').collect::<Vec<&str>>().as_slice() {
         [r_version, devel] => (r_version, Some(devel)),
@@ -296,6 +297,7 @@ fn parse_r_version(r_version: String) -> Result<RVersionInfo, EnvVarError> {
         minor,
         patch,
         devel,
+        full,
     })
 }
 
@@ -361,6 +363,7 @@ fn set_r_version_vars(ver: &RVersionInfo) {
     println!("cargo:r_version_devel={}", ver.devel); // Becomes DEP_R_R_VERSION_DEVEL for clients
 }
 
+#[cfg(feature = "use-bindgen")]
 fn get_non_api() -> std::collections::HashSet<String> {
     // Several non-APIs are required for extendr-engine, so we explicitly allow
     // these here. If extendr-engine (or other crate) requires more non-APIs,
@@ -442,6 +445,13 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Put all the symbols into allowlist
     let mut allowlist = std::collections::HashSet::new();
     for e in e {
+        // skip unnamed items
+        // this occurs on llvm 16.0.0, see
+        // https://github.com/rust-lang/rust-bindgen/issues/2488
+        // and this is how it is decided to check for this
+        if e.is_anonymous() {
+            continue;
+        }
         match e.get_kind() {
             EnumDecl | FunctionDecl | StructDecl | TypedefDecl | VarDecl | UnionDecl => {
                 if let Some(n) = e.get_name() {
@@ -484,10 +494,11 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
     // Join into a regex pattern to supply into bindgen::Builder.
     let allowlist_pattern = allowlist
-        .difference(&get_non_api()) // Exclude non-API calls
-        .map(|s| s.to_owned())
-        .collect::<Vec<String>>()
-        .join("|");
+        // Exclude non-API calls
+        .difference(&get_non_api())
+        .cloned()
+        .collect::<Vec<_>>();
+    let allowlist_pattern = allowlist_pattern.join("|");
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
@@ -515,7 +526,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Point to the correct headers
     bindgen_builder = bindgen_builder.clang_args(&[
         format!("-I{}", r_paths.include.display()),
-        format!("--target={}", target),
+        format!("--target={target}"),
     ]);
 
     // allow injection of an alternative include path to libclang
@@ -537,7 +548,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
         .generate_comments(true)
-        .parse_callbacks(Box::new(RCallbacks))
+        .parse_callbacks(Box::new(TrimCommentsCallbacks))
         .clang_arg("-fparse-all-comments")
         .generate()
         // Unwrap the Result and panic on failure.
@@ -566,14 +577,36 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
         let out_file = out_path.join(bindings_file_full);
 
-        bindings
-            .write_to_file(&out_file)
-            .expect(&format!("Couldn't write bindings: {}", out_file.display()));
+        save_bindings_to_file(bindings, version_info, out_file);
     } else {
         println!(
             "Warning: Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
         );
     }
+}
+
+#[cfg(feature = "use-bindgen")]
+fn save_bindings_to_file(
+    bindings: bindgen::Bindings,
+    version_info: &RVersionInfo,
+    out_file: PathBuf,
+) {
+    let clang_version_bindgen = bindgen::clang_version();
+    let clang_rs_version = clang::get_version();
+    let header = [
+        format!(
+            "/* bindgen clang version: {} */",
+            clang_version_bindgen.full
+        ),
+        format!("/* clang-rs version: {} */", clang_rs_version),
+        format!("/* r version: {} */", version_info.full),
+    ];
+    let header = header.join("\n");
+
+    let bindings = bindings.to_string();
+    let bindings = format!("{header}\n{bindings}");
+    std::fs::write(&out_file, bindings)
+        .expect(&format!("Couldn't write bindings: {}", out_file.display()));
 }
 
 #[allow(dead_code)]
@@ -614,11 +647,12 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
 }
 
 /// Provide extra cleaning of the processed elements in the headers.
+#[cfg(feature = "use-bindgen")]
 #[derive(Debug)]
-struct RCallbacks;
+struct TrimCommentsCallbacks;
 
 #[cfg(feature = "use-bindgen")]
-impl bindgen::callbacks::ParseCallbacks for RCallbacks {
+impl bindgen::callbacks::ParseCallbacks for TrimCommentsCallbacks {
     fn process_comment(&self, comment: &str) -> Option<String> {
         let trim_comment = comment.trim();
         Some(trim_comment.to_string())
@@ -640,7 +674,10 @@ fn main() {
     println!("cargo:r_home={}", r_paths.r_home.display()); // Becomes DEP_R_R_HOME for clients
 
     // make sure cargo links properly against library
-    println!("cargo:rustc-link-search={}", r_paths.library.display());
+    println!(
+        "cargo:rustc-link-search={}",
+        r_paths.library.canonicalize().unwrap().display()
+    );
     println!("cargo:rustc-link-lib=dylib=R");
 
     println!("cargo:rerun-if-changed=build.rs");
