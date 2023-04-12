@@ -133,14 +133,18 @@ jobs:
           if ($env:RTOOLS_VERSION -eq '43') {
             echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
             $mingw_root = "C:\rtools43\x86_64-w64-mingw32.static.posix"
+            $libclang_include = "$mingw_root\include"
           } elseif ($env:RTOOLS_VERSION -eq '42') {
             echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
             $mingw_root = "C:\rtools42\x86_64-w64-mingw32.static.posix"
+            $libclang_include = "$mingw_root\include"
           } elseif ($env:RTOOLS_VERSION -eq '40') {
             if ($env:RUST_TARGET -like "x86_64*") {
               $mingw_root = "C:\rtools40\mingw64"
+              $libclang_include = "$mingw_root\mingw64\x86_64-w64-mingw32\include"
             } else {
               $mingw_root = "C:\rtools40\mingw32"
+              $libclang_include = "$mingw_root\mingw32\i686-w64-mingw32\include"
             }
           }
 
@@ -161,7 +165,7 @@ jobs:
           }
 
           echo "$mingw_root\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$mingw_root\include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$libclang_include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           RUST_TARGET: ${{ matrix.config.target }}
           RTOOLS_VERSION: ${{ matrix.config.rtools-version }}
