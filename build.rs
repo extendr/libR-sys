@@ -445,17 +445,17 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Put all the symbols into allowlist
     let mut allowlist = std::collections::HashSet::new();
     for e in e {
+        // skip unnamed items
+        // this occurs on llvm 16.0.0, see
+        // https://github.com/rust-lang/rust-bindgen/issues/2488
+        // and this is how it is decided to check for this
+        if e.is_anonymous() {
+            continue;
+        }
         match e.get_kind() {
             EnumDecl | FunctionDecl | StructDecl | TypedefDecl | VarDecl | UnionDecl => {
                 if let Some(n) = e.get_name() {
-                    // due to a bug in LLVM 16.0.0 on Windows, unnamed
-                    // items are included here
-                    // See
-                    // https://github.com/rust-lang/rust-bindgen/issues/2488
-                    // https://github.com/extendr/libR-sys/issues/151
-                    if !e.is_anonymous() {
-                        allowlist.insert(n);
-                    }
+                    allowlist.insert(n);
                 }
             }
             _ => panic!("Unknown kind: {:?}", e),
