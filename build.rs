@@ -69,6 +69,8 @@ struct RVersionInfo {
 }
 
 impl RVersionInfo {
+    /// Returns the name for precompiled bindings, given R version and targets.
+    /// e.g. `bindings-windows-x86_64-R4.4-devel.rs`
     fn get_r_bindings_filename(&self, target_os: &str, target_arch: &str) -> PathBuf {
         let devel_suffix = if self.devel { "-devel" } else { "" };
         PathBuf::from(format!(
@@ -441,7 +443,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .collect::<Vec<_>>();
     // Add more include files manually
     include_files.insert(r_paths.include.join("Rversion.h"));
-
+    //FIXME: add `wrapper_complex.c` here instead of manual additions in
+    // allowlist_function?
+    
     // Put all the symbols into allowlist
     let mut allowlist = std::collections::HashSet::new();
     for e in e {
@@ -507,9 +511,15 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .allowlist_function(&allowlist_pattern)
         .allowlist_var(&allowlist_pattern)
         .allowlist_type(&allowlist_pattern)
+        .allowlist_function("create_rcomplex")
+        .allowlist_function("Rcomplex_real")
+        .allowlist_function("Rcomplex_imaginary")
+        .allowlist_function("Rcomplex_set_real")
+        .allowlist_function("Rcomplex_set_imaginary")
         // The input header we would like to generate
         // bindings for.
         .header("wrapper.h")
+        .header("wrapper_complex.c")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks));
@@ -555,6 +565,20 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .expect("Unable to generate bindings");
 
     bindings.emit_warnings();
+
+    cc::Build::new()
+        .file("wrapper_complex.c")
+        .cpp(false)
+        // .opt_level(opt_level)
+        .extra_warnings(true)
+        .cargo_metadata(true)
+        // .debug(debug)
+        .shared_flag(true)
+        // .flag_if_supported("-std=c99")
+        .flag_if_supported("-std=c11")
+        .include(&r_paths.include)
+        .compile("wrapper_complex");
+    println!("cargo:rerun-if-changed=wrapper_complex.c");
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
@@ -620,7 +644,7 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
 
     // we try a few different file names, from more specific to less specific
     let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
-    let bindings_file_novers = PathBuf::from(format!("bindings-{}-{}.rs", target_os, target_arch));
+    let bindings_file_novers = PathBuf::from(format!("bindings-{target_os}-{target_arch}.rs"));
 
     let mut from = bindings_path.join(bindings_file_full);
     if !from.exists() {
