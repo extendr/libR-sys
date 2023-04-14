@@ -33,8 +33,8 @@ jobs:
 
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }})
-              
+    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}-${{ matrix.config.target || 'default' }})
+
     strategy:
       fail-fast: false
       matrix:
@@ -55,25 +55,30 @@ jobs:
           #   - emit-bindings: If 'true', emit bindings. In principle, we choose
           #     only one stable Rust toolchain per combination of a platform and
           #     an R version (e.g. Windows and R-release) to emit bindings.
-          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42',  emit-bindings: 'true'}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu'],                        emit-bindings: 'true'}
-          - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
-          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu'], emit-bindings: 'true'}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '42', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', target: 'x86_64-pc-windows-gnu', rtools-version: '42'}
+          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '43', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   target: 'x86_64-pc-windows-gnu', rtools-version: '42'}
+          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '40', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'i686-pc-windows-gnu',   rtools-version: '40', emit-bindings: 'true'}
+
 
           - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
           - {os: macOS-latest,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
           - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
-          # TODO: Remove no-test-targets when aarch64 runner is available
-          - {os: macOS-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-apple-darwin'], no-test-targets: 'aarch64-apple-darwin', emit-bindings: 'true'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
+
 
           - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
-          # TODO: Remove no-test-targets when aarch64 runner is available
-          - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', targets: ['default', 'aarch64-unknown-linux-gnu'], no-test-targets: 'aarch64-unknown-linux-gnu', emit-bindings: 'true'}
-          - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', targets: ['default', 'aarch64-unknown-linux-gnu'], no-test-targets: 'aarch64-unknown-linux-gnu', emit-bindings: 'true'}
-          - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', targets: ['default', 'aarch64-unknown-linux-gnu'], no-test-targets: 'aarch64-unknown-linux-gnu', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
+          - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
+          - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
     env:
       RSPM: ${{ matrix.config.rspm }}
@@ -82,9 +87,9 @@ jobs:
     defaults:
       run:
         shell: pwsh
-      
+
     steps:
-      
+
       - uses: actions/checkout@v3
 
       # When invoked by an issue comment event, the GitHub Actions runner runs
@@ -96,7 +101,7 @@ jobs:
         uses: r-lib/actions/pr-fetch@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
         with:
@@ -109,55 +114,57 @@ jobs:
         with:
           toolchain: ${{ matrix.config.rust-version }}
           components: rustfmt, clippy
-
-      - name: Configure targets
-        run: |
-          if ($env:RUST_TARGETS -eq '') {
-            $env:RUST_TARGETS = "default"
-          }
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            if ($target -ne "default") {
-              rustup target add $target
-            }
-          }
-          echo "RUST_TARGETS=$env:RUST_TARGETS"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        env:
-          RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
-
-      - name: MINGW64
-        if: startsWith(runner.os, 'Windows')
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: mingw64
-          install: mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain
-          release: false
-
-      - name: MINGW32
-        if: startsWith(runner.os, 'Windows') && contains(join(matrix.config.targets, ','), 'i686')
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: mingw32
-          install: mingw32/mingw-w64-i686-clang mingw-w64-i686-toolchain
-          release: false
+          targets: ${{ matrix.config.target }}
 
       # All configurations for Windows go here
-      # Rust toolchain is used to determine target architecture
+      # 1. Configure linker if RTools >= 4.2
+      # 2. Determine mingw root
+      # 3. Create libgcc_eh mock for RTools >= 4.2
+      # 4. Add R bin path to PATH
+      # 5. Add mingw root/bin to PATH (required to find linker)
+      # 6. Add include path (required to resolve standard headers like stdio.h)
       - name: Configure Windows
         if: runner.os == 'Windows'
-        # 1. Configure path to libclang
-        # 2. Add path to mingw32/mingw64 -- otherwise library is linked to rtools
-        # 3. Add path to R's i386/x64  -- to solve x86 build/test issue
         run: |
-          if ($env:RUST_TARGETS -like "*x86_64*") {
-            echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          if ($env:RTOOLS_VERSION -eq '43') {
+            echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            $mingw_root = "C:\rtools43\x86_64-w64-mingw32.static.posix"
+            $libclang_include = "$mingw_root\include"
+          } elseif ($env:RTOOLS_VERSION -eq '42') {
+            echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            $mingw_root = "C:\rtools42\x86_64-w64-mingw32.static.posix"
+            $libclang_include = "$mingw_root\include"
+          } elseif ($env:RTOOLS_VERSION -eq '40') {
+            if ($env:RUST_TARGET -like "x86_64*") {
+              $mingw_root = "C:\rtools40\mingw64"
+              $libclang_include = "$mingw_root\mingw64\x86_64-w64-mingw32\include"
+            } else {
+              $mingw_root = "C:\rtools40\mingw32"
+              $libclang_include = "$mingw_root\mingw32\i686-w64-mingw32\include"
+            }
+          }
+
+          if ($env:RTOOLS_VERSION -ne '40') {
+            New-Item -Path libgcc_mock -Type Directory
+            New-Item -Path libgcc_mock\libgcc_eh.a -Type File
+            New-Item -Path libgcc_mock\libgcc_s.a -Type File
+
+            $pwd_slash = echo "${PWD}" | % {$_ -replace '\\','/'}
+            echo "LIBRARY_PATH=${pwd_slash}/libgcc_mock" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          }
+
+          if ($env:RUST_TARGET -like "x86_64*") {
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
-          if ($env:RUST_TARGETS -like "*i686*") {
-            echo "C:\msys64\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          if ($env:RUST_TARGET -like "i686*") {
             echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           }
+
+          echo "$mingw_root\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$libclang_include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
-          RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
+          RUST_TARGET: ${{ matrix.config.target }}
+          RTOOLS_VERSION: ${{ matrix.config.rtools-version }}
 
 
       # macOS configurations, mainly llvm and path to libclang
@@ -169,7 +176,7 @@ jobs:
       # https://github.com/extendr/libR-sys/issues/35
       - name: Configure macOS
         if: runner.os == 'macOS'
-        run: | 
+        run: |
           brew install llvm
           echo "LIBCLANG_PATH=$(brew --prefix llvm)/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           $env:LLVM_CONFIG_PATH = "$(brew --prefix llvm)/bin/llvm-config" 
@@ -193,213 +200,55 @@ jobs:
           Del alias:R
           echo "LD_LIBRARY_PATH=$(R -s -e 'cat(normalizePath(R.home()))')/lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Install gcc linux/aarch64 cross compiler
-        if: matrix.config.no-test-targets == 'aarch64-unknown-linux-gnu'
-        run: |
-          sudo apt-get update
-          sudo apt-get install gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
-          # https://github.com/rust-lang/rust-bindgen/issues/1229
-          echo 'BINDGEN_EXTRA_CLANG_ARGS=--sysroot=/usr/aarch64-linux-gnu' >> $GITHUB_ENV
-          # https://github.com/rust-lang/rust/issues/28924
-          echo 'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc' >> $GITHUB_ENV
+          if($env:RUST_TARGET -eq 'aarch64-unknown-linux-gnu') {
+            sudo apt-get update
+            sudo apt-get install gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+            # https://github.com/rust-lang/rust-bindgen/issues/1229
+            echo 'BINDGEN_EXTRA_CLANG_ARGS=--sysroot=/usr/aarch64-linux-gnu' >> $GITHUB_ENV
+            # https://github.com/rust-lang/rust/issues/28924
+            echo 'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc' >> $GITHUB_ENV
+          }
+        env:
+          RUST_TARGET: ${{ matrix.config.target }}
 
       # Build and emit bindings to './generated_bindings'
       - name: Build & Emit bindings
         id: build
         run: |
           . ./ci-cargo.ps1
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            ci-cargo build -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) -ActionName "Building for target: $target"
-          }
+          ci-cargo build -vv --features use-bindgen $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) -ActionName "Building for target: $env:RUST_TARGET"
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
+          RUST_TARGET: ${{ matrix.config.target }}
 
       # Test the result of previous step
       - name: Run tests
         id: test
+        if: matrix.config.skip-tests != 'true'
         run: |
           . ./ci-cargo.ps1
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
-              echo "::warning:: Skipping bindgen tests for target: $target"
-            }
-            else {
-              ci-cargo test -vv --features use-bindgen $(if ($target -ne 'default') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running bindgen tests for target: $target"
-            }
-          }
-        env: 
-          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
+          ci-cargo test -vv --features use-bindgen $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture --test-threads=1 -ActionName "Running bindgen tests for target: $env:RUST_TARGET"
+        env:
+          RUST_TARGET: ${{ matrix.config.target }}
 
-      # If success
-      # AND (either rust is stable and 'emit-bindings' != 'false'
-      #      OR rust is any and 'emit-bindings' == 'true'),
-      # upload bindings
       - name: Upload generated bindings
-        if: 
-          steps.build.outcome == 'success' && 
-          steps.test.outcome == 'success' && 
+        if:
+          steps.build.outcome == 'success' &&
           matrix.config.emit-bindings == 'true'
         uses: actions/upload-artifact@main
         with:
-          name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}
+          name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}-${{ matrix.config.target || 'default'}}
           path: generated_bindings
 
       # Run tests again using different bindings
       - name: Run tests on precomputed bindings shipped with libR-sys
+        if: matrix.config.skip-tests != 'true'
         run: |
           . ./ci-cargo.ps1
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
-              echo "::warning:: Skipping tests for target: $target"
-            }
-            else {    
-              ci-cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running tests for target: $target"
-            }
-          }
-        env: 
-          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
-
-  test_windows_rtools:
-    # This doesn't need to be run on /bindings command
-    if: github.event_name != 'issue_comment'
-
-    runs-on: ${{ matrix.config.os }}
-
-    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}) \w Rtools
-              
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          # On Windows,
-          #
-          # * for R >= 4.2, both the MSVC toolchain and the GNU toolchain should
-          #   work. Since we primarily support MSVC, we focus on testing MSVC here.
-          #   Also, at least one GNU case should be included so that we can
-          #   detect when something gets broken. 
-          # * for R < 4.2, the MSVC toolchain must be used to support
-          #   cross-compilation to 32-bit. 
-          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu']}
-          - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',  targets: ['x86_64-pc-windows-gnu'], rtools-version: '42'}
-          - {os: windows-latest, r: '4.1',     rust-version: 'stable-msvc', targets: ['x86_64-pc-windows-gnu', 'i686-pc-windows-gnu']}
-
-    env:
-      RSPM: ${{ matrix.config.rspm }}
-
-    # PowerShell core is available on all platforms and can be used to unify scripts
-    defaults:
-      run:
-        shell: pwsh
-      
-    steps:
-      
-      - uses: actions/checkout@v3
-
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: ${{ matrix.config.r }}
-          use-public-rspm: true
-          rtools-version: ${{ matrix.config.rtools-version }}
-          
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: ${{ matrix.config.rust-version }}
-          components: rustfmt, clippy
-
-      - name: Configure targets
-        run: |
-          if ($env:RUST_TARGETS -eq '') {
-            $env:RUST_TARGETS = "default"
-          }
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            if ($target -ne "default") {
-              rustup target add $target
-            }
-          }
-          echo "RUST_TARGETS=$env:RUST_TARGETS"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          ci-cargo test -vv $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture --test-threads=1 -ActionName "Running tests for target: $env:RUST_TARGET"
         env:
-          RUST_TARGETS: ${{ join(matrix.config.targets, ',')}}
-      
-      - name: Configure Windows for Rtools (R >= 4.2)
-        if: runner.os == 'Windows' && matrix.config.r != '4.1'
-        run: |
-          if ("${{ matrix.config.rtools-version }}" -eq "42") {
-            $rtools_home = "C:\rtools42"   # for R 4.2
-          } else {
-            $rtools_home = "C:\rtools43"   # for R >= 4.3
-          }
+          RUST_TARGET: ${{ matrix.config.target }}
 
-          echo "${rtools_home}\x86_64-w64-mingw32.static.posix\bin"        | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-          echo "${rtools_home}\usr\bin"                                    | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-          echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-
-          # NOTE: Unlike extendr, libR-sys can be compiled with non-Rtools' toolchain
-          #       without any problem. But, for consistency (and in order to detect
-          #       the possible problem), we anyway add the tweak.
-
-          # The following lines add two tweaks:
-          #
-          #  1. Change the linker name to "x86_64-w64-mingw32.static.posix-gcc.exe".
-          #  2. Add empty libgcc_s.a and libgcc_eh.a, and add them to the compiler's
-          #     library search paths via `LIBRARY_PATH` envvar.
-          # 
-          # The first tweak is needed because Rtools42 and Rtools43 don't contain 
-          # "x86_64-w64-mingw32-gcc," which `rustc` uses as the default linker 
-          # for the `x86_64-pc-windows-gnu` target.
-          #  
-          # If we use the Rtools' toolchain, the second tweak is also required.
-          # `rustc` adds `-lgcc_eh` and `-lgcc_s` flags to the compiler, but
-          # Rtools' GCC doesn't have `libgcc_eh` or `libgcc_s` due to the 
-          # compilation settings. So, in order to please the compiler, we need
-          # to add empty `libgcc_eh` or `libgcc_s` to the library search paths.
-          # 
-          # For more details, please refer to https://github.com/r-windows/rtools-packages/blob/2407b23f1e0925bbb20a4162c963600105236318/mingw-w64-gcc/PKGBUILD#L313-L316
-
-          New-Item -Path libgcc_mock -Type Directory
-          New-Item -Path libgcc_mock\libgcc_eh.a -Type File
-          New-Item -Path libgcc_mock\libgcc_s.a -Type File
-
-          New-Item -Path .cargo -ItemType Directory -Force
-          $pwd_slash = echo "${PWD}" | % {$_ -replace '\\','/'}
-          @"
-          [target.x86_64-pc-windows-gnu]
-          linker = "x86_64-w64-mingw32.static.posix-gcc.exe"
-
-          [env]
-          LIBRARY_PATH = "${pwd_slash}/libgcc_mock"
-          "@ | Out-File -FilePath .cargo/config.toml -Encoding utf8 -Append ;
-
-      # TODO: Remove this step when we drop the support for R < 4.2
-      - name: Configure Windows for Rtools (R < 4.2)
-        if: runner.os == 'Windows' && matrix.config.r == '4.1'
-        run: |
-          if ($env:RUST_TARGETS -like "*x86_64*") {
-            echo "C:\rtools40\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-          }
-          if ($env:RUST_TARGETS -like "*i686*") {
-            echo "C:\rtools40\mingw32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-          }
-
-      # Run tests again using different bindings
-      - name: Run tests on precomputed bindings shipped with libR-sys
-        run: |
-          . ./ci-cargo.ps1
-          foreach ($target in ($env:RUST_TARGETS).Split(",")) {
-            if(($env:NO_TEST_TARGETS).Split(",").Contains($target)) {
-              echo "::warning:: Skipping tests for target: $target"
-            }
-            else {            
-              ci-cargo test -vv $(if ($target -ne 'default') {"--target=$target"} ) '--' --nocapture --test-threads=1 -ActionName "Running tests for target: $target"
-            }
-          }
-        env: 
-          NO_TEST_TARGETS: ${{ join(matrix.config.no-test-targets, ',') }}
-  
   # Gather the generated bindings and push them to generated_bindings branch.
   # If we need to update the bindings, create a pull request from that branch.
   commit_generated_bindings:
@@ -451,7 +300,7 @@ jobs:
         if ! git diff-index --quiet HEAD -- bindings/; then
           git config --local user.name "${GITHUB_ACTOR}"
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git commit -m "Update bindings [skip ci]"          
+          git commit -m "Update bindings [skip ci]"
         else
           echo "No changes"
         fi
@@ -465,3 +314,4 @@ jobs:
       uses: r-lib/actions/pr-push@v2
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
+
