@@ -552,6 +552,10 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
         .raw_line(format!(
+            "/* libR-sys version: {} */",
+            env!("CARGO_PKG_VERSION")
+        ))
+        .raw_line(format!(
             "/* bindgen clang version: {} */",
             bindgen::clang_version().full
         ))
