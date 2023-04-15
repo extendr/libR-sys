@@ -75,8 +75,8 @@ impl RVersionInfo {
     /// e.g. `bindings-windows-x86_64-R4.4-devel.rs`
     fn get_r_bindings_filename(&self, target_os: &str, target_arch: &str) -> PathBuf {
         let devel_suffix = if self.devel { "-devel" } else { "" };
-        let major = self.major;
-        let minor = self.minor;
+        let major = &self.major;
+        let minor = &self.minor;
         PathBuf::from(format!(
             "bindings-{target_os}-{target_arch}-R{major}.{minor}{devel_suffix}.rs"
         ))
