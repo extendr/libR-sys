@@ -30,6 +30,7 @@ const ENVVAR_R_HOME: &str = "R_HOME";
 const ENVVAR_R_VERSION: &str = "LIBRSYS_R_VERSION";
 
 // A path to a dir containing pre-computed bindings (default: "bindings").
+#[cfg(not(feature = "use-bindgen"))]
 const ENVVAR_BINDINGS_PATH: &str = "LIBRSYS_BINDINGS_PATH";
 
 // A path to libclang toolchain. If this is set, the path is added to the
@@ -41,7 +42,8 @@ const ENVVAR_LIBCLANG_INCLUDE_PATH: &str = "LIBRSYS_LIBCLANG_INCLUDE_PATH";
 // dir. If this is set, generated bindings are also put there.
 #[cfg(feature = "use-bindgen")]
 const ENVVAR_BINDINGS_OUTPUT_PATH: &str = "LIBRSYS_BINDINGS_OUTPUT_PATH";
-#[allow(dead_code)]
+
+#[derive(Debug)]
 struct InstallationPaths {
     r_home: PathBuf,
     include: PathBuf,
@@ -69,11 +71,14 @@ struct RVersionInfo {
 }
 
 impl RVersionInfo {
+    /// Returns the name for precompiled bindings, given R version and targets.
+    /// e.g. `bindings-windows-x86_64-R4.4-devel.rs`
     fn get_r_bindings_filename(&self, target_os: &str, target_arch: &str) -> PathBuf {
         let devel_suffix = if self.devel { "-devel" } else { "" };
+        let major = self.major;
+        let minor = self.minor;
         PathBuf::from(format!(
-            "bindings-{}-{}-R{}.{}{}.rs",
-            target_os, target_arch, self.major, self.minor, devel_suffix
+            "bindings-{target_os}-{target_arch}-R{major}.{minor}{devel_suffix}.rs"
         ))
     }
 }
@@ -547,6 +552,12 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
+        .raw_line(format!(
+            "/* bindgen clang version: {} */",
+            bindgen::clang_version().full
+        ))
+        .raw_line(format!("/* clang-rs version: {} */", clang::get_version()))
+        .raw_line(format!("/* r version: {} */", version_info.full))
         .generate_comments(true)
         .parse_callbacks(Box::new(TrimCommentsCallbacks))
         .clang_arg("-fparse-all-comments")
@@ -577,7 +588,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
         let out_file = out_path.join(bindings_file_full);
 
-        save_bindings_to_file(bindings, version_info, out_file);
+        bindings
+            .write_to_file(&out_file)
+            .expect(&format!("Couldn't write bindings: {}", out_file.display()));
     } else {
         println!(
             "Warning: Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
@@ -585,31 +598,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     }
 }
 
-#[cfg(feature = "use-bindgen")]
-fn save_bindings_to_file(
-    bindings: bindgen::Bindings,
-    version_info: &RVersionInfo,
-    out_file: PathBuf,
-) {
-    let clang_version_bindgen = bindgen::clang_version();
-    let clang_rs_version = clang::get_version();
-    let header = [
-        format!(
-            "/* bindgen clang version: {} */",
-            clang_version_bindgen.full
-        ),
-        format!("/* clang-rs version: {} */", clang_rs_version),
-        format!("/* r version: {} */", version_info.full),
-    ];
-    let header = header.join("\n");
-
-    let bindings = bindings.to_string();
-    let bindings = format!("{header}\n{bindings}");
-    std::fs::write(&out_file, bindings)
-        .expect(&format!("Couldn't write bindings: {}", out_file.display()));
-}
-
-#[allow(dead_code)]
+#[cfg(not(feature = "use-bindgen"))]
 /// Retrieve bindings from cache, if available. Errors out otherwise.
 fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
@@ -620,7 +609,7 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
 
     // we try a few different file names, from more specific to less specific
     let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
-    let bindings_file_novers = PathBuf::from(format!("bindings-{}-{}.rs", target_os, target_arch));
+    let bindings_file_novers = PathBuf::from(format!("bindings-{target_os}-{target_arch}.rs"));
 
     let mut from = bindings_path.join(bindings_file_full);
     if !from.exists() {
