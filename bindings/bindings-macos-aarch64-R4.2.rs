@@ -7717,7 +7717,7 @@ extern "C" {
 extern "C" {
     pub fn user_norm_rand() -> *mut f64;
 }
-#[doc = "<div rustbindgen replaces=\"Rcomplex\"></div>"]
+#[doc = "R 4.3 redefined `Rcomplex` to a union for compatibility with Fortran.\n But the old definition is compatible both the union version\n and the struct version.\n See: https://github.com/extendr/extendr/issues/524\n <div rustbindgen replaces=\"Rcomplex\"></div>"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Rcomplex {

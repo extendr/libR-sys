@@ -85,8 +85,8 @@ pub const R_MINOR: &[u8; 4usize] = b"4.0\0";
 pub const R_STATUS: &[u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5usize] = b"2023\0";
 pub const R_MONTH: &[u8; 3usize] = b"04\0";
-pub const R_DAY: &[u8; 3usize] = b"13\0";
-pub const R_SVN_REVISION: u32 = 84257;
+pub const R_DAY: &[u8; 3usize] = b"15\0";
+pub const R_SVN_REVISION: u32 = 84265;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -7339,7 +7339,7 @@ extern "C" {
 extern "C" {
     pub fn user_norm_rand() -> *mut f64;
 }
-#[doc = "<div rustbindgen replaces=\"Rcomplex\"></div>"]
+#[doc = "R 4.3 redefined `Rcomplex` to a union for compatibility with Fortran.\n But the old definition is compatible both the union version\n and the struct version.\n See: https://github.com/extendr/extendr/issues/524\n <div rustbindgen replaces=\"Rcomplex\"></div>"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Rcomplex {
