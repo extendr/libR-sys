@@ -524,8 +524,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
 
     println!(
-        "Generating bindings for target: {}, os: {}, architecture: {}",
-        target, target_os, target_arch
+        "Generating bindings for target: {target}, os: {target_os}, architecture: {target_arch}"
     );
 
     // Point to the correct headers
