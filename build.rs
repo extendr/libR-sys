@@ -507,6 +507,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .allowlist_function(&allowlist_pattern)
         .allowlist_var(&allowlist_pattern)
         .allowlist_type(&allowlist_pattern)
+        .translate_enum_integer_types(true)
         // The input header we would like to generate
         // bindings for.
         .header("wrapper.h")
