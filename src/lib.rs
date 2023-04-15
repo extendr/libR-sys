@@ -58,39 +58,13 @@
 //!     }
 //! }
 //! ```
+
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 #![allow(improper_ctypes)]
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-
-impl Rcomplex {
-    #[inline]
-    pub fn new(real: f64, imaginary: f64) -> Self {
-        unsafe { create_rcomplex(real, imaginary) }
-    }
-
-    #[inline]
-    pub fn re(&self) -> f64 {
-        unsafe { Rcomplex_real(self as *const Self) }
-    }
-
-    #[inline]
-    pub fn im(&self) -> f64 {
-        unsafe { Rcomplex_imaginary(self as *const Self) }
-    }
-
-    #[inline]
-    pub fn set_re(&mut self, value: f64) {
-        unsafe { Rcomplex_set_real(self as *mut Self, value) }
-    }
-
-    #[inline]
-    pub fn set_im(&mut self, value: f64) {
-        unsafe { Rcomplex_set_imaginary(self as *mut Self, value) }
-    }
-}
 
 #[cfg(test)]
 mod tests {

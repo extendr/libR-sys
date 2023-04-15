@@ -22,9 +22,8 @@ repository = "https://github.com/extendr/libR-sys"
 bindgen = { version = "0.64", optional = true }
 regex = { version = "1", optional = true }
 clang = { version = "2", optional = true, features = ["runtime", "clang_3_7"] }
-cc = { version = "1", optional = true }
 
 [features]
 # By default, we use pre-computed bindings that ship with the library. This may fail!
 # Turn on the 'use-bindgen' feature to generate bindings on the fly for your platform.
-use-bindgen = ["bindgen", "regex", "clang", "cc"]
+use-bindgen = ["bindgen", "regex", "clang"]
