@@ -546,6 +546,23 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             .blocklist_item("__mingw_ldbl_type_t");
     }
 
+    // Remove constants defined by C-headers and use available rust deifnitions
+    let bindgen_builder = bindgen_builder
+        // redefined in `lib.rs`
+        .blocklist_item("M_E")
+        .blocklist_item("M_LOG2E")
+        .blocklist_item("M_LOG10E")
+        .blocklist_item("M_LN2")
+        .blocklist_item("M_LN10")
+        .blocklist_item("M_PI")
+        .blocklist_item("M_PI_2")
+        .blocklist_item("M_PI_4")
+        .blocklist_item("M_1_PI")
+        .blocklist_item("M_2_PI")
+        .blocklist_item("M_2_SQRTPI")
+        .blocklist_item("M_SQRT2")
+        .blocklist_item("M_SQRT1_2");
+
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
         .generate_comments(true)
