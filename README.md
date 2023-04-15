@@ -98,152 +98,89 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
   ```
 
 - **Windows**
-  Binding generation on Windows happens with the help of `MSYS2`.
-  Make sure the environment variable `MSYS_ROOT` points to `MSYS2` root, e.g., `C:\tools\msys64`.
+  On Windows, bindings can be generated using native `LLVM` installation and `Rtools` distribution.
 
-  <details>
-    <summary>Installing and configuring `MSYS2`</summary>
+  Install LLVM:
 
-    Install `MSYS2`. Here is an example using `chocolatey`:
-
-    ```shell
-    choco install msys2 -y
-    ```
-
-    Set up `MSYS_ROOT` environment variable.
-    Install `clang` and `mingw`-toolchains (assuming `PowerShell` syntax)
-
-    ```pwsh
-    &"$env:MSYS_ROOT\usr\bin\bash" -l -c "pacman -S --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-toolchain"
-    ```
-
-  </details>
-
-  Add the following to the `PATH` (using `PowerShell` syntax).
-
-  ```pwsh
-  # for R >= 4.3, this should be "C:\rtools43"
-  $rtools_home = "C:\rtools42"
-  
-  $env:PATH = "${env:R_HOME}\bin\x64;${rtools_home}\usr\bin;${rtools_home}\x86_64-w64-mingw32.static.posix\bin;${env:MSYS_ROOT}\mingw64\bin;${env:PATH}"
+  ```powershell
+  choco install llvm -y
   ```
 
-  then build & test with
+  `LLVM` can be also installed using `winget`, `scoop`, or manually.
 
-  ```pwsh
+  To ensure LLVM is successfully installed and configured, run `clang --version`. If `clang` is not on the `PATH`, manually add path to `clang` installation to the `PATH` environement variable.
+
+  Install `Rtools` if it is misisng:
+
+  ```powershell
+  choco install rtools -y
+  ```
+
+  Installing `Rtools` this way automatically sets `RTOOLS42_HOME` (or `RTOOLS43_HOME`) environment variable.
+
+  Ensure that `R_HOME` environment variable is set to the `R` installation directory.
+
+  Finally, point `libR-sys` to the include directory of `Rtools`:
+
+  ```powershell
+  $env:LIBRSYS_LIBCLANG_INCLUDE_PATH="$env:RTOOLS42_HOME\x86_64-w64-mingw32.static.posix\include"
+  ```
+
+  Now, the bindings can be build using the following command:
+
+  ```powershell
   cargo build --target x86_64-pc-windows-gnu --features use-bindgen
   ```
 
-## Toolchain setup on Windows
+## Running bindgen tests on Windows
 
-The setup is tricky because the Rtools' toolchain is a bit different from the
-assumption of Rust.
+Running bindgen tests on Windows requires a bit more setup.
 
-### Install the GNU target of Rust
+First, add `Rtools` `bin` directory to the `PATH` (replace `RTOOLS42_HOME` with `RTOOLS43_HOME` if you are using `Rtools` 4.3):
 
-Both the default MSVC toolchain and the GNU toolchain should work fine with
-libR-sys, but we recommend the MSVC toolchain because we mainly use it.
-
-With either toolchain, since the R itself is built with the GNU toolchain, the
-target must be GNU. So, the GNU target needs to be installed.
-
-```shell
-rustup target add x86_64-pc-windows-gnu
+```powershell
+$env:PATH += ";$env:RTOOLS42_HOME\x86_64-w64-mingw32.static.posix\bin"
 ```
 
-### Install Rtools42 (or Rtools43)
+Second, patch `Rtools` version `4.2` and higher since there is a `gcc` static linking issue. `rustc` adds `-lgcc_eh` flag
+to the compiler, but Rtools' GCC doesn't have `libgcc_eh` due to
+the compilation settings. So, in order to please the compiler, `libgcc_eh` should be mocked and added to the library search paths. For more details, please refer to [r-windows/rtools-packages].
 
-Rtools42 can be downloaded from [here][rtools42_website]. For R >= 4.3, download
-Rtools43 from [here][rtools43_website]. Alternatively, `Rtools` will eventually
-be available on `chocolatey`.
+[r-windows/rtools-packages]: https://github.com/r-windows/rtools-packages/blob/2407b23f1e0925bbb20a4162c963600105236318/mingw-w64-gcc/PKGBUILD#L313-L316
 
-[rtools42_website]: https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html
-[rtools43_website]: https://cran.r-project.org/bin/windows/Rtools/rtools43/rtools.html
+Create a directory for missing library file and an empty file there:
 
+``` powershell
+# create a directory in an arbitrary location (e.g. libgcc_mock)
+New-Item -Path libgcc_mock -Type Directory
 
-```shell
-## TODO: Rtools42 is not yet on chocolatey
-# choco install rtools -y
+# create empty libgcc_eh.a and libgcc_s.a
+New-Item -Path libgcc_mock\libgcc_eh.a -Type File
 ```
 
-### Setup `R_HOME` and  `PATH` Environment Variables
+Finally, configure `Rust` compiler and select appropriate linker (see [The Cargo Book]):
 
-First, ensure that `R_HOME` points to `R` home, e.g. `C:\Program Files\R\R-4.2.0`
-(in an R session, this should be automatically set by R).
+[The Cargo Book]: https://doc.rust-lang.org/cargo/reference/config.html#environment-variables
 
-Second, ensure that `PATH` is properly configured that the following executables
-are available:
-
-- the `R` binary to build against
-- the compiler toolchain that is used for compiling the R itself, i.e., `Rtools`
-
-Typically, the following paths need to be added to the head of `PATH` (using
-`PowerShell` syntax).
-
-```pwsh
-# for R >= 4.3, this should be "C:\rtools43"
-$rtools_home = "C:\rtools42"
-
-$env:PATH = "${env:R_HOME}\bin\x64;${rtools_home}\usr\bin;${rtools_home}\x86_64-w64-mingw32.static.posix\bin;${env:PATH}"
+```powershell
+$env:CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER="x86_64-w64-mingw32.static.posix-gcc.exe"
+$env:LIBRARY_PATH="libgcc_mock" # Replace it with the path to the directory created above
 ```
 
-Note that the above prepends, rather than appends, because otherwise the wrong
-toolchain might be accidentally chosen if the `PATH` already contains another
-version of `R` or compiler toolchain.
-
-### Tweak the toolchain
-
-As noted above, since the Rtools' toolchain is a bit different from the
-assumption of Rust, we need the following tweaks:
-
-1. Change the linker name to `x86_64-w64-mingw32.static.posix-gcc.exe`.
-2. Add empty `libgcc_s.a` and `libgcc_eh.a`, and add them to the compiler's
-   library search paths via `LIBRARY_PATH` environment variables.
-
-The first tweak is needed because Rtools42 and Rtools43 don't contain
-`x86_64-w64-mingw32-gcc`, which `rustc` uses as the default linker for the
-`x86_64-pc-windows-gnu` target. This can be done by adding `.cargo/config.toml`
-with the following lines on the root directory of the project:
+Alternatively, linker can be configured in `.cargo/config.toml`:
 
 ``` toml
 [target.x86_64-pc-windows-gnu]
 linker = "x86_64-w64-mingw32.static.posix-gcc.exe"
 ```
 
-Alternatively, you can inject this configuration via the corresponding
-environmental variable, `CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER`. See [the
-Cargo Book] about how this works.
+Now, the tests can be run:
 
-[The Cargo Book]: https://doc.rust-lang.org/cargo/reference/config.html#environment-variables
-
-The second tweak is also required. `rustc` adds `-lgcc_eh` and `-lgcc_s` flags
-to the compiler, but Rtools' GCC doesn't have `libgcc_eh` or `libgcc_s` due to
-the compilation settings. So, in order to please the compiler, we need to add
-empty `libgcc_eh` or `libgcc_s` to the library search paths. For more details,
-please refer to [r-windows/rtools-packages].
-
-[r-windows/rtools-packages]: https://github.com/r-windows/rtools-packages/blob/2407b23f1e0925bbb20a4162c963600105236318/mingw-w64-gcc/PKGBUILD#L313-L316
-
-First, create a directory that contains empty `libgcc_eh` or `libgcc_s`.
-
-``` ps1
-# create a directory in an arbitrary location (e.g. libgcc_mock)
-New-Item -Path libgcc_mock -Type Directory
-
-# create empty libgcc_eh.a and libgcc_s.a
-New-Item -Path libgcc_mock\libgcc_eh.a -Type File
-New-Item -Path libgcc_mock\libgcc_s.a -Type File
+```powershell
+cargo test --target x86_64-pc-windows-gnu --features use-bindgen
 ```
 
-Then, add the directory to `LIBRARY_PATH` environment variables. For example, this can be done
-by adding the following lines to `.cargo/config.toml`:
-
-``` toml
-[env]
-LIBRARY_PATH = "path/to/libgcc_mock"
-```
-
-#### Editor settings
+### Editor settings
 
 <details>
 

@@ -249,47 +249,6 @@ pub const Rboolean_FALSE: Rboolean = 0;
 #[doc = ", MAYBE"]
 pub const Rboolean_TRUE: Rboolean = 1;
 pub type Rboolean = ::std::os::raw::c_uint;
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct Rcomplex {
-    pub r: f64,
-    pub i: f64,
-}
-#[test]
-fn bindgen_test_layout_Rcomplex() {
-    const UNINIT: ::std::mem::MaybeUninit<Rcomplex> = ::std::mem::MaybeUninit::uninit();
-    let ptr = UNINIT.as_ptr();
-    assert_eq!(
-        ::std::mem::size_of::<Rcomplex>(),
-        16usize,
-        concat!("Size of: ", stringify!(Rcomplex))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<Rcomplex>(),
-        8usize,
-        concat!("Alignment of ", stringify!(Rcomplex))
-    );
-    assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).r) as usize - ptr as usize },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(Rcomplex),
-            "::",
-            stringify!(r)
-        )
-    );
-    assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).i) as usize - ptr as usize },
-        8usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(Rcomplex),
-            "::",
-            stringify!(i)
-        )
-    );
-}
 extern "C" {
     pub fn Rf_error(arg1: *const ::std::os::raw::c_char, ...) -> !;
 }
@@ -7464,5 +7423,47 @@ extern "C" {
 }
 extern "C" {
     pub fn user_norm_rand() -> *mut f64;
+}
+#[doc = "<div rustbindgen replaces=\"Rcomplex\"></div>"]
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct Rcomplex {
+    pub r: f64,
+    pub i: f64,
+}
+#[test]
+fn bindgen_test_layout_Rcomplex() {
+    const UNINIT: ::std::mem::MaybeUninit<Rcomplex> = ::std::mem::MaybeUninit::uninit();
+    let ptr = UNINIT.as_ptr();
+    assert_eq!(
+        ::std::mem::size_of::<Rcomplex>(),
+        16usize,
+        concat!("Size of: ", stringify!(Rcomplex))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Rcomplex>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Rcomplex))
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).r) as usize - ptr as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Rcomplex),
+            "::",
+            stringify!(r)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).i) as usize - ptr as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Rcomplex),
+            "::",
+            stringify!(i)
+        )
+    );
 }
 pub type __builtin_va_list = *mut ::std::os::raw::c_char;

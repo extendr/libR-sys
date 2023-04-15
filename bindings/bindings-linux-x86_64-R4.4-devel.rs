@@ -166,8 +166,8 @@ pub const R_MINOR: &[u8; 4usize] = b"4.0\0";
 pub const R_STATUS: &[u8; 29usize] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5usize] = b"2023\0";
 pub const R_MONTH: &[u8; 3usize] = b"04\0";
-pub const R_DAY: &[u8; 3usize] = b"11\0";
-pub const R_SVN_REVISION: u32 = 84221;
+pub const R_DAY: &[u8; 3usize] = b"13\0";
+pub const R_SVN_REVISION: u32 = 84257;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -633,48 +633,6 @@ pub const Rboolean_FALSE: Rboolean = 0;
 #[doc = ", MAYBE"]
 pub const Rboolean_TRUE: Rboolean = 1;
 pub type Rboolean = ::std::os::raw::c_uint;
-#[doc = "This definition does not work with optimizing compilers which take\nadvantage of strict aliasing rules.  It is not safe to use with Fortran\nCOMPLEX*16 (PR#18430) or in arguments to library calls expecting C99\n_Complex double.  This definition should not be used, but if it were still\nnecessary, one should at least disable LTO."]
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct Rcomplex {
-    pub r: f64,
-    pub i: f64,
-}
-#[test]
-fn bindgen_test_layout_Rcomplex() {
-    const UNINIT: ::std::mem::MaybeUninit<Rcomplex> = ::std::mem::MaybeUninit::uninit();
-    let ptr = UNINIT.as_ptr();
-    assert_eq!(
-        ::std::mem::size_of::<Rcomplex>(),
-        16usize,
-        concat!("Size of: ", stringify!(Rcomplex))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<Rcomplex>(),
-        8usize,
-        concat!("Alignment of ", stringify!(Rcomplex))
-    );
-    assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).r) as usize - ptr as usize },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(Rcomplex),
-            "::",
-            stringify!(r)
-        )
-    );
-    assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).i) as usize - ptr as usize },
-        8usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(Rcomplex),
-            "::",
-            stringify!(i)
-        )
-    );
-}
 extern "C" {
     pub fn Rf_error(arg1: *const ::std::os::raw::c_char, ...) -> !;
 }
@@ -8012,6 +7970,48 @@ extern "C" {
 }
 extern "C" {
     pub fn user_norm_rand() -> *mut f64;
+}
+#[doc = "<div rustbindgen replaces=\"Rcomplex\"></div>"]
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct Rcomplex {
+    pub r: f64,
+    pub i: f64,
+}
+#[test]
+fn bindgen_test_layout_Rcomplex() {
+    const UNINIT: ::std::mem::MaybeUninit<Rcomplex> = ::std::mem::MaybeUninit::uninit();
+    let ptr = UNINIT.as_ptr();
+    assert_eq!(
+        ::std::mem::size_of::<Rcomplex>(),
+        16usize,
+        concat!("Size of: ", stringify!(Rcomplex))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Rcomplex>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Rcomplex))
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).r) as usize - ptr as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Rcomplex),
+            "::",
+            stringify!(r)
+        )
+    );
+    assert_eq!(
+        unsafe { ::std::ptr::addr_of!((*ptr).i) as usize - ptr as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Rcomplex),
+            "::",
+            stringify!(i)
+        )
+    );
 }
 pub type __builtin_va_list = [__va_list_tag; 1usize];
 #[repr(C)]
