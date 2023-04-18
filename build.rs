@@ -546,9 +546,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             .blocklist_item("__mingw_ldbl_type_t");
     }
 
-    // Remove constants defined by C-headers and use available rust deifnitions
+    // Remove constants defined by C-headers as
+    // there are rust equivalents for them.
     let bindgen_builder = bindgen_builder
-        // redefined in `lib.rs`
         .blocklist_item("M_E")
         .blocklist_item("M_LOG2E")
         .blocklist_item("M_LOG10E")
