@@ -124,24 +124,29 @@ jobs:
       - name: Configure Windows
         if: runner.os == 'Windows'
         run: |
-          if ($env:RTOOLS_VERSION -eq '43') {
-            echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-            $mingw_root = "C:\rtools43\x86_64-w64-mingw32.static.posix"
-          } elseif ($env:RTOOLS_VERSION -eq '42') {
-            echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-            $mingw_root = "C:\rtools42\x86_64-w64-mingw32.static.posix"
-          }
+          # Configure linker
+          echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
+          # Create libgcc_eh mock
           New-Item -Path libgcc_mock -Type Directory
           New-Item -Path libgcc_mock\libgcc_eh.a -Type File
           New-Item -Path libgcc_mock\libgcc_s.a -Type File
           $pwd_slash = echo "${PWD}" | % {$_ -replace '\\','/'}
           echo "LIBRARY_PATH=${pwd_slash}/libgcc_mock" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
+          # Add R bin path to PATH
           echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-          echo "$mingw_root\include\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
-          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$libclang_include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          # Add Rtools' GCC to PATH
+          if ($env:RTOOLS_VERSION -eq '43') {
+            $mingw_root = "C:\rtools43\x86_64-w64-mingw32.static.posix"
+          } elseif ($env:RTOOLS_VERSION -eq '42') {
+            $mingw_root = "C:\rtools42\x86_64-w64-mingw32.static.posix"
+          }
+          echo "$mingw_root\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+          # Add include path
+          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$mingw_root\include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           RUST_TARGET: ${{ matrix.config.target }}
           RTOOLS_VERSION: ${{ matrix.config.rtools-version }}
