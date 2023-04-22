@@ -5,6 +5,7 @@
 /* clang-rs version: clang version 15.0.7 */
 /* r version: 4.1.3 */
 
+pub const INT_MIN: i32 = -2147483648;
 pub const M_E: f64 = 2.718281828459045;
 pub const M_LOG2E: f64 = 1.4426950408889634;
 pub const M_LOG10E: f64 = 0.4342944819032518;
@@ -19,6 +20,14 @@ pub const M_2_SQRTPI: f64 = 1.1283791670955126;
 pub const M_SQRT2: f64 = 1.4142135623730951;
 pub const M_SQRT1_2: f64 = 0.7071067811865476;
 pub const SINGLESXP: u32 = 302;
+pub const R_LEN_T_MAX: u32 = 2147483647;
+pub const HAVE_F77_UNDERSCORE: u32 = 1;
+pub const IEEE_754: u32 = 1;
+pub const SUPPORT_UTF8: u32 = 1;
+pub const SUPPORT_MBCS: u32 = 1;
+pub const ENABLE_NLS: u32 = 1;
+pub const SIZEOF_SIZE_T: u32 = 8;
+pub const HAVE_UINTPTR_T: u32 = 1;
 pub const R_XLEN_T_MAX: u64 = 4503599627370496;
 pub const R_SHORT_LEN_MAX: u32 = 2147483647;
 pub const R_INTERNALS_UUID: &[u8; 37usize] = b"2fdf6c18-697a-4ba7-b8ef-11c0d92f1327\0";

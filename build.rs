@@ -398,17 +398,7 @@ fn get_non_api() -> std::collections::HashSet<String> {
 fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     use clang::EntityKind::*;
     use clang::*;
-    use std::io::BufRead;
-
-    // This extract the items from the #include files in twos steps. First, use
-    // clang-rs; it parses the C files and extract the items automagically.
-    // However, this is not enough. Since clang-rs flattens the #define macro,
-    //
-    //   - macro constants (e.g. `#define FOO 1`)
-    //   - macro functions (e.g. `#define FOO(x) (x + 1)`)
-    //
-    // are not caught by this. So, we need to extract them by ourselves using
-    // some regex-fu. We might have some better approach, but this just works.
+    use std::collections::HashSet;
 
     let clang = Clang::new().unwrap();
     let index = Index::new(&clang, false, false);
@@ -417,81 +407,36 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let tu = index
         .parser("wrapper.h")
         .arguments(&[format!("-I{}", r_paths.include.display())])
+        .skip_function_bodies(true)
+        .detailed_preprocessing_record(true)
         .parse()
         .unwrap();
 
     // Extract all the AST entities into `e`, as well as listing up all the
     // include files in a chain into `include_files`.
-    let mut include_files = std::collections::HashSet::new();
-    let e = tu
+    let r_ast_entities: HashSet<_> = tu
         .get_entity()
         .get_children()
         .into_iter()
-        .filter(|e| match e.get_location() {
-            Some(l) => match l.get_file_location().file {
-                Some(f) => {
-                    let p = f.get_path();
-
-                    if p.starts_with(&r_paths.include) || p.to_string_lossy() == "wrapper.h" {
-                        include_files.insert(p);
-                        true
-                    } else {
-                        false
-                    }
-                }
-                None => false,
-            },
-            None => false,
-        })
-        .collect::<Vec<_>>();
-    // Add more include files manually
-    include_files.insert(r_paths.include.join("Rversion.h"));
+        .filter(|x| !x.is_in_system_header())
+        .collect();
 
     // Put all the symbols into allowlist
-    let mut allowlist = std::collections::HashSet::new();
-    for e in e {
-        // skip unnamed items
-        // this occurs on llvm 16.0.0, see
-        // https://github.com/rust-lang/rust-bindgen/issues/2488
-        // and this is how it is decided to check for this
-        if e.is_anonymous() {
-            continue;
-        }
-        match e.get_kind() {
-            EnumDecl | FunctionDecl | StructDecl | TypedefDecl | VarDecl | UnionDecl => {
-                if let Some(n) = e.get_name() {
-                    allowlist.insert(n);
-                }
-            }
-            _ => panic!("Unknown kind: {:?}", e),
-        }
-    }
-
-    // Do some regex-fu against the text content of all the include files. This
-    // handles these 3 cases:
-    //
-    // case 1) numeric literals
-    //
-    //     #define FOO 1
-    //
-    // case 2) string literals
-    //
-    //     #define FOO "foo"
-    //
-    // case 3) inline function
-    //
-    //     #define FOO(x) (x + 1)
-    //
-    let re = regex::Regex::new(r#"^\s*#\s*define\s+([^\s\(]+)(\s*\(|\s+-?[0-9"])"#).unwrap();
-
-    for include_file in include_files {
-        let file = std::fs::File::open(include_file).unwrap();
-        for line in io::BufReader::new(file).lines() {
-            if let Some(cap) = re.captures(line.unwrap().as_str()) {
-                allowlist.insert(cap[1].to_string());
-            }
-        }
-    }
+    let mut allowlist: HashSet<_> = r_ast_entities
+        .into_iter()
+        .filter(|e| {
+            // skip unnamed items
+            // this occurs on llvm 16.0.0, see
+            // https://github.com/rust-lang/rust-bindgen/issues/2488
+            // and this is how it is decided to check for this
+            !e.is_anonymous()
+        })
+        .flat_map(|e| match e.get_kind() {
+            EnumDecl | FunctionDecl | StructDecl | TypedefDecl | VarDecl | UnionDecl
+            | MacroDefinition | MacroExpansion => e.get_name(),
+            _ => None,
+        })
+        .collect();
 
     // This cannot be detected because the #define-ed constants are aliased in another #define
     // c.f. https://github.com/wch/r-source/blob/9f284035b7e503aebe4a804579e9e80a541311bb/src/include/R_ext/GraphicsEngine.h#L93
