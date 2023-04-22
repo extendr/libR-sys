@@ -55,12 +55,11 @@ jobs:
           #   - emit-bindings: If 'true', emit bindings. In principle, we choose
           #     only one stable Rust toolchain per combination of a platform and
           #     an R version (e.g. Windows and R-release) to emit bindings.
-          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '42', emit-bindings: 'true'}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', target: 'x86_64-pc-windows-gnu', rtools-version: '42'}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '43', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', target: 'x86_64-pc-windows-gnu', rtools-version: '43'}
           - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '43', emit-bindings: 'true'}
-          - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   target: 'x86_64-pc-windows-gnu', rtools-version: '42'}
-          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '40', emit-bindings: 'true'}
-          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'i686-pc-windows-gnu',   rtools-version: '40', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   target: 'x86_64-pc-windows-gnu', rtools-version: '43'}
+          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '42', emit-bindings: 'true'}
 
 
           - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
@@ -117,51 +116,37 @@ jobs:
           targets: ${{ matrix.config.target }}
 
       # All configurations for Windows go here
-      # 1. Configure linker if RTools >= 4.2
-      # 2. Determine mingw root
-      # 3. Create libgcc_eh mock for RTools >= 4.2
-      # 4. Add R bin path to PATH
-      # 5. Add mingw root/bin to PATH (required to find linker)
-      # 6. Add include path (required to resolve standard headers like stdio.h)
+      # 1. Configure linker
+      # 2. Create libgcc_eh mock
+      # 3. Add R bin path to PATH
+      # 4. Add Rtools' GCC to PATH (required to find linker)
+      # 5. Add include path (required to resolve standard headers like stdio.h)
       - name: Configure Windows
         if: runner.os == 'Windows'
         run: |
+          # Configure linker
+          echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          # Create libgcc_eh mock
+          New-Item -Path libgcc_mock -Type Directory
+          New-Item -Path libgcc_mock\libgcc_eh.a -Type File
+          New-Item -Path libgcc_mock\libgcc_s.a -Type File
+          $pwd_slash = echo "${PWD}" | % {$_ -replace '\\','/'}
+          echo "LIBRARY_PATH=${pwd_slash}/libgcc_mock" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          # Add R bin path to PATH
+          echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+
+          # Add Rtools' GCC to PATH
           if ($env:RTOOLS_VERSION -eq '43') {
-            echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
             $mingw_root = "C:\rtools43\x86_64-w64-mingw32.static.posix"
-            $libclang_include = "$mingw_root\include"
           } elseif ($env:RTOOLS_VERSION -eq '42') {
-            echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
             $mingw_root = "C:\rtools42\x86_64-w64-mingw32.static.posix"
-            $libclang_include = "$mingw_root\include"
-          } elseif ($env:RTOOLS_VERSION -eq '40') {
-            if ($env:RUST_TARGET -like "x86_64*") {
-              $mingw_root = "C:\rtools40\mingw64"
-              $libclang_include = "$mingw_root\mingw64\x86_64-w64-mingw32\include"
-            } else {
-              $mingw_root = "C:\rtools40\mingw32"
-              $libclang_include = "$mingw_root\mingw32\i686-w64-mingw32\include"
-            }
           }
-
-          if ($env:RTOOLS_VERSION -ne '40') {
-            New-Item -Path libgcc_mock -Type Directory
-            New-Item -Path libgcc_mock\libgcc_eh.a -Type File
-            New-Item -Path libgcc_mock\libgcc_s.a -Type File
-
-            $pwd_slash = echo "${PWD}" | % {$_ -replace '\\','/'}
-            echo "LIBRARY_PATH=${pwd_slash}/libgcc_mock" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          }
-
-          if ($env:RUST_TARGET -like "x86_64*") {
-            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-          }
-          if ($env:RUST_TARGET -like "i686*") {
-            echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\i386"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
-          }
-
           echo "$mingw_root\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$libclang_include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          # Add include path
+          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$mingw_root\include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           RUST_TARGET: ${{ matrix.config.target }}
           RTOOLS_VERSION: ${{ matrix.config.rtools-version }}
@@ -288,7 +273,7 @@ jobs:
 
         # Replace the default bindings
         cd bindings
-        for x in linux-aarch64 linux-x86_64 macos-aarch64 macos-x86_64 windows-x86 windows-x86_64; do
+        for x in linux-aarch64 linux-x86_64 macos-aarch64 macos-x86_64 windows-x86_64; do
           # Choose the newest version except for devel
           ln --force -s "$(ls -1 ./bindings-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-${x}.rs
         done
