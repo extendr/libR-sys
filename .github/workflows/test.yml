@@ -116,28 +116,27 @@ jobs:
           targets: ${{ matrix.config.target }}
 
       # All configurations for Windows go here
-      # 1. Configure linker if RTools >= 4.2
-      # 2. Determine mingw root
-      # 3. Create libgcc_eh mock for RTools >= 4.2
-      # 4. Add R bin path to PATH
-      # 5. Add mingw root/bin to PATH (required to find linker)
-      # 6. Add include path (required to resolve standard headers like stdio.h)
+      # 1. Configure linker
+      # 2. Create libgcc_eh mock
+      # 3. Add R bin path to PATH
+      # 4. Add Rtools' GCC to PATH (required to find linker)
+      # 5. Add include path (required to resolve standard headers like stdio.h)
       - name: Configure Windows
         if: runner.os == 'Windows'
         run: |
           if ($env:RTOOLS_VERSION -eq '43') {
             echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
             $mingw_root = "C:\rtools43\x86_64-w64-mingw32.static.posix"
-            $libclang_include = "$mingw_root\include"
           } elseif ($env:RTOOLS_VERSION -eq '42') {
             echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
             $mingw_root = "C:\rtools42\x86_64-w64-mingw32.static.posix"
-            $libclang_include = "$mingw_root\include"
           }
 
-          echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          echo "LIBRARY_PATH=${pwd_slash}/libgcc_mock" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-          echo "$mingw_root\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          echo "$mingw_root\include\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
           echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$libclang_include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           RUST_TARGET: ${{ matrix.config.target }}
