@@ -117,10 +117,9 @@ jobs:
 
       # All configurations for Windows go here
       # 1. Configure linker
-      # 2. Create libgcc_eh mock
-      # 3. Add R bin path to PATH
-      # 4. Add Rtools' GCC to PATH (required to find linker)
-      # 5. Add include path (required to resolve standard headers like stdio.h)
+      # 2. Add R bin path to PATH
+      # 3. Add Rtools' GCC to PATH (required to find linker)
+      # 4. Add include path (required to resolve standard headers like stdio.h)
       - name: Configure Windows
         if: runner.os == 'Windows'
         run: |
@@ -131,8 +130,6 @@ jobs:
             echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
             $mingw_root = "C:\rtools42\x86_64-w64-mingw32.static.posix"
           }
-
-          echo "LIBRARY_PATH=${pwd_slash}/libgcc_mock" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
           echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
           echo "$mingw_root\include\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
