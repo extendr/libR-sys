@@ -69,6 +69,8 @@ struct RVersionInfo {
 }
 
 impl RVersionInfo {
+    /// Returns the name for precompiled bindings, given R version and targets.
+    /// e.g. `bindings-windows-x86_64-R4.4-devel.rs`
     fn get_r_bindings_filename(&self, target_os: &str, target_arch: &str) -> PathBuf {
         let devel_suffix = if self.devel { "-devel" } else { "" };
         PathBuf::from(format!(
@@ -565,7 +567,7 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
 
     // we try a few different file names, from more specific to less specific
     let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
-    let bindings_file_novers = PathBuf::from(format!("bindings-{}-{}.rs", target_os, target_arch));
+    let bindings_file_novers = PathBuf::from(format!("bindings-{target_os}-{target_arch}.rs"));
 
     let mut from = bindings_path.join(bindings_file_full);
     if !from.exists() {
