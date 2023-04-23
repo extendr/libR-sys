@@ -206,14 +206,20 @@ jobs:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
           RUST_TARGET: ${{ matrix.config.target }}
 
+      # Remove the existing ones to ensure the test will be done agaist the
+      # newly generated ones.
+      - name: Remove the existing bindings
+        run: Remove-Item -Recurse bindings/
+
       # Test the result of previous step
-      - name: Run tests
+      - name: Run tests against the generated bindings
         id: test
         if: matrix.config.skip-tests != 'true'
         run: |
           . ./ci-cargo.ps1
-          ci-cargo test -vv --features use-bindgen $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture --test-threads=1 -ActionName "Running bindgen tests for target: $env:RUST_TARGET"
+          ci-cargo test -vv $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture --test-threads=1 -ActionName "Running bindgen tests for target: $env:RUST_TARGET"
         env:
+          LIBRSYS_BINDINGS_PATH: generated_bindings
           RUST_TARGET: ${{ matrix.config.target }}
 
       - name: Upload generated bindings
@@ -224,15 +230,6 @@ jobs:
         with:
           name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}-${{ matrix.config.target || 'default'}}
           path: generated_bindings
-
-      # Run tests again using different bindings
-      - name: Run tests on precomputed bindings shipped with libR-sys
-        if: matrix.config.skip-tests != 'true'
-        run: |
-          . ./ci-cargo.ps1
-          ci-cargo test -vv $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture --test-threads=1 -ActionName "Running tests for target: $env:RUST_TARGET"
-        env:
-          RUST_TARGET: ${{ matrix.config.target }}
 
   # Gather the generated bindings and push them to generated_bindings branch.
   # If we need to update the bindings, create a pull request from that branch.
