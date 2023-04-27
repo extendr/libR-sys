@@ -454,6 +454,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .allowlist_function(&allowlist_pattern)
         .allowlist_var(&allowlist_pattern)
         .allowlist_type(&allowlist_pattern)
+        .translate_enum_integer_types(true)
         // The input header we would like to generate
         // bindings for.
         .header("wrapper.h")
@@ -491,6 +492,23 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             .blocklist_item("max_align_t")
             .blocklist_item("__mingw_ldbl_type_t");
     }
+
+    // Remove constants defined by C-headers as
+    // there are rust equivalents for them.
+    let bindgen_builder = bindgen_builder
+        .blocklist_item("M_E")
+        .blocklist_item("M_LOG2E")
+        .blocklist_item("M_LOG10E")
+        .blocklist_item("M_LN2")
+        .blocklist_item("M_LN10")
+        .blocklist_item("M_PI")
+        .blocklist_item("M_PI_2")
+        .blocklist_item("M_PI_4")
+        .blocklist_item("M_1_PI")
+        .blocklist_item("M_2_PI")
+        .blocklist_item("M_2_SQRTPI")
+        .blocklist_item("M_SQRT2")
+        .blocklist_item("M_SQRT1_2");
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
