@@ -85,19 +85,6 @@ where
         }
     }
 }
-pub const M_E: f64 = 2.718281828459045;
-pub const M_LOG2E: f64 = 1.4426950408889634;
-pub const M_LOG10E: f64 = 0.4342944819032518;
-pub const M_LN2: f64 = 0.6931471805599453;
-pub const M_LN10: f64 = 2.302585092994046;
-pub const M_PI: f64 = 3.141592653589793;
-pub const M_PI_2: f64 = 1.5707963267948966;
-pub const M_PI_4: f64 = 0.7853981633974483;
-pub const M_1_PI: f64 = 0.3183098861837907;
-pub const M_2_PI: f64 = 0.6366197723675814;
-pub const M_2_SQRTPI: f64 = 1.1283791670955126;
-pub const M_SQRT2: f64 = 1.4142135623730951;
-pub const M_SQRT1_2: f64 = 0.7071067811865476;
 pub const SINGLESXP: u32 = 302;
 pub const HAVE_F77_UNDERSCORE: u32 = 1;
 pub const IEEE_754: u32 = 1;
@@ -638,7 +625,7 @@ extern "C" {
 pub const Rboolean_FALSE: Rboolean = 0;
 #[doc = ", MAYBE"]
 pub const Rboolean_TRUE: Rboolean = 1;
-pub type Rboolean = ::std::os::raw::c_uint;
+pub type Rboolean = u32;
 extern "C" {
     pub fn Rf_error(arg1: *const ::std::os::raw::c_char, ...) -> !;
 }
@@ -1032,7 +1019,7 @@ pub const NativeSymbolType_R_C_SYM: NativeSymbolType = 1;
 pub const NativeSymbolType_R_CALL_SYM: NativeSymbolType = 2;
 pub const NativeSymbolType_R_FORTRAN_SYM: NativeSymbolType = 3;
 pub const NativeSymbolType_R_EXTERNAL_SYM: NativeSymbolType = 4;
-pub type NativeSymbolType = ::std::os::raw::c_uint;
+pub type NativeSymbolType = u32;
 extern "C" {
     pub fn R_FindSymbol(
         arg1: *const ::std::os::raw::c_char,
@@ -1192,9 +1179,6 @@ extern "C" {
 }
 extern "C" {
     pub fn STRING_PTR_RO(x: SEXP) -> *const SEXP;
-}
-extern "C" {
-    pub fn VECTOR_PTR(x: SEXP) -> !;
 }
 extern "C" {
     pub fn INTEGER_GET_REGION(
@@ -1852,7 +1836,7 @@ pub const nchar_type_Bytes: nchar_type = 0;
 pub const nchar_type_Chars: nchar_type = 1;
 pub const nchar_type_Width: nchar_type = 2;
 #[doc = "../main/character.c :"]
-pub type nchar_type = ::std::os::raw::c_uint;
+pub type nchar_type = u32;
 extern "C" {
     pub fn R_nchar(
         string: SEXP,
@@ -1935,7 +1919,7 @@ pub const cetype_t_CE_BYTES: cetype_t = 3;
 pub const cetype_t_CE_SYMBOL: cetype_t = 5;
 pub const cetype_t_CE_ANY: cetype_t = 99;
 #[doc = "cetype_t is an identifier reseved by POSIX, but it is\nwell established as public.  Could remap by a #define though"]
-pub type cetype_t = ::std::os::raw::c_uint;
+pub type cetype_t = u32;
 extern "C" {
     pub fn Rf_getCharCE(arg1: SEXP) -> cetype_t;
 }
@@ -2182,7 +2166,7 @@ pub const R_pstream_format_t_R_pstream_ascii_format: R_pstream_format_t = 1;
 pub const R_pstream_format_t_R_pstream_binary_format: R_pstream_format_t = 2;
 pub const R_pstream_format_t_R_pstream_xdr_format: R_pstream_format_t = 3;
 pub const R_pstream_format_t_R_pstream_asciihex_format: R_pstream_format_t = 4;
-pub type R_pstream_format_t = ::std::os::raw::c_uint;
+pub type R_pstream_format_t = u32;
 pub type R_outpstream_t = *mut R_outpstream_st;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -3039,7 +3023,7 @@ pub const SA_TYPE_SA_SAVE: SA_TYPE = 4;
 pub const SA_TYPE_SA_SAVEASK: SA_TYPE = 5;
 pub const SA_TYPE_SA_SUICIDE: SA_TYPE = 6;
 #[doc = "Startup Actions"]
-pub type SA_TYPE = ::std::os::raw::c_uint;
+pub type SA_TYPE = u32;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct structRstart {
@@ -4070,7 +4054,7 @@ pub const ParseStatus_PARSE_INCOMPLETE: ParseStatus = 2;
 pub const ParseStatus_PARSE_ERROR: ParseStatus = 3;
 pub const ParseStatus_PARSE_EOF: ParseStatus = 4;
 #[doc = "PARSE_NULL will not be returned by R_ParseVector"]
-pub type ParseStatus = ::std::os::raw::c_uint;
+pub type ParseStatus = u32;
 extern "C" {
     pub fn R_ParseVector(
         arg1: SEXP,
@@ -4443,7 +4427,7 @@ pub const GEUnit_GE_NDC: GEUnit = 1;
 pub const GEUnit_GE_INCHES: GEUnit = 2;
 pub const GEUnit_GE_CM: GEUnit = 3;
 #[doc = "The graphics engine will only accept locations and dimensions\n in native device coordinates, but it provides the following functions\n for converting between a couple of simple alternative coordinate\n systems and device coordinates:\n    DEVICE = native units of the device\n    NDC = Normalised device coordinates\n    INCHES = inches (!)\n    CM = centimetres (!!)"]
-pub type GEUnit = ::std::os::raw::c_uint;
+pub type GEUnit = u32;
 #[doc = "In response to this event, the registered graphics system\n should allocate and initialise the systemSpecific structure\n\n Should return R_NilValue on failure so that engine\n can tidy up memory allocation"]
 pub const GEevent_GE_InitState: GEevent = 0;
 #[doc = "This event gives the registered system a chance to undo\n anything done in the initialisation."]
@@ -4462,16 +4446,16 @@ pub const GEevent_GE_RestoreSnapshotState: GEevent = 5;
 pub const GEevent_GE_CheckPlot: GEevent = 7;
 #[doc = "The device wants to scale the current pointsize\n (for scaling an image)\n This is not a nice general solution, but a quick fix for\n the Windows device."]
 pub const GEevent_GE_ScalePS: GEevent = 8;
-pub type GEevent = ::std::os::raw::c_uint;
+pub type GEevent = u32;
 pub const R_GE_lineend_GE_ROUND_CAP: R_GE_lineend = 1;
 pub const R_GE_lineend_GE_BUTT_CAP: R_GE_lineend = 2;
 pub const R_GE_lineend_GE_SQUARE_CAP: R_GE_lineend = 3;
 #[doc = "Some line end/join constants"]
-pub type R_GE_lineend = ::std::os::raw::c_uint;
+pub type R_GE_lineend = u32;
 pub const R_GE_linejoin_GE_ROUND_JOIN: R_GE_linejoin = 1;
 pub const R_GE_linejoin_GE_MITRE_JOIN: R_GE_linejoin = 2;
 pub const R_GE_linejoin_GE_BEVEL_JOIN: R_GE_linejoin = 3;
-pub type R_GE_linejoin = ::std::os::raw::c_uint;
+pub type R_GE_linejoin = u32;
 #[doc = "A structure containing graphical parameters\n\n This is how graphical parameters are passed from graphics systems\n to the graphics engine AND from the graphics engine to graphics\n devices.\n\n Devices are not *required* to honour graphical parameters\n (e.g., alpha transparency is going to be tough for some)"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -5801,12 +5785,12 @@ pub const R_KeyName_knHOME: R_KeyName = 19;
 pub const R_KeyName_knINS: R_KeyName = 20;
 pub const R_KeyName_knDEL: R_KeyName = 21;
 #[doc = "These give the indices of some known keys"]
-pub type R_KeyName = ::std::os::raw::c_int;
+pub type R_KeyName = i32;
 pub const R_MouseEvent_meMouseDown: R_MouseEvent = 0;
 pub const R_MouseEvent_meMouseUp: R_MouseEvent = 1;
 pub const R_MouseEvent_meMouseMove: R_MouseEvent = 2;
 #[doc = "These are the three possible mouse events"]
-pub type R_MouseEvent = ::std::os::raw::c_uint;
+pub type R_MouseEvent = u32;
 extern "C" {
     pub fn Rf_doMouseEvent(
         dd: pDevDesc,
@@ -7737,7 +7721,7 @@ pub const RNGtype_KNUTH_TAOCP: RNGtype = 4;
 pub const RNGtype_USER_UNIF: RNGtype = 5;
 pub const RNGtype_KNUTH_TAOCP2: RNGtype = 6;
 pub const RNGtype_LECUYER_CMRG: RNGtype = 7;
-pub type RNGtype = ::std::os::raw::c_uint;
+pub type RNGtype = u32;
 pub const N01type_BUGGY_KINDERMAN_RAMAGE: N01type = 0;
 pub const N01type_AHRENS_DIETER: N01type = 1;
 pub const N01type_BOX_MULLER: N01type = 2;
@@ -7745,11 +7729,11 @@ pub const N01type_USER_NORM: N01type = 3;
 pub const N01type_INVERSION: N01type = 4;
 pub const N01type_KINDERMAN_RAMAGE: N01type = 5;
 #[doc = "Different kinds of \"N(0,1)\" generators :"]
-pub type N01type = ::std::os::raw::c_uint;
+pub type N01type = u32;
 pub const Sampletype_ROUNDING: Sampletype = 0;
 pub const Sampletype_REJECTION: Sampletype = 1;
 #[doc = "Different ways to generate discrete uniform samples"]
-pub type Sampletype = ::std::os::raw::c_uint;
+pub type Sampletype = u32;
 extern "C" {
     pub fn R_sample_kind() -> Sampletype;
 }
