@@ -512,6 +512,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .blocklist_item("M_SQRT2")
         .blocklist_item("M_SQRT1_2");
 
+    // `VECTOR_PTR` is deprecated, use `DATAPTR` and friends instead
+    let bindgen_builder = bindgen_builder.blocklist_item("VECTOR_PTR");
+
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
         .raw_line(format!(
