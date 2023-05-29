@@ -2,7 +2,7 @@
 
 ## libR-sys 0.5.0
 
-- Update the default precomuted bindings to R 4.3.0.
+- Update the default precomputed bindings to R 4.3.0.
 - Remove deprecated API `VECTOR_PTR` from bindings [[#165]](https://github.com/extendr/libR-sys/pull/165)
 - Use Rust constants (i.e., `::std::os::raw::c_uint` is now replaced with `u32`) [[#160]](https://github.com/extendr/libR-sys/pull/160)
 - Remove mathematical constants (e.g., `M_PI`), which are also provided by Rust's `std` (e.g., `std::f64::consts::PI`) [[#160]](https://github.com/extendr/libR-sys/pull/160)
