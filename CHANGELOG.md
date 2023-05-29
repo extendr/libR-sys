@@ -3,12 +3,12 @@
 ## libR-sys 0.5.0
 
 - Update the default precomputed bindings to R 4.3.0.
-- Remove deprecated API `VECTOR_PTR` from bindings [[#165]](https://github.com/extendr/libR-sys/pull/165)
+- Remove deprecated API `VECTOR_PTR` from bindings. [[#165]](https://github.com/extendr/libR-sys/pull/165)
 - Use Rust types such as `u32` and `i16` instead of C types such as `c_uint` and `c_short` for `enum`s. [[#160]](https://github.com/extendr/libR-sys/pull/160)
-- Remove mathematical constants (e.g., `M_PI`), which are also provided by Rust's `std` (e.g., `std::f64::consts::PI`) [[#160]](https://github.com/extendr/libR-sys/pull/160)
-- Exclude "non-API" calls [[#135]](https://github.com/extendr/libR-sys/pull/135)
-- Refactor version logging in generated bindings [[#159]](https://github.com/extendr/libR-sys/pull/159)
-- Redefine R-devel's `Rcomplex` [[#156]](https://github.com/extendr/libR-sys/pull/156)
+- Remove mathematical constants (e.g., `M_PI`), which are also provided by Rust's `std` (e.g., `std::f64::consts::PI`). [[#160]](https://github.com/extendr/libR-sys/pull/160)
+- Exclude "non-API" calls. [[#135]](https://github.com/extendr/libR-sys/pull/135)
+- Refactor version logging in generated bindings. [[#159]](https://github.com/extendr/libR-sys/pull/159)
+- Redefine R-devel's `Rcomplex`. [[#156]](https://github.com/extendr/libR-sys/pull/156)
 
 ## libR-sys 0.4.0
 
