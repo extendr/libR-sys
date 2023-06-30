@@ -485,16 +485,6 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             bindgen_builder.clang_arg(format!("-I{}", PathBuf::from(alt_include).display()));
     }
 
-    // Blocklist some types on i686
-    // https://github.com/rust-lang/rust-bindgen/issues/1823
-    // https://github.com/rust-lang/rust/issues/54341
-    // https://github.com/extendr/libR-sys/issues/39
-    if target_os == "windows" && target_arch == "x86" {
-        bindgen_builder = bindgen_builder
-            .blocklist_item("max_align_t")
-            .blocklist_item("__mingw_ldbl_type_t");
-    }
-
     // Remove constants defined by C-headers as
     // there are rust equivalents for them.
     let bindgen_builder = bindgen_builder
