@@ -26,7 +26,7 @@ Two components are required to build the library:
 1. [`R`](https://cran.r-project.org/): It needs to be installed and available in the search path.
 2. [`Rust`](https://www.rust-lang.org/learn/get-started): It is recommended to install `Rust` using `rustup`; search path should include `Rust` binaries.
 
-**Note: On Windows, R < 4.2 requires a more complex setup in order to support the 32-bit version. Please refer to [README-old-windows.md](./README-old-windows.md) for more details.**
+**Note: On Windows, only R >= 4.2 is supported**
 
 Once `R` and `Rust` are configured, the library can be easily built:
 
@@ -50,7 +50,7 @@ cargo test --target x86_64-pc-windows-gnu
 
 ## Building bindings from source (advanced)
 
-**Note: On Windows, R < 4.2 requires a more complex setup in order to support the 32-bit version. Please refer to [README-old-windows.md](./README-old-windows.md) for more details.**
+**Note: On Windows, only R >= 4.2 is supported**
 
 The bindings can be generated using [`bindgen`](https://github.com/rust-lang/rust-bindgen), special `Rust` crate.
 `bindgen` usage is enabled via `use-bindgen` feature flag.
