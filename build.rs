@@ -194,13 +194,23 @@ fn get_r_home() -> io::Result<PathBuf> {
 // Get the path to the R library
 fn get_r_library(r_home: &Path) -> PathBuf {
     let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-    match (cfg!(windows), pkg_target_arch.as_str()) {
+    let r_library = match (cfg!(windows), pkg_target_arch.as_str()) {
         // For Windows
         (true, "x86_64") => Path::new(r_home).join("bin").join("x64"),
         (true, "x86") => Path::new(r_home).join("bin").join("i386"),
         (true, _) => panic!("Unknown architecture"),
         // For Unix-alike
         (false, _) => Path::new(r_home).join("lib"),
+    };
+
+    if let Ok(r_library_canonicalized) = r_library.canonicalize() {
+        r_library_canonicalized
+    } else {
+        // TODO: r_library might not exist in some types of installation that
+        // doesn't provide libR, R's shared library; in such a situation, just
+        // return this non-existent path for now. Probably the `rustc-link-search`
+        // setting itself is not used at all, but we are not sure at the moment.
+        r_library
     }
 }
 
@@ -622,10 +632,7 @@ fn main() {
     println!("cargo:r_home={}", r_paths.r_home.display()); // Becomes DEP_R_R_HOME for clients
 
     // make sure cargo links properly against library
-    println!(
-        "cargo:rustc-link-search={}",
-        r_paths.library.canonicalize().unwrap().display()
-    );
+    println!("cargo:rustc-link-search={}", r_paths.library.display());
     println!("cargo:rustc-link-lib=dylib=R");
 
     println!("cargo:rerun-if-changed=build.rs");
