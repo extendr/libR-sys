@@ -621,11 +621,13 @@ fn main() {
     println!("cargo:rustc-env=R_HOME={}", r_paths.r_home.display());
     println!("cargo:r_home={}", r_paths.r_home.display()); // Becomes DEP_R_R_HOME for clients
 
-    // make sure cargo links properly against library
-    println!(
-        "cargo:rustc-link-search={}",
-        r_paths.library.canonicalize().unwrap().display()
-    );
+    // TODO: r_library might not exist in some types of installation that
+    // doesn't provide libR, R's shared library; in such a situation, just skip
+    // setting `rustc-link-search`. Probably this setting itself is not used at
+    // all except when compiled for testing, but we are not sure at the moment.
+    if let Ok(r_library) = r_paths.library.canonicalize() {
+        println!("cargo:rustc-link-search={}", r_library.display());
+    }
     println!("cargo:rustc-link-lib=dylib=R");
 
     println!("cargo:rerun-if-changed=build.rs");

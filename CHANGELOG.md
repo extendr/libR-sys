@@ -3,6 +3,7 @@
 ## libR-sys (unreleased)
 
 - Drop support for 32-bit Windows, which virtually means dropping support for R < 4.2.
+- Fix failures with R installation that doesn't provide shared libraries.
 
 ## libR-sys 0.5.0
 
