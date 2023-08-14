@@ -522,6 +522,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .generate_comments(true)
         .parse_callbacks(Box::new(TrimCommentsCallbacks))
         .clang_arg("-fparse-all-comments")
+        .enable_function_attribute_detection()
         .generate()
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
