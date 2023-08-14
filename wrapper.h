@@ -44,7 +44,7 @@ typedef ptrdiff_t R_xlen_t_rust;
 // R 4.3 redefined `Rcomplex` to a union for compatibility with Fortran.
 // But the old definition is compatible both the union version
 // and the struct version.
-// See: https://github.com/extendr/extendr/issues/524
+// See: <https://github.com/extendr/extendr/issues/524>
 /// <div rustbindgen replaces="Rcomplex"></div>
 typedef struct
 {
