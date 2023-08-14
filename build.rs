@@ -522,12 +522,11 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .generate_comments(true)
         .parse_callbacks(Box::new(TrimCommentsCallbacks))
         .clang_arg("-fparse-all-comments")
+        .emit_diagnostics()
         .enable_function_attribute_detection()
         .generate()
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
-
-    bindings.emit_warnings();
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
