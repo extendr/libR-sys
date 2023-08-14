@@ -19,7 +19,7 @@ repository = "https://github.com/extendr/libR-sys"
 [dependencies]
 
 [build-dependencies]
-bindgen = { version = "0.64", optional = true }
+bindgen = { version = "0.66", optional = true, features = ["experimental"] }
 clang = { version = "2", optional = true, features = ["runtime", "clang_3_7"] }
 
 [features]
