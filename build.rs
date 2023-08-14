@@ -191,7 +191,7 @@ fn get_r_home() -> io::Result<PathBuf> {
     }
 }
 
-// Get the path to the R library
+/// Returns the path to the R library.
 fn get_r_library(r_home: &Path) -> PathBuf {
     let pkg_target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
     match (cfg!(windows), pkg_target_arch.as_str()) {
