@@ -373,10 +373,11 @@ fn get_non_api() -> std::collections::HashSet<String> {
     // Several non-APIs are required for extendr-engine, so we explicitly allow
     // these here. If extendr-engine (or other crate) requires more non-APIs,
     // add it here with caution.
-    const REQUIRED_NON_API: [&str; 6] = [
+    const REQUIRED_NON_API: [&str; 7] = [
         "R_CStackLimit",
         "R_CleanTempDir",
         "R_RunExitFinalizers",
+        "Rf_initEmbeddedR",
         "Rf_endEmbeddedR",
         "Rf_initialize_R",
         "setup_Rmainloop",
@@ -604,8 +605,14 @@ struct TrimCommentsCallbacks;
 #[cfg(feature = "use-bindgen")]
 impl bindgen::callbacks::ParseCallbacks for TrimCommentsCallbacks {
     fn process_comment(&self, comment: &str) -> Option<String> {
-        let trim_comment = comment.trim();
-        Some(trim_comment.to_string())
+        // trim comments
+        let comment = comment.trim();
+
+        // replace bare brackets
+        let comment = comment.replace("[", r"`[");
+        let comment = comment.replace("]", r"]`");
+
+        Some(comment.into())
     }
 }
 
