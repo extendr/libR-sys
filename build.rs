@@ -604,8 +604,8 @@ impl bindgen::callbacks::ParseCallbacks for TrimCommentsCallbacks {
         let comment = comment.trim();
 
         // replace bare brackets in comments
-        let comment = comment.replace("[", r"`[");
-        let comment = comment.replace("]", r"]`");
+        let comment = comment.replace("[", r"\[");
+        let comment = comment.replace("]", r"\]");
 
         Some(comment.into())
     }
