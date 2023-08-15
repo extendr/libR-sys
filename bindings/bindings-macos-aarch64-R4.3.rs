@@ -1005,7 +1005,7 @@ extern "C" {
 pub type Rbyte = ::std::os::raw::c_uchar;
 #[doc = "type for length of (standard, not long) vectors etc"]
 pub type R_len_t = ::std::os::raw::c_int;
-#[doc = "NOT YET using enum:\n  1)\tThe internal SEXPREC struct has 'SEXPTYPE type : 5'\n\t(making FUNSXP and CLOSXP equivalent in there),\n\tgiving (-Wall only ?) warnings all over the place\n 2)\tMany switch(type) { case ... } statements need a final `default:'\n\tadded in order to avoid warnings like `[e.g. l.170 of ../main/util.c]`\n\t  \"enumeration value `FUNSXP' not handled in switch\""]
+#[doc = "NOT YET using enum:\n  1)\tThe internal SEXPREC struct has 'SEXPTYPE type : 5'\n\t(making FUNSXP and CLOSXP equivalent in there),\n\tgiving (-Wall only ?) warnings all over the place\n 2)\tMany switch(type) { case ... } statements need a final `default:'\n\tadded in order to avoid warnings like \\[e.g. l.170 of ../main/util.c\\]\n\t  \"enumeration value `FUNSXP' not handled in switch\""]
 pub type SEXPTYPE = ::std::os::raw::c_uint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -1405,11 +1405,11 @@ extern "C" {
     pub static mut R_BraceSymbol: SEXP;
 }
 extern "C" {
-    #[doc = "\"`[`[\""]
+    #[doc = "\"\\[\\[\""]
     pub static mut R_Bracket2Symbol: SEXP;
 }
 extern "C" {
-    #[doc = "\"`[\""]
+    #[doc = "\"\\[\""]
     pub static mut R_BracketSymbol: SEXP;
 }
 extern "C" {
@@ -4663,9 +4663,9 @@ pub struct _DevDesc {
     pub yCharOffset: f64,
     #[doc = "1/2 interline space as frac of line height"]
     pub yLineBias: f64,
-    #[doc = "Inches per raster; `[0]`=x, `[1]`=y"]
+    #[doc = "Inches per raster; \\[0\\]=x, \\[1\\]=y"]
     pub ipr: [f64; 2usize],
-    #[doc = "Character size in rasters; `[0]`=x, `[1]`=y"]
+    #[doc = "Character size in rasters; \\[0\\]=x, \\[1\\]=y"]
     pub cra: [f64; 2usize],
     #[doc = "(initial) Device Gamma Correction"]
     pub gamma: f64,
@@ -4673,7 +4673,7 @@ pub struct _DevDesc {
     pub canClip: Rboolean,
     #[doc = "can the gamma factor be modified?"]
     pub canChangeGamma: Rboolean,
-    #[doc = "Can do at least some horiz adjust of text\n0 = none, 1 = {0,0.5,1}, 2 = `[0,1]`"]
+    #[doc = "Can do at least some horiz adjust of text\n0 = none, 1 = {0,0.5,1}, 2 = \\[0,1\\]"]
     pub canHAdj: ::std::os::raw::c_int,
     #[doc = "Device initial settings\n/\n/* These are things that the device must set up when it is created.\n The graphics system can modify them and track current values,"]
     pub startps: f64,
@@ -6133,7 +6133,7 @@ extern "C" {
     pub fn Rf_col2name(col: rcolor) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
-    #[doc = "Convert either a name or a #RRGGBB`[AA]` string to internal.\nBecause people were using it, it also converts \"1\", \"2\" ...\nto a colour in the palette, and \"0\" to transparent white."]
+    #[doc = "Convert either a name or a #RRGGBB\\[AA\\] string to internal.\nBecause people were using it, it also converts \"1\", \"2\" ...\nto a colour in the palette, and \"0\" to transparent white."]
     pub fn R_GE_str2col(s: *const ::std::os::raw::c_char) -> rcolor;
 }
 extern "C" {
@@ -7601,7 +7601,7 @@ pub type integr_fn = ::std::option::Option<
     unsafe extern "C" fn(x: *mut f64, n: ::std::os::raw::c_int, ex: *mut ::std::os::raw::c_void),
 >;
 extern "C" {
-    #[doc = "vectorizing function   f(x`[1:n]`, ...) -> x`[]`  {overwriting x`[]`}."]
+    #[doc = "vectorizing function   f(x\\[1:n\\], ...) -> x\\[\\]  {overwriting x\\[\\]}."]
     pub fn Rdqags(
         f: integr_fn,
         ex: *mut ::std::os::raw::c_void,
