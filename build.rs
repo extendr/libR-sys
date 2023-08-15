@@ -600,8 +600,14 @@ struct TrimCommentsCallbacks;
 #[cfg(feature = "use-bindgen")]
 impl bindgen::callbacks::ParseCallbacks for TrimCommentsCallbacks {
     fn process_comment(&self, comment: &str) -> Option<String> {
-        let trim_comment = comment.trim();
-        Some(trim_comment.to_string())
+        // trim comments
+        let comment = comment.trim();
+
+        // replace bare brackets in comments
+        let comment = comment.replace("[", r"`[");
+        let comment = comment.replace("]", r"]`");
+
+        Some(comment.into())
     }
 }
 
