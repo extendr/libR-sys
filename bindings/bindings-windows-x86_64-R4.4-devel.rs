@@ -1691,7 +1691,7 @@ extern "C" {
     pub fn R_MakeUnwindCont() -> SEXP;
 }
 extern "C" {
-    pub fn R_ContinueUnwind(cont: SEXP) -> !;
+    pub fn R_ContinueUnwind(cont: SEXP);
 }
 extern "C" {
     pub fn R_UnwindProtect(
@@ -1755,7 +1755,7 @@ extern "C" {
 }
 extern "C" {
     #[doc = "../main/errors.c : */\n/* needed for R_load/savehistory handling in front ends"]
-    pub fn Rf_errorcall(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...) -> !;
+    pub fn Rf_errorcall(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...);
 }
 extern "C" {
     pub fn Rf_warningcall(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...);
