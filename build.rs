@@ -454,6 +454,8 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let mut bindgen_builder = bindgen::Builder::default()
+        .clang_arg("-std=c2x")
+        .enable_function_attribute_detection()
         .emit_diagnostics()
         .allowlist_function(&allowlist_pattern)
         .allowlist_var(&allowlist_pattern)
