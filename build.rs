@@ -524,8 +524,6 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
 
-    bindings.emit_warnings();
-
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
 
