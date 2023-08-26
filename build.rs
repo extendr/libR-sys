@@ -1,17 +1,12 @@
 use std::{
     env,
-    ffi::{OsStr, OsString},
-    fs, io,
+    ffi::OsStr,
+    fs,
+    io::{self, Write},
     io::{Error, ErrorKind},
     path::{Path, PathBuf},
     process::{exit, Command},
 };
-
-#[cfg(target_family = "unix")]
-use std::os::unix::ffi::OsStrExt;
-
-#[cfg(target_family = "windows")]
-use std::os::windows::ffi::OsStringExt;
 
 //
 // Environmental variables
@@ -91,86 +86,18 @@ enum EnvVarError {
     InvalidROutput(&'static str),
 }
 
-// frustratingly, something like the following does not exist in an
-// OS-independent way in Rust
-#[cfg(target_family = "unix")]
-fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
-    let os_str = OsStr::from_bytes(bytes);
-    os_str.to_os_string()
-}
-
-#[link(name = "kernel32")]
-#[cfg(target_family = "windows")]
-extern "system" {
-    #[link_name = "GetConsoleCP"]
-    fn get_console_code_page() -> u32;
-    #[link_name = "MultiByteToWideChar"]
-    fn multi_byte_to_wide_char(
-        CodePage: u32,
-        dwFlags: u32,
-        lpMultiByteStr: *const u8,
-        cbMultiByte: i32,
-        lpWideCharStr: *mut u16,
-        cchWideChar: i32,
-    ) -> i32;
-}
-
-// convert bytes to wide-encoded characters on Windows
-// from: https://stackoverflow.com/a/40456495/4975218
-#[cfg(target_family = "windows")]
-fn wide_from_console_string(bytes: &[u8]) -> Vec<u16> {
-    assert!(bytes.len() < std::i32::MAX as usize);
-    let mut wide;
-    let mut len;
-    unsafe {
-        let cp = get_console_code_page();
-        len = multi_byte_to_wide_char(
-            cp,
-            0,
-            bytes.as_ptr() as *const u8,
-            bytes.len() as i32,
-            std::ptr::null_mut(),
-            0,
-        );
-        wide = Vec::with_capacity(len as usize);
-        len = multi_byte_to_wide_char(
-            cp,
-            0,
-            bytes.as_ptr() as *const u8,
-            bytes.len() as i32,
-            wide.as_mut_ptr(),
-            len,
-        );
-        wide.set_len(len as usize);
-    }
-    wide
-}
-
-#[cfg(target_family = "windows")]
-fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
-    // first, use Windows API to convert to wide encoded
-    let wide = wide_from_console_string(bytes);
-    // then, use `std::os::windows::ffi::OsStringExt::from_wide()`
-    OsString::from_wide(&wide)
-}
-
 // Execute an R script and return the captured output
-fn r_command<S: AsRef<OsStr>>(r_binary: S, script: &str) -> io::Result<OsString> {
-    let out = Command::new(r_binary)
-        .args(&["-s", "-e", script])
-        .output()?;
+fn r_command<S: AsRef<OsStr>>(r_binary: S, script: &str) -> io::Result<String> {
+    let out = Command::new(r_binary).args(["-s", "-e", script]).output()?;
 
     // if there are any errors we print them out, helps with debugging
-    if !out.stderr.is_empty() {
-        println!(
-            "> {}",
-            byte_array_to_os_string(&out.stderr)
-                .as_os_str()
-                .to_string_lossy()
-        );
+    if !out.status.success() {
+        let stderr = io::stderr();
+        let mut handle = stderr.lock();
+        handle.write_all(b"> ")?;
+        handle.write_all(&out.stderr)?;
     }
-
-    Ok(byte_array_to_os_string(&out.stdout))
+    String::from_utf8(out.stdout).map_err(|x| io::Error::new(ErrorKind::Other, x))
 }
 
 // Get the path to the R home either from an envvar or by executing the actual R binary on PATH.
@@ -334,8 +261,6 @@ fn get_r_version_from_r(r_paths: &InstallationPaths) -> Result<RVersionInfo, Env
         r#"cat(sprintf('%s.%s%s\n', R.version$major, R.version$minor, if(isTRUE(grepl('devel', R.version$status, fixed = TRUE))) '-devel' else ''))"#,
     )
         .map_err(EnvVarError::RInvocationError)?;
-
-    let out = out.as_os_str().to_string_lossy().into_owned();
     let mut lines = out.lines();
 
     // Process the first line of the output
