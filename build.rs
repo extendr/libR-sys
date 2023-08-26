@@ -484,6 +484,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 #[cfg(not(feature = "use-bindgen"))]
 /// Retrieve bindings from cache, if available. Errors out otherwise.
 fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
+    use std::ffi::OsString;
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
     let bindings_path = PathBuf::from(
