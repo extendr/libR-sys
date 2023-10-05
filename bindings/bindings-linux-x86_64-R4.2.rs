@@ -146,10 +146,8 @@ pub const HAVE_EXPM1: u32 = 1;
 pub const HAVE_HYPOT: u32 = 1;
 pub const HAVE_LOG1P: u32 = 1;
 pub const HAVE_WORKING_LOG1P: u32 = 1;
-pub const M_2PI: f64 = 6.283185307179586;
 pub const M_SQRT_3: f64 = 1.7320508075688772;
 pub const M_SQRT_32: f64 = 5.656854249492381;
-pub const M_LOG10_2: f64 = 0.3010299956639812;
 pub const M_SQRT_PI: f64 = 1.772453850905516;
 pub const M_1_SQRT_2PI: f64 = 0.3989422804014327;
 pub const M_SQRT_2dPI: f64 = 0.7978845608028654;
@@ -591,273 +589,11 @@ fn bindgen_test_layout__IO_FILE() {
         )
     );
 }
-extern "C" {
-    #[doc = "IEEE NaN"]
-    pub static mut R_NaN: f64;
-}
-extern "C" {
-    #[doc = "IEEE Inf"]
-    pub static mut R_PosInf: f64;
-}
-extern "C" {
-    #[doc = "IEEE -Inf"]
-    pub static mut R_NegInf: f64;
-}
-extern "C" {
-    #[doc = "NA_REAL: IEEE"]
-    pub static mut R_NaReal: f64;
-}
-extern "C" {
-    #[doc = "NA_INTEGER:= INT_MIN currently"]
-    pub static mut R_NaInt: ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "NA_STRING is a SEXP, so defined in Rinternals.h"]
-    pub fn R_IsNA(arg1: f64) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_IsNaN(arg1: f64) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_finite(arg1: f64) -> ::std::os::raw::c_int;
-}
 #[doc = ", MAYBE"]
 pub const Rboolean_FALSE: Rboolean = 0;
 #[doc = ", MAYBE"]
 pub const Rboolean_TRUE: Rboolean = 1;
 pub type Rboolean = u32;
-extern "C" {
-    pub fn Rf_error(arg1: *const ::std::os::raw::c_char, ...) -> !;
-}
-extern "C" {
-    pub fn UNIMPLEMENTED(arg1: *const ::std::os::raw::c_char) -> !;
-}
-extern "C" {
-    pub fn WrongArgCount(arg1: *const ::std::os::raw::c_char) -> !;
-}
-extern "C" {
-    pub fn Rf_warning(arg1: *const ::std::os::raw::c_char, ...);
-}
-extern "C" {
-    pub fn R_ShowMessage(s: *const ::std::os::raw::c_char);
-}
-extern "C" {
-    pub fn vmaxget() -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn vmaxset(arg1: *const ::std::os::raw::c_void);
-}
-extern "C" {
-    pub fn R_gc();
-}
-extern "C" {
-    pub fn R_gc_running() -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_alloc(arg1: usize, arg2: ::std::os::raw::c_int) -> *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn R_allocLD(nelem: usize) -> *mut u128;
-}
-extern "C" {
-    pub fn S_alloc(
-        arg1: ::std::os::raw::c_long,
-        arg2: ::std::os::raw::c_int,
-    ) -> *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn S_realloc(
-        arg1: *mut ::std::os::raw::c_char,
-        arg2: ::std::os::raw::c_long,
-        arg3: ::std::os::raw::c_long,
-        arg4: ::std::os::raw::c_int,
-    ) -> *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn R_malloc_gc(arg1: usize) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn R_calloc_gc(arg1: usize, arg2: usize) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn R_realloc_gc(
-        arg1: *mut ::std::os::raw::c_void,
-        arg2: usize,
-    ) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    #[doc = "../../main/sort.c :"]
-    pub fn R_isort(arg1: *mut ::std::os::raw::c_int, arg2: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn R_rsort(arg1: *mut f64, arg2: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn R_csort(arg1: *mut Rcomplex, arg2: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn rsort_with_index(
-        arg1: *mut f64,
-        arg2: *mut ::std::os::raw::c_int,
-        arg3: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn Rf_revsort(
-        arg1: *mut f64,
-        arg2: *mut ::std::os::raw::c_int,
-        arg3: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn Rf_iPsort(
-        arg1: *mut ::std::os::raw::c_int,
-        arg2: ::std::os::raw::c_int,
-        arg3: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn Rf_rPsort(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn Rf_cPsort(arg1: *mut Rcomplex, arg2: ::std::os::raw::c_int, arg3: ::std::os::raw::c_int);
-}
-extern "C" {
-    #[doc = "../../main/qsort.c : */\n/* dummy renamed to II to avoid problems with g++ on Solaris"]
-    pub fn R_qsort(v: *mut f64, i: usize, j: usize);
-}
-extern "C" {
-    pub fn R_qsort_I(
-        v: *mut f64,
-        II: *mut ::std::os::raw::c_int,
-        i: ::std::os::raw::c_int,
-        j: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn R_qsort_int(iv: *mut ::std::os::raw::c_int, i: usize, j: usize);
-}
-extern "C" {
-    pub fn R_qsort_int_I(
-        iv: *mut ::std::os::raw::c_int,
-        II: *mut ::std::os::raw::c_int,
-        i: ::std::os::raw::c_int,
-        j: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    #[doc = "../../main/util.c  and others :"]
-    pub fn R_ExpandFileName(arg1: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn Rf_setIVector(
-        arg1: *mut ::std::os::raw::c_int,
-        arg2: ::std::os::raw::c_int,
-        arg3: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn Rf_setRVector(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: f64);
-}
-extern "C" {
-    pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-}
-extern "C" {
-    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
-    pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
-}
-extern "C" {
-    pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
-        -> f64;
-}
-extern "C" {
-    pub fn R_tmpnam(
-        prefix: *const ::std::os::raw::c_char,
-        tempdir: *const ::std::os::raw::c_char,
-    ) -> *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn R_tmpnam2(
-        prefix: *const ::std::os::raw::c_char,
-        tempdir: *const ::std::os::raw::c_char,
-        fileext: *const ::std::os::raw::c_char,
-    ) -> *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn R_free_tmpnam(name: *mut ::std::os::raw::c_char);
-}
-extern "C" {
-    pub fn R_CheckUserInterrupt();
-}
-extern "C" {
-    pub fn R_CheckStack();
-}
-extern "C" {
-    pub fn R_CheckStack2(arg1: usize);
-}
-extern "C" {
-    #[doc = "../../appl/interv.c: also in Applic.h"]
-    pub fn findInterval(
-        xt: *mut f64,
-        n: ::std::os::raw::c_int,
-        x: f64,
-        rightmost_closed: Rboolean,
-        all_inside: Rboolean,
-        ilo: ::std::os::raw::c_int,
-        mflag: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn findInterval2(
-        xt: *mut f64,
-        n: ::std::os::raw::c_int,
-        x: f64,
-        rightmost_closed: Rboolean,
-        all_inside: Rboolean,
-        left_open: Rboolean,
-        ilo: ::std::os::raw::c_int,
-        mflag: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn find_interv_vec(
-        xt: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        x: *mut f64,
-        nx: *mut ::std::os::raw::c_int,
-        rightmost_closed: *mut ::std::os::raw::c_int,
-        all_inside: *mut ::std::os::raw::c_int,
-        indx: *mut ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    #[doc = "../../appl/maxcol.c: also in Applic.h"]
-    pub fn R_max_col(
-        matrix: *mut f64,
-        nr: *mut ::std::os::raw::c_int,
-        nc: *mut ::std::os::raw::c_int,
-        maxes: *mut ::std::os::raw::c_int,
-        ties_meth: *mut ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn Rprintf(arg1: *const ::std::os::raw::c_char, ...);
-}
-extern "C" {
-    pub fn REprintf(arg1: *const ::std::os::raw::c_char, ...);
-}
-extern "C" {
-    pub fn Rvprintf(arg1: *const ::std::os::raw::c_char, arg2: *mut __va_list_tag);
-}
-extern "C" {
-    pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: *mut __va_list_tag);
-}
 #[doc = "Called with a variable argument set after casting to a compatible\nfunction pointer."]
 pub type DL_FUNC = ::std::option::Option<unsafe extern "C" fn() -> *mut ::std::os::raw::c_void>;
 pub type R_NativePrimitiveArgType = ::std::os::raw::c_uint;
@@ -986,28 +722,6 @@ pub struct _DllInfo {
     _unused: [u8; 0],
 }
 pub type DllInfo = _DllInfo;
-extern "C" {
-    pub fn R_registerRoutines(
-        info: *mut DllInfo,
-        croutines: *const R_CMethodDef,
-        callRoutines: *const R_CallMethodDef,
-        fortranRoutines: *const R_FortranMethodDef,
-        externalRoutines: *const R_ExternalMethodDef,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_useDynamicSymbols(info: *mut DllInfo, value: Rboolean) -> Rboolean;
-}
-extern "C" {
-    pub fn R_forceSymbols(info: *mut DllInfo, value: Rboolean) -> Rboolean;
-}
-extern "C" {
-    pub fn R_getDllInfo(name: *const ::std::os::raw::c_char) -> *mut DllInfo;
-}
-extern "C" {
-    #[doc = "To be used by applications embedding R to register their symbols\nthat are not related to any dynamic module"]
-    pub fn R_getEmbeddingDllInfo() -> *mut DllInfo;
-}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Rf_RegisteredNativeSymbol {
@@ -1020,27 +734,6 @@ pub const NativeSymbolType_R_CALL_SYM: NativeSymbolType = 2;
 pub const NativeSymbolType_R_FORTRAN_SYM: NativeSymbolType = 3;
 pub const NativeSymbolType_R_EXTERNAL_SYM: NativeSymbolType = 4;
 pub type NativeSymbolType = u32;
-extern "C" {
-    pub fn R_FindSymbol(
-        arg1: *const ::std::os::raw::c_char,
-        arg2: *const ::std::os::raw::c_char,
-        symbol: *mut R_RegisteredNativeSymbol,
-    ) -> DL_FUNC;
-}
-extern "C" {
-    #[doc = "Interface for exporting and importing functions from one package\nfor use from C code in a package.  The registration part probably\nought to be integrated with the other registrations.  The naming of\nthese routines may be less than ideal."]
-    pub fn R_RegisterCCallable(
-        package: *const ::std::os::raw::c_char,
-        name: *const ::std::os::raw::c_char,
-        fptr: DL_FUNC,
-    );
-}
-extern "C" {
-    pub fn R_GetCCallable(
-        package: *const ::std::os::raw::c_char,
-        name: *const ::std::os::raw::c_char,
-    ) -> DL_FUNC;
-}
 pub type Rbyte = ::std::os::raw::c_uchar;
 #[doc = "type for length of (standard, not long) vectors etc"]
 pub type R_len_t = ::std::os::raw::c_int;
@@ -1052,866 +745,19 @@ pub struct SEXPREC {
     _unused: [u8; 0],
 }
 pub type SEXP = *mut SEXPREC;
-extern "C" {
-    pub fn R_CHAR(x: SEXP) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    #[doc = "Various tests with macro versions in the internal headers"]
-    pub fn Rf_isNull(s: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isSymbol(s: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isLogical(s: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isReal(s: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isComplex(s: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isExpression(s: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isEnvironment(s: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isString(s: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isObject(s: SEXP) -> Rboolean;
-}
-extern "C" {
-    #[doc = "General Cons Cell Attributes"]
-    pub fn ATTRIB(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn OBJECT(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn MARK(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn TYPEOF(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn NAMED(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn REFCNT(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_ATTRIB(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn DUPLICATE_ATTRIB(to: SEXP, from: SEXP);
-}
-extern "C" {
-    pub fn SHALLOW_DUPLICATE_ATTRIB(to: SEXP, from: SEXP);
-}
-extern "C" {
-    pub fn MARK_NOT_MUTABLE(x: SEXP);
-}
-extern "C" {
-    #[doc = "S4 object testing"]
-    pub fn IS_S4_OBJECT(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "Vector Access Functions"]
-    pub fn LENGTH(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn XLENGTH(x: SEXP) -> R_xlen_t;
-}
-extern "C" {
-    pub fn TRUELENGTH(x: SEXP) -> R_xlen_t;
-}
-extern "C" {
-    pub fn IS_LONG_VEC(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn LEVELS(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn LOGICAL(x: SEXP) -> *mut ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn INTEGER(x: SEXP) -> *mut ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn RAW(x: SEXP) -> *mut Rbyte;
-}
-extern "C" {
-    pub fn REAL(x: SEXP) -> *mut f64;
-}
-extern "C" {
-    pub fn COMPLEX(x: SEXP) -> *mut Rcomplex;
-}
-extern "C" {
-    pub fn LOGICAL_RO(x: SEXP) -> *const ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn INTEGER_RO(x: SEXP) -> *const ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn RAW_RO(x: SEXP) -> *const Rbyte;
-}
-extern "C" {
-    pub fn REAL_RO(x: SEXP) -> *const f64;
-}
-extern "C" {
-    pub fn COMPLEX_RO(x: SEXP) -> *const Rcomplex;
-}
-extern "C" {
-    #[doc = "SEXP (STRING_ELT)(SEXP x, R_xlen_t i);"]
-    pub fn VECTOR_ELT(x: SEXP, i: R_xlen_t) -> SEXP;
-}
-extern "C" {
-    pub fn SET_STRING_ELT(x: SEXP, i: R_xlen_t, v: SEXP);
-}
-extern "C" {
-    pub fn SET_VECTOR_ELT(x: SEXP, i: R_xlen_t, v: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn STRING_PTR(x: SEXP) -> *mut SEXP;
-}
-extern "C" {
-    pub fn STRING_PTR_RO(x: SEXP) -> *const SEXP;
-}
-extern "C" {
-    pub fn INTEGER_GET_REGION(
-        sx: SEXP,
-        i: R_xlen_t,
-        n: R_xlen_t,
-        buf: *mut ::std::os::raw::c_int,
-    ) -> R_xlen_t;
-}
-extern "C" {
-    pub fn REAL_GET_REGION(sx: SEXP, i: R_xlen_t, n: R_xlen_t, buf: *mut f64) -> R_xlen_t;
-}
-extern "C" {
-    pub fn LOGICAL_GET_REGION(
-        sx: SEXP,
-        i: R_xlen_t,
-        n: R_xlen_t,
-        buf: *mut ::std::os::raw::c_int,
-    ) -> R_xlen_t;
-}
-extern "C" {
-    pub fn COMPLEX_GET_REGION(sx: SEXP, i: R_xlen_t, n: R_xlen_t, buf: *mut Rcomplex) -> R_xlen_t;
-}
-extern "C" {
-    pub fn RAW_GET_REGION(sx: SEXP, i: R_xlen_t, n: R_xlen_t, buf: *mut Rbyte) -> R_xlen_t;
-}
-extern "C" {
-    #[doc = "metadata access"]
-    pub fn INTEGER_IS_SORTED(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn INTEGER_NO_NA(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn REAL_IS_SORTED(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn REAL_NO_NA(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn LOGICAL_IS_SORTED(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn LOGICAL_NO_NA(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn STRING_IS_SORTED(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn STRING_NO_NA(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn TAG(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn CDR(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn CAAR(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn CDAR(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn CADR(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn CDDR(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn CDDDR(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn CADDR(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn CADDDR(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn CAD4R(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn MISSING(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_TAG(x: SEXP, y: SEXP);
-}
-extern "C" {
-    pub fn SETCAR(x: SEXP, y: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn SETCDR(x: SEXP, y: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn SETCADR(x: SEXP, y: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn SETCADDR(x: SEXP, y: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn SETCADDDR(x: SEXP, y: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn SETCAD4R(e: SEXP, y: SEXP) -> SEXP;
-}
-extern "C" {
-    #[doc = "Closure Access Functions"]
-    pub fn FORMALS(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn BODY(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn CLOENV(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn RDEBUG(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn RSTEP(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn RTRACE(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_RDEBUG(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_RSTEP(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_RTRACE(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_FORMALS(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_BODY(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_CLOENV(x: SEXP, v: SEXP);
-}
-extern "C" {
-    #[doc = "Symbol Access Functions"]
-    pub fn PRINTNAME(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn SYMVALUE(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn INTERNAL(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn DDVAL(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "Environment Access Functions"]
-    pub fn FRAME(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn ENCLOS(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn HASHTAB(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn ENVFLAGS(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "Promise Access Functions"]
-    pub fn PRCODE(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn PRENV(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn PRVALUE(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn PRSEEN(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "External pointer access macros"]
-    pub fn EXTPTR_PROT(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn EXTPTR_TAG(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn EXTPTR_PTR(arg1: SEXP) -> *mut ::std::os::raw::c_void;
-}
 #[doc = "We sometimes need to coerce a protected value and place the new\ncoerced value under protection.  For these cases PROTECT_WITH_INDEX\nsaves an index of the protection location that can be used to\nreplace the protected value using REPROTECT."]
 pub type PROTECT_INDEX = ::std::os::raw::c_int;
-extern "C" {
-    #[doc = "The \"global\" environment"]
-    pub static mut R_GlobalEnv: SEXP;
-}
-extern "C" {
-    #[doc = "An empty environment at the root of the\nenvironment tree"]
-    pub static mut R_EmptyEnv: SEXP;
-}
-extern "C" {
-    #[doc = "The base environment; formerly R_NilValue"]
-    pub static mut R_BaseEnv: SEXP;
-}
-extern "C" {
-    #[doc = "The (fake) namespace for base"]
-    pub static mut R_BaseNamespace: SEXP;
-}
-extern "C" {
-    #[doc = "Registry for registered namespaces"]
-    pub static mut R_NamespaceRegistry: SEXP;
-}
-extern "C" {
-    #[doc = "Current srcref, for debuggers"]
-    pub static mut R_Srcref: SEXP;
-}
-extern "C" {
-    #[doc = "The nil object"]
-    pub static mut R_NilValue: SEXP;
-}
-extern "C" {
-    #[doc = "Unbound marker"]
-    pub static mut R_UnboundValue: SEXP;
-}
-extern "C" {
-    #[doc = "Missing argument marker"]
-    pub static mut R_MissingArg: SEXP;
-}
-extern "C" {
-    #[doc = "To be found in BC interp. state\n(marker)"]
-    pub static mut R_InBCInterpreter: SEXP;
-}
-extern "C" {
-    #[doc = "Use current expression (marker)"]
-    pub static mut R_CurrentExpression: SEXP;
-}
-extern "C" {
-    #[doc = "Marker for restarted function calls"]
-    pub static mut R_RestartToken: SEXP;
-}
-extern "C" {
-    #[doc = "\"as.character\""]
-    pub static mut R_AsCharacterSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"@\""]
-    pub static mut R_AtsignSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "<-- backcompatible version of:"]
-    pub static mut R_baseSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"base\""]
-    pub static mut R_BaseSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"{\""]
-    pub static mut R_BraceSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"\\[\\[\""]
-    pub static mut R_Bracket2Symbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"\\[\""]
-    pub static mut R_BracketSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"class\""]
-    pub static mut R_ClassSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\".Device\""]
-    pub static mut R_DeviceSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"dimnames\""]
-    pub static mut R_DimNamesSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"dim\""]
-    pub static mut R_DimSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"$\""]
-    pub static mut R_DollarSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"...\""]
-    pub static mut R_DotsSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"::\""]
-    pub static mut R_DoubleColonSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"drop\""]
-    pub static mut R_DropSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"eval\""]
-    pub static mut R_EvalSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"function\""]
-    pub static mut R_FunctionSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\".Last.value\""]
-    pub static mut R_LastvalueSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"levels\""]
-    pub static mut R_LevelsSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"mode\""]
-    pub static mut R_ModeSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"na.rm\""]
-    pub static mut R_NaRmSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"name\""]
-    pub static mut R_NameSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"names\""]
-    pub static mut R_NamesSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\".__NAMESPACE__.\""]
-    pub static mut R_NamespaceEnvSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"package\""]
-    pub static mut R_PackageSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"previous\""]
-    pub static mut R_PreviousSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"quote\""]
-    pub static mut R_QuoteSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"row.names\""]
-    pub static mut R_RowNamesSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\".Random.seed\""]
-    pub static mut R_SeedsSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"sort.list\""]
-    pub static mut R_SortListSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"source\""]
-    pub static mut R_SourceSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"spec\""]
-    pub static mut R_SpecSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\":::\""]
-    pub static mut R_TripleColonSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\"tsp\""]
-    pub static mut R_TspSymbol: SEXP;
-}
-extern "C" {
-    #[doc = "\".defined\""]
-    pub static mut R_dot_defined: SEXP;
-}
-extern "C" {
-    #[doc = "\".Method\""]
-    pub static mut R_dot_Method: SEXP;
-}
-extern "C" {
-    #[doc = "\".packageName\""]
-    pub static mut R_dot_packageName: SEXP;
-}
-extern "C" {
-    #[doc = "\".target\""]
-    pub static mut R_dot_target: SEXP;
-}
-extern "C" {
-    #[doc = "\".Generic\""]
-    pub static mut R_dot_Generic: SEXP;
-}
-extern "C" {
-    #[doc = "NA_STRING as a CHARSXP"]
-    pub static mut R_NaString: SEXP;
-}
-extern "C" {
-    #[doc = "\"\" as a CHARSXP"]
-    pub static mut R_BlankString: SEXP;
-}
-extern "C" {
-    #[doc = "\"\" as a STRSXP"]
-    pub static mut R_BlankScalarString: SEXP;
-}
-extern "C" {
-    #[doc = "srcref related functions"]
-    pub fn R_GetCurrentSrcref(arg1: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn R_GetSrcFilename(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    #[doc = "Type Coercions of all kinds"]
-    pub fn Rf_asChar(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_coerceVector(arg1: SEXP, arg2: SEXPTYPE) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_PairToVectorList(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_VectorToPairList(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_asCharacterFactor(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_asLogical(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_asInteger(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_asReal(x: SEXP) -> f64;
-}
-extern "C" {
-    pub fn Rf_asComplex(x: SEXP) -> Rcomplex;
-}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct R_allocator {
     _unused: [u8; 0],
 }
 pub type R_allocator_t = R_allocator;
-extern "C" {
-    #[doc = "Other Internally Used Functions, excluding those which are inline-able"]
-    pub fn Rf_acopy_string(arg1: *const ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn Rf_alloc3DArray(
-        arg1: SEXPTYPE,
-        arg2: ::std::os::raw::c_int,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_allocArray(arg1: SEXPTYPE, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_allocMatrix(
-        arg1: SEXPTYPE,
-        arg2: ::std::os::raw::c_int,
-        arg3: ::std::os::raw::c_int,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_allocList(arg1: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_allocS4Object() -> SEXP;
-}
-extern "C" {
-    pub fn Rf_allocSExp(arg1: SEXPTYPE) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_allocVector3(arg1: SEXPTYPE, arg2: R_xlen_t, arg3: *mut R_allocator_t) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_any_duplicated(x: SEXP, from_last: Rboolean) -> R_xlen_t;
-}
-extern "C" {
-    pub fn Rf_any_duplicated3(x: SEXP, incomp: SEXP, from_last: Rboolean) -> R_xlen_t;
-}
-extern "C" {
-    pub fn Rf_applyClosure(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_classgets(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_cons(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_copyMatrix(arg1: SEXP, arg2: SEXP, arg3: Rboolean);
-}
-extern "C" {
-    pub fn Rf_copyListMatrix(arg1: SEXP, arg2: SEXP, arg3: Rboolean);
-}
-extern "C" {
-    pub fn Rf_copyMostAttrib(arg1: SEXP, arg2: SEXP);
-}
-extern "C" {
-    pub fn Rf_copyVector(arg1: SEXP, arg2: SEXP);
-}
-extern "C" {
-    pub fn Rf_defineVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);
-}
-extern "C" {
-    pub fn Rf_dimgets(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_dimnamesgets(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_duplicate(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_shallow_duplicate(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_duplicate_attr(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_shallow_duplicate_attr(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_lazy_duplicate(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    #[doc = "the next really should not be here and is also in Defn.h"]
-    pub fn Rf_duplicated(arg1: SEXP, arg2: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_eval(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_findFun(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_findVar(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_findVarInFrame(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_findVarInFrame3(arg1: SEXP, arg2: SEXP, arg3: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn R_existsVarInFrame(arg1: SEXP, arg2: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn R_removeVarFromFrame(arg1: SEXP, arg2: SEXP);
-}
-extern "C" {
-    pub fn Rf_getAttrib(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_GetArrayDimnames(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_GetColNames(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_GetMatrixDimnames(
-        arg1: SEXP,
-        arg2: *mut SEXP,
-        arg3: *mut SEXP,
-        arg4: *mut *const ::std::os::raw::c_char,
-        arg5: *mut *const ::std::os::raw::c_char,
-    );
-}
-extern "C" {
-    pub fn Rf_GetOption(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_GetOption1(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_GetOptionDigits() -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_GetOptionWidth() -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_GetRowNames(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_gsetVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);
-}
-extern "C" {
-    pub fn Rf_install(arg1: *const ::std::os::raw::c_char) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_installChar(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_installNoTrChar(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_installTrChar(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_isOrdered(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isUnordered(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isUnsorted(arg1: SEXP, arg2: Rboolean) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_lengthgets(arg1: SEXP, arg2: R_len_t) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_xlengthgets(arg1: SEXP, arg2: R_xlen_t) -> SEXP;
-}
-extern "C" {
-    pub fn R_lsInternal(arg1: SEXP, arg2: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn R_lsInternal3(arg1: SEXP, arg2: Rboolean, arg3: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_match(arg1: SEXP, arg2: SEXP, arg3: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_namesgets(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_mkChar(arg1: *const ::std::os::raw::c_char) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_mkCharLen(arg1: *const ::std::os::raw::c_char, arg2: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_NonNullStringMatch(arg1: SEXP, arg2: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_ncols(arg1: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_nrows(arg1: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_nthcdr(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP;
-}
 pub const nchar_type_Bytes: nchar_type = 0;
 pub const nchar_type_Chars: nchar_type = 1;
 pub const nchar_type_Width: nchar_type = 2;
 #[doc = "../main/character.c :"]
 pub type nchar_type = u32;
-extern "C" {
-    pub fn R_nchar(
-        string: SEXP,
-        type_: nchar_type,
-        allowNA: Rboolean,
-        keepNA: Rboolean,
-        msg_name: *const ::std::os::raw::c_char,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_ParseEvalString(arg1: *const ::std::os::raw::c_char, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_PrintValue(arg1: SEXP);
-}
-extern "C" {
-    pub fn Rf_setAttrib(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_setVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);
-}
-extern "C" {
-    pub fn Rf_str2type(arg1: *const ::std::os::raw::c_char) -> SEXPTYPE;
-}
-extern "C" {
-    pub fn Rf_StringBlank(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_substitute(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_topenv(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_translateChar(arg1: SEXP) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn Rf_translateCharUTF8(arg1: SEXP) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn Rf_type2char(arg1: SEXPTYPE) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn Rf_type2rstr(arg1: SEXPTYPE) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_type2str(arg1: SEXPTYPE) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_type2str_nowarn(arg1: SEXPTYPE) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_unprotect_ptr(arg1: SEXP);
-}
-extern "C" {
-    pub fn R_tryEval(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn R_tryEvalSilent(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn R_GetCurrentEnv() -> SEXP;
-}
-extern "C" {
-    pub fn Rf_isS4(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_asS4(arg1: SEXP, arg2: Rboolean, arg3: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_S3Class(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_isBasicClass(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
-}
 pub const cetype_t_CE_NATIVE: cetype_t = 0;
 pub const cetype_t_CE_UTF8: cetype_t = 1;
 pub const cetype_t_CE_LATIN1: cetype_t = 2;
@@ -1920,246 +766,8 @@ pub const cetype_t_CE_SYMBOL: cetype_t = 5;
 pub const cetype_t_CE_ANY: cetype_t = 99;
 #[doc = "cetype_t is an identifier reseved by POSIX, but it is\nwell established as public.  Could remap by a #define though"]
 pub type cetype_t = u32;
-extern "C" {
-    pub fn Rf_getCharCE(arg1: SEXP) -> cetype_t;
-}
-extern "C" {
-    pub fn Rf_mkCharCE(arg1: *const ::std::os::raw::c_char, arg2: cetype_t) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_mkCharLenCE(
-        arg1: *const ::std::os::raw::c_char,
-        arg2: ::std::os::raw::c_int,
-        arg3: cetype_t,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_reEnc(
-        x: *const ::std::os::raw::c_char,
-        ce_in: cetype_t,
-        ce_out: cetype_t,
-        subst: ::std::os::raw::c_int,
-    ) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    #[doc = "Calling a function with arguments evaluated"]
-    pub fn R_forceAndCall(e: SEXP, n: ::std::os::raw::c_int, rho: SEXP) -> SEXP;
-}
-extern "C" {
-    #[doc = "External pointer interface"]
-    pub fn R_MakeExternalPtr(p: *mut ::std::os::raw::c_void, tag: SEXP, prot: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_ExternalPtrAddr(s: SEXP) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn R_ExternalPtrTag(s: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_ExternalPtrProtected(s: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_ClearExternalPtr(s: SEXP);
-}
-extern "C" {
-    pub fn R_SetExternalPtrAddr(s: SEXP, p: *mut ::std::os::raw::c_void);
-}
-extern "C" {
-    pub fn R_SetExternalPtrTag(s: SEXP, tag: SEXP);
-}
-extern "C" {
-    pub fn R_SetExternalPtrProtected(s: SEXP, p: SEXP);
-}
-extern "C" {
-    #[doc = "Added in R 3.4.0"]
-    pub fn R_MakeExternalPtrFn(p: DL_FUNC, tag: SEXP, prot: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_ExternalPtrAddrFn(s: SEXP) -> DL_FUNC;
-}
 #[doc = "Finalization interface"]
 pub type R_CFinalizer_t = ::std::option::Option<unsafe extern "C" fn(arg1: SEXP)>;
-extern "C" {
-    pub fn R_RegisterFinalizer(s: SEXP, fun: SEXP);
-}
-extern "C" {
-    pub fn R_RegisterCFinalizer(s: SEXP, fun: R_CFinalizer_t);
-}
-extern "C" {
-    pub fn R_RegisterFinalizerEx(s: SEXP, fun: SEXP, onexit: Rboolean);
-}
-extern "C" {
-    pub fn R_RegisterCFinalizerEx(s: SEXP, fun: R_CFinalizer_t, onexit: Rboolean);
-}
-extern "C" {
-    pub fn R_RunPendingFinalizers();
-}
-extern "C" {
-    #[doc = "Weak reference interface"]
-    pub fn R_MakeWeakRef(key: SEXP, val: SEXP, fin: SEXP, onexit: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn R_MakeWeakRefC(key: SEXP, val: SEXP, fin: R_CFinalizer_t, onexit: Rboolean) -> SEXP;
-}
-extern "C" {
-    pub fn R_WeakRefKey(w: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_WeakRefValue(w: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_RunWeakRefFinalizer(w: SEXP);
-}
-extern "C" {
-    pub fn R_PromiseExpr(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_ClosureExpr(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_BytecodeExpr(e: SEXP) -> SEXP;
-}
-extern "C" {
-    #[doc = "Protected evaluation"]
-    pub fn R_ToplevelExec(
-        fun: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
-        data: *mut ::std::os::raw::c_void,
-    ) -> Rboolean;
-}
-extern "C" {
-    pub fn R_ExecWithCleanup(
-        fun: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> SEXP>,
-        data: *mut ::std::os::raw::c_void,
-        cleanfun: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
-        cleandata: *mut ::std::os::raw::c_void,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn R_tryCatch(
-        arg1: ::std::option::Option<
-            unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> SEXP,
-        >,
-        arg2: *mut ::std::os::raw::c_void,
-        arg3: SEXP,
-        arg4: ::std::option::Option<
-            unsafe extern "C" fn(arg1: SEXP, arg2: *mut ::std::os::raw::c_void) -> SEXP,
-        >,
-        arg5: *mut ::std::os::raw::c_void,
-        arg6: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
-        arg7: *mut ::std::os::raw::c_void,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn R_tryCatchError(
-        arg1: ::std::option::Option<
-            unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> SEXP,
-        >,
-        arg2: *mut ::std::os::raw::c_void,
-        arg3: ::std::option::Option<
-            unsafe extern "C" fn(arg1: SEXP, arg2: *mut ::std::os::raw::c_void) -> SEXP,
-        >,
-        arg4: *mut ::std::os::raw::c_void,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn R_withCallingErrorHandler(
-        arg1: ::std::option::Option<
-            unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> SEXP,
-        >,
-        arg2: *mut ::std::os::raw::c_void,
-        arg3: ::std::option::Option<
-            unsafe extern "C" fn(arg1: SEXP, arg2: *mut ::std::os::raw::c_void) -> SEXP,
-        >,
-        arg4: *mut ::std::os::raw::c_void,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn R_MakeUnwindCont() -> SEXP;
-}
-extern "C" {
-    pub fn R_ContinueUnwind(cont: SEXP) -> !;
-}
-extern "C" {
-    pub fn R_UnwindProtect(
-        fun: ::std::option::Option<unsafe extern "C" fn(data: *mut ::std::os::raw::c_void) -> SEXP>,
-        data: *mut ::std::os::raw::c_void,
-        cleanfun: ::std::option::Option<
-            unsafe extern "C" fn(data: *mut ::std::os::raw::c_void, jump: Rboolean),
-        >,
-        cleandata: *mut ::std::os::raw::c_void,
-        cont: SEXP,
-    ) -> SEXP;
-}
-extern "C" {
-    #[doc = "Environment and Binding Features"]
-    pub fn R_NewEnv(arg1: SEXP, arg2: ::std::os::raw::c_int, arg3: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn R_IsPackageEnv(rho: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn R_PackageEnvName(rho: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_FindPackageEnv(info: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_IsNamespaceEnv(rho: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn R_NamespaceEnvSpec(rho: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_FindNamespace(info: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_LockEnvironment(env: SEXP, bindings: Rboolean);
-}
-extern "C" {
-    pub fn R_EnvironmentIsLocked(env: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn R_LockBinding(sym: SEXP, env: SEXP);
-}
-extern "C" {
-    pub fn R_unLockBinding(sym: SEXP, env: SEXP);
-}
-extern "C" {
-    pub fn R_MakeActiveBinding(sym: SEXP, fun: SEXP, env: SEXP);
-}
-extern "C" {
-    pub fn R_BindingIsLocked(sym: SEXP, env: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn R_BindingIsActive(sym: SEXP, env: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn R_ActiveBindingFunction(sym: SEXP, env: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_HasFancyBindings(rho: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_errorcall(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...) -> !;
-}
-extern "C" {
-    pub fn Rf_warningcall(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...);
-}
-extern "C" {
-    pub fn Rf_warningcall_immediate(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...);
-}
-extern "C" {
-    pub fn R_XDREncodeDouble(d: f64, buf: *mut ::std::os::raw::c_void);
-}
-extern "C" {
-    pub fn R_XDRDecodeDouble(buf: *mut ::std::os::raw::c_void) -> f64;
-}
-extern "C" {
-    pub fn R_XDREncodeInteger(i: ::std::os::raw::c_int, buf: *mut ::std::os::raw::c_void);
-}
-extern "C" {
-    pub fn R_XDRDecodeInteger(buf: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_int;
-}
 pub type R_pstream_data_t = *mut ::std::os::raw::c_void;
 pub const R_pstream_format_t_R_pstream_any_format: R_pstream_format_t = 0;
 pub const R_pstream_format_t_R_pstream_ascii_format: R_pstream_format_t = 1;
@@ -2400,459 +1008,6 @@ fn bindgen_test_layout_R_inpstream_st() {
         )
     );
 }
-extern "C" {
-    pub fn R_InitInPStream(
-        stream: R_inpstream_t,
-        data: R_pstream_data_t,
-        type_: R_pstream_format_t,
-        inchar: ::std::option::Option<
-            unsafe extern "C" fn(arg1: R_inpstream_t) -> ::std::os::raw::c_int,
-        >,
-        inbytes: ::std::option::Option<
-            unsafe extern "C" fn(
-                arg1: R_inpstream_t,
-                arg2: *mut ::std::os::raw::c_void,
-                arg3: ::std::os::raw::c_int,
-            ),
-        >,
-        phook: ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
-        pdata: SEXP,
-    );
-}
-extern "C" {
-    pub fn R_InitOutPStream(
-        stream: R_outpstream_t,
-        data: R_pstream_data_t,
-        type_: R_pstream_format_t,
-        version: ::std::os::raw::c_int,
-        outchar: ::std::option::Option<
-            unsafe extern "C" fn(arg1: R_outpstream_t, arg2: ::std::os::raw::c_int),
-        >,
-        outbytes: ::std::option::Option<
-            unsafe extern "C" fn(
-                arg1: R_outpstream_t,
-                arg2: *mut ::std::os::raw::c_void,
-                arg3: ::std::os::raw::c_int,
-            ),
-        >,
-        phook: ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
-        pdata: SEXP,
-    );
-}
-extern "C" {
-    pub fn R_InitFileInPStream(
-        stream: R_inpstream_t,
-        fp: *mut FILE,
-        type_: R_pstream_format_t,
-        phook: ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
-        pdata: SEXP,
-    );
-}
-extern "C" {
-    pub fn R_InitFileOutPStream(
-        stream: R_outpstream_t,
-        fp: *mut FILE,
-        type_: R_pstream_format_t,
-        version: ::std::os::raw::c_int,
-        phook: ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
-        pdata: SEXP,
-    );
-}
-extern "C" {
-    pub fn R_Serialize(s: SEXP, ops: R_outpstream_t);
-}
-extern "C" {
-    pub fn R_Unserialize(ips: R_inpstream_t) -> SEXP;
-}
-extern "C" {
-    pub fn R_SerializeInfo(ips: R_inpstream_t) -> SEXP;
-}
-extern "C" {
-    #[doc = "slot management (in attrib.c)"]
-    pub fn R_do_slot(obj: SEXP, name: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_do_slot_assign(obj: SEXP, name: SEXP, value: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_has_slot(obj: SEXP, name: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "S3-S4 class (inheritance), attrib.c"]
-    pub fn R_S4_extends(klass: SEXP, useTable: SEXP) -> SEXP;
-}
-extern "C" {
-    #[doc = "class definition, new objects (objects.c)"]
-    pub fn R_do_MAKE_CLASS(what: *const ::std::os::raw::c_char) -> SEXP;
-}
-extern "C" {
-    pub fn R_getClassDef(what: *const ::std::os::raw::c_char) -> SEXP;
-}
-extern "C" {
-    pub fn R_getClassDef_R(what: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_has_methods_attached() -> Rboolean;
-}
-extern "C" {
-    pub fn R_isVirtualClass(class_def: SEXP, env: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn R_extends(class1: SEXP, class2: SEXP, env: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn R_do_new_object(class_def: SEXP) -> SEXP;
-}
-extern "C" {
-    #[doc = "supporting  a C-level version of  is(., .) :"]
-    pub fn R_check_class_and_super(
-        x: SEXP,
-        valid: *mut *const ::std::os::raw::c_char,
-        rho: SEXP,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_check_class_etc(
-        x: SEXP,
-        valid: *mut *const ::std::os::raw::c_char,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "preserve objects across GCs"]
-    pub fn R_PreserveObject(arg1: SEXP);
-}
-extern "C" {
-    pub fn R_ReleaseObject(arg1: SEXP);
-}
-extern "C" {
-    pub fn R_NewPreciousMSet(arg1: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn R_PreserveInMSet(x: SEXP, mset: SEXP);
-}
-extern "C" {
-    pub fn R_ReleaseFromMSet(x: SEXP, mset: SEXP);
-}
-extern "C" {
-    pub fn R_ReleaseMSet(mset: SEXP, keepSize: ::std::os::raw::c_int);
-}
-extern "C" {
-    #[doc = "Shutdown actions"]
-    pub fn R_dot_Last();
-}
-extern "C" {
-    pub fn R_RunExitFinalizers();
-}
-extern "C" {
-    pub fn R_system(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_compute_identical(arg1: SEXP, arg2: SEXP, arg3: ::std::os::raw::c_int) -> Rboolean;
-}
-extern "C" {
-    pub fn R_body_no_src(x: SEXP) -> SEXP;
-}
-extern "C" {
-    #[doc = "C version of R's  indx <- order(..., na.last, decreasing) :\ne.g.  arglist = Rf_lang2(x,y)  or  Rf_lang3(x,y,z)"]
-    pub fn R_orderVector(
-        indx: *mut ::std::os::raw::c_int,
-        n: ::std::os::raw::c_int,
-        arglist: SEXP,
-        nalast: Rboolean,
-        decreasing: Rboolean,
-    );
-}
-extern "C" {
-    #[doc = "C version of R's  indx <- order(x, na.last, decreasing) :"]
-    pub fn R_orderVector1(
-        indx: *mut ::std::os::raw::c_int,
-        n: ::std::os::raw::c_int,
-        x: SEXP,
-        nalast: Rboolean,
-        decreasing: Rboolean,
-    );
-}
-extern "C" {
-    #[doc = "These are the public inlinable functions that are provided in\nRinlinedfuns.h It is *essential* that these do not appear in any\nother header file, with or without the Rf_ prefix."]
-    pub fn Rf_allocVector(arg1: SEXPTYPE, arg2: R_xlen_t) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_conformable(arg1: SEXP, arg2: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_elt(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_inherits(arg1: SEXP, arg2: *const ::std::os::raw::c_char) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isArray(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isFactor(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isFrame(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isFunction(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isInteger(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isLanguage(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isList(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isMatrix(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isNewList(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isNumber(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isNumeric(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isPairList(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isPrimitive(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isTs(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isUserBinop(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isValidString(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isValidStringF(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isVector(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isVectorAtomic(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isVectorList(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_isVectorizable(arg1: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_lang1(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_lang2(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_lang3(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_lang4(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_lang5(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_lang6(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP, arg6: SEXP)
-        -> SEXP;
-}
-extern "C" {
-    pub fn Rf_lastElt(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_lcons(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_length(arg1: SEXP) -> R_len_t;
-}
-extern "C" {
-    pub fn Rf_list1(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_list2(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_list3(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_list4(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_list5(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_list6(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP, arg6: SEXP)
-        -> SEXP;
-}
-extern "C" {
-    pub fn Rf_listAppend(arg1: SEXP, arg2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_mkNamed(arg1: SEXPTYPE, arg2: *mut *const ::std::os::raw::c_char) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_mkString(arg1: *const ::std::os::raw::c_char) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_nlevels(arg1: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_stringPositionTr(
-        arg1: SEXP,
-        arg2: *const ::std::os::raw::c_char,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_ScalarComplex(arg1: Rcomplex) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_ScalarInteger(arg1: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_ScalarLogical(arg1: ::std::os::raw::c_int) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_ScalarRaw(arg1: Rbyte) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_ScalarReal(arg1: f64) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_ScalarString(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_xlength(arg1: SEXP) -> R_xlen_t;
-}
-extern "C" {
-    pub fn XTRUELENGTH(x: SEXP) -> R_xlen_t;
-}
-extern "C" {
-    pub fn LENGTH_EX(
-        x: SEXP,
-        file: *const ::std::os::raw::c_char,
-        line: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn XLENGTH_EX(x: SEXP) -> R_xlen_t;
-}
-extern "C" {
-    pub fn Rf_protect(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_unprotect(arg1: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn R_ProtectWithIndex(arg1: SEXP, arg2: *mut PROTECT_INDEX);
-}
-extern "C" {
-    pub fn R_Reprotect(arg1: SEXP, arg2: PROTECT_INDEX);
-}
-extern "C" {
-    pub fn CAR(e: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn DATAPTR(x: SEXP) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn DATAPTR_RO(x: SEXP) -> *const ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn DATAPTR_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn LOGICAL_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn INTEGER_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn REAL_OR_NULL(x: SEXP) -> *const f64;
-}
-extern "C" {
-    pub fn COMPLEX_OR_NULL(x: SEXP) -> *const Rcomplex;
-}
-extern "C" {
-    pub fn RAW_OR_NULL(x: SEXP) -> *const Rbyte;
-}
-extern "C" {
-    pub fn INTEGER_ELT(x: SEXP, i: R_xlen_t) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn REAL_ELT(x: SEXP, i: R_xlen_t) -> f64;
-}
-extern "C" {
-    pub fn LOGICAL_ELT(x: SEXP, i: R_xlen_t) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn COMPLEX_ELT(x: SEXP, i: R_xlen_t) -> Rcomplex;
-}
-extern "C" {
-    pub fn RAW_ELT(x: SEXP, i: R_xlen_t) -> Rbyte;
-}
-extern "C" {
-    pub fn STRING_ELT(x: SEXP, i: R_xlen_t) -> SEXP;
-}
-extern "C" {
-    pub fn SET_LOGICAL_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_INTEGER_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_REAL_ELT(x: SEXP, i: R_xlen_t, v: f64);
-}
-extern "C" {
-    pub fn SET_COMPLEX_ELT(x: SEXP, i: R_xlen_t, v: Rcomplex);
-}
-extern "C" {
-    pub fn SET_RAW_ELT(x: SEXP, i: R_xlen_t, v: Rbyte);
-}
-extern "C" {
-    #[doc = "ALTREP support"]
-    pub fn ALTREP_CLASS(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_altrep_data1(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_altrep_data2(x: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_set_altrep_data1(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn R_set_altrep_data2(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn LOGICAL0(x: SEXP) -> *mut ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn INTEGER0(x: SEXP) -> *mut ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn REAL0(x: SEXP) -> *mut f64;
-}
-extern "C" {
-    pub fn COMPLEX0(x: SEXP) -> *mut Rcomplex;
-}
-extern "C" {
-    pub fn RAW0(x: SEXP) -> *mut Rbyte;
-}
-extern "C" {
-    pub fn ALTREP(x: SEXP) -> ::std::os::raw::c_int;
-}
 #[doc = "try to allow some type checking"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -2883,135 +1038,6 @@ fn bindgen_test_layout_R_hashtab_type() {
             stringify!(cell)
         )
     );
-}
-extern "C" {
-    #[doc = "public C interface"]
-    pub fn R_asHashtable(h: SEXP) -> R_hashtab_type;
-}
-extern "C" {
-    pub fn R_HashtabSEXP(h: R_hashtab_type) -> SEXP;
-}
-extern "C" {
-    pub fn R_isHashtable(h: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_mkhashtab(type_: ::std::os::raw::c_int, arg1: ::std::os::raw::c_int)
-        -> R_hashtab_type;
-}
-extern "C" {
-    pub fn R_gethash(h: R_hashtab_type, key: SEXP, nomatch: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_sethash(h: R_hashtab_type, key: SEXP, value: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_remhash(h: R_hashtab_type, key: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_numhash(h: R_hashtab_type) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_typhash(h: R_hashtab_type) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_maphash(h: R_hashtab_type, FUN: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_maphashC(
-        h: R_hashtab_type,
-        FUN: ::std::option::Option<
-            unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_void),
-        >,
-        data: *mut ::std::os::raw::c_void,
-    );
-}
-extern "C" {
-    pub fn R_clrhash(h: R_hashtab_type);
-}
-extern "C" {
-    #[doc = "stuff that probably shouldn't be in the API but is getting used"]
-    pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_S4_OBJECT(x: SEXP);
-}
-extern "C" {
-    pub fn UNSET_S4_OBJECT(x: SEXP);
-}
-extern "C" {
-    pub fn R_curErrorBuf() -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn IS_SCALAR(x: SEXP, type_: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_psmatch(
-        arg1: *const ::std::os::raw::c_char,
-        arg2: *const ::std::os::raw::c_char,
-        arg3: Rboolean,
-    ) -> Rboolean;
-}
-extern "C" {
-    pub fn SETLENGTH(x: SEXP, v: R_xlen_t);
-}
-extern "C" {
-    pub fn SET_TRUELENGTH(x: SEXP, v: R_xlen_t);
-}
-extern "C" {
-    pub fn SETLEVELS(x: SEXP, v: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_ENVFLAGS(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn SET_FRAME(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_ENCLOS(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_HASHTAB(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_PRENV(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_PRVALUE(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn SET_PRCODE(x: SEXP, v: SEXP);
-}
-extern "C" {
-    pub fn STDVEC_DATAPTR(x: SEXP) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn IS_GROWABLE(x: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn SET_GROWABLE_BIT(x: SEXP);
-}
-extern "C" {
-    pub fn SET_NAMED(x: SEXP, v: ::std::os::raw::c_int);
-}
-extern "C" {
-    #[doc = "used by BIOC::matter; mightbe reasonable to include in API"]
-    pub fn R_tryWrap(arg1: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_FlushConsole();
-}
-extern "C" {
-    pub fn Rf_onintr();
-}
-extern "C" {
-    pub fn Rf_onintrNoResume();
-}
-extern "C" {
-    #[doc = "C stack limit"]
-    pub static mut R_CStackLimit: usize;
 }
 #[doc = "= 0"]
 pub const SA_TYPE_SA_NORESTORE: SA_TYPE = 0;
@@ -3241,813 +1267,6 @@ impl structRstart {
     }
 }
 pub type Rstart = *mut structRstart;
-extern "C" {
-    pub fn R_common_command_line(
-        arg1: *mut ::std::os::raw::c_int,
-        arg2: *mut *mut ::std::os::raw::c_char,
-        arg3: Rstart,
-    );
-}
-extern "C" {
-    pub fn setup_Rmainloop();
-}
-extern "C" {
-    pub fn Rf_endEmbeddedR(fatal: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn Rf_initialize_R(
-        ac: ::std::os::raw::c_int,
-        av: *mut *mut ::std::os::raw::c_char,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn CleanEd();
-}
-extern "C" {
-    pub fn R_CleanTempDir();
-}
-extern "C" {
-    #[doc = "R's versions with !R_FINITE checks"]
-    pub fn R_pow(x: f64, y: f64) -> f64;
-}
-extern "C" {
-    pub fn R_pow_di(arg1: f64, arg2: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    #[doc = "Random Number Generators"]
-    pub fn norm_rand() -> f64;
-}
-extern "C" {
-    pub fn unif_rand() -> f64;
-}
-extern "C" {
-    pub fn R_unif_index(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn exp_rand() -> f64;
-}
-extern "C" {
-    pub fn Rf_dnorm4(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pnorm5(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qnorm5(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rnorm(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_pnorm_both(
-        arg1: f64,
-        arg2: *mut f64,
-        arg3: *mut f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn Rf_dunif(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_punif(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qunif(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_runif(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dgamma(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pgamma(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qgamma(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rgamma(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_log1pmx(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_log1pexp(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_log1mexp(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_lgamma1p(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_logspace_add(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_logspace_sub(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_logspace_sum(arg1: *const f64, arg2: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_dbeta(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pbeta(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qbeta(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rbeta(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dlnorm(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_plnorm(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qlnorm(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rlnorm(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dchisq(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pchisq(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qchisq(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rchisq(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dnchisq(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pnchisq(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qnchisq(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rnchisq(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_df(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pf(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qf(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rf(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dt(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pt(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qt(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rt(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dbinom_raw(x: f64, n: f64, p: f64, q: f64, give_log: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_dbinom(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pbinom(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qbinom(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rbinom(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_rmultinom(
-        arg1: ::std::os::raw::c_int,
-        arg2: *mut f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: *mut ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn Rf_dcauchy(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pcauchy(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qcauchy(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rcauchy(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dexp(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pexp(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qexp(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rexp(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dgeom(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pgeom(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qgeom(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rgeom(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dhyper(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: f64,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_phyper(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: f64,
-        arg5: ::std::os::raw::c_int,
-        arg6: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qhyper(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: f64,
-        arg5: ::std::os::raw::c_int,
-        arg6: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rhyper(arg1: f64, arg2: f64, arg3: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dnbinom(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pnbinom(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qnbinom(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rnbinom(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dnbinom_mu(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pnbinom_mu(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qnbinom_mu(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rnbinom_mu(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dpois_raw(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_dpois(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_ppois(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qpois(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rpois(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dweibull(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pweibull(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qweibull(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rweibull(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dlogis(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_plogis(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qlogis(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rlogis(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dnbeta(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: f64,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_pnbeta(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: f64,
-        arg5: ::std::os::raw::c_int,
-        arg6: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qnbeta(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: f64,
-        arg5: ::std::os::raw::c_int,
-        arg6: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rnbeta(arg1: f64, arg2: f64, arg3: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_dnf(arg1: f64, arg2: f64, arg3: f64, arg4: f64, arg5: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pnf(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: f64,
-        arg5: ::std::os::raw::c_int,
-        arg6: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qnf(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: f64,
-        arg5: ::std::os::raw::c_int,
-        arg6: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_dnt(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pnt(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qnt(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_ptukey(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: f64,
-        arg5: ::std::os::raw::c_int,
-        arg6: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qtukey(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: f64,
-        arg5: ::std::os::raw::c_int,
-        arg6: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_dwilcox(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_pwilcox(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qwilcox(
-        arg1: f64,
-        arg2: f64,
-        arg3: f64,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rwilcox(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn wilcox_free();
-}
-extern "C" {
-    pub fn Rf_dsignrank(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_psignrank(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_qsignrank(
-        arg1: f64,
-        arg2: f64,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn Rf_rsignrank(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn signrank_free();
-}
-extern "C" {
-    pub fn Rf_gammafn(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_lgammafn(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_lgammafn_sign(arg1: f64, arg2: *mut ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn Rf_dpsifn(
-        arg1: f64,
-        arg2: ::std::os::raw::c_int,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-        arg5: *mut f64,
-        arg6: *mut ::std::os::raw::c_int,
-        arg7: *mut ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn Rf_psigamma(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_digamma(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_trigamma(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_tetragamma(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_pentagamma(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_beta(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_lbeta(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_choose(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_lchoose(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_bessel_i(arg1: f64, arg2: f64, arg3: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_bessel_j(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_bessel_k(arg1: f64, arg2: f64, arg3: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_bessel_y(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_bessel_i_ex(arg1: f64, arg2: f64, arg3: f64, arg4: *mut f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_bessel_j_ex(arg1: f64, arg2: f64, arg3: *mut f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_bessel_k_ex(arg1: f64, arg2: f64, arg3: f64, arg4: *mut f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_bessel_y_ex(arg1: f64, arg2: f64, arg3: *mut f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_imax2(
-        arg1: ::std::os::raw::c_int,
-        arg2: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_imin2(
-        arg1: ::std::os::raw::c_int,
-        arg2: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_fmax2(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_fmin2(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_sign(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_fprec(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_fround(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_fsign(arg1: f64, arg2: f64) -> f64;
-}
-extern "C" {
-    pub fn Rf_ftrunc(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn cospi(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn sinpi(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn tanpi(arg1: f64) -> f64;
-}
-extern "C" {
-    pub fn Rtanpi(arg1: f64) -> f64;
-}
 pub const ParseStatus_PARSE_NULL: ParseStatus = 0;
 pub const ParseStatus_PARSE_OK: ParseStatus = 1;
 pub const ParseStatus_PARSE_INCOMPLETE: ParseStatus = 2;
@@ -4055,14 +1274,6 @@ pub const ParseStatus_PARSE_ERROR: ParseStatus = 3;
 pub const ParseStatus_PARSE_EOF: ParseStatus = 4;
 #[doc = "PARSE_NULL will not be returned by R_ParseVector"]
 pub type ParseStatus = u32;
-extern "C" {
-    pub fn R_ParseVector(
-        arg1: SEXP,
-        arg2: ::std::os::raw::c_int,
-        arg3: *mut ParseStatus,
-        arg4: SEXP,
-    ) -> SEXP;
-}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct R_altrep_class_t {
@@ -4092,54 +1303,6 @@ fn bindgen_test_layout_R_altrep_class_t() {
             stringify!(ptr)
         )
     );
-}
-extern "C" {
-    pub fn R_new_altrep(aclass: R_altrep_class_t, data1: SEXP, data2: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_make_altstring_class(
-        cname: *const ::std::os::raw::c_char,
-        pname: *const ::std::os::raw::c_char,
-        info: *mut DllInfo,
-    ) -> R_altrep_class_t;
-}
-extern "C" {
-    pub fn R_make_altinteger_class(
-        cname: *const ::std::os::raw::c_char,
-        pname: *const ::std::os::raw::c_char,
-        info: *mut DllInfo,
-    ) -> R_altrep_class_t;
-}
-extern "C" {
-    pub fn R_make_altreal_class(
-        cname: *const ::std::os::raw::c_char,
-        pname: *const ::std::os::raw::c_char,
-        info: *mut DllInfo,
-    ) -> R_altrep_class_t;
-}
-extern "C" {
-    pub fn R_make_altlogical_class(
-        cname: *const ::std::os::raw::c_char,
-        pname: *const ::std::os::raw::c_char,
-        info: *mut DllInfo,
-    ) -> R_altrep_class_t;
-}
-extern "C" {
-    pub fn R_make_altraw_class(
-        cname: *const ::std::os::raw::c_char,
-        pname: *const ::std::os::raw::c_char,
-        info: *mut DllInfo,
-    ) -> R_altrep_class_t;
-}
-extern "C" {
-    pub fn R_make_altcomplex_class(
-        cname: *const ::std::os::raw::c_char,
-        pname: *const ::std::os::raw::c_char,
-        info: *mut DllInfo,
-    ) -> R_altrep_class_t;
-}
-extern "C" {
-    pub fn R_altrep_inherits(x: SEXP, arg1: R_altrep_class_t) -> Rboolean;
 }
 pub type R_altrep_UnserializeEX_method_t = ::std::option::Option<
     unsafe extern "C" fn(
@@ -4261,165 +1424,6 @@ pub type R_altstring_Is_sorted_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
 pub type R_altstring_No_NA_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
-extern "C" {
-    pub fn R_set_altrep_UnserializeEX_method(
-        cls: R_altrep_class_t,
-        fun: R_altrep_UnserializeEX_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altrep_Unserialize_method(
-        cls: R_altrep_class_t,
-        fun: R_altrep_Unserialize_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altrep_Serialized_state_method(
-        cls: R_altrep_class_t,
-        fun: R_altrep_Serialized_state_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altrep_DuplicateEX_method(
-        cls: R_altrep_class_t,
-        fun: R_altrep_DuplicateEX_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altrep_Duplicate_method(cls: R_altrep_class_t, fun: R_altrep_Duplicate_method_t);
-}
-extern "C" {
-    pub fn R_set_altrep_Coerce_method(cls: R_altrep_class_t, fun: R_altrep_Coerce_method_t);
-}
-extern "C" {
-    pub fn R_set_altrep_Inspect_method(cls: R_altrep_class_t, fun: R_altrep_Inspect_method_t);
-}
-extern "C" {
-    pub fn R_set_altrep_Length_method(cls: R_altrep_class_t, fun: R_altrep_Length_method_t);
-}
-extern "C" {
-    pub fn R_set_altvec_Dataptr_method(cls: R_altrep_class_t, fun: R_altvec_Dataptr_method_t);
-}
-extern "C" {
-    pub fn R_set_altvec_Dataptr_or_null_method(
-        cls: R_altrep_class_t,
-        fun: R_altvec_Dataptr_or_null_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altvec_Extract_subset_method(
-        cls: R_altrep_class_t,
-        fun: R_altvec_Extract_subset_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altinteger_Elt_method(cls: R_altrep_class_t, fun: R_altinteger_Elt_method_t);
-}
-extern "C" {
-    pub fn R_set_altinteger_Get_region_method(
-        cls: R_altrep_class_t,
-        fun: R_altinteger_Get_region_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altinteger_Is_sorted_method(
-        cls: R_altrep_class_t,
-        fun: R_altinteger_Is_sorted_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altinteger_No_NA_method(cls: R_altrep_class_t, fun: R_altinteger_No_NA_method_t);
-}
-extern "C" {
-    pub fn R_set_altinteger_Sum_method(cls: R_altrep_class_t, fun: R_altinteger_Sum_method_t);
-}
-extern "C" {
-    pub fn R_set_altinteger_Min_method(cls: R_altrep_class_t, fun: R_altinteger_Min_method_t);
-}
-extern "C" {
-    pub fn R_set_altinteger_Max_method(cls: R_altrep_class_t, fun: R_altinteger_Max_method_t);
-}
-extern "C" {
-    pub fn R_set_altreal_Elt_method(cls: R_altrep_class_t, fun: R_altreal_Elt_method_t);
-}
-extern "C" {
-    pub fn R_set_altreal_Get_region_method(
-        cls: R_altrep_class_t,
-        fun: R_altreal_Get_region_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altreal_Is_sorted_method(cls: R_altrep_class_t, fun: R_altreal_Is_sorted_method_t);
-}
-extern "C" {
-    pub fn R_set_altreal_No_NA_method(cls: R_altrep_class_t, fun: R_altreal_No_NA_method_t);
-}
-extern "C" {
-    pub fn R_set_altreal_Sum_method(cls: R_altrep_class_t, fun: R_altreal_Sum_method_t);
-}
-extern "C" {
-    pub fn R_set_altreal_Min_method(cls: R_altrep_class_t, fun: R_altreal_Min_method_t);
-}
-extern "C" {
-    pub fn R_set_altreal_Max_method(cls: R_altrep_class_t, fun: R_altreal_Max_method_t);
-}
-extern "C" {
-    pub fn R_set_altlogical_Elt_method(cls: R_altrep_class_t, fun: R_altlogical_Elt_method_t);
-}
-extern "C" {
-    pub fn R_set_altlogical_Get_region_method(
-        cls: R_altrep_class_t,
-        fun: R_altlogical_Get_region_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altlogical_Is_sorted_method(
-        cls: R_altrep_class_t,
-        fun: R_altlogical_Is_sorted_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altlogical_No_NA_method(cls: R_altrep_class_t, fun: R_altlogical_No_NA_method_t);
-}
-extern "C" {
-    pub fn R_set_altlogical_Sum_method(cls: R_altrep_class_t, fun: R_altlogical_Sum_method_t);
-}
-extern "C" {
-    pub fn R_set_altraw_Elt_method(cls: R_altrep_class_t, fun: R_altraw_Elt_method_t);
-}
-extern "C" {
-    pub fn R_set_altraw_Get_region_method(cls: R_altrep_class_t, fun: R_altraw_Get_region_method_t);
-}
-extern "C" {
-    pub fn R_set_altcomplex_Elt_method(cls: R_altrep_class_t, fun: R_altcomplex_Elt_method_t);
-}
-extern "C" {
-    pub fn R_set_altcomplex_Get_region_method(
-        cls: R_altrep_class_t,
-        fun: R_altcomplex_Get_region_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altstring_Elt_method(cls: R_altrep_class_t, fun: R_altstring_Elt_method_t);
-}
-extern "C" {
-    pub fn R_set_altstring_Set_elt_method(cls: R_altrep_class_t, fun: R_altstring_Set_elt_method_t);
-}
-extern "C" {
-    pub fn R_set_altstring_Is_sorted_method(
-        cls: R_altrep_class_t,
-        fun: R_altstring_Is_sorted_method_t,
-    );
-}
-extern "C" {
-    pub fn R_set_altstring_No_NA_method(cls: R_altrep_class_t, fun: R_altstring_No_NA_method_t);
-}
-extern "C" {
-    pub fn R_GE_getVersion() -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_GE_checkVersionOrDie(version: ::std::os::raw::c_int);
-}
 #[doc = "native device coordinates (rasters)"]
 pub const GEUnit_GE_DEVICE: GEUnit = 0;
 #[doc = "normalised device coordinates x=(0,1), y=(0,1)"]
@@ -5727,40 +2731,6 @@ fn bindgen_test_layout__DevDesc() {
         )
     );
 }
-extern "C" {
-    pub fn Rf_ndevNumber(arg1: pDevDesc) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_NumDevices() -> ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "Check for an available device slot"]
-    pub fn R_CheckDeviceAvailable();
-}
-extern "C" {
-    pub fn R_CheckDeviceAvailableBool() -> Rboolean;
-}
-extern "C" {
-    pub fn Rf_curDevice() -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_nextDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_prevDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_selectDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_killDevice(arg1: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn Rf_NoDevices() -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_NewFrameConfirm(arg1: pDevDesc);
-}
 pub const R_KeyName_knUNKNOWN: R_KeyName = -1;
 pub const R_KeyName_knLEFT: R_KeyName = 0;
 pub const R_KeyName_knUP: R_KeyName = 1;
@@ -5791,60 +2761,6 @@ pub const R_MouseEvent_meMouseUp: R_MouseEvent = 1;
 pub const R_MouseEvent_meMouseMove: R_MouseEvent = 2;
 #[doc = "These are the three possible mouse events"]
 pub type R_MouseEvent = u32;
-extern "C" {
-    pub fn Rf_doMouseEvent(
-        dd: pDevDesc,
-        event: R_MouseEvent,
-        buttons: ::std::os::raw::c_int,
-        x: f64,
-        y: f64,
-    );
-}
-extern "C" {
-    pub fn Rf_doKeybd(dd: pDevDesc, rkey: R_KeyName, keyname: *const ::std::os::raw::c_char);
-}
-extern "C" {
-    pub fn Rf_doIdle(dd: pDevDesc);
-}
-extern "C" {
-    pub fn Rf_doesIdle(dd: pDevDesc) -> Rboolean;
-}
-extern "C" {
-    pub static mut R_interrupts_suspended: Rboolean;
-}
-extern "C" {
-    pub static mut R_interrupts_pending: ::std::os::raw::c_int;
-}
-extern "C" {
-    pub static mut mbcslocale: Rboolean;
-}
-extern "C" {
-    pub fn Rf_AdobeSymbol2utf8(
-        out: *mut ::std::os::raw::c_char,
-        in_: *const ::std::os::raw::c_char,
-        nwork: usize,
-        usePUA: Rboolean,
-    ) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn Rf_utf8toAdobeSymbol(
-        out: *mut ::std::os::raw::c_char,
-        in_: *const ::std::os::raw::c_char,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn Rf_utf8Toutf8NoPUA(in_: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn Rf_utf8ToLatin1AdobeSymbol2utf8(
-        in_: *const ::std::os::raw::c_char,
-        usePUA: Rboolean,
-    ) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    #[doc = "Translates Unicode point to UTF-8"]
-    pub fn Rf_ucstoutf8(s: *mut ::std::os::raw::c_char, c: ::std::os::raw::c_uint) -> usize;
-}
 pub type GEDevDesc = _GEDevDesc;
 pub type GEcallback = ::std::option::Option<
     unsafe extern "C" fn(arg1: GEevent, arg2: *mut GEDevDesc, arg3: SEXP) -> SEXP,
@@ -6032,1450 +2948,12 @@ fn bindgen_test_layout__GEDevDesc() {
     );
 }
 pub type pGEDevDesc = *mut GEDevDesc;
-extern "C" {
-    pub fn Rf_desc2GEDesc(dd: pDevDesc) -> pGEDevDesc;
-}
-extern "C" {
-    pub fn GEdeviceNumber(arg1: pGEDevDesc) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn GEgetDevice(arg1: ::std::os::raw::c_int) -> pGEDevDesc;
-}
-extern "C" {
-    pub fn GEaddDevice(arg1: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEaddDevice2(arg1: pGEDevDesc, arg2: *const ::std::os::raw::c_char);
-}
-extern "C" {
-    pub fn GEaddDevice2f(
-        arg1: pGEDevDesc,
-        arg2: *const ::std::os::raw::c_char,
-        arg3: *const ::std::os::raw::c_char,
-    );
-}
-extern "C" {
-    pub fn GEkillDevice(arg1: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEcreateDevDesc(dev: pDevDesc) -> pGEDevDesc;
-}
-extern "C" {
-    pub fn GEdestroyDevDesc(dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEsystemState(
-        dd: pGEDevDesc,
-        index: ::std::os::raw::c_int,
-    ) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn GEregisterWithDevice(dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEregisterSystem(callback: GEcallback, systemRegisterIndex: *mut ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn GEunregisterSystem(registerIndex: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn GEhandleEvent(event: GEevent, dev: pDevDesc, data: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn GEfromDeviceX(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
-}
-extern "C" {
-    pub fn GEtoDeviceX(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
-}
-extern "C" {
-    pub fn GEfromDeviceY(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
-}
-extern "C" {
-    pub fn GEtoDeviceY(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
-}
-extern "C" {
-    pub fn GEfromDeviceWidth(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
-}
-extern "C" {
-    pub fn GEtoDeviceWidth(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
-}
-extern "C" {
-    pub fn GEfromDeviceHeight(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
-}
-extern "C" {
-    pub fn GEtoDeviceHeight(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
-}
 #[doc = "-------------------------------------------------------------------\n\n  COLOUR CODE is concerned with the internals of R colour representation\n\n  From colors.c, used in par.c, grid/src/gpar.c"]
 pub type rcolor = ::std::os::raw::c_uint;
-extern "C" {
-    pub fn Rf_RGBpar(arg1: SEXP, arg2: ::std::os::raw::c_int) -> rcolor;
-}
-extern "C" {
-    pub fn Rf_RGBpar3(arg1: SEXP, arg2: ::std::os::raw::c_int, arg3: rcolor) -> rcolor;
-}
-extern "C" {
-    pub fn Rf_col2name(col: rcolor) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    #[doc = "Convert either a name or a #RRGGBB\\[AA\\] string to internal.\nBecause people were using it, it also converts \"1\", \"2\" ...\nto a colour in the palette, and \"0\" to transparent white."]
-    pub fn R_GE_str2col(s: *const ::std::os::raw::c_char) -> rcolor;
-}
-extern "C" {
-    pub fn GE_LENDpar(value: SEXP, ind: ::std::os::raw::c_int) -> R_GE_lineend;
-}
-extern "C" {
-    pub fn GE_LENDget(lend: R_GE_lineend) -> SEXP;
-}
-extern "C" {
-    pub fn GE_LJOINpar(value: SEXP, ind: ::std::os::raw::c_int) -> R_GE_linejoin;
-}
-extern "C" {
-    pub fn GE_LJOINget(ljoin: R_GE_linejoin) -> SEXP;
-}
-extern "C" {
-    pub fn GESetClip(x1: f64, y1: f64, x2: f64, y2: f64, dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GENewPage(gc: pGEcontext, dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GELine(x1: f64, y1: f64, x2: f64, y2: f64, gc: pGEcontext, dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEPolyline(
-        n: ::std::os::raw::c_int,
-        x: *mut f64,
-        y: *mut f64,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    );
-}
-extern "C" {
-    pub fn GEPolygon(
-        n: ::std::os::raw::c_int,
-        x: *mut f64,
-        y: *mut f64,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    );
-}
-extern "C" {
-    pub fn GEXspline(
-        n: ::std::os::raw::c_int,
-        x: *mut f64,
-        y: *mut f64,
-        s: *mut f64,
-        open: Rboolean,
-        repEnds: Rboolean,
-        draw: Rboolean,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn GECircle(x: f64, y: f64, radius: f64, gc: pGEcontext, dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GERect(x0: f64, y0: f64, x1: f64, y1: f64, gc: pGEcontext, dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEPath(
-        x: *mut f64,
-        y: *mut f64,
-        npoly: ::std::os::raw::c_int,
-        nper: *mut ::std::os::raw::c_int,
-        winding: Rboolean,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    );
-}
-extern "C" {
-    pub fn GERaster(
-        raster: *mut ::std::os::raw::c_uint,
-        w: ::std::os::raw::c_int,
-        h: ::std::os::raw::c_int,
-        x: f64,
-        y: f64,
-        width: f64,
-        height: f64,
-        angle: f64,
-        interpolate: Rboolean,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    );
-}
-extern "C" {
-    pub fn GECap(dd: pGEDevDesc) -> SEXP;
-}
-extern "C" {
-    pub fn GEText(
-        x: f64,
-        y: f64,
-        str_: *const ::std::os::raw::c_char,
-        enc: cetype_t,
-        xc: f64,
-        yc: f64,
-        rot: f64,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    );
-}
-extern "C" {
-    pub fn GEMode(mode: ::std::os::raw::c_int, dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GESymbol(
-        x: f64,
-        y: f64,
-        pch: ::std::os::raw::c_int,
-        size: f64,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    );
-}
-extern "C" {
-    pub fn GEPretty(lo: *mut f64, up: *mut f64, ndiv: *mut ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn GEMetricInfo(
-        c: ::std::os::raw::c_int,
-        gc: pGEcontext,
-        ascent: *mut f64,
-        descent: *mut f64,
-        width: *mut f64,
-        dd: pGEDevDesc,
-    );
-}
-extern "C" {
-    pub fn GEStrWidth(
-        str_: *const ::std::os::raw::c_char,
-        enc: cetype_t,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    ) -> f64;
-}
-extern "C" {
-    pub fn GEStrHeight(
-        str_: *const ::std::os::raw::c_char,
-        enc: cetype_t,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    ) -> f64;
-}
-extern "C" {
-    pub fn GEStrMetric(
-        str_: *const ::std::os::raw::c_char,
-        enc: cetype_t,
-        gc: pGEcontext,
-        ascent: *mut f64,
-        descent: *mut f64,
-        width: *mut f64,
-        dd: pGEDevDesc,
-    );
-}
-extern "C" {
-    pub fn GEstring_to_pch(pch: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "-------------------------------------------------------------------\n\n  LINE TEXTURE CODE is concerned with the internals of R\n  line texture representation."]
-    pub fn GE_LTYpar(arg1: SEXP, arg2: ::std::os::raw::c_int) -> ::std::os::raw::c_uint;
-}
-extern "C" {
-    pub fn GE_LTYget(arg1: ::std::os::raw::c_uint) -> SEXP;
-}
-extern "C" {
-    #[doc = "Raster operations"]
-    pub fn R_GE_rasterScale(
-        sraster: *mut ::std::os::raw::c_uint,
-        sw: ::std::os::raw::c_int,
-        sh: ::std::os::raw::c_int,
-        draster: *mut ::std::os::raw::c_uint,
-        dw: ::std::os::raw::c_int,
-        dh: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn R_GE_rasterInterpolate(
-        sraster: *mut ::std::os::raw::c_uint,
-        sw: ::std::os::raw::c_int,
-        sh: ::std::os::raw::c_int,
-        draster: *mut ::std::os::raw::c_uint,
-        dw: ::std::os::raw::c_int,
-        dh: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn R_GE_rasterRotatedSize(
-        w: ::std::os::raw::c_int,
-        h: ::std::os::raw::c_int,
-        angle: f64,
-        wnew: *mut ::std::os::raw::c_int,
-        hnew: *mut ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn R_GE_rasterRotatedOffset(
-        w: ::std::os::raw::c_int,
-        h: ::std::os::raw::c_int,
-        angle: f64,
-        botleft: ::std::os::raw::c_int,
-        xoff: *mut f64,
-        yoff: *mut f64,
-    );
-}
-extern "C" {
-    pub fn R_GE_rasterResizeForRotation(
-        sraster: *mut ::std::os::raw::c_uint,
-        w: ::std::os::raw::c_int,
-        h: ::std::os::raw::c_int,
-        newRaster: *mut ::std::os::raw::c_uint,
-        wnew: ::std::os::raw::c_int,
-        hnew: ::std::os::raw::c_int,
-        gc: pGEcontext,
-    );
-}
-extern "C" {
-    pub fn R_GE_rasterRotate(
-        sraster: *mut ::std::os::raw::c_uint,
-        w: ::std::os::raw::c_int,
-        h: ::std::os::raw::c_int,
-        angle: f64,
-        draster: *mut ::std::os::raw::c_uint,
-        gc: pGEcontext,
-        perPixelAlpha: Rboolean,
-    );
-}
-extern "C" {
-    #[doc = "From plotmath.c"]
-    pub fn GEExpressionWidth(expr: SEXP, gc: pGEcontext, dd: pGEDevDesc) -> f64;
-}
-extern "C" {
-    pub fn GEExpressionHeight(expr: SEXP, gc: pGEcontext, dd: pGEDevDesc) -> f64;
-}
-extern "C" {
-    pub fn GEExpressionMetric(
-        expr: SEXP,
-        gc: pGEcontext,
-        ascent: *mut f64,
-        descent: *mut f64,
-        width: *mut f64,
-        dd: pGEDevDesc,
-    );
-}
-extern "C" {
-    pub fn GEMathText(
-        x: f64,
-        y: f64,
-        expr: SEXP,
-        xc: f64,
-        yc: f64,
-        rot: f64,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    );
-}
-extern "C" {
-    #[doc = "From plot3d.c : used in package clines"]
-    pub fn GEcontourLines(
-        x: *mut f64,
-        nx: ::std::os::raw::c_int,
-        y: *mut f64,
-        ny: ::std::os::raw::c_int,
-        z: *mut f64,
-        levels: *mut f64,
-        nl: ::std::os::raw::c_int,
-    ) -> SEXP;
-}
-extern "C" {
-    #[doc = "From vfonts.c"]
-    pub fn R_GE_VStrWidth(
-        s: *const ::std::os::raw::c_char,
-        enc: cetype_t,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    ) -> f64;
-}
-extern "C" {
-    pub fn R_GE_VStrHeight(
-        s: *const ::std::os::raw::c_char,
-        enc: cetype_t,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    ) -> f64;
-}
-extern "C" {
-    pub fn R_GE_VText(
-        x: f64,
-        y: f64,
-        s: *const ::std::os::raw::c_char,
-        enc: cetype_t,
-        x_justify: f64,
-        y_justify: f64,
-        rotation: f64,
-        gc: pGEcontext,
-        dd: pGEDevDesc,
-    );
-}
-extern "C" {
-    pub fn GEcurrentDevice() -> pGEDevDesc;
-}
-extern "C" {
-    pub fn GEdeviceDirty(dd: pGEDevDesc) -> Rboolean;
-}
-extern "C" {
-    pub fn GEdirtyDevice(dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEcheckState(dd: pGEDevDesc) -> Rboolean;
-}
-extern "C" {
-    pub fn GErecording(call: SEXP, dd: pGEDevDesc) -> Rboolean;
-}
-extern "C" {
-    pub fn GErecordGraphicOperation(op: SEXP, args: SEXP, dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEinitDisplayList(dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEplayDisplayList(dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEcopyDisplayList(fromDevice: ::std::os::raw::c_int);
-}
-extern "C" {
-    pub fn GEcreateSnapshot(dd: pGEDevDesc) -> SEXP;
-}
-extern "C" {
-    pub fn GEplaySnapshot(snapshot: SEXP, dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEonExit();
-}
-extern "C" {
-    pub fn GEnullDevice();
-}
-extern "C" {
-    pub fn Rf_CreateAtVector(
-        axp: *mut f64,
-        usr: *const f64,
-        nint: ::std::os::raw::c_int,
-        logflag: Rboolean,
-    ) -> SEXP;
-}
-extern "C" {
-    pub fn Rf_GAxisPars(
-        min: *mut f64,
-        max: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        log: Rboolean,
-        axis: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    #[doc = "Patterns - from ../../main/patterns.c"]
-    pub fn R_GE_isPattern(x: SEXP) -> Rboolean;
-}
-extern "C" {
-    pub fn R_GE_patternType(pattern: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_GE_linearGradientX1(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_linearGradientY1(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_linearGradientX2(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_linearGradientY2(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_linearGradientNumStops(pattern: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_GE_linearGradientStop(pattern: SEXP, i: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn R_GE_linearGradientColour(pattern: SEXP, i: ::std::os::raw::c_int) -> rcolor;
-}
-extern "C" {
-    pub fn R_GE_linearGradientExtend(pattern: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_GE_radialGradientCX1(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_radialGradientCY1(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_radialGradientR1(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_radialGradientCX2(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_radialGradientCY2(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_radialGradientR2(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_radialGradientNumStops(pattern: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_GE_radialGradientStop(pattern: SEXP, i: ::std::os::raw::c_int) -> f64;
-}
-extern "C" {
-    pub fn R_GE_radialGradientColour(pattern: SEXP, i: ::std::os::raw::c_int) -> rcolor;
-}
-extern "C" {
-    pub fn R_GE_radialGradientExtend(pattern: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_GE_tilingPatternFunction(pattern: SEXP) -> SEXP;
-}
-extern "C" {
-    pub fn R_GE_tilingPatternX(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_tilingPatternY(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_tilingPatternWidth(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_tilingPatternHeight(pattern: SEXP) -> f64;
-}
-extern "C" {
-    pub fn R_GE_tilingPatternExtend(pattern: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn R_GE_clipPathFillRule(path: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn GEStroke(path: SEXP, gc: pGEcontext, dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEFill(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn GEFillStroke(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pGEDevDesc);
-}
-extern "C" {
-    pub fn R_GE_maskType(mask: SEXP) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    #[doc = "S Like Memory Management"]
-    pub fn R_chk_calloc(arg1: usize, arg2: usize) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn R_chk_realloc(
-        arg1: *mut ::std::os::raw::c_void,
-        arg2: usize,
-    ) -> *mut ::std::os::raw::c_void;
-}
-extern "C" {
-    pub fn R_chk_free(arg1: *mut ::std::os::raw::c_void);
-}
-extern "C" {
-    pub fn dasum_(
-        n: *const ::std::os::raw::c_int,
-        dx: *const f64,
-        incx: *const ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn daxpy_(
-        n: *const ::std::os::raw::c_int,
-        da: *const f64,
-        dx: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        dy: *mut f64,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dcopy_(
-        n: *const ::std::os::raw::c_int,
-        dx: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        dy: *mut f64,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn ddot_(
-        n: *const ::std::os::raw::c_int,
-        dx: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        dy: *const f64,
-        incy: *const ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn dnrm2_(
-        n: *const ::std::os::raw::c_int,
-        dx: *const f64,
-        incx: *const ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn drot_(
-        n: *const ::std::os::raw::c_int,
-        dx: *mut f64,
-        incx: *const ::std::os::raw::c_int,
-        dy: *mut f64,
-        incy: *const ::std::os::raw::c_int,
-        c: *const f64,
-        s: *const f64,
-    );
-}
-extern "C" {
-    pub fn drotg_(a: *const f64, b: *const f64, c: *mut f64, s: *mut f64);
-}
-extern "C" {
-    pub fn drotm_(
-        n: *const ::std::os::raw::c_int,
-        dx: *mut f64,
-        incx: *const ::std::os::raw::c_int,
-        dy: *mut f64,
-        incy: *const ::std::os::raw::c_int,
-        dparam: *const f64,
-    );
-}
-extern "C" {
-    pub fn drotmg_(
-        dd1: *const f64,
-        dd2: *const f64,
-        dx1: *const f64,
-        dy1: *const f64,
-        param: *mut f64,
-    );
-}
-extern "C" {
-    pub fn dscal_(
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        dx: *mut f64,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dswap_(
-        n: *const ::std::os::raw::c_int,
-        dx: *mut f64,
-        incx: *const ::std::os::raw::c_int,
-        dy: *mut f64,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn idamax_(
-        n: *const ::std::os::raw::c_int,
-        dx: *const f64,
-        incx: *const ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn dgbmv_(
-        trans: *const ::std::os::raw::c_char,
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        kl: *const ::std::os::raw::c_int,
-        ku: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        x: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        Rf_beta: *const f64,
-        y: *mut f64,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dgemv_(
-        trans: *const ::std::os::raw::c_char,
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        x: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        Rf_beta: *const f64,
-        y: *mut f64,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dsbmv_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        x: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        Rf_beta: *const f64,
-        y: *mut f64,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dspmv_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        ap: *const f64,
-        x: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        Rf_beta: *const f64,
-        y: *mut f64,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dsymv_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        x: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        Rf_beta: *const f64,
-        y: *mut f64,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dtbmv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        x: *mut f64,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dtpmv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        ap: *const f64,
-        x: *mut f64,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dtrmv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        x: *mut f64,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dtbsv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        x: *mut f64,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dtpsv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        ap: *const f64,
-        x: *mut f64,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dtrsv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        x: *mut f64,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dger_(
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        x: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        y: *const f64,
-        incy: *const ::std::os::raw::c_int,
-        a: *mut f64,
-        lda: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dsyr_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        x: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        a: *mut f64,
-        lda: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dspr_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        x: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        ap: *mut f64,
-    );
-}
-extern "C" {
-    pub fn dsyr2_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        x: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        y: *const f64,
-        incy: *const ::std::os::raw::c_int,
-        a: *mut f64,
-        lda: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dspr2_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        x: *const f64,
-        incx: *const ::std::os::raw::c_int,
-        y: *const f64,
-        incy: *const ::std::os::raw::c_int,
-        ap: *mut f64,
-    );
-}
-extern "C" {
-    pub fn dgemm_(
-        transa: *const ::std::os::raw::c_char,
-        transb: *const ::std::os::raw::c_char,
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        b: *const f64,
-        ldb: *const ::std::os::raw::c_int,
-        Rf_beta: *const f64,
-        c: *mut f64,
-        ldc: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dtrsm_(
-        side: *const ::std::os::raw::c_char,
-        uplo: *const ::std::os::raw::c_char,
-        transa: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        b: *mut f64,
-        ldb: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dtrmm_(
-        side: *const ::std::os::raw::c_char,
-        uplo: *const ::std::os::raw::c_char,
-        transa: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        b: *mut f64,
-        ldb: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dsymm_(
-        side: *const ::std::os::raw::c_char,
-        uplo: *const ::std::os::raw::c_char,
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        b: *const f64,
-        ldb: *const ::std::os::raw::c_int,
-        Rf_beta: *const f64,
-        c: *mut f64,
-        ldc: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dsyrk_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        Rf_beta: *const f64,
-        c: *mut f64,
-        ldc: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dsyr2k_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        a: *const f64,
-        lda: *const ::std::os::raw::c_int,
-        b: *const f64,
-        ldb: *const ::std::os::raw::c_int,
-        Rf_beta: *const f64,
-        c: *mut f64,
-        ldc: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dcabs1_(z: *const Rcomplex) -> f64;
-}
-extern "C" {
-    pub fn dzasum_(
-        n: *const ::std::os::raw::c_int,
-        zx: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn dznrm2_(
-        n: *const ::std::os::raw::c_int,
-        x: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    ) -> f64;
-}
-extern "C" {
-    pub fn izamax_(
-        n: *const ::std::os::raw::c_int,
-        zx: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn zaxpy_(
-        n: *const ::std::os::raw::c_int,
-        za: *const Rcomplex,
-        zx: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        zy: *const Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zcopy_(
-        n: *const ::std::os::raw::c_int,
-        zx: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        zy: *const Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zdotc_(
-        n: *const ::std::os::raw::c_int,
-        zx: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        zy: *const Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-    ) -> Rcomplex;
-}
-extern "C" {
-    pub fn zdotu_(
-        n: *const ::std::os::raw::c_int,
-        zx: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        zy: *const Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-    ) -> Rcomplex;
-}
-extern "C" {
-    pub fn zdrot_(
-        n: *const ::std::os::raw::c_int,
-        zx: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        zy: *mut Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-        c: *const f64,
-        s: *const f64,
-    );
-}
-extern "C" {
-    pub fn zdscal_(
-        n: *const ::std::os::raw::c_int,
-        da: *const f64,
-        zx: *mut Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zgbmv_(
-        trans: *const ::std::os::raw::c_char,
-        m: *mut ::std::os::raw::c_int,
-        n: *mut ::std::os::raw::c_int,
-        kl: *mut ::std::os::raw::c_int,
-        ku: *mut ::std::os::raw::c_int,
-        alpha: *mut Rcomplex,
-        a: *mut Rcomplex,
-        lda: *mut ::std::os::raw::c_int,
-        x: *mut Rcomplex,
-        incx: *mut ::std::os::raw::c_int,
-        Rf_beta: *mut Rcomplex,
-        y: *mut Rcomplex,
-        incy: *mut ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zgemm_(
-        transa: *const ::std::os::raw::c_char,
-        transb: *const ::std::os::raw::c_char,
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        b: *const Rcomplex,
-        ldb: *const ::std::os::raw::c_int,
-        Rf_beta: *const Rcomplex,
-        c: *mut Rcomplex,
-        ldc: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zgemv_(
-        trans: *const ::std::os::raw::c_char,
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        x: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        Rf_beta: *const Rcomplex,
-        y: *mut Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zgerc_(
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        x: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        y: *const Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-        a: *mut Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zgeru_(
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        x: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        y: *const Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-        a: *mut Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zhbmv_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        x: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        Rf_beta: *const Rcomplex,
-        y: *mut Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zhemm_(
-        side: *const ::std::os::raw::c_char,
-        uplo: *const ::std::os::raw::c_char,
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        b: *const Rcomplex,
-        ldb: *const ::std::os::raw::c_int,
-        Rf_beta: *const Rcomplex,
-        c: *mut Rcomplex,
-        ldc: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zhemv_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        x: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        Rf_beta: *const Rcomplex,
-        y: *mut Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zher_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        x: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        a: *mut Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zher2_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        x: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        y: *const Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-        a: *mut Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zher2k_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        b: *const Rcomplex,
-        ldb: *const ::std::os::raw::c_int,
-        Rf_beta: *const f64,
-        c: *mut Rcomplex,
-        ldc: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zherk_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        Rf_beta: *const f64,
-        c: *mut Rcomplex,
-        ldc: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zhpmv_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        ap: *const Rcomplex,
-        x: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        Rf_beta: *const Rcomplex,
-        y: *mut Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zhpr_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const f64,
-        x: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        ap: *mut Rcomplex,
-    );
-}
-extern "C" {
-    pub fn zhpr2_(
-        uplo: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        x: *const Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        y: *const Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-        ap: *mut Rcomplex,
-    );
-}
-extern "C" {
-    pub fn zrotg_(ca: *const Rcomplex, cb: *const Rcomplex, c: *mut f64, s: *mut Rcomplex);
-}
-extern "C" {
-    pub fn zscal_(
-        n: *const ::std::os::raw::c_int,
-        za: *const Rcomplex,
-        zx: *mut Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zswap_(
-        n: *const ::std::os::raw::c_int,
-        zx: *mut Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-        zy: *mut Rcomplex,
-        incy: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zsymm_(
-        side: *const ::std::os::raw::c_char,
-        uplo: *const ::std::os::raw::c_char,
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        b: *const Rcomplex,
-        ldb: *const ::std::os::raw::c_int,
-        Rf_beta: *const Rcomplex,
-        c: *mut Rcomplex,
-        ldc: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zsyr2k_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        alpha: *mut Rcomplex,
-        a: *mut Rcomplex,
-        lda: *mut ::std::os::raw::c_int,
-        b: *mut Rcomplex,
-        ldb: *mut ::std::os::raw::c_int,
-        Rf_beta: *mut Rcomplex,
-        c: *mut Rcomplex,
-        ldc: *mut ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn zsyrk_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        Rf_beta: *const Rcomplex,
-        c: *mut Rcomplex,
-        ldc: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn ztbmv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        x: *mut Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn ztbsv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        k: *const ::std::os::raw::c_int,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        x: *mut Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn ztpmv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        ap: *const Rcomplex,
-        x: *mut Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn ztpsv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        ap: *const Rcomplex,
-        x: *mut Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn ztrmm_(
-        side: *const ::std::os::raw::c_char,
-        uplo: *const ::std::os::raw::c_char,
-        transa: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        m: *const ::std::os::raw::c_int,
-        n: *const ::std::os::raw::c_int,
-        alpha: *const Rcomplex,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        b: *mut Rcomplex,
-        ldb: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn ztrmv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        x: *mut Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn ztrsm_(
-        side: *const ::std::os::raw::c_char,
-        uplo: *const ::std::os::raw::c_char,
-        transa: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        m: *mut ::std::os::raw::c_int,
-        n: *mut ::std::os::raw::c_int,
-        alpha: *mut Rcomplex,
-        a: *mut Rcomplex,
-        lda: *mut ::std::os::raw::c_int,
-        b: *mut Rcomplex,
-        ldb: *mut ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn ztrsv_(
-        uplo: *const ::std::os::raw::c_char,
-        trans: *const ::std::os::raw::c_char,
-        diag: *const ::std::os::raw::c_char,
-        n: *const ::std::os::raw::c_int,
-        a: *const Rcomplex,
-        lda: *const ::std::os::raw::c_int,
-        x: *mut Rcomplex,
-        incx: *const ::std::os::raw::c_int,
-    );
-}
 #[doc = "../../appl/integrate.c"]
 pub type integr_fn = ::std::option::Option<
     unsafe extern "C" fn(x: *mut f64, n: ::std::os::raw::c_int, ex: *mut ::std::os::raw::c_void),
 >;
-extern "C" {
-    #[doc = "vectorizing function   f(x\\[1:n\\], ...) -> x\\[\\]  {overwriting x\\[\\]}."]
-    pub fn Rdqags(
-        f: integr_fn,
-        ex: *mut ::std::os::raw::c_void,
-        a: *mut f64,
-        b: *mut f64,
-        epsabs: *mut f64,
-        epsrel: *mut f64,
-        result: *mut f64,
-        abserr: *mut f64,
-        neval: *mut ::std::os::raw::c_int,
-        ier: *mut ::std::os::raw::c_int,
-        limit: *mut ::std::os::raw::c_int,
-        lenw: *mut ::std::os::raw::c_int,
-        last: *mut ::std::os::raw::c_int,
-        iwork: *mut ::std::os::raw::c_int,
-        work: *mut f64,
-    );
-}
-extern "C" {
-    pub fn Rdqagi(
-        f: integr_fn,
-        ex: *mut ::std::os::raw::c_void,
-        bound: *mut f64,
-        inf: *mut ::std::os::raw::c_int,
-        epsabs: *mut f64,
-        epsrel: *mut f64,
-        result: *mut f64,
-        abserr: *mut f64,
-        neval: *mut ::std::os::raw::c_int,
-        ier: *mut ::std::os::raw::c_int,
-        limit: *mut ::std::os::raw::c_int,
-        lenw: *mut ::std::os::raw::c_int,
-        last: *mut ::std::os::raw::c_int,
-        iwork: *mut ::std::os::raw::c_int,
-        work: *mut f64,
-    );
-}
 #[doc = "main/optim.c"]
 pub type optimfn = ::std::option::Option<
     unsafe extern "C" fn(
@@ -7492,146 +2970,6 @@ pub type optimgr = ::std::option::Option<
         arg4: *mut ::std::os::raw::c_void,
     ),
 >;
-extern "C" {
-    pub fn vmmin(
-        n: ::std::os::raw::c_int,
-        b: *mut f64,
-        Fmin: *mut f64,
-        fn_: optimfn,
-        gr: optimgr,
-        maxit: ::std::os::raw::c_int,
-        trace: ::std::os::raw::c_int,
-        mask: *mut ::std::os::raw::c_int,
-        abstol: f64,
-        reltol: f64,
-        nREPORT: ::std::os::raw::c_int,
-        ex: *mut ::std::os::raw::c_void,
-        fncount: *mut ::std::os::raw::c_int,
-        grcount: *mut ::std::os::raw::c_int,
-        fail: *mut ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn nmmin(
-        n: ::std::os::raw::c_int,
-        Bvec: *mut f64,
-        X: *mut f64,
-        Fmin: *mut f64,
-        fn_: optimfn,
-        fail: *mut ::std::os::raw::c_int,
-        abstol: f64,
-        intol: f64,
-        ex: *mut ::std::os::raw::c_void,
-        alpha: f64,
-        bet: f64,
-        gamm: f64,
-        trace: ::std::os::raw::c_int,
-        fncount: *mut ::std::os::raw::c_int,
-        maxit: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn cgmin(
-        n: ::std::os::raw::c_int,
-        Bvec: *mut f64,
-        X: *mut f64,
-        Fmin: *mut f64,
-        fn_: optimfn,
-        gr: optimgr,
-        fail: *mut ::std::os::raw::c_int,
-        abstol: f64,
-        intol: f64,
-        ex: *mut ::std::os::raw::c_void,
-        type_: ::std::os::raw::c_int,
-        trace: ::std::os::raw::c_int,
-        fncount: *mut ::std::os::raw::c_int,
-        grcount: *mut ::std::os::raw::c_int,
-        maxit: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn lbfgsb(
-        n: ::std::os::raw::c_int,
-        m: ::std::os::raw::c_int,
-        x: *mut f64,
-        l: *mut f64,
-        u: *mut f64,
-        nbd: *mut ::std::os::raw::c_int,
-        Fmin: *mut f64,
-        fn_: optimfn,
-        gr: optimgr,
-        fail: *mut ::std::os::raw::c_int,
-        ex: *mut ::std::os::raw::c_void,
-        factr: f64,
-        pgtol: f64,
-        fncount: *mut ::std::os::raw::c_int,
-        grcount: *mut ::std::os::raw::c_int,
-        maxit: ::std::os::raw::c_int,
-        msg: *mut ::std::os::raw::c_char,
-        trace: ::std::os::raw::c_int,
-        nREPORT: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn samin(
-        n: ::std::os::raw::c_int,
-        pb: *mut f64,
-        yb: *mut f64,
-        fn_: optimfn,
-        maxit: ::std::os::raw::c_int,
-        tmax: ::std::os::raw::c_int,
-        ti: f64,
-        trace: ::std::os::raw::c_int,
-        ex: *mut ::std::os::raw::c_void,
-    );
-}
-extern "C" {
-    pub fn dqrqty_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        qty: *mut f64,
-    );
-}
-extern "C" {
-    pub fn dqrqy_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        qy: *mut f64,
-    );
-}
-extern "C" {
-    pub fn dqrcf_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        b: *mut f64,
-        info: *mut ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    #[doc = "appl/pretty.c: for use in engine.c and util.c"]
-    pub fn R_pretty(
-        lo: *mut f64,
-        up: *mut f64,
-        ndiv: *mut ::std::os::raw::c_int,
-        min_n: ::std::os::raw::c_int,
-        shrink_sml: f64,
-        high_u_fact: *const f64,
-        eps_correction: ::std::os::raw::c_int,
-        return_bounds: ::std::os::raw::c_int,
-    ) -> f64;
-}
 #[doc = "type of pointer to the target and gradient functions"]
 pub type fcn_p = ::std::option::Option<
     unsafe extern "C" fn(
@@ -7651,68 +2989,6 @@ pub type d2fcn_p = ::std::option::Option<
         arg5: *mut ::std::os::raw::c_void,
     ),
 >;
-extern "C" {
-    #[doc = "Also used in packages nlme, pcaPP"]
-    pub fn optif9(
-        nr: ::std::os::raw::c_int,
-        n: ::std::os::raw::c_int,
-        x: *mut f64,
-        fcn: fcn_p,
-        d1fcn: fcn_p,
-        d2fcn: d2fcn_p,
-        state: *mut ::std::os::raw::c_void,
-        typsiz: *mut f64,
-        fscale: f64,
-        method: ::std::os::raw::c_int,
-        iexp: ::std::os::raw::c_int,
-        msg: *mut ::std::os::raw::c_int,
-        ndigit: ::std::os::raw::c_int,
-        itnlim: ::std::os::raw::c_int,
-        iagflg: ::std::os::raw::c_int,
-        iahflg: ::std::os::raw::c_int,
-        dlt: f64,
-        gradtl: f64,
-        stepmx: f64,
-        steptl: f64,
-        xpls: *mut f64,
-        fpls: *mut f64,
-        gpls: *mut f64,
-        itrmcd: *mut ::std::os::raw::c_int,
-        a: *mut f64,
-        wrk: *mut f64,
-        itncnt: *mut ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn dqrdc2_(
-        x: *mut f64,
-        ldx: *mut ::std::os::raw::c_int,
-        n: *mut ::std::os::raw::c_int,
-        p: *mut ::std::os::raw::c_int,
-        tol: *mut f64,
-        rank: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        pivot: *mut ::std::os::raw::c_int,
-        work: *mut f64,
-    );
-}
-extern "C" {
-    pub fn dqrls_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        p: *mut ::std::os::raw::c_int,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        tol: *mut f64,
-        b: *mut f64,
-        rsd: *mut f64,
-        qty: *mut f64,
-        k: *mut ::std::os::raw::c_int,
-        jpvt: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        work: *mut f64,
-    );
-}
 pub const RNGtype_WICHMANN_HILL: RNGtype = 0;
 pub const RNGtype_MARSAGLIA_MULTICARRY: RNGtype = 1;
 pub const RNGtype_SUPER_DUPER: RNGtype = 2;
@@ -7734,31 +3010,7 @@ pub const Sampletype_ROUNDING: Sampletype = 0;
 pub const Sampletype_REJECTION: Sampletype = 1;
 #[doc = "Different ways to generate discrete uniform samples"]
 pub type Sampletype = u32;
-extern "C" {
-    pub fn R_sample_kind() -> Sampletype;
-}
-extern "C" {
-    pub fn GetRNGstate();
-}
-extern "C" {
-    pub fn PutRNGstate();
-}
 pub type Int32 = ::std::os::raw::c_uint;
-extern "C" {
-    pub fn user_unif_rand() -> *mut f64;
-}
-extern "C" {
-    pub fn user_unif_init(arg1: Int32);
-}
-extern "C" {
-    pub fn user_unif_nseed() -> *mut ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn user_unif_seedloc() -> *mut ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn user_norm_rand() -> *mut f64;
-}
 #[doc = "R 4.3 redefined `Rcomplex` to a union for compatibility with Fortran.\n But the old definition is compatible both the union version\n and the struct version.\n See: <https://github.com/extendr/extendr/issues/524>\n <div rustbindgen replaces=\"Rcomplex\"></div>"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -7864,4 +3116,2808 @@ fn bindgen_test_layout___va_list_tag() {
             stringify!(reg_save_area)
         )
     );
+}
+extern "C" {
+    #[doc = "IEEE NaN"]
+    pub static mut R_NaN: f64;
+    #[doc = "IEEE Inf"]
+    pub static mut R_PosInf: f64;
+    #[doc = "IEEE -Inf"]
+    pub static mut R_NegInf: f64;
+    #[doc = "NA_REAL: IEEE"]
+    pub static mut R_NaReal: f64;
+    #[doc = "NA_INTEGER:= INT_MIN currently"]
+    pub static mut R_NaInt: ::std::os::raw::c_int;
+    #[doc = "NA_STRING is a SEXP, so defined in Rinternals.h"]
+    pub fn R_IsNA(arg1: f64) -> ::std::os::raw::c_int;
+    pub fn R_IsNaN(arg1: f64) -> ::std::os::raw::c_int;
+    pub fn R_finite(arg1: f64) -> ::std::os::raw::c_int;
+    pub fn Rf_error(arg1: *const ::std::os::raw::c_char, ...) -> !;
+    pub fn UNIMPLEMENTED(arg1: *const ::std::os::raw::c_char) -> !;
+    pub fn WrongArgCount(arg1: *const ::std::os::raw::c_char) -> !;
+    pub fn Rf_warning(arg1: *const ::std::os::raw::c_char, ...);
+    pub fn R_ShowMessage(s: *const ::std::os::raw::c_char);
+    pub fn vmaxget() -> *mut ::std::os::raw::c_void;
+    pub fn vmaxset(arg1: *const ::std::os::raw::c_void);
+    pub fn R_gc();
+    pub fn R_gc_running() -> ::std::os::raw::c_int;
+    pub fn R_alloc(arg1: usize, arg2: ::std::os::raw::c_int) -> *mut ::std::os::raw::c_char;
+    pub fn R_allocLD(nelem: usize) -> *mut u128;
+    pub fn S_alloc(
+        arg1: ::std::os::raw::c_long,
+        arg2: ::std::os::raw::c_int,
+    ) -> *mut ::std::os::raw::c_char;
+    pub fn S_realloc(
+        arg1: *mut ::std::os::raw::c_char,
+        arg2: ::std::os::raw::c_long,
+        arg3: ::std::os::raw::c_long,
+        arg4: ::std::os::raw::c_int,
+    ) -> *mut ::std::os::raw::c_char;
+    pub fn R_malloc_gc(arg1: usize) -> *mut ::std::os::raw::c_void;
+    pub fn R_calloc_gc(arg1: usize, arg2: usize) -> *mut ::std::os::raw::c_void;
+    pub fn R_realloc_gc(
+        arg1: *mut ::std::os::raw::c_void,
+        arg2: usize,
+    ) -> *mut ::std::os::raw::c_void;
+    #[doc = "../../main/sort.c :"]
+    pub fn R_isort(arg1: *mut ::std::os::raw::c_int, arg2: ::std::os::raw::c_int);
+    pub fn R_rsort(arg1: *mut f64, arg2: ::std::os::raw::c_int);
+    pub fn R_csort(arg1: *mut Rcomplex, arg2: ::std::os::raw::c_int);
+    pub fn rsort_with_index(
+        arg1: *mut f64,
+        arg2: *mut ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+    );
+    pub fn Rf_revsort(
+        arg1: *mut f64,
+        arg2: *mut ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+    );
+    pub fn Rf_iPsort(
+        arg1: *mut ::std::os::raw::c_int,
+        arg2: ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+    );
+    pub fn Rf_rPsort(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: ::std::os::raw::c_int);
+    pub fn Rf_cPsort(arg1: *mut Rcomplex, arg2: ::std::os::raw::c_int, arg3: ::std::os::raw::c_int);
+    #[doc = "../../main/qsort.c : */\n/* dummy renamed to II to avoid problems with g++ on Solaris"]
+    pub fn R_qsort(v: *mut f64, i: usize, j: usize);
+    pub fn R_qsort_I(
+        v: *mut f64,
+        II: *mut ::std::os::raw::c_int,
+        i: ::std::os::raw::c_int,
+        j: ::std::os::raw::c_int,
+    );
+    pub fn R_qsort_int(iv: *mut ::std::os::raw::c_int, i: usize, j: usize);
+    pub fn R_qsort_int_I(
+        iv: *mut ::std::os::raw::c_int,
+        II: *mut ::std::os::raw::c_int,
+        i: ::std::os::raw::c_int,
+        j: ::std::os::raw::c_int,
+    );
+    #[doc = "../../main/util.c  and others :"]
+    pub fn R_ExpandFileName(arg1: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
+    pub fn Rf_setIVector(
+        arg1: *mut ::std::os::raw::c_int,
+        arg2: ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+    );
+    pub fn Rf_setRVector(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: f64);
+    pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
+    pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
+    pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
+    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
+    pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
+    pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
+        -> f64;
+    pub fn R_tmpnam(
+        prefix: *const ::std::os::raw::c_char,
+        tempdir: *const ::std::os::raw::c_char,
+    ) -> *mut ::std::os::raw::c_char;
+    pub fn R_tmpnam2(
+        prefix: *const ::std::os::raw::c_char,
+        tempdir: *const ::std::os::raw::c_char,
+        fileext: *const ::std::os::raw::c_char,
+    ) -> *mut ::std::os::raw::c_char;
+    pub fn R_free_tmpnam(name: *mut ::std::os::raw::c_char);
+    pub fn R_CheckUserInterrupt();
+    pub fn R_CheckStack();
+    pub fn R_CheckStack2(arg1: usize);
+    #[doc = "../../appl/interv.c: also in Applic.h"]
+    pub fn findInterval(
+        xt: *mut f64,
+        n: ::std::os::raw::c_int,
+        x: f64,
+        rightmost_closed: Rboolean,
+        all_inside: Rboolean,
+        ilo: ::std::os::raw::c_int,
+        mflag: *mut ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+    pub fn findInterval2(
+        xt: *mut f64,
+        n: ::std::os::raw::c_int,
+        x: f64,
+        rightmost_closed: Rboolean,
+        all_inside: Rboolean,
+        left_open: Rboolean,
+        ilo: ::std::os::raw::c_int,
+        mflag: *mut ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+    pub fn find_interv_vec(
+        xt: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        x: *mut f64,
+        nx: *mut ::std::os::raw::c_int,
+        rightmost_closed: *mut ::std::os::raw::c_int,
+        all_inside: *mut ::std::os::raw::c_int,
+        indx: *mut ::std::os::raw::c_int,
+    );
+    #[doc = "../../appl/maxcol.c: also in Applic.h"]
+    pub fn R_max_col(
+        matrix: *mut f64,
+        nr: *mut ::std::os::raw::c_int,
+        nc: *mut ::std::os::raw::c_int,
+        maxes: *mut ::std::os::raw::c_int,
+        ties_meth: *mut ::std::os::raw::c_int,
+    );
+    pub fn Rprintf(arg1: *const ::std::os::raw::c_char, ...);
+    pub fn REprintf(arg1: *const ::std::os::raw::c_char, ...);
+    pub fn Rvprintf(arg1: *const ::std::os::raw::c_char, arg2: *mut __va_list_tag);
+    pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: *mut __va_list_tag);
+    pub fn R_registerRoutines(
+        info: *mut DllInfo,
+        croutines: *const R_CMethodDef,
+        callRoutines: *const R_CallMethodDef,
+        fortranRoutines: *const R_FortranMethodDef,
+        externalRoutines: *const R_ExternalMethodDef,
+    ) -> ::std::os::raw::c_int;
+    pub fn R_useDynamicSymbols(info: *mut DllInfo, value: Rboolean) -> Rboolean;
+    pub fn R_forceSymbols(info: *mut DllInfo, value: Rboolean) -> Rboolean;
+    pub fn R_getDllInfo(name: *const ::std::os::raw::c_char) -> *mut DllInfo;
+    #[doc = "To be used by applications embedding R to register their symbols\nthat are not related to any dynamic module"]
+    pub fn R_getEmbeddingDllInfo() -> *mut DllInfo;
+    pub fn R_FindSymbol(
+        arg1: *const ::std::os::raw::c_char,
+        arg2: *const ::std::os::raw::c_char,
+        symbol: *mut R_RegisteredNativeSymbol,
+    ) -> DL_FUNC;
+    #[doc = "Interface for exporting and importing functions from one package\nfor use from C code in a package.  The registration part probably\nought to be integrated with the other registrations.  The naming of\nthese routines may be less than ideal."]
+    pub fn R_RegisterCCallable(
+        package: *const ::std::os::raw::c_char,
+        name: *const ::std::os::raw::c_char,
+        fptr: DL_FUNC,
+    );
+    pub fn R_GetCCallable(
+        package: *const ::std::os::raw::c_char,
+        name: *const ::std::os::raw::c_char,
+    ) -> DL_FUNC;
+    pub fn R_CHAR(x: SEXP) -> *const ::std::os::raw::c_char;
+    #[doc = "Various tests with macro versions in the internal headers"]
+    pub fn Rf_isNull(s: SEXP) -> Rboolean;
+    pub fn Rf_isSymbol(s: SEXP) -> Rboolean;
+    pub fn Rf_isLogical(s: SEXP) -> Rboolean;
+    pub fn Rf_isReal(s: SEXP) -> Rboolean;
+    pub fn Rf_isComplex(s: SEXP) -> Rboolean;
+    pub fn Rf_isExpression(s: SEXP) -> Rboolean;
+    pub fn Rf_isEnvironment(s: SEXP) -> Rboolean;
+    pub fn Rf_isString(s: SEXP) -> Rboolean;
+    pub fn Rf_isObject(s: SEXP) -> Rboolean;
+    #[doc = "General Cons Cell Attributes"]
+    pub fn ATTRIB(x: SEXP) -> SEXP;
+    pub fn OBJECT(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn MARK(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn TYPEOF(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn NAMED(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn REFCNT(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn SET_ATTRIB(x: SEXP, v: SEXP);
+    pub fn DUPLICATE_ATTRIB(to: SEXP, from: SEXP);
+    pub fn SHALLOW_DUPLICATE_ATTRIB(to: SEXP, from: SEXP);
+    pub fn MARK_NOT_MUTABLE(x: SEXP);
+    #[doc = "S4 object testing"]
+    pub fn IS_S4_OBJECT(x: SEXP) -> ::std::os::raw::c_int;
+    #[doc = "Vector Access Functions"]
+    pub fn LENGTH(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn XLENGTH(x: SEXP) -> R_xlen_t;
+    pub fn TRUELENGTH(x: SEXP) -> R_xlen_t;
+    pub fn IS_LONG_VEC(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn LEVELS(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn LOGICAL(x: SEXP) -> *mut ::std::os::raw::c_int;
+    pub fn INTEGER(x: SEXP) -> *mut ::std::os::raw::c_int;
+    pub fn RAW(x: SEXP) -> *mut Rbyte;
+    pub fn REAL(x: SEXP) -> *mut f64;
+    pub fn COMPLEX(x: SEXP) -> *mut Rcomplex;
+    pub fn LOGICAL_RO(x: SEXP) -> *const ::std::os::raw::c_int;
+    pub fn INTEGER_RO(x: SEXP) -> *const ::std::os::raw::c_int;
+    pub fn RAW_RO(x: SEXP) -> *const Rbyte;
+    pub fn REAL_RO(x: SEXP) -> *const f64;
+    pub fn COMPLEX_RO(x: SEXP) -> *const Rcomplex;
+    #[doc = "SEXP (STRING_ELT)(SEXP x, R_xlen_t i);"]
+    pub fn VECTOR_ELT(x: SEXP, i: R_xlen_t) -> SEXP;
+    pub fn SET_STRING_ELT(x: SEXP, i: R_xlen_t, v: SEXP);
+    pub fn SET_VECTOR_ELT(x: SEXP, i: R_xlen_t, v: SEXP) -> SEXP;
+    pub fn STRING_PTR(x: SEXP) -> *mut SEXP;
+    pub fn STRING_PTR_RO(x: SEXP) -> *const SEXP;
+    pub fn INTEGER_GET_REGION(
+        sx: SEXP,
+        i: R_xlen_t,
+        n: R_xlen_t,
+        buf: *mut ::std::os::raw::c_int,
+    ) -> R_xlen_t;
+    pub fn REAL_GET_REGION(sx: SEXP, i: R_xlen_t, n: R_xlen_t, buf: *mut f64) -> R_xlen_t;
+    pub fn LOGICAL_GET_REGION(
+        sx: SEXP,
+        i: R_xlen_t,
+        n: R_xlen_t,
+        buf: *mut ::std::os::raw::c_int,
+    ) -> R_xlen_t;
+    pub fn COMPLEX_GET_REGION(sx: SEXP, i: R_xlen_t, n: R_xlen_t, buf: *mut Rcomplex) -> R_xlen_t;
+    pub fn RAW_GET_REGION(sx: SEXP, i: R_xlen_t, n: R_xlen_t, buf: *mut Rbyte) -> R_xlen_t;
+    #[doc = "metadata access"]
+    pub fn INTEGER_IS_SORTED(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn INTEGER_NO_NA(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn REAL_IS_SORTED(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn REAL_NO_NA(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn LOGICAL_IS_SORTED(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn LOGICAL_NO_NA(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn STRING_IS_SORTED(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn STRING_NO_NA(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn TAG(e: SEXP) -> SEXP;
+    pub fn CDR(e: SEXP) -> SEXP;
+    pub fn CAAR(e: SEXP) -> SEXP;
+    pub fn CDAR(e: SEXP) -> SEXP;
+    pub fn CADR(e: SEXP) -> SEXP;
+    pub fn CDDR(e: SEXP) -> SEXP;
+    pub fn CDDDR(e: SEXP) -> SEXP;
+    pub fn CADDR(e: SEXP) -> SEXP;
+    pub fn CADDDR(e: SEXP) -> SEXP;
+    pub fn CAD4R(e: SEXP) -> SEXP;
+    pub fn MISSING(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn SET_TAG(x: SEXP, y: SEXP);
+    pub fn SETCAR(x: SEXP, y: SEXP) -> SEXP;
+    pub fn SETCDR(x: SEXP, y: SEXP) -> SEXP;
+    pub fn SETCADR(x: SEXP, y: SEXP) -> SEXP;
+    pub fn SETCADDR(x: SEXP, y: SEXP) -> SEXP;
+    pub fn SETCADDDR(x: SEXP, y: SEXP) -> SEXP;
+    pub fn SETCAD4R(e: SEXP, y: SEXP) -> SEXP;
+    #[doc = "Closure Access Functions"]
+    pub fn FORMALS(x: SEXP) -> SEXP;
+    pub fn BODY(x: SEXP) -> SEXP;
+    pub fn CLOENV(x: SEXP) -> SEXP;
+    pub fn RDEBUG(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn RSTEP(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn RTRACE(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn SET_RDEBUG(x: SEXP, v: ::std::os::raw::c_int);
+    pub fn SET_RSTEP(x: SEXP, v: ::std::os::raw::c_int);
+    pub fn SET_RTRACE(x: SEXP, v: ::std::os::raw::c_int);
+    pub fn SET_FORMALS(x: SEXP, v: SEXP);
+    pub fn SET_BODY(x: SEXP, v: SEXP);
+    pub fn SET_CLOENV(x: SEXP, v: SEXP);
+    #[doc = "Symbol Access Functions"]
+    pub fn PRINTNAME(x: SEXP) -> SEXP;
+    pub fn SYMVALUE(x: SEXP) -> SEXP;
+    pub fn INTERNAL(x: SEXP) -> SEXP;
+    pub fn DDVAL(x: SEXP) -> ::std::os::raw::c_int;
+    #[doc = "Environment Access Functions"]
+    pub fn FRAME(x: SEXP) -> SEXP;
+    pub fn ENCLOS(x: SEXP) -> SEXP;
+    pub fn HASHTAB(x: SEXP) -> SEXP;
+    pub fn ENVFLAGS(x: SEXP) -> ::std::os::raw::c_int;
+    #[doc = "Promise Access Functions"]
+    pub fn PRCODE(x: SEXP) -> SEXP;
+    pub fn PRENV(x: SEXP) -> SEXP;
+    pub fn PRVALUE(x: SEXP) -> SEXP;
+    pub fn PRSEEN(x: SEXP) -> ::std::os::raw::c_int;
+    #[doc = "External pointer access macros"]
+    pub fn EXTPTR_PROT(arg1: SEXP) -> SEXP;
+    pub fn EXTPTR_TAG(arg1: SEXP) -> SEXP;
+    pub fn EXTPTR_PTR(arg1: SEXP) -> *mut ::std::os::raw::c_void;
+    #[doc = "The \"global\" environment"]
+    pub static mut R_GlobalEnv: SEXP;
+    #[doc = "An empty environment at the root of the\nenvironment tree"]
+    pub static mut R_EmptyEnv: SEXP;
+    #[doc = "The base environment; formerly R_NilValue"]
+    pub static mut R_BaseEnv: SEXP;
+    #[doc = "The (fake) namespace for base"]
+    pub static mut R_BaseNamespace: SEXP;
+    #[doc = "Registry for registered namespaces"]
+    pub static mut R_NamespaceRegistry: SEXP;
+    #[doc = "Current srcref, for debuggers"]
+    pub static mut R_Srcref: SEXP;
+    #[doc = "The nil object"]
+    pub static mut R_NilValue: SEXP;
+    #[doc = "Unbound marker"]
+    pub static mut R_UnboundValue: SEXP;
+    #[doc = "Missing argument marker"]
+    pub static mut R_MissingArg: SEXP;
+    #[doc = "To be found in BC interp. state\n(marker)"]
+    pub static mut R_InBCInterpreter: SEXP;
+    #[doc = "Use current expression (marker)"]
+    pub static mut R_CurrentExpression: SEXP;
+    #[doc = "Marker for restarted function calls"]
+    pub static mut R_RestartToken: SEXP;
+    #[doc = "\"as.character\""]
+    pub static mut R_AsCharacterSymbol: SEXP;
+    #[doc = "\"@\""]
+    pub static mut R_AtsignSymbol: SEXP;
+    #[doc = "<-- backcompatible version of:"]
+    pub static mut R_baseSymbol: SEXP;
+    #[doc = "\"base\""]
+    pub static mut R_BaseSymbol: SEXP;
+    #[doc = "\"{\""]
+    pub static mut R_BraceSymbol: SEXP;
+    #[doc = "\"\\[\\[\""]
+    pub static mut R_Bracket2Symbol: SEXP;
+    #[doc = "\"\\[\""]
+    pub static mut R_BracketSymbol: SEXP;
+    #[doc = "\"class\""]
+    pub static mut R_ClassSymbol: SEXP;
+    #[doc = "\".Device\""]
+    pub static mut R_DeviceSymbol: SEXP;
+    #[doc = "\"dimnames\""]
+    pub static mut R_DimNamesSymbol: SEXP;
+    #[doc = "\"dim\""]
+    pub static mut R_DimSymbol: SEXP;
+    #[doc = "\"$\""]
+    pub static mut R_DollarSymbol: SEXP;
+    #[doc = "\"...\""]
+    pub static mut R_DotsSymbol: SEXP;
+    #[doc = "\"::\""]
+    pub static mut R_DoubleColonSymbol: SEXP;
+    #[doc = "\"drop\""]
+    pub static mut R_DropSymbol: SEXP;
+    #[doc = "\"eval\""]
+    pub static mut R_EvalSymbol: SEXP;
+    #[doc = "\"function\""]
+    pub static mut R_FunctionSymbol: SEXP;
+    #[doc = "\".Last.value\""]
+    pub static mut R_LastvalueSymbol: SEXP;
+    #[doc = "\"levels\""]
+    pub static mut R_LevelsSymbol: SEXP;
+    #[doc = "\"mode\""]
+    pub static mut R_ModeSymbol: SEXP;
+    #[doc = "\"na.rm\""]
+    pub static mut R_NaRmSymbol: SEXP;
+    #[doc = "\"name\""]
+    pub static mut R_NameSymbol: SEXP;
+    #[doc = "\"names\""]
+    pub static mut R_NamesSymbol: SEXP;
+    #[doc = "\".__NAMESPACE__.\""]
+    pub static mut R_NamespaceEnvSymbol: SEXP;
+    #[doc = "\"package\""]
+    pub static mut R_PackageSymbol: SEXP;
+    #[doc = "\"previous\""]
+    pub static mut R_PreviousSymbol: SEXP;
+    #[doc = "\"quote\""]
+    pub static mut R_QuoteSymbol: SEXP;
+    #[doc = "\"row.names\""]
+    pub static mut R_RowNamesSymbol: SEXP;
+    #[doc = "\".Random.seed\""]
+    pub static mut R_SeedsSymbol: SEXP;
+    #[doc = "\"sort.list\""]
+    pub static mut R_SortListSymbol: SEXP;
+    #[doc = "\"source\""]
+    pub static mut R_SourceSymbol: SEXP;
+    #[doc = "\"spec\""]
+    pub static mut R_SpecSymbol: SEXP;
+    #[doc = "\":::\""]
+    pub static mut R_TripleColonSymbol: SEXP;
+    #[doc = "\"tsp\""]
+    pub static mut R_TspSymbol: SEXP;
+    #[doc = "\".defined\""]
+    pub static mut R_dot_defined: SEXP;
+    #[doc = "\".Method\""]
+    pub static mut R_dot_Method: SEXP;
+    #[doc = "\".packageName\""]
+    pub static mut R_dot_packageName: SEXP;
+    #[doc = "\".target\""]
+    pub static mut R_dot_target: SEXP;
+    #[doc = "\".Generic\""]
+    pub static mut R_dot_Generic: SEXP;
+    #[doc = "NA_STRING as a CHARSXP"]
+    pub static mut R_NaString: SEXP;
+    #[doc = "\"\" as a CHARSXP"]
+    pub static mut R_BlankString: SEXP;
+    #[doc = "\"\" as a STRSXP"]
+    pub static mut R_BlankScalarString: SEXP;
+    #[doc = "srcref related functions"]
+    pub fn R_GetCurrentSrcref(arg1: ::std::os::raw::c_int) -> SEXP;
+    pub fn R_GetSrcFilename(arg1: SEXP) -> SEXP;
+    #[doc = "Type Coercions of all kinds"]
+    pub fn Rf_asChar(arg1: SEXP) -> SEXP;
+    pub fn Rf_coerceVector(arg1: SEXP, arg2: SEXPTYPE) -> SEXP;
+    pub fn Rf_PairToVectorList(x: SEXP) -> SEXP;
+    pub fn Rf_VectorToPairList(x: SEXP) -> SEXP;
+    pub fn Rf_asCharacterFactor(x: SEXP) -> SEXP;
+    pub fn Rf_asLogical(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn Rf_asInteger(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn Rf_asReal(x: SEXP) -> f64;
+    pub fn Rf_asComplex(x: SEXP) -> Rcomplex;
+    #[doc = "Other Internally Used Functions, excluding those which are inline-able"]
+    pub fn Rf_acopy_string(arg1: *const ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
+    pub fn Rf_alloc3DArray(
+        arg1: SEXPTYPE,
+        arg2: ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> SEXP;
+    pub fn Rf_allocArray(arg1: SEXPTYPE, arg2: SEXP) -> SEXP;
+    pub fn Rf_allocMatrix(
+        arg1: SEXPTYPE,
+        arg2: ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+    ) -> SEXP;
+    pub fn Rf_allocList(arg1: ::std::os::raw::c_int) -> SEXP;
+    pub fn Rf_allocS4Object() -> SEXP;
+    pub fn Rf_allocSExp(arg1: SEXPTYPE) -> SEXP;
+    pub fn Rf_allocVector3(arg1: SEXPTYPE, arg2: R_xlen_t, arg3: *mut R_allocator_t) -> SEXP;
+    pub fn Rf_any_duplicated(x: SEXP, from_last: Rboolean) -> R_xlen_t;
+    pub fn Rf_any_duplicated3(x: SEXP, incomp: SEXP, from_last: Rboolean) -> R_xlen_t;
+    pub fn Rf_applyClosure(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP) -> SEXP;
+    pub fn Rf_classgets(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_cons(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_copyMatrix(arg1: SEXP, arg2: SEXP, arg3: Rboolean);
+    pub fn Rf_copyListMatrix(arg1: SEXP, arg2: SEXP, arg3: Rboolean);
+    pub fn Rf_copyMostAttrib(arg1: SEXP, arg2: SEXP);
+    pub fn Rf_copyVector(arg1: SEXP, arg2: SEXP);
+    pub fn Rf_defineVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);
+    pub fn Rf_dimgets(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_dimnamesgets(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_duplicate(arg1: SEXP) -> SEXP;
+    pub fn Rf_shallow_duplicate(arg1: SEXP) -> SEXP;
+    pub fn R_duplicate_attr(arg1: SEXP) -> SEXP;
+    pub fn R_shallow_duplicate_attr(arg1: SEXP) -> SEXP;
+    pub fn Rf_lazy_duplicate(arg1: SEXP) -> SEXP;
+    #[doc = "the next really should not be here and is also in Defn.h"]
+    pub fn Rf_duplicated(arg1: SEXP, arg2: Rboolean) -> SEXP;
+    pub fn Rf_eval(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_findFun(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_findVar(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_findVarInFrame(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_findVarInFrame3(arg1: SEXP, arg2: SEXP, arg3: Rboolean) -> SEXP;
+    pub fn R_existsVarInFrame(arg1: SEXP, arg2: SEXP) -> Rboolean;
+    pub fn R_removeVarFromFrame(arg1: SEXP, arg2: SEXP);
+    pub fn Rf_getAttrib(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_GetArrayDimnames(arg1: SEXP) -> SEXP;
+    pub fn Rf_GetColNames(arg1: SEXP) -> SEXP;
+    pub fn Rf_GetMatrixDimnames(
+        arg1: SEXP,
+        arg2: *mut SEXP,
+        arg3: *mut SEXP,
+        arg4: *mut *const ::std::os::raw::c_char,
+        arg5: *mut *const ::std::os::raw::c_char,
+    );
+    pub fn Rf_GetOption(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_GetOption1(arg1: SEXP) -> SEXP;
+    pub fn Rf_GetOptionDigits() -> ::std::os::raw::c_int;
+    pub fn Rf_GetOptionWidth() -> ::std::os::raw::c_int;
+    pub fn Rf_GetRowNames(arg1: SEXP) -> SEXP;
+    pub fn Rf_gsetVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);
+    pub fn Rf_install(arg1: *const ::std::os::raw::c_char) -> SEXP;
+    pub fn Rf_installChar(arg1: SEXP) -> SEXP;
+    pub fn Rf_installNoTrChar(arg1: SEXP) -> SEXP;
+    pub fn Rf_installTrChar(arg1: SEXP) -> SEXP;
+    pub fn Rf_isOrdered(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isUnordered(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isUnsorted(arg1: SEXP, arg2: Rboolean) -> Rboolean;
+    pub fn Rf_lengthgets(arg1: SEXP, arg2: R_len_t) -> SEXP;
+    pub fn Rf_xlengthgets(arg1: SEXP, arg2: R_xlen_t) -> SEXP;
+    pub fn R_lsInternal(arg1: SEXP, arg2: Rboolean) -> SEXP;
+    pub fn R_lsInternal3(arg1: SEXP, arg2: Rboolean, arg3: Rboolean) -> SEXP;
+    pub fn Rf_match(arg1: SEXP, arg2: SEXP, arg3: ::std::os::raw::c_int) -> SEXP;
+    pub fn Rf_namesgets(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_mkChar(arg1: *const ::std::os::raw::c_char) -> SEXP;
+    pub fn Rf_mkCharLen(arg1: *const ::std::os::raw::c_char, arg2: ::std::os::raw::c_int) -> SEXP;
+    pub fn Rf_NonNullStringMatch(arg1: SEXP, arg2: SEXP) -> Rboolean;
+    pub fn Rf_ncols(arg1: SEXP) -> ::std::os::raw::c_int;
+    pub fn Rf_nrows(arg1: SEXP) -> ::std::os::raw::c_int;
+    pub fn Rf_nthcdr(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP;
+    pub fn R_nchar(
+        string: SEXP,
+        type_: nchar_type,
+        allowNA: Rboolean,
+        keepNA: Rboolean,
+        msg_name: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+    pub fn R_ParseEvalString(arg1: *const ::std::os::raw::c_char, arg2: SEXP) -> SEXP;
+    pub fn Rf_PrintValue(arg1: SEXP);
+    pub fn Rf_setAttrib(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
+    pub fn Rf_setVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);
+    pub fn Rf_str2type(arg1: *const ::std::os::raw::c_char) -> SEXPTYPE;
+    pub fn Rf_StringBlank(arg1: SEXP) -> Rboolean;
+    pub fn Rf_substitute(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_topenv(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_translateChar(arg1: SEXP) -> *const ::std::os::raw::c_char;
+    pub fn Rf_translateCharUTF8(arg1: SEXP) -> *const ::std::os::raw::c_char;
+    pub fn Rf_type2char(arg1: SEXPTYPE) -> *const ::std::os::raw::c_char;
+    pub fn Rf_type2rstr(arg1: SEXPTYPE) -> SEXP;
+    pub fn Rf_type2str(arg1: SEXPTYPE) -> SEXP;
+    pub fn Rf_type2str_nowarn(arg1: SEXPTYPE) -> SEXP;
+    pub fn Rf_unprotect_ptr(arg1: SEXP);
+    pub fn R_tryEval(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_int) -> SEXP;
+    pub fn R_tryEvalSilent(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_int) -> SEXP;
+    pub fn R_GetCurrentEnv() -> SEXP;
+    pub fn Rf_isS4(arg1: SEXP) -> Rboolean;
+    pub fn Rf_asS4(arg1: SEXP, arg2: Rboolean, arg3: ::std::os::raw::c_int) -> SEXP;
+    pub fn Rf_S3Class(arg1: SEXP) -> SEXP;
+    pub fn Rf_isBasicClass(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
+    pub fn Rf_getCharCE(arg1: SEXP) -> cetype_t;
+    pub fn Rf_mkCharCE(arg1: *const ::std::os::raw::c_char, arg2: cetype_t) -> SEXP;
+    pub fn Rf_mkCharLenCE(
+        arg1: *const ::std::os::raw::c_char,
+        arg2: ::std::os::raw::c_int,
+        arg3: cetype_t,
+    ) -> SEXP;
+    pub fn Rf_reEnc(
+        x: *const ::std::os::raw::c_char,
+        ce_in: cetype_t,
+        ce_out: cetype_t,
+        subst: ::std::os::raw::c_int,
+    ) -> *const ::std::os::raw::c_char;
+    #[doc = "Calling a function with arguments evaluated"]
+    pub fn R_forceAndCall(e: SEXP, n: ::std::os::raw::c_int, rho: SEXP) -> SEXP;
+    #[doc = "External pointer interface"]
+    pub fn R_MakeExternalPtr(p: *mut ::std::os::raw::c_void, tag: SEXP, prot: SEXP) -> SEXP;
+    pub fn R_ExternalPtrAddr(s: SEXP) -> *mut ::std::os::raw::c_void;
+    pub fn R_ExternalPtrTag(s: SEXP) -> SEXP;
+    pub fn R_ExternalPtrProtected(s: SEXP) -> SEXP;
+    pub fn R_ClearExternalPtr(s: SEXP);
+    pub fn R_SetExternalPtrAddr(s: SEXP, p: *mut ::std::os::raw::c_void);
+    pub fn R_SetExternalPtrTag(s: SEXP, tag: SEXP);
+    pub fn R_SetExternalPtrProtected(s: SEXP, p: SEXP);
+    #[doc = "Added in R 3.4.0"]
+    pub fn R_MakeExternalPtrFn(p: DL_FUNC, tag: SEXP, prot: SEXP) -> SEXP;
+    pub fn R_ExternalPtrAddrFn(s: SEXP) -> DL_FUNC;
+    pub fn R_RegisterFinalizer(s: SEXP, fun: SEXP);
+    pub fn R_RegisterCFinalizer(s: SEXP, fun: R_CFinalizer_t);
+    pub fn R_RegisterFinalizerEx(s: SEXP, fun: SEXP, onexit: Rboolean);
+    pub fn R_RegisterCFinalizerEx(s: SEXP, fun: R_CFinalizer_t, onexit: Rboolean);
+    pub fn R_RunPendingFinalizers();
+    #[doc = "Weak reference interface"]
+    pub fn R_MakeWeakRef(key: SEXP, val: SEXP, fin: SEXP, onexit: Rboolean) -> SEXP;
+    pub fn R_MakeWeakRefC(key: SEXP, val: SEXP, fin: R_CFinalizer_t, onexit: Rboolean) -> SEXP;
+    pub fn R_WeakRefKey(w: SEXP) -> SEXP;
+    pub fn R_WeakRefValue(w: SEXP) -> SEXP;
+    pub fn R_RunWeakRefFinalizer(w: SEXP);
+    pub fn R_PromiseExpr(arg1: SEXP) -> SEXP;
+    pub fn R_ClosureExpr(arg1: SEXP) -> SEXP;
+    pub fn R_BytecodeExpr(e: SEXP) -> SEXP;
+    #[doc = "Protected evaluation"]
+    pub fn R_ToplevelExec(
+        fun: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
+        data: *mut ::std::os::raw::c_void,
+    ) -> Rboolean;
+    pub fn R_ExecWithCleanup(
+        fun: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> SEXP>,
+        data: *mut ::std::os::raw::c_void,
+        cleanfun: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
+        cleandata: *mut ::std::os::raw::c_void,
+    ) -> SEXP;
+    pub fn R_tryCatch(
+        arg1: ::std::option::Option<
+            unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> SEXP,
+        >,
+        arg2: *mut ::std::os::raw::c_void,
+        arg3: SEXP,
+        arg4: ::std::option::Option<
+            unsafe extern "C" fn(arg1: SEXP, arg2: *mut ::std::os::raw::c_void) -> SEXP,
+        >,
+        arg5: *mut ::std::os::raw::c_void,
+        arg6: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
+        arg7: *mut ::std::os::raw::c_void,
+    ) -> SEXP;
+    pub fn R_tryCatchError(
+        arg1: ::std::option::Option<
+            unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> SEXP,
+        >,
+        arg2: *mut ::std::os::raw::c_void,
+        arg3: ::std::option::Option<
+            unsafe extern "C" fn(arg1: SEXP, arg2: *mut ::std::os::raw::c_void) -> SEXP,
+        >,
+        arg4: *mut ::std::os::raw::c_void,
+    ) -> SEXP;
+    pub fn R_withCallingErrorHandler(
+        arg1: ::std::option::Option<
+            unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> SEXP,
+        >,
+        arg2: *mut ::std::os::raw::c_void,
+        arg3: ::std::option::Option<
+            unsafe extern "C" fn(arg1: SEXP, arg2: *mut ::std::os::raw::c_void) -> SEXP,
+        >,
+        arg4: *mut ::std::os::raw::c_void,
+    ) -> SEXP;
+    pub fn R_MakeUnwindCont() -> SEXP;
+    pub fn R_ContinueUnwind(cont: SEXP) -> !;
+    pub fn R_UnwindProtect(
+        fun: ::std::option::Option<unsafe extern "C" fn(data: *mut ::std::os::raw::c_void) -> SEXP>,
+        data: *mut ::std::os::raw::c_void,
+        cleanfun: ::std::option::Option<
+            unsafe extern "C" fn(data: *mut ::std::os::raw::c_void, jump: Rboolean),
+        >,
+        cleandata: *mut ::std::os::raw::c_void,
+        cont: SEXP,
+    ) -> SEXP;
+    #[doc = "Environment and Binding Features"]
+    pub fn R_NewEnv(arg1: SEXP, arg2: ::std::os::raw::c_int, arg3: ::std::os::raw::c_int) -> SEXP;
+    pub fn R_IsPackageEnv(rho: SEXP) -> Rboolean;
+    pub fn R_PackageEnvName(rho: SEXP) -> SEXP;
+    pub fn R_FindPackageEnv(info: SEXP) -> SEXP;
+    pub fn R_IsNamespaceEnv(rho: SEXP) -> Rboolean;
+    pub fn R_NamespaceEnvSpec(rho: SEXP) -> SEXP;
+    pub fn R_FindNamespace(info: SEXP) -> SEXP;
+    pub fn R_LockEnvironment(env: SEXP, bindings: Rboolean);
+    pub fn R_EnvironmentIsLocked(env: SEXP) -> Rboolean;
+    pub fn R_LockBinding(sym: SEXP, env: SEXP);
+    pub fn R_unLockBinding(sym: SEXP, env: SEXP);
+    pub fn R_MakeActiveBinding(sym: SEXP, fun: SEXP, env: SEXP);
+    pub fn R_BindingIsLocked(sym: SEXP, env: SEXP) -> Rboolean;
+    pub fn R_BindingIsActive(sym: SEXP, env: SEXP) -> Rboolean;
+    pub fn R_ActiveBindingFunction(sym: SEXP, env: SEXP) -> SEXP;
+    pub fn R_HasFancyBindings(rho: SEXP) -> Rboolean;
+    pub fn Rf_errorcall(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...) -> !;
+    pub fn Rf_warningcall(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...);
+    pub fn Rf_warningcall_immediate(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...);
+    pub fn R_XDREncodeDouble(d: f64, buf: *mut ::std::os::raw::c_void);
+    pub fn R_XDRDecodeDouble(buf: *mut ::std::os::raw::c_void) -> f64;
+    pub fn R_XDREncodeInteger(i: ::std::os::raw::c_int, buf: *mut ::std::os::raw::c_void);
+    pub fn R_XDRDecodeInteger(buf: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_int;
+    pub fn R_InitInPStream(
+        stream: R_inpstream_t,
+        data: R_pstream_data_t,
+        type_: R_pstream_format_t,
+        inchar: ::std::option::Option<
+            unsafe extern "C" fn(arg1: R_inpstream_t) -> ::std::os::raw::c_int,
+        >,
+        inbytes: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: R_inpstream_t,
+                arg2: *mut ::std::os::raw::c_void,
+                arg3: ::std::os::raw::c_int,
+            ),
+        >,
+        phook: ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
+        pdata: SEXP,
+    );
+    pub fn R_InitOutPStream(
+        stream: R_outpstream_t,
+        data: R_pstream_data_t,
+        type_: R_pstream_format_t,
+        version: ::std::os::raw::c_int,
+        outchar: ::std::option::Option<
+            unsafe extern "C" fn(arg1: R_outpstream_t, arg2: ::std::os::raw::c_int),
+        >,
+        outbytes: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: R_outpstream_t,
+                arg2: *mut ::std::os::raw::c_void,
+                arg3: ::std::os::raw::c_int,
+            ),
+        >,
+        phook: ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
+        pdata: SEXP,
+    );
+    pub fn R_InitFileInPStream(
+        stream: R_inpstream_t,
+        fp: *mut FILE,
+        type_: R_pstream_format_t,
+        phook: ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
+        pdata: SEXP,
+    );
+    pub fn R_InitFileOutPStream(
+        stream: R_outpstream_t,
+        fp: *mut FILE,
+        type_: R_pstream_format_t,
+        version: ::std::os::raw::c_int,
+        phook: ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXP) -> SEXP>,
+        pdata: SEXP,
+    );
+    pub fn R_Serialize(s: SEXP, ops: R_outpstream_t);
+    pub fn R_Unserialize(ips: R_inpstream_t) -> SEXP;
+    pub fn R_SerializeInfo(ips: R_inpstream_t) -> SEXP;
+    #[doc = "slot management (in attrib.c)"]
+    pub fn R_do_slot(obj: SEXP, name: SEXP) -> SEXP;
+    pub fn R_do_slot_assign(obj: SEXP, name: SEXP, value: SEXP) -> SEXP;
+    pub fn R_has_slot(obj: SEXP, name: SEXP) -> ::std::os::raw::c_int;
+    #[doc = "S3-S4 class (inheritance), attrib.c"]
+    pub fn R_S4_extends(klass: SEXP, useTable: SEXP) -> SEXP;
+    #[doc = "class definition, new objects (objects.c)"]
+    pub fn R_do_MAKE_CLASS(what: *const ::std::os::raw::c_char) -> SEXP;
+    pub fn R_getClassDef(what: *const ::std::os::raw::c_char) -> SEXP;
+    pub fn R_getClassDef_R(what: SEXP) -> SEXP;
+    pub fn R_has_methods_attached() -> Rboolean;
+    pub fn R_isVirtualClass(class_def: SEXP, env: SEXP) -> Rboolean;
+    pub fn R_extends(class1: SEXP, class2: SEXP, env: SEXP) -> Rboolean;
+    pub fn R_do_new_object(class_def: SEXP) -> SEXP;
+    #[doc = "supporting  a C-level version of  is(., .) :"]
+    pub fn R_check_class_and_super(
+        x: SEXP,
+        valid: *mut *const ::std::os::raw::c_char,
+        rho: SEXP,
+    ) -> ::std::os::raw::c_int;
+    pub fn R_check_class_etc(
+        x: SEXP,
+        valid: *mut *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+    #[doc = "preserve objects across GCs"]
+    pub fn R_PreserveObject(arg1: SEXP);
+    pub fn R_ReleaseObject(arg1: SEXP);
+    pub fn R_NewPreciousMSet(arg1: ::std::os::raw::c_int) -> SEXP;
+    pub fn R_PreserveInMSet(x: SEXP, mset: SEXP);
+    pub fn R_ReleaseFromMSet(x: SEXP, mset: SEXP);
+    pub fn R_ReleaseMSet(mset: SEXP, keepSize: ::std::os::raw::c_int);
+    #[doc = "Shutdown actions"]
+    pub fn R_dot_Last();
+    pub fn R_RunExitFinalizers();
+    pub fn R_system(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
+    pub fn R_compute_identical(arg1: SEXP, arg2: SEXP, arg3: ::std::os::raw::c_int) -> Rboolean;
+    pub fn R_body_no_src(x: SEXP) -> SEXP;
+    #[doc = "C version of R's  indx <- order(..., na.last, decreasing) :\ne.g.  arglist = Rf_lang2(x,y)  or  Rf_lang3(x,y,z)"]
+    pub fn R_orderVector(
+        indx: *mut ::std::os::raw::c_int,
+        n: ::std::os::raw::c_int,
+        arglist: SEXP,
+        nalast: Rboolean,
+        decreasing: Rboolean,
+    );
+    #[doc = "C version of R's  indx <- order(x, na.last, decreasing) :"]
+    pub fn R_orderVector1(
+        indx: *mut ::std::os::raw::c_int,
+        n: ::std::os::raw::c_int,
+        x: SEXP,
+        nalast: Rboolean,
+        decreasing: Rboolean,
+    );
+    #[doc = "These are the public inlinable functions that are provided in\nRinlinedfuns.h It is *essential* that these do not appear in any\nother header file, with or without the Rf_ prefix."]
+    pub fn Rf_allocVector(arg1: SEXPTYPE, arg2: R_xlen_t) -> SEXP;
+    pub fn Rf_conformable(arg1: SEXP, arg2: SEXP) -> Rboolean;
+    pub fn Rf_elt(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP;
+    pub fn Rf_inherits(arg1: SEXP, arg2: *const ::std::os::raw::c_char) -> Rboolean;
+    pub fn Rf_isArray(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isFactor(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isFrame(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isFunction(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isInteger(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isLanguage(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isList(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isMatrix(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isNewList(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isNumber(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isNumeric(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isPairList(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isPrimitive(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isTs(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isUserBinop(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isValidString(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isValidStringF(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isVector(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isVectorAtomic(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isVectorList(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isVectorizable(arg1: SEXP) -> Rboolean;
+    pub fn Rf_lang1(arg1: SEXP) -> SEXP;
+    pub fn Rf_lang2(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_lang3(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
+    pub fn Rf_lang4(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP) -> SEXP;
+    pub fn Rf_lang5(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP) -> SEXP;
+    pub fn Rf_lang6(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP, arg6: SEXP)
+        -> SEXP;
+    pub fn Rf_lastElt(arg1: SEXP) -> SEXP;
+    pub fn Rf_lcons(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_length(arg1: SEXP) -> R_len_t;
+    pub fn Rf_list1(arg1: SEXP) -> SEXP;
+    pub fn Rf_list2(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_list3(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
+    pub fn Rf_list4(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP) -> SEXP;
+    pub fn Rf_list5(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP) -> SEXP;
+    pub fn Rf_list6(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP, arg6: SEXP)
+        -> SEXP;
+    pub fn Rf_listAppend(arg1: SEXP, arg2: SEXP) -> SEXP;
+    pub fn Rf_mkNamed(arg1: SEXPTYPE, arg2: *mut *const ::std::os::raw::c_char) -> SEXP;
+    pub fn Rf_mkString(arg1: *const ::std::os::raw::c_char) -> SEXP;
+    pub fn Rf_nlevels(arg1: SEXP) -> ::std::os::raw::c_int;
+    pub fn Rf_stringPositionTr(
+        arg1: SEXP,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+    pub fn Rf_ScalarComplex(arg1: Rcomplex) -> SEXP;
+    pub fn Rf_ScalarInteger(arg1: ::std::os::raw::c_int) -> SEXP;
+    pub fn Rf_ScalarLogical(arg1: ::std::os::raw::c_int) -> SEXP;
+    pub fn Rf_ScalarRaw(arg1: Rbyte) -> SEXP;
+    pub fn Rf_ScalarReal(arg1: f64) -> SEXP;
+    pub fn Rf_ScalarString(arg1: SEXP) -> SEXP;
+    pub fn Rf_xlength(arg1: SEXP) -> R_xlen_t;
+    pub fn XTRUELENGTH(x: SEXP) -> R_xlen_t;
+    pub fn LENGTH_EX(
+        x: SEXP,
+        file: *const ::std::os::raw::c_char,
+        line: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+    pub fn XLENGTH_EX(x: SEXP) -> R_xlen_t;
+    pub fn Rf_protect(arg1: SEXP) -> SEXP;
+    pub fn Rf_unprotect(arg1: ::std::os::raw::c_int);
+    pub fn R_ProtectWithIndex(arg1: SEXP, arg2: *mut PROTECT_INDEX);
+    pub fn R_Reprotect(arg1: SEXP, arg2: PROTECT_INDEX);
+    pub fn CAR(e: SEXP) -> SEXP;
+    pub fn DATAPTR(x: SEXP) -> *mut ::std::os::raw::c_void;
+    pub fn DATAPTR_RO(x: SEXP) -> *const ::std::os::raw::c_void;
+    pub fn DATAPTR_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_void;
+    pub fn LOGICAL_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_int;
+    pub fn INTEGER_OR_NULL(x: SEXP) -> *const ::std::os::raw::c_int;
+    pub fn REAL_OR_NULL(x: SEXP) -> *const f64;
+    pub fn COMPLEX_OR_NULL(x: SEXP) -> *const Rcomplex;
+    pub fn RAW_OR_NULL(x: SEXP) -> *const Rbyte;
+    pub fn INTEGER_ELT(x: SEXP, i: R_xlen_t) -> ::std::os::raw::c_int;
+    pub fn REAL_ELT(x: SEXP, i: R_xlen_t) -> f64;
+    pub fn LOGICAL_ELT(x: SEXP, i: R_xlen_t) -> ::std::os::raw::c_int;
+    pub fn COMPLEX_ELT(x: SEXP, i: R_xlen_t) -> Rcomplex;
+    pub fn RAW_ELT(x: SEXP, i: R_xlen_t) -> Rbyte;
+    pub fn STRING_ELT(x: SEXP, i: R_xlen_t) -> SEXP;
+    pub fn SET_LOGICAL_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
+    pub fn SET_INTEGER_ELT(x: SEXP, i: R_xlen_t, v: ::std::os::raw::c_int);
+    pub fn SET_REAL_ELT(x: SEXP, i: R_xlen_t, v: f64);
+    pub fn SET_COMPLEX_ELT(x: SEXP, i: R_xlen_t, v: Rcomplex);
+    pub fn SET_RAW_ELT(x: SEXP, i: R_xlen_t, v: Rbyte);
+    #[doc = "ALTREP support"]
+    pub fn ALTREP_CLASS(x: SEXP) -> SEXP;
+    pub fn R_altrep_data1(x: SEXP) -> SEXP;
+    pub fn R_altrep_data2(x: SEXP) -> SEXP;
+    pub fn R_set_altrep_data1(x: SEXP, v: SEXP);
+    pub fn R_set_altrep_data2(x: SEXP, v: SEXP);
+    pub fn LOGICAL0(x: SEXP) -> *mut ::std::os::raw::c_int;
+    pub fn INTEGER0(x: SEXP) -> *mut ::std::os::raw::c_int;
+    pub fn REAL0(x: SEXP) -> *mut f64;
+    pub fn COMPLEX0(x: SEXP) -> *mut Rcomplex;
+    pub fn RAW0(x: SEXP) -> *mut Rbyte;
+    pub fn ALTREP(x: SEXP) -> ::std::os::raw::c_int;
+    #[doc = "public C interface"]
+    pub fn R_asHashtable(h: SEXP) -> R_hashtab_type;
+    pub fn R_HashtabSEXP(h: R_hashtab_type) -> SEXP;
+    pub fn R_isHashtable(h: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_mkhashtab(type_: ::std::os::raw::c_int, arg1: ::std::os::raw::c_int)
+        -> R_hashtab_type;
+    pub fn R_gethash(h: R_hashtab_type, key: SEXP, nomatch: SEXP) -> SEXP;
+    pub fn R_sethash(h: R_hashtab_type, key: SEXP, value: SEXP) -> SEXP;
+    pub fn R_remhash(h: R_hashtab_type, key: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_numhash(h: R_hashtab_type) -> ::std::os::raw::c_int;
+    pub fn R_typhash(h: R_hashtab_type) -> ::std::os::raw::c_int;
+    pub fn R_maphash(h: R_hashtab_type, FUN: SEXP) -> SEXP;
+    pub fn R_maphashC(
+        h: R_hashtab_type,
+        FUN: ::std::option::Option<
+            unsafe extern "C" fn(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_void),
+        >,
+        data: *mut ::std::os::raw::c_void,
+    );
+    pub fn R_clrhash(h: R_hashtab_type);
+    #[doc = "stuff that probably shouldn't be in the API but is getting used"]
+    pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
+    pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
+    pub fn SET_S4_OBJECT(x: SEXP);
+    pub fn UNSET_S4_OBJECT(x: SEXP);
+    pub fn R_curErrorBuf() -> *const ::std::os::raw::c_char;
+    pub fn IS_SCALAR(x: SEXP, type_: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn Rf_psmatch(
+        arg1: *const ::std::os::raw::c_char,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: Rboolean,
+    ) -> Rboolean;
+    pub fn SETLENGTH(x: SEXP, v: R_xlen_t);
+    pub fn SET_TRUELENGTH(x: SEXP, v: R_xlen_t);
+    pub fn SETLEVELS(x: SEXP, v: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn SET_ENVFLAGS(x: SEXP, v: ::std::os::raw::c_int);
+    pub fn SET_FRAME(x: SEXP, v: SEXP);
+    pub fn SET_ENCLOS(x: SEXP, v: SEXP);
+    pub fn SET_HASHTAB(x: SEXP, v: SEXP);
+    pub fn SET_PRENV(x: SEXP, v: SEXP);
+    pub fn SET_PRVALUE(x: SEXP, v: SEXP);
+    pub fn SET_PRCODE(x: SEXP, v: SEXP);
+    pub fn STDVEC_DATAPTR(x: SEXP) -> *mut ::std::os::raw::c_void;
+    pub fn IS_GROWABLE(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn SET_GROWABLE_BIT(x: SEXP);
+    pub fn SET_NAMED(x: SEXP, v: ::std::os::raw::c_int);
+    #[doc = "used by BIOC::matter; mightbe reasonable to include in API"]
+    pub fn R_tryWrap(arg1: SEXP) -> SEXP;
+    pub fn R_FlushConsole();
+    pub fn Rf_onintr();
+    pub fn Rf_onintrNoResume();
+    #[doc = "C stack limit"]
+    pub static mut R_CStackLimit: usize;
+    pub fn R_common_command_line(
+        arg1: *mut ::std::os::raw::c_int,
+        arg2: *mut *mut ::std::os::raw::c_char,
+        arg3: Rstart,
+    );
+    pub fn setup_Rmainloop();
+    pub fn Rf_endEmbeddedR(fatal: ::std::os::raw::c_int);
+    pub fn Rf_initialize_R(
+        ac: ::std::os::raw::c_int,
+        av: *mut *mut ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+    pub fn CleanEd();
+    pub fn R_CleanTempDir();
+    #[doc = "R's versions with !R_FINITE checks"]
+    pub fn R_pow(x: f64, y: f64) -> f64;
+    pub fn R_pow_di(arg1: f64, arg2: ::std::os::raw::c_int) -> f64;
+    #[doc = "Random Number Generators"]
+    pub fn norm_rand() -> f64;
+    pub fn unif_rand() -> f64;
+    pub fn R_unif_index(arg1: f64) -> f64;
+    pub fn exp_rand() -> f64;
+    pub fn Rf_dnorm4(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pnorm5(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qnorm5(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rnorm(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_pnorm_both(
+        arg1: f64,
+        arg2: *mut f64,
+        arg3: *mut f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    );
+    pub fn Rf_dunif(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_punif(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qunif(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_runif(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_dgamma(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pgamma(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qgamma(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rgamma(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_log1pmx(arg1: f64) -> f64;
+    pub fn Rf_log1pexp(arg1: f64) -> f64;
+    pub fn Rf_log1mexp(arg1: f64) -> f64;
+    pub fn Rf_lgamma1p(arg1: f64) -> f64;
+    pub fn Rf_logspace_add(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_logspace_sub(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_logspace_sum(arg1: *const f64, arg2: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_dbeta(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pbeta(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qbeta(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rbeta(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_dlnorm(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_plnorm(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qlnorm(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rlnorm(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_dchisq(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pchisq(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qchisq(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rchisq(arg1: f64) -> f64;
+    pub fn Rf_dnchisq(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pnchisq(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qnchisq(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rnchisq(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_df(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pf(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qf(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rf(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_dt(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pt(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qt(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rt(arg1: f64) -> f64;
+    pub fn Rf_dbinom_raw(x: f64, n: f64, p: f64, q: f64, give_log: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_dbinom(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pbinom(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qbinom(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rbinom(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_rmultinom(
+        arg1: ::std::os::raw::c_int,
+        arg2: *mut f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: *mut ::std::os::raw::c_int,
+    );
+    pub fn Rf_dcauchy(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pcauchy(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qcauchy(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rcauchy(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_dexp(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pexp(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qexp(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rexp(arg1: f64) -> f64;
+    pub fn Rf_dgeom(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pgeom(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qgeom(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rgeom(arg1: f64) -> f64;
+    pub fn Rf_dhyper(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: f64,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_phyper(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: f64,
+        arg5: ::std::os::raw::c_int,
+        arg6: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qhyper(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: f64,
+        arg5: ::std::os::raw::c_int,
+        arg6: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rhyper(arg1: f64, arg2: f64, arg3: f64) -> f64;
+    pub fn Rf_dnbinom(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pnbinom(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qnbinom(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rnbinom(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_dnbinom_mu(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pnbinom_mu(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qnbinom_mu(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rnbinom_mu(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_dpois_raw(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_dpois(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_ppois(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qpois(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rpois(arg1: f64) -> f64;
+    pub fn Rf_dweibull(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pweibull(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qweibull(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rweibull(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_dlogis(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_plogis(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qlogis(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rlogis(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_dnbeta(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: f64,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_pnbeta(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: f64,
+        arg5: ::std::os::raw::c_int,
+        arg6: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qnbeta(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: f64,
+        arg5: ::std::os::raw::c_int,
+        arg6: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rnbeta(arg1: f64, arg2: f64, arg3: f64) -> f64;
+    pub fn Rf_dnf(arg1: f64, arg2: f64, arg3: f64, arg4: f64, arg5: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pnf(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: f64,
+        arg5: ::std::os::raw::c_int,
+        arg6: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qnf(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: f64,
+        arg5: ::std::os::raw::c_int,
+        arg6: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_dnt(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pnt(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qnt(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_ptukey(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: f64,
+        arg5: ::std::os::raw::c_int,
+        arg6: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qtukey(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: f64,
+        arg5: ::std::os::raw::c_int,
+        arg6: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_dwilcox(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_pwilcox(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qwilcox(
+        arg1: f64,
+        arg2: f64,
+        arg3: f64,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rwilcox(arg1: f64, arg2: f64) -> f64;
+    pub fn wilcox_free();
+    pub fn Rf_dsignrank(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
+    pub fn Rf_psignrank(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_qsignrank(
+        arg1: f64,
+        arg2: f64,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn Rf_rsignrank(arg1: f64) -> f64;
+    pub fn signrank_free();
+    pub fn Rf_gammafn(arg1: f64) -> f64;
+    pub fn Rf_lgammafn(arg1: f64) -> f64;
+    pub fn Rf_lgammafn_sign(arg1: f64, arg2: *mut ::std::os::raw::c_int) -> f64;
+    pub fn Rf_dpsifn(
+        arg1: f64,
+        arg2: ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+        arg5: *mut f64,
+        arg6: *mut ::std::os::raw::c_int,
+        arg7: *mut ::std::os::raw::c_int,
+    );
+    pub fn Rf_psigamma(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_digamma(arg1: f64) -> f64;
+    pub fn Rf_trigamma(arg1: f64) -> f64;
+    pub fn Rf_tetragamma(arg1: f64) -> f64;
+    pub fn Rf_pentagamma(arg1: f64) -> f64;
+    pub fn Rf_beta(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_lbeta(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_choose(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_lchoose(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_bessel_i(arg1: f64, arg2: f64, arg3: f64) -> f64;
+    pub fn Rf_bessel_j(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_bessel_k(arg1: f64, arg2: f64, arg3: f64) -> f64;
+    pub fn Rf_bessel_y(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_bessel_i_ex(arg1: f64, arg2: f64, arg3: f64, arg4: *mut f64) -> f64;
+    pub fn Rf_bessel_j_ex(arg1: f64, arg2: f64, arg3: *mut f64) -> f64;
+    pub fn Rf_bessel_k_ex(arg1: f64, arg2: f64, arg3: f64, arg4: *mut f64) -> f64;
+    pub fn Rf_bessel_y_ex(arg1: f64, arg2: f64, arg3: *mut f64) -> f64;
+    pub fn Rf_imax2(
+        arg1: ::std::os::raw::c_int,
+        arg2: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+    pub fn Rf_imin2(
+        arg1: ::std::os::raw::c_int,
+        arg2: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+    pub fn Rf_fmax2(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_fmin2(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_sign(arg1: f64) -> f64;
+    pub fn Rf_fprec(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_fround(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_fsign(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_ftrunc(arg1: f64) -> f64;
+    pub fn cospi(arg1: f64) -> f64;
+    pub fn sinpi(arg1: f64) -> f64;
+    pub fn tanpi(arg1: f64) -> f64;
+    pub fn Rtanpi(arg1: f64) -> f64;
+    pub fn R_ParseVector(
+        arg1: SEXP,
+        arg2: ::std::os::raw::c_int,
+        arg3: *mut ParseStatus,
+        arg4: SEXP,
+    ) -> SEXP;
+    pub fn R_new_altrep(aclass: R_altrep_class_t, data1: SEXP, data2: SEXP) -> SEXP;
+    pub fn R_make_altstring_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+    pub fn R_make_altinteger_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+    pub fn R_make_altreal_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+    pub fn R_make_altlogical_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+    pub fn R_make_altraw_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+    pub fn R_make_altcomplex_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
+    pub fn R_altrep_inherits(x: SEXP, arg1: R_altrep_class_t) -> Rboolean;
+    pub fn R_set_altrep_UnserializeEX_method(
+        cls: R_altrep_class_t,
+        fun: R_altrep_UnserializeEX_method_t,
+    );
+    pub fn R_set_altrep_Unserialize_method(
+        cls: R_altrep_class_t,
+        fun: R_altrep_Unserialize_method_t,
+    );
+    pub fn R_set_altrep_Serialized_state_method(
+        cls: R_altrep_class_t,
+        fun: R_altrep_Serialized_state_method_t,
+    );
+    pub fn R_set_altrep_DuplicateEX_method(
+        cls: R_altrep_class_t,
+        fun: R_altrep_DuplicateEX_method_t,
+    );
+    pub fn R_set_altrep_Duplicate_method(cls: R_altrep_class_t, fun: R_altrep_Duplicate_method_t);
+    pub fn R_set_altrep_Coerce_method(cls: R_altrep_class_t, fun: R_altrep_Coerce_method_t);
+    pub fn R_set_altrep_Inspect_method(cls: R_altrep_class_t, fun: R_altrep_Inspect_method_t);
+    pub fn R_set_altrep_Length_method(cls: R_altrep_class_t, fun: R_altrep_Length_method_t);
+    pub fn R_set_altvec_Dataptr_method(cls: R_altrep_class_t, fun: R_altvec_Dataptr_method_t);
+    pub fn R_set_altvec_Dataptr_or_null_method(
+        cls: R_altrep_class_t,
+        fun: R_altvec_Dataptr_or_null_method_t,
+    );
+    pub fn R_set_altvec_Extract_subset_method(
+        cls: R_altrep_class_t,
+        fun: R_altvec_Extract_subset_method_t,
+    );
+    pub fn R_set_altinteger_Elt_method(cls: R_altrep_class_t, fun: R_altinteger_Elt_method_t);
+    pub fn R_set_altinteger_Get_region_method(
+        cls: R_altrep_class_t,
+        fun: R_altinteger_Get_region_method_t,
+    );
+    pub fn R_set_altinteger_Is_sorted_method(
+        cls: R_altrep_class_t,
+        fun: R_altinteger_Is_sorted_method_t,
+    );
+    pub fn R_set_altinteger_No_NA_method(cls: R_altrep_class_t, fun: R_altinteger_No_NA_method_t);
+    pub fn R_set_altinteger_Sum_method(cls: R_altrep_class_t, fun: R_altinteger_Sum_method_t);
+    pub fn R_set_altinteger_Min_method(cls: R_altrep_class_t, fun: R_altinteger_Min_method_t);
+    pub fn R_set_altinteger_Max_method(cls: R_altrep_class_t, fun: R_altinteger_Max_method_t);
+    pub fn R_set_altreal_Elt_method(cls: R_altrep_class_t, fun: R_altreal_Elt_method_t);
+    pub fn R_set_altreal_Get_region_method(
+        cls: R_altrep_class_t,
+        fun: R_altreal_Get_region_method_t,
+    );
+    pub fn R_set_altreal_Is_sorted_method(cls: R_altrep_class_t, fun: R_altreal_Is_sorted_method_t);
+    pub fn R_set_altreal_No_NA_method(cls: R_altrep_class_t, fun: R_altreal_No_NA_method_t);
+    pub fn R_set_altreal_Sum_method(cls: R_altrep_class_t, fun: R_altreal_Sum_method_t);
+    pub fn R_set_altreal_Min_method(cls: R_altrep_class_t, fun: R_altreal_Min_method_t);
+    pub fn R_set_altreal_Max_method(cls: R_altrep_class_t, fun: R_altreal_Max_method_t);
+    pub fn R_set_altlogical_Elt_method(cls: R_altrep_class_t, fun: R_altlogical_Elt_method_t);
+    pub fn R_set_altlogical_Get_region_method(
+        cls: R_altrep_class_t,
+        fun: R_altlogical_Get_region_method_t,
+    );
+    pub fn R_set_altlogical_Is_sorted_method(
+        cls: R_altrep_class_t,
+        fun: R_altlogical_Is_sorted_method_t,
+    );
+    pub fn R_set_altlogical_No_NA_method(cls: R_altrep_class_t, fun: R_altlogical_No_NA_method_t);
+    pub fn R_set_altlogical_Sum_method(cls: R_altrep_class_t, fun: R_altlogical_Sum_method_t);
+    pub fn R_set_altraw_Elt_method(cls: R_altrep_class_t, fun: R_altraw_Elt_method_t);
+    pub fn R_set_altraw_Get_region_method(cls: R_altrep_class_t, fun: R_altraw_Get_region_method_t);
+    pub fn R_set_altcomplex_Elt_method(cls: R_altrep_class_t, fun: R_altcomplex_Elt_method_t);
+    pub fn R_set_altcomplex_Get_region_method(
+        cls: R_altrep_class_t,
+        fun: R_altcomplex_Get_region_method_t,
+    );
+    pub fn R_set_altstring_Elt_method(cls: R_altrep_class_t, fun: R_altstring_Elt_method_t);
+    pub fn R_set_altstring_Set_elt_method(cls: R_altrep_class_t, fun: R_altstring_Set_elt_method_t);
+    pub fn R_set_altstring_Is_sorted_method(
+        cls: R_altrep_class_t,
+        fun: R_altstring_Is_sorted_method_t,
+    );
+    pub fn R_set_altstring_No_NA_method(cls: R_altrep_class_t, fun: R_altstring_No_NA_method_t);
+    pub fn R_GE_getVersion() -> ::std::os::raw::c_int;
+    pub fn R_GE_checkVersionOrDie(version: ::std::os::raw::c_int);
+    pub fn Rf_ndevNumber(arg1: pDevDesc) -> ::std::os::raw::c_int;
+    pub fn Rf_NumDevices() -> ::std::os::raw::c_int;
+    #[doc = "Check for an available device slot"]
+    pub fn R_CheckDeviceAvailable();
+    pub fn R_CheckDeviceAvailableBool() -> Rboolean;
+    pub fn Rf_curDevice() -> ::std::os::raw::c_int;
+    pub fn Rf_nextDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn Rf_prevDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn Rf_selectDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn Rf_killDevice(arg1: ::std::os::raw::c_int);
+    pub fn Rf_NoDevices() -> ::std::os::raw::c_int;
+    pub fn Rf_NewFrameConfirm(arg1: pDevDesc);
+    pub fn Rf_doMouseEvent(
+        dd: pDevDesc,
+        event: R_MouseEvent,
+        buttons: ::std::os::raw::c_int,
+        x: f64,
+        y: f64,
+    );
+    pub fn Rf_doKeybd(dd: pDevDesc, rkey: R_KeyName, keyname: *const ::std::os::raw::c_char);
+    pub fn Rf_doIdle(dd: pDevDesc);
+    pub fn Rf_doesIdle(dd: pDevDesc) -> Rboolean;
+    pub static mut R_interrupts_suspended: Rboolean;
+    pub static mut R_interrupts_pending: ::std::os::raw::c_int;
+    pub static mut mbcslocale: Rboolean;
+    pub fn Rf_AdobeSymbol2utf8(
+        out: *mut ::std::os::raw::c_char,
+        in_: *const ::std::os::raw::c_char,
+        nwork: usize,
+        usePUA: Rboolean,
+    ) -> *mut ::std::os::raw::c_void;
+    pub fn Rf_utf8toAdobeSymbol(
+        out: *mut ::std::os::raw::c_char,
+        in_: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+    pub fn Rf_utf8Toutf8NoPUA(in_: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
+    pub fn Rf_utf8ToLatin1AdobeSymbol2utf8(
+        in_: *const ::std::os::raw::c_char,
+        usePUA: Rboolean,
+    ) -> *const ::std::os::raw::c_char;
+    #[doc = "Translates Unicode point to UTF-8"]
+    pub fn Rf_ucstoutf8(s: *mut ::std::os::raw::c_char, c: ::std::os::raw::c_uint) -> usize;
+    pub fn Rf_desc2GEDesc(dd: pDevDesc) -> pGEDevDesc;
+    pub fn GEdeviceNumber(arg1: pGEDevDesc) -> ::std::os::raw::c_int;
+    pub fn GEgetDevice(arg1: ::std::os::raw::c_int) -> pGEDevDesc;
+    pub fn GEaddDevice(arg1: pGEDevDesc);
+    pub fn GEaddDevice2(arg1: pGEDevDesc, arg2: *const ::std::os::raw::c_char);
+    pub fn GEaddDevice2f(
+        arg1: pGEDevDesc,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: *const ::std::os::raw::c_char,
+    );
+    pub fn GEkillDevice(arg1: pGEDevDesc);
+    pub fn GEcreateDevDesc(dev: pDevDesc) -> pGEDevDesc;
+    pub fn GEdestroyDevDesc(dd: pGEDevDesc);
+    pub fn GEsystemState(
+        dd: pGEDevDesc,
+        index: ::std::os::raw::c_int,
+    ) -> *mut ::std::os::raw::c_void;
+    pub fn GEregisterWithDevice(dd: pGEDevDesc);
+    pub fn GEregisterSystem(callback: GEcallback, systemRegisterIndex: *mut ::std::os::raw::c_int);
+    pub fn GEunregisterSystem(registerIndex: ::std::os::raw::c_int);
+    pub fn GEhandleEvent(event: GEevent, dev: pDevDesc, data: SEXP) -> SEXP;
+    pub fn GEfromDeviceX(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
+    pub fn GEtoDeviceX(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
+    pub fn GEfromDeviceY(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
+    pub fn GEtoDeviceY(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
+    pub fn GEfromDeviceWidth(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
+    pub fn GEtoDeviceWidth(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
+    pub fn GEfromDeviceHeight(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
+    pub fn GEtoDeviceHeight(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
+    pub fn Rf_RGBpar(arg1: SEXP, arg2: ::std::os::raw::c_int) -> rcolor;
+    pub fn Rf_RGBpar3(arg1: SEXP, arg2: ::std::os::raw::c_int, arg3: rcolor) -> rcolor;
+    pub fn Rf_col2name(col: rcolor) -> *const ::std::os::raw::c_char;
+    #[doc = "Convert either a name or a #RRGGBB\\[AA\\] string to internal.\nBecause people were using it, it also converts \"1\", \"2\" ...\nto a colour in the palette, and \"0\" to transparent white."]
+    pub fn R_GE_str2col(s: *const ::std::os::raw::c_char) -> rcolor;
+    pub fn GE_LENDpar(value: SEXP, ind: ::std::os::raw::c_int) -> R_GE_lineend;
+    pub fn GE_LENDget(lend: R_GE_lineend) -> SEXP;
+    pub fn GE_LJOINpar(value: SEXP, ind: ::std::os::raw::c_int) -> R_GE_linejoin;
+    pub fn GE_LJOINget(ljoin: R_GE_linejoin) -> SEXP;
+    pub fn GESetClip(x1: f64, y1: f64, x2: f64, y2: f64, dd: pGEDevDesc);
+    pub fn GENewPage(gc: pGEcontext, dd: pGEDevDesc);
+    pub fn GELine(x1: f64, y1: f64, x2: f64, y2: f64, gc: pGEcontext, dd: pGEDevDesc);
+    pub fn GEPolyline(
+        n: ::std::os::raw::c_int,
+        x: *mut f64,
+        y: *mut f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+    pub fn GEPolygon(
+        n: ::std::os::raw::c_int,
+        x: *mut f64,
+        y: *mut f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+    pub fn GEXspline(
+        n: ::std::os::raw::c_int,
+        x: *mut f64,
+        y: *mut f64,
+        s: *mut f64,
+        open: Rboolean,
+        repEnds: Rboolean,
+        draw: Rboolean,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    ) -> SEXP;
+    pub fn GECircle(x: f64, y: f64, radius: f64, gc: pGEcontext, dd: pGEDevDesc);
+    pub fn GERect(x0: f64, y0: f64, x1: f64, y1: f64, gc: pGEcontext, dd: pGEDevDesc);
+    pub fn GEPath(
+        x: *mut f64,
+        y: *mut f64,
+        npoly: ::std::os::raw::c_int,
+        nper: *mut ::std::os::raw::c_int,
+        winding: Rboolean,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+    pub fn GERaster(
+        raster: *mut ::std::os::raw::c_uint,
+        w: ::std::os::raw::c_int,
+        h: ::std::os::raw::c_int,
+        x: f64,
+        y: f64,
+        width: f64,
+        height: f64,
+        angle: f64,
+        interpolate: Rboolean,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+    pub fn GECap(dd: pGEDevDesc) -> SEXP;
+    pub fn GEText(
+        x: f64,
+        y: f64,
+        str_: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        xc: f64,
+        yc: f64,
+        rot: f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+    pub fn GEMode(mode: ::std::os::raw::c_int, dd: pGEDevDesc);
+    pub fn GESymbol(
+        x: f64,
+        y: f64,
+        pch: ::std::os::raw::c_int,
+        size: f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+    pub fn GEPretty(lo: *mut f64, up: *mut f64, ndiv: *mut ::std::os::raw::c_int);
+    pub fn GEMetricInfo(
+        c: ::std::os::raw::c_int,
+        gc: pGEcontext,
+        ascent: *mut f64,
+        descent: *mut f64,
+        width: *mut f64,
+        dd: pGEDevDesc,
+    );
+    pub fn GEStrWidth(
+        str_: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    ) -> f64;
+    pub fn GEStrHeight(
+        str_: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    ) -> f64;
+    pub fn GEStrMetric(
+        str_: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        gc: pGEcontext,
+        ascent: *mut f64,
+        descent: *mut f64,
+        width: *mut f64,
+        dd: pGEDevDesc,
+    );
+    pub fn GEstring_to_pch(pch: SEXP) -> ::std::os::raw::c_int;
+    #[doc = "-------------------------------------------------------------------\n\n  LINE TEXTURE CODE is concerned with the internals of R\n  line texture representation."]
+    pub fn GE_LTYpar(arg1: SEXP, arg2: ::std::os::raw::c_int) -> ::std::os::raw::c_uint;
+    pub fn GE_LTYget(arg1: ::std::os::raw::c_uint) -> SEXP;
+    #[doc = "Raster operations"]
+    pub fn R_GE_rasterScale(
+        sraster: *mut ::std::os::raw::c_uint,
+        sw: ::std::os::raw::c_int,
+        sh: ::std::os::raw::c_int,
+        draster: *mut ::std::os::raw::c_uint,
+        dw: ::std::os::raw::c_int,
+        dh: ::std::os::raw::c_int,
+    );
+    pub fn R_GE_rasterInterpolate(
+        sraster: *mut ::std::os::raw::c_uint,
+        sw: ::std::os::raw::c_int,
+        sh: ::std::os::raw::c_int,
+        draster: *mut ::std::os::raw::c_uint,
+        dw: ::std::os::raw::c_int,
+        dh: ::std::os::raw::c_int,
+    );
+    pub fn R_GE_rasterRotatedSize(
+        w: ::std::os::raw::c_int,
+        h: ::std::os::raw::c_int,
+        angle: f64,
+        wnew: *mut ::std::os::raw::c_int,
+        hnew: *mut ::std::os::raw::c_int,
+    );
+    pub fn R_GE_rasterRotatedOffset(
+        w: ::std::os::raw::c_int,
+        h: ::std::os::raw::c_int,
+        angle: f64,
+        botleft: ::std::os::raw::c_int,
+        xoff: *mut f64,
+        yoff: *mut f64,
+    );
+    pub fn R_GE_rasterResizeForRotation(
+        sraster: *mut ::std::os::raw::c_uint,
+        w: ::std::os::raw::c_int,
+        h: ::std::os::raw::c_int,
+        newRaster: *mut ::std::os::raw::c_uint,
+        wnew: ::std::os::raw::c_int,
+        hnew: ::std::os::raw::c_int,
+        gc: pGEcontext,
+    );
+    pub fn R_GE_rasterRotate(
+        sraster: *mut ::std::os::raw::c_uint,
+        w: ::std::os::raw::c_int,
+        h: ::std::os::raw::c_int,
+        angle: f64,
+        draster: *mut ::std::os::raw::c_uint,
+        gc: pGEcontext,
+        perPixelAlpha: Rboolean,
+    );
+    #[doc = "From plotmath.c"]
+    pub fn GEExpressionWidth(expr: SEXP, gc: pGEcontext, dd: pGEDevDesc) -> f64;
+    pub fn GEExpressionHeight(expr: SEXP, gc: pGEcontext, dd: pGEDevDesc) -> f64;
+    pub fn GEExpressionMetric(
+        expr: SEXP,
+        gc: pGEcontext,
+        ascent: *mut f64,
+        descent: *mut f64,
+        width: *mut f64,
+        dd: pGEDevDesc,
+    );
+    pub fn GEMathText(
+        x: f64,
+        y: f64,
+        expr: SEXP,
+        xc: f64,
+        yc: f64,
+        rot: f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+    #[doc = "From plot3d.c : used in package clines"]
+    pub fn GEcontourLines(
+        x: *mut f64,
+        nx: ::std::os::raw::c_int,
+        y: *mut f64,
+        ny: ::std::os::raw::c_int,
+        z: *mut f64,
+        levels: *mut f64,
+        nl: ::std::os::raw::c_int,
+    ) -> SEXP;
+    #[doc = "From vfonts.c"]
+    pub fn R_GE_VStrWidth(
+        s: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    ) -> f64;
+    pub fn R_GE_VStrHeight(
+        s: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    ) -> f64;
+    pub fn R_GE_VText(
+        x: f64,
+        y: f64,
+        s: *const ::std::os::raw::c_char,
+        enc: cetype_t,
+        x_justify: f64,
+        y_justify: f64,
+        rotation: f64,
+        gc: pGEcontext,
+        dd: pGEDevDesc,
+    );
+    pub fn GEcurrentDevice() -> pGEDevDesc;
+    pub fn GEdeviceDirty(dd: pGEDevDesc) -> Rboolean;
+    pub fn GEdirtyDevice(dd: pGEDevDesc);
+    pub fn GEcheckState(dd: pGEDevDesc) -> Rboolean;
+    pub fn GErecording(call: SEXP, dd: pGEDevDesc) -> Rboolean;
+    pub fn GErecordGraphicOperation(op: SEXP, args: SEXP, dd: pGEDevDesc);
+    pub fn GEinitDisplayList(dd: pGEDevDesc);
+    pub fn GEplayDisplayList(dd: pGEDevDesc);
+    pub fn GEcopyDisplayList(fromDevice: ::std::os::raw::c_int);
+    pub fn GEcreateSnapshot(dd: pGEDevDesc) -> SEXP;
+    pub fn GEplaySnapshot(snapshot: SEXP, dd: pGEDevDesc);
+    pub fn GEonExit();
+    pub fn GEnullDevice();
+    pub fn Rf_CreateAtVector(
+        axp: *mut f64,
+        usr: *const f64,
+        nint: ::std::os::raw::c_int,
+        logflag: Rboolean,
+    ) -> SEXP;
+    pub fn Rf_GAxisPars(
+        min: *mut f64,
+        max: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        log: Rboolean,
+        axis: ::std::os::raw::c_int,
+    );
+    #[doc = "Patterns - from ../../main/patterns.c"]
+    pub fn R_GE_isPattern(x: SEXP) -> Rboolean;
+    pub fn R_GE_patternType(pattern: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_GE_linearGradientX1(pattern: SEXP) -> f64;
+    pub fn R_GE_linearGradientY1(pattern: SEXP) -> f64;
+    pub fn R_GE_linearGradientX2(pattern: SEXP) -> f64;
+    pub fn R_GE_linearGradientY2(pattern: SEXP) -> f64;
+    pub fn R_GE_linearGradientNumStops(pattern: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_GE_linearGradientStop(pattern: SEXP, i: ::std::os::raw::c_int) -> f64;
+    pub fn R_GE_linearGradientColour(pattern: SEXP, i: ::std::os::raw::c_int) -> rcolor;
+    pub fn R_GE_linearGradientExtend(pattern: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_GE_radialGradientCX1(pattern: SEXP) -> f64;
+    pub fn R_GE_radialGradientCY1(pattern: SEXP) -> f64;
+    pub fn R_GE_radialGradientR1(pattern: SEXP) -> f64;
+    pub fn R_GE_radialGradientCX2(pattern: SEXP) -> f64;
+    pub fn R_GE_radialGradientCY2(pattern: SEXP) -> f64;
+    pub fn R_GE_radialGradientR2(pattern: SEXP) -> f64;
+    pub fn R_GE_radialGradientNumStops(pattern: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_GE_radialGradientStop(pattern: SEXP, i: ::std::os::raw::c_int) -> f64;
+    pub fn R_GE_radialGradientColour(pattern: SEXP, i: ::std::os::raw::c_int) -> rcolor;
+    pub fn R_GE_radialGradientExtend(pattern: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_GE_tilingPatternFunction(pattern: SEXP) -> SEXP;
+    pub fn R_GE_tilingPatternX(pattern: SEXP) -> f64;
+    pub fn R_GE_tilingPatternY(pattern: SEXP) -> f64;
+    pub fn R_GE_tilingPatternWidth(pattern: SEXP) -> f64;
+    pub fn R_GE_tilingPatternHeight(pattern: SEXP) -> f64;
+    pub fn R_GE_tilingPatternExtend(pattern: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_GE_clipPathFillRule(path: SEXP) -> ::std::os::raw::c_int;
+    pub fn GEStroke(path: SEXP, gc: pGEcontext, dd: pGEDevDesc);
+    pub fn GEFill(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pGEDevDesc);
+    pub fn GEFillStroke(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pGEDevDesc);
+    pub fn R_GE_maskType(mask: SEXP) -> ::std::os::raw::c_int;
+    #[doc = "S Like Memory Management"]
+    pub fn R_chk_calloc(arg1: usize, arg2: usize) -> *mut ::std::os::raw::c_void;
+    pub fn R_chk_realloc(
+        arg1: *mut ::std::os::raw::c_void,
+        arg2: usize,
+    ) -> *mut ::std::os::raw::c_void;
+    pub fn R_chk_free(arg1: *mut ::std::os::raw::c_void);
+    pub fn dasum_(
+        n: *const ::std::os::raw::c_int,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn daxpy_(
+        n: *const ::std::os::raw::c_int,
+        da: *const f64,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn dcopy_(
+        n: *const ::std::os::raw::c_int,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn ddot_(
+        n: *const ::std::os::raw::c_int,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *const f64,
+        incy: *const ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn dnrm2_(
+        n: *const ::std::os::raw::c_int,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn drot_(
+        n: *const ::std::os::raw::c_int,
+        dx: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+        c: *const f64,
+        s: *const f64,
+    );
+    pub fn drotg_(a: *const f64, b: *const f64, c: *mut f64, s: *mut f64);
+    pub fn drotm_(
+        n: *const ::std::os::raw::c_int,
+        dx: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+        dparam: *const f64,
+    );
+    pub fn drotmg_(
+        dd1: *const f64,
+        dd2: *const f64,
+        dx1: *const f64,
+        dy1: *const f64,
+        param: *mut f64,
+    );
+    pub fn dscal_(
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        dx: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn dswap_(
+        n: *const ::std::os::raw::c_int,
+        dx: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+        dy: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn idamax_(
+        n: *const ::std::os::raw::c_int,
+        dx: *const f64,
+        incx: *const ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+    pub fn dgbmv_(
+        trans: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        kl: *const ::std::os::raw::c_int,
+        ku: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        Rf_beta: *const f64,
+        y: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn dgemv_(
+        trans: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        Rf_beta: *const f64,
+        y: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn dsbmv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        Rf_beta: *const f64,
+        y: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn dspmv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        ap: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        Rf_beta: *const f64,
+        y: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn dsymv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        Rf_beta: *const f64,
+        y: *mut f64,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn dtbmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn dtpmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        ap: *const f64,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn dtrmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn dtbsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn dtpsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        ap: *const f64,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn dtrsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut f64,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn dger_(
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        y: *const f64,
+        incy: *const ::std::os::raw::c_int,
+        a: *mut f64,
+        lda: *const ::std::os::raw::c_int,
+    );
+    pub fn dsyr_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        a: *mut f64,
+        lda: *const ::std::os::raw::c_int,
+    );
+    pub fn dspr_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        ap: *mut f64,
+    );
+    pub fn dsyr2_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        y: *const f64,
+        incy: *const ::std::os::raw::c_int,
+        a: *mut f64,
+        lda: *const ::std::os::raw::c_int,
+    );
+    pub fn dspr2_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const f64,
+        incx: *const ::std::os::raw::c_int,
+        y: *const f64,
+        incy: *const ::std::os::raw::c_int,
+        ap: *mut f64,
+    );
+    pub fn dgemm_(
+        transa: *const ::std::os::raw::c_char,
+        transb: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        b: *const f64,
+        ldb: *const ::std::os::raw::c_int,
+        Rf_beta: *const f64,
+        c: *mut f64,
+        ldc: *const ::std::os::raw::c_int,
+    );
+    pub fn dtrsm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        transa: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        b: *mut f64,
+        ldb: *const ::std::os::raw::c_int,
+    );
+    pub fn dtrmm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        transa: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        b: *mut f64,
+        ldb: *const ::std::os::raw::c_int,
+    );
+    pub fn dsymm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        b: *const f64,
+        ldb: *const ::std::os::raw::c_int,
+        Rf_beta: *const f64,
+        c: *mut f64,
+        ldc: *const ::std::os::raw::c_int,
+    );
+    pub fn dsyrk_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        Rf_beta: *const f64,
+        c: *mut f64,
+        ldc: *const ::std::os::raw::c_int,
+    );
+    pub fn dsyr2k_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const f64,
+        lda: *const ::std::os::raw::c_int,
+        b: *const f64,
+        ldb: *const ::std::os::raw::c_int,
+        Rf_beta: *const f64,
+        c: *mut f64,
+        ldc: *const ::std::os::raw::c_int,
+    );
+    pub fn dcabs1_(z: *const Rcomplex) -> f64;
+    pub fn dzasum_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn dznrm2_(
+        n: *const ::std::os::raw::c_int,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    ) -> f64;
+    pub fn izamax_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+    pub fn zaxpy_(
+        n: *const ::std::os::raw::c_int,
+        za: *const Rcomplex,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn zcopy_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn zdotc_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    ) -> Rcomplex;
+    pub fn zdotu_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    ) -> Rcomplex;
+    pub fn zdrot_(
+        n: *const ::std::os::raw::c_int,
+        zx: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+        c: *const f64,
+        s: *const f64,
+    );
+    pub fn zdscal_(
+        n: *const ::std::os::raw::c_int,
+        da: *const f64,
+        zx: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn zgbmv_(
+        trans: *const ::std::os::raw::c_char,
+        m: *mut ::std::os::raw::c_int,
+        n: *mut ::std::os::raw::c_int,
+        kl: *mut ::std::os::raw::c_int,
+        ku: *mut ::std::os::raw::c_int,
+        alpha: *mut Rcomplex,
+        a: *mut Rcomplex,
+        lda: *mut ::std::os::raw::c_int,
+        x: *mut Rcomplex,
+        incx: *mut ::std::os::raw::c_int,
+        Rf_beta: *mut Rcomplex,
+        y: *mut Rcomplex,
+        incy: *mut ::std::os::raw::c_int,
+    );
+    pub fn zgemm_(
+        transa: *const ::std::os::raw::c_char,
+        transb: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        b: *const Rcomplex,
+        ldb: *const ::std::os::raw::c_int,
+        Rf_beta: *const Rcomplex,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+    pub fn zgemv_(
+        trans: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        Rf_beta: *const Rcomplex,
+        y: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn zgerc_(
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        y: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+        a: *mut Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+    );
+    pub fn zgeru_(
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        y: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+        a: *mut Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+    );
+    pub fn zhbmv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        Rf_beta: *const Rcomplex,
+        y: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn zhemm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        b: *const Rcomplex,
+        ldb: *const ::std::os::raw::c_int,
+        Rf_beta: *const Rcomplex,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+    pub fn zhemv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        Rf_beta: *const Rcomplex,
+        y: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn zher_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        a: *mut Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+    );
+    pub fn zher2_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        y: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+        a: *mut Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+    );
+    pub fn zher2k_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        b: *const Rcomplex,
+        ldb: *const ::std::os::raw::c_int,
+        Rf_beta: *const f64,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+    pub fn zherk_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        Rf_beta: *const f64,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+    pub fn zhpmv_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        ap: *const Rcomplex,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        Rf_beta: *const Rcomplex,
+        y: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn zhpr_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const f64,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        ap: *mut Rcomplex,
+    );
+    pub fn zhpr2_(
+        uplo: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        x: *const Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        y: *const Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+        ap: *mut Rcomplex,
+    );
+    pub fn zrotg_(ca: *const Rcomplex, cb: *const Rcomplex, c: *mut f64, s: *mut Rcomplex);
+    pub fn zscal_(
+        n: *const ::std::os::raw::c_int,
+        za: *const Rcomplex,
+        zx: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn zswap_(
+        n: *const ::std::os::raw::c_int,
+        zx: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+        zy: *mut Rcomplex,
+        incy: *const ::std::os::raw::c_int,
+    );
+    pub fn zsymm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        b: *const Rcomplex,
+        ldb: *const ::std::os::raw::c_int,
+        Rf_beta: *const Rcomplex,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+    pub fn zsyr2k_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        alpha: *mut Rcomplex,
+        a: *mut Rcomplex,
+        lda: *mut ::std::os::raw::c_int,
+        b: *mut Rcomplex,
+        ldb: *mut ::std::os::raw::c_int,
+        Rf_beta: *mut Rcomplex,
+        c: *mut Rcomplex,
+        ldc: *mut ::std::os::raw::c_int,
+    );
+    pub fn zsyrk_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        Rf_beta: *const Rcomplex,
+        c: *mut Rcomplex,
+        ldc: *const ::std::os::raw::c_int,
+    );
+    pub fn ztbmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn ztbsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        k: *const ::std::os::raw::c_int,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn ztpmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        ap: *const Rcomplex,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn ztpsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        ap: *const Rcomplex,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn ztrmm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        transa: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        m: *const ::std::os::raw::c_int,
+        n: *const ::std::os::raw::c_int,
+        alpha: *const Rcomplex,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        b: *mut Rcomplex,
+        ldb: *const ::std::os::raw::c_int,
+    );
+    pub fn ztrmv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+    pub fn ztrsm_(
+        side: *const ::std::os::raw::c_char,
+        uplo: *const ::std::os::raw::c_char,
+        transa: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        m: *mut ::std::os::raw::c_int,
+        n: *mut ::std::os::raw::c_int,
+        alpha: *mut Rcomplex,
+        a: *mut Rcomplex,
+        lda: *mut ::std::os::raw::c_int,
+        b: *mut Rcomplex,
+        ldb: *mut ::std::os::raw::c_int,
+    );
+    pub fn ztrsv_(
+        uplo: *const ::std::os::raw::c_char,
+        trans: *const ::std::os::raw::c_char,
+        diag: *const ::std::os::raw::c_char,
+        n: *const ::std::os::raw::c_int,
+        a: *const Rcomplex,
+        lda: *const ::std::os::raw::c_int,
+        x: *mut Rcomplex,
+        incx: *const ::std::os::raw::c_int,
+    );
+    #[doc = "vectorizing function   f(x\\[1:n\\], ...) -> x\\[\\]  {overwriting x\\[\\]}."]
+    pub fn Rdqags(
+        f: integr_fn,
+        ex: *mut ::std::os::raw::c_void,
+        a: *mut f64,
+        b: *mut f64,
+        epsabs: *mut f64,
+        epsrel: *mut f64,
+        result: *mut f64,
+        abserr: *mut f64,
+        neval: *mut ::std::os::raw::c_int,
+        ier: *mut ::std::os::raw::c_int,
+        limit: *mut ::std::os::raw::c_int,
+        lenw: *mut ::std::os::raw::c_int,
+        last: *mut ::std::os::raw::c_int,
+        iwork: *mut ::std::os::raw::c_int,
+        work: *mut f64,
+    );
+    pub fn Rdqagi(
+        f: integr_fn,
+        ex: *mut ::std::os::raw::c_void,
+        bound: *mut f64,
+        inf: *mut ::std::os::raw::c_int,
+        epsabs: *mut f64,
+        epsrel: *mut f64,
+        result: *mut f64,
+        abserr: *mut f64,
+        neval: *mut ::std::os::raw::c_int,
+        ier: *mut ::std::os::raw::c_int,
+        limit: *mut ::std::os::raw::c_int,
+        lenw: *mut ::std::os::raw::c_int,
+        last: *mut ::std::os::raw::c_int,
+        iwork: *mut ::std::os::raw::c_int,
+        work: *mut f64,
+    );
+    pub fn vmmin(
+        n: ::std::os::raw::c_int,
+        b: *mut f64,
+        Fmin: *mut f64,
+        fn_: optimfn,
+        gr: optimgr,
+        maxit: ::std::os::raw::c_int,
+        trace: ::std::os::raw::c_int,
+        mask: *mut ::std::os::raw::c_int,
+        abstol: f64,
+        reltol: f64,
+        nREPORT: ::std::os::raw::c_int,
+        ex: *mut ::std::os::raw::c_void,
+        fncount: *mut ::std::os::raw::c_int,
+        grcount: *mut ::std::os::raw::c_int,
+        fail: *mut ::std::os::raw::c_int,
+    );
+    pub fn nmmin(
+        n: ::std::os::raw::c_int,
+        Bvec: *mut f64,
+        X: *mut f64,
+        Fmin: *mut f64,
+        fn_: optimfn,
+        fail: *mut ::std::os::raw::c_int,
+        abstol: f64,
+        intol: f64,
+        ex: *mut ::std::os::raw::c_void,
+        alpha: f64,
+        bet: f64,
+        gamm: f64,
+        trace: ::std::os::raw::c_int,
+        fncount: *mut ::std::os::raw::c_int,
+        maxit: ::std::os::raw::c_int,
+    );
+    pub fn cgmin(
+        n: ::std::os::raw::c_int,
+        Bvec: *mut f64,
+        X: *mut f64,
+        Fmin: *mut f64,
+        fn_: optimfn,
+        gr: optimgr,
+        fail: *mut ::std::os::raw::c_int,
+        abstol: f64,
+        intol: f64,
+        ex: *mut ::std::os::raw::c_void,
+        type_: ::std::os::raw::c_int,
+        trace: ::std::os::raw::c_int,
+        fncount: *mut ::std::os::raw::c_int,
+        grcount: *mut ::std::os::raw::c_int,
+        maxit: ::std::os::raw::c_int,
+    );
+    pub fn lbfgsb(
+        n: ::std::os::raw::c_int,
+        m: ::std::os::raw::c_int,
+        x: *mut f64,
+        l: *mut f64,
+        u: *mut f64,
+        nbd: *mut ::std::os::raw::c_int,
+        Fmin: *mut f64,
+        fn_: optimfn,
+        gr: optimgr,
+        fail: *mut ::std::os::raw::c_int,
+        ex: *mut ::std::os::raw::c_void,
+        factr: f64,
+        pgtol: f64,
+        fncount: *mut ::std::os::raw::c_int,
+        grcount: *mut ::std::os::raw::c_int,
+        maxit: ::std::os::raw::c_int,
+        msg: *mut ::std::os::raw::c_char,
+        trace: ::std::os::raw::c_int,
+        nREPORT: ::std::os::raw::c_int,
+    );
+    pub fn samin(
+        n: ::std::os::raw::c_int,
+        pb: *mut f64,
+        yb: *mut f64,
+        fn_: optimfn,
+        maxit: ::std::os::raw::c_int,
+        tmax: ::std::os::raw::c_int,
+        ti: f64,
+        trace: ::std::os::raw::c_int,
+        ex: *mut ::std::os::raw::c_void,
+    );
+    pub fn dqrqty_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        qty: *mut f64,
+    );
+    pub fn dqrqy_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        qy: *mut f64,
+    );
+    pub fn dqrcf_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        b: *mut f64,
+        info: *mut ::std::os::raw::c_int,
+    );
+    #[doc = "appl/pretty.c: for use in engine.c and util.c"]
+    pub fn R_pretty(
+        lo: *mut f64,
+        up: *mut f64,
+        ndiv: *mut ::std::os::raw::c_int,
+        min_n: ::std::os::raw::c_int,
+        shrink_sml: f64,
+        high_u_fact: *const f64,
+        eps_correction: ::std::os::raw::c_int,
+        return_bounds: ::std::os::raw::c_int,
+    ) -> f64;
+    #[doc = "Also used in packages nlme, pcaPP"]
+    pub fn optif9(
+        nr: ::std::os::raw::c_int,
+        n: ::std::os::raw::c_int,
+        x: *mut f64,
+        fcn: fcn_p,
+        d1fcn: fcn_p,
+        d2fcn: d2fcn_p,
+        state: *mut ::std::os::raw::c_void,
+        typsiz: *mut f64,
+        fscale: f64,
+        method: ::std::os::raw::c_int,
+        iexp: ::std::os::raw::c_int,
+        msg: *mut ::std::os::raw::c_int,
+        ndigit: ::std::os::raw::c_int,
+        itnlim: ::std::os::raw::c_int,
+        iagflg: ::std::os::raw::c_int,
+        iahflg: ::std::os::raw::c_int,
+        dlt: f64,
+        gradtl: f64,
+        stepmx: f64,
+        steptl: f64,
+        xpls: *mut f64,
+        fpls: *mut f64,
+        gpls: *mut f64,
+        itrmcd: *mut ::std::os::raw::c_int,
+        a: *mut f64,
+        wrk: *mut f64,
+        itncnt: *mut ::std::os::raw::c_int,
+    );
+    pub fn dqrdc2_(
+        x: *mut f64,
+        ldx: *mut ::std::os::raw::c_int,
+        n: *mut ::std::os::raw::c_int,
+        p: *mut ::std::os::raw::c_int,
+        tol: *mut f64,
+        rank: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        pivot: *mut ::std::os::raw::c_int,
+        work: *mut f64,
+    );
+    pub fn dqrls_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        p: *mut ::std::os::raw::c_int,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        tol: *mut f64,
+        b: *mut f64,
+        rsd: *mut f64,
+        qty: *mut f64,
+        k: *mut ::std::os::raw::c_int,
+        jpvt: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        work: *mut f64,
+    );
+    pub fn R_sample_kind() -> Sampletype;
+    pub fn GetRNGstate();
+    pub fn PutRNGstate();
+    pub fn user_unif_rand() -> *mut f64;
+    pub fn user_unif_init(arg1: Int32);
+    pub fn user_unif_nseed() -> *mut ::std::os::raw::c_int;
+    pub fn user_unif_seedloc() -> *mut ::std::os::raw::c_int;
+    pub fn user_norm_rand() -> *mut f64;
 }
