@@ -156,9 +156,7 @@ fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
 
 // Execute an R script and return the captured output
 fn r_command<S: AsRef<OsStr>>(r_binary: S, script: &str) -> io::Result<OsString> {
-    let out = Command::new(r_binary)
-        .args(&["-s", "-e", script])
-        .output()?;
+    let out = Command::new(r_binary).args(["-s", "-e", script]).output()?;
 
     // if there are any errors we print them out, helps with debugging
     if !out.stderr.is_empty() {
@@ -220,7 +218,7 @@ fn get_r_include(r_home: &Path, library: &Path) -> io::Result<PathBuf> {
     }
     .get_r_binary();
 
-    let rout = r_command(&r_binary, r#"cat(normalizePath(R.home('include')))"#)?;
+    let rout = r_command(r_binary, r#"cat(normalizePath(R.home('include')))"#)?;
     if !rout.is_empty() {
         Ok(PathBuf::from(rout))
     } else {
@@ -266,7 +264,7 @@ fn parse_r_version(r_version: String) -> Result<RVersionInfo, EnvVarError> {
             // Bad:
             //   - "4.1.foo" (some part contains any non-digit characters)
             //   - "4.1." (some part is missing)
-            if !s.is_empty() && s.chars().all(|c| c.is_digit(10)) {
+            if !s.is_empty() && s.chars().all(|c| c.is_ascii_digit()) {
                 Some(s)
             } else {
                 None
@@ -330,8 +328,8 @@ fn get_r_version_from_r(r_paths: &InstallationPaths) -> Result<RVersionInfo, Env
     // 4.2.0-devel
     // ```
     let out = r_command(
-        &r_binary,
-        r#"cat(sprintf('%s.%s%s\n', R.version$major, R.version$minor, if(isTRUE(grepl('devel', R.version$status, fixed = TRUE))) '-devel' else ''))"#,
+        r_binary,
+        r"cat(sprintf('%s.%s%s\n', R.version$major, R.version$minor, if(isTRUE(grepl('devel', R.version$status, fixed = TRUE))) '-devel' else ''))",
     )
         .map_err(EnvVarError::RInvocationError)?;
 
@@ -475,7 +473,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     );
 
     // Point to the correct headers
-    bindgen_builder = bindgen_builder.clang_args(&[
+    bindgen_builder = bindgen_builder.clang_args([
         format!("-I{}", r_paths.include.display()),
         format!("--target={target}"),
     ]);
@@ -537,10 +535,12 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         let out_path = PathBuf::from(alt_target);
         // if folder doesn't exist, try to create it
         if !out_path.exists() {
-            fs::create_dir(&out_path).expect(&format!(
-                "Couldn't create output directory for bindings: {}",
-                out_path.display()
-            ));
+            fs::create_dir(&out_path).unwrap_or_else(|_| {
+                panic!(
+                    "Couldn't create output directory for bindings: {}",
+                    out_path.display()
+                )
+            });
         }
 
         let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
@@ -548,7 +548,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
         bindings
             .write_to_file(&out_file)
-            .expect(&format!("Couldn't write bindings: {}", out_file.display()));
+            .unwrap_or_else(|_| panic!("Couldn't write bindings: {}", out_file.display()));
     } else {
         println!(
             "Warning: Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
@@ -605,10 +605,10 @@ impl bindgen::callbacks::ParseCallbacks for TrimCommentsCallbacks {
         let comment = comment.trim();
 
         // replace bare brackets in comments
-        let comment = comment.replace("[", r"\[");
-        let comment = comment.replace("]", r"\]");
+        let comment = comment.replace('[', r"\[");
+        let comment = comment.replace(']', r"\]");
 
-        Some(comment.into())
+        Some(comment)
     }
 }
 
