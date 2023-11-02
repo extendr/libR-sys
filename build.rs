@@ -479,6 +479,10 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         format!("--target={target}"),
     ]);
 
+    // stops warning about ignored attributes,
+    // e.g. ignores `__format__` attributes caused by `stdio.h`
+    bindgen_builder = bindgen_builder.clang_arg("-Wno-ignored-attributes");
+
     // allow injection of an alternative include path to libclang
     if let Some(alt_include) = env::var_os(ENVVAR_LIBCLANG_INCLUDE_PATH) {
         bindgen_builder =
