@@ -463,7 +463,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .header("wrapper.h")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks));
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()));
 
     let target = env::var("TARGET").expect("Could not get the target triple");
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
