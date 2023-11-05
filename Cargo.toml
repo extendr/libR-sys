@@ -26,3 +26,8 @@ clang = { version = "2", optional = true, features = ["runtime", "clang_3_7"] }
 # By default, we use pre-computed bindings that ship with the library. This may fail!
 # Turn on the 'use-bindgen' feature to generate bindings on the fly for your platform.
 use-bindgen = ["bindgen", "clang"]
+
+[lib]
+# Some code comments on R's source code might be accidentally treated as Rust's
+# doc test. See https://github.com/extendr/libR-sys/issues/194 for the details.
+doctest = false
