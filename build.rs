@@ -463,7 +463,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .header("wrapper.h")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks));
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()));
 
     let target = env::var("TARGET").expect("Could not get the target triple");
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
@@ -478,6 +478,10 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         format!("-I{}", r_paths.include.display()),
         format!("--target={target}"),
     ]);
+
+    // stops warning about ignored attributes,
+    // e.g. ignores `__format__` attributes caused by `stdio.h`
+    bindgen_builder = bindgen_builder.clang_arg("-Wno-ignored-attributes");
 
     // allow injection of an alternative include path to libclang
     if let Some(alt_include) = env::var_os(ENVVAR_LIBCLANG_INCLUDE_PATH) {
