@@ -512,7 +512,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let bindgen_builder = bindgen_builder.blocklist_item("VECTOR_PTR");
 
     // Remove all Fortran items, these are items with underscore _ postfix
-    let bindgen_builder = bindgen_builder.blocklist_item(".*_$");
+    let bindgen_builder = bindgen_builder.blocklist_item("[A-Za-z_][A-Za-z0-9_]*[^_]_$");
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
