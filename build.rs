@@ -511,6 +511,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // `VECTOR_PTR` is deprecated, use `DATAPTR` and friends instead
     let bindgen_builder = bindgen_builder.blocklist_item("VECTOR_PTR");
 
+    // Remove all Fortran items, these are items with underscore _ postfix
+    let bindgen_builder = bindgen_builder.blocklist_item(".*_$");
+
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
         .raw_line(format!(
