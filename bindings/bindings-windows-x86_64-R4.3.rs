@@ -60,7 +60,6 @@ pub const IDENT_USE_SRCREF: u32 = 32;
 pub const IDENT_EXTPTR_AS_REF: u32 = 64;
 pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
-pub const __STDC_WANT_IEC_60559_FUNCS_EXT__: u32 = 1;
 pub const R_VERSION_STRING: &[u8; 6] = b"4.3.2\0";
 pub const HAVE_EXPM1: u32 = 1;
 pub const HAVE_HYPOT: u32 = 1;
