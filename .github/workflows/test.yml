@@ -243,7 +243,7 @@ jobs:
     # In the case of /bindings command, we don't need to check anything else
     # because it should have checked in test_with_bindings job. In the other
     # cases, we only want to invoke this on the master branch.
-    # if: github.event_name == 'issue_comment' || github.ref == 'refs/heads/master'
+    if: github.event_name == 'issue_comment' || github.ref == 'refs/heads/master'
     steps:
     - uses: actions/checkout@v4
 
