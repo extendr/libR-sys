@@ -163,8 +163,8 @@ pub const R_MINOR: &[u8; 4] = b"4.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2023\0";
 pub const R_MONTH: &[u8; 3] = b"11\0";
-pub const R_DAY: &[u8; 3] = b"08\0";
-pub const R_SVN_REVISION: u32 = 85496;
+pub const R_DAY: &[u8; 3] = b"10\0";
+pub const R_SVN_REVISION: u32 = 85507;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -345,7 +345,22 @@ pub type SEXPTYPE = ::std::os::raw::c_uint;
 pub struct SEXPREC {
     _unused: [u8; 0],
 }
-pub type SEXP = *mut SEXPREC;
+#[repr(transparent)]
+#[derive(Debug, Copy, Clone)]
+pub struct SEXP(pub *mut SEXPREC);
+impl ::std::ops::Deref for SEXP {
+    type Target = *mut SEXPREC;
+    #[inline]
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+impl ::std::ops::DerefMut for SEXP {
+    #[inline]
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
+}
 #[doc = "We sometimes need to coerce a protected value and place the new\ncoerced value under protection.  For these cases PROTECT_WITH_INDEX\nsaves an index of the protection location that can be used to\nreplace the protected value using REPROTECT."]
 pub type PROTECT_INDEX = ::std::os::raw::c_int;
 #[repr(C)]
