@@ -453,6 +453,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // the resulting bindings.
     let mut bindgen_builder = bindgen::Builder::default()
         .emit_diagnostics()
+        .blocklist_file(r".*BLAS\.h")
         .allowlist_function(&allowlist_pattern)
         .allowlist_var(&allowlist_pattern)
         .allowlist_type(&allowlist_pattern)
