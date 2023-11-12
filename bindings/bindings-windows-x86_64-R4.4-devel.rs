@@ -61,7 +61,6 @@ pub const IDENT_USE_SRCREF: u32 = 32;
 pub const IDENT_EXTPTR_AS_REF: u32 = 64;
 pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
-pub const __STDC_WANT_IEC_60559_FUNCS_EXT__: u32 = 1;
 pub const R_VERSION_STRING: &[u8; 6] = b"4.4.0\0";
 pub const HAVE_EXPM1: u32 = 1;
 pub const HAVE_HYPOT: u32 = 1;
@@ -83,8 +82,8 @@ pub const R_MINOR: &[u8; 4] = b"4.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2023\0";
 pub const R_MONTH: &[u8; 3] = b"11\0";
-pub const R_DAY: &[u8; 3] = b"04\0";
-pub const R_SVN_REVISION: u32 = 85472;
+pub const R_DAY: &[u8; 3] = b"11\0";
+pub const R_SVN_REVISION: u32 = 85510;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -4488,34 +4487,6 @@ extern "C" {
         trace: ::std::os::raw::c_int,
         ex: *mut ::std::os::raw::c_void,
     );
-    pub fn dqrqty_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        qty: *mut f64,
-    );
-    pub fn dqrqy_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        qy: *mut f64,
-    );
-    pub fn dqrcf_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        k: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        b: *mut f64,
-        info: *mut ::std::os::raw::c_int,
-    );
     #[doc = "appl/pretty.c: for use in engine.c and util.c"]
     pub fn R_pretty(
         lo: *mut f64,
@@ -4556,32 +4527,6 @@ extern "C" {
         a: *mut f64,
         wrk: *mut f64,
         itncnt: *mut ::std::os::raw::c_int,
-    );
-    pub fn dqrdc2_(
-        x: *mut f64,
-        ldx: *mut ::std::os::raw::c_int,
-        n: *mut ::std::os::raw::c_int,
-        p: *mut ::std::os::raw::c_int,
-        tol: *mut f64,
-        rank: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        pivot: *mut ::std::os::raw::c_int,
-        work: *mut f64,
-    );
-    pub fn dqrls_(
-        x: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        p: *mut ::std::os::raw::c_int,
-        y: *mut f64,
-        ny: *mut ::std::os::raw::c_int,
-        tol: *mut f64,
-        b: *mut f64,
-        rsd: *mut f64,
-        qty: *mut f64,
-        k: *mut ::std::os::raw::c_int,
-        jpvt: *mut ::std::os::raw::c_int,
-        qraux: *mut f64,
-        work: *mut f64,
     );
     pub fn R_sample_kind() -> Sampletype;
     pub fn GetRNGstate();
