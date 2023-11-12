@@ -454,6 +454,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let mut bindgen_builder = bindgen::Builder::default()
         .emit_diagnostics()
         .blocklist_file(r".*BLAS\.h")
+        .blocklist_file(r".*Linpack\.h")
         .allowlist_function(&allowlist_pattern)
         .allowlist_var(&allowlist_pattern)
         .allowlist_type(&allowlist_pattern)
