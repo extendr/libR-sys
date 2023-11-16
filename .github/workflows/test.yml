@@ -261,7 +261,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check_generate_bindings_flag
     steps:
-      - run: echo ${{needs.check_generate_bindings_flag.outputs.HEAD_COMMIT_MESSAGE}}
+      - run: echo ${{ needs.check_generate_bindings_flag.outputs.HEAD_COMMIT_MESSAGE }}
   
   pr_generated_bindings:
     name: Make PR with generated bindings
