@@ -253,7 +253,7 @@ jobs:
   
   pr_generated_bindings:
     name: Make PR with generated bindings
-    needs: test_with_bindgen
+    # needs: test_with_bindgen
     if: ${{ contains(github.event.head_commit.message, '[generate bindings]') }}
     runs-on: ubuntu-latest
 
