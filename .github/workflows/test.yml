@@ -249,9 +249,8 @@ jobs:
     name: Debug
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo ${{ github.event.head_commit.message }}
-          echo ${{ contains(github.event.head_commit.message, '[generate bindings]') }}
+      - run: echo ${{ github.event.head_commit.message }}
+      - run: echo ${{ contains(github.event.head_commit.message, '[generate bindings]') }}
   
   pr_generated_bindings:
     name: Make PR with generated bindings
