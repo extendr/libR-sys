@@ -26,10 +26,10 @@ jobs:
     #
     # ref.
     # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#issue_comment
-    if: |
-      github.event_name != 'issue_comment'
-      || (github.event.issue.pull_request && github.event.comment.author_association == 'MEMBER' && startsWith(github.event.comment.body, '/bindings'))
-
+    # if: |
+    #   github.event_name != 'issue_comment'
+    #   || (github.event.issue.pull_request && github.event.comment.author_association == 'MEMBER' && startsWith(github.event.comment.body, '/bindings'))
+    if: false
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (R-${{ matrix.config.r }} rust-${{ matrix.config.rust-version }}-${{ matrix.config.target || 'default' }})
@@ -245,10 +245,14 @@ jobs:
         echo "${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}"
         echo "${{ contains(steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}"
   
+  is_generated_binding_commit:
+    name: Debug
+    run: |
+      echo ${{ github.event.head_commit.message }}
+      echo ${{ contains(github.event.head_commit.message, '[generate bindings]') }}
+  
   pr_generated_bindings:
     name: Make PR with generated bindings
-    env:
-      ACTIONS_STEP_DEBUG: 1
     needs: test_with_bindgen
     if: ${{ contains(github.event.head_commit.message, '[generate bindings]') }}
     runs-on: ubuntu-latest
