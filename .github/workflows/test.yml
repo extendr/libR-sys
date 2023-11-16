@@ -254,19 +254,19 @@ jobs:
         ref: ${{ env.GITHUB_SHA }}
     - name: Get Head Commit Message
       id: get_head_commit_message
-      run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_ENV"
+      run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
   
   is_generated_binding_commit:
     name: Debug
     runs-on: ubuntu-latest
     needs: check_generate_bindings_flag
     steps:
-      - run: echo ${{env.HEAD_COMMIT_MESSAGE}}
+      - run: echo ${{needs.check_generate_bindings_flag.outputs.HEAD_COMMIT_MESSAGE}}
   
   pr_generated_bindings:
     name: Make PR with generated bindings
     needs: [test_with_bindgen, check_generate_bindings_flag]
-    if: contains(${{env.HEAD_COMMIT_MESSAGE}}, '[generate bindings]')
+    if: contains(needs.check_generate_bindings_flag.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]')
     runs-on: ubuntu-latest
 
     steps:
