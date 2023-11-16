@@ -1,6 +1,4 @@
 name: Tests
-env:
-  ACTIONS_STEP_DEBUG: 1
 on:
   push:
     branches:
@@ -249,6 +247,8 @@ jobs:
   
   pr_generated_bindings:
     name: Make PR with generated bindings
+    env:
+      ACTIONS_STEP_DEBUG: 1
     needs: test_with_bindgen
     if: contains(github.event.head_commit.message, '[generate bindings]')
     runs-on: ubuntu-latest
