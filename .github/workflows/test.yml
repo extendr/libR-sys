@@ -253,7 +253,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        ref: ${{ env.GITHUB_SHA }}
+        ref: ${{ github.event.pull_request.head.sha }}
     - name: Get Head Commit Message
       id: get_head_commit_message
       run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
@@ -263,12 +263,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: check_generate_bindings_flag
     steps:
-      - run: echo ${{ needs.check_generate_bindings_flag.outputs.head_commit_message }}
+      - run: echo "${{ needs.check_generate_bindings_flag.outputs.head_commit_message }}"
   
   pr_generated_bindings:
     name: Make PR with generated bindings
     needs: [test_with_bindgen, check_generate_bindings_flag]
-    if: contains(needs.check_generate_bindings_flag.outputs.head_commit_message, '[generate bindings]')
+    if: ${{ contains(needs.check_generate_bindings_flag.outputs.head_commit_message, '[generate bindings]') }}
     runs-on: ubuntu-latest
 
     steps:
