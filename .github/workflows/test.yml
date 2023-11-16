@@ -247,6 +247,7 @@ jobs:
   
   is_generated_binding_commit:
     name: Debug
+    runs-on: ubuntu-latest
     steps:
       - run: |
           echo ${{ github.event.head_commit.message }}
