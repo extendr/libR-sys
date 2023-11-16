@@ -473,6 +473,11 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()));
+    
+    // Collect C-enums into idiomatic Rust-style enums
+    bindgen_builder = bindgen_builder.default_enum_style(bindgen::EnumVariation::Rust {
+        non_exhaustive: false,
+    });
 
     if cfg!(feature = "layout_tests") {
         bindgen_builder = bindgen_builder.layout_tests(true);
