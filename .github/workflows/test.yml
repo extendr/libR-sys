@@ -266,7 +266,7 @@ jobs:
   pr_generated_bindings:
     name: Make PR with generated bindings
     needs: [test_with_bindgen, check_generate_bindings_flag]
-    if: ${{ contains(env.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}
+    if: contains(${{env.HEAD_COMMIT_MESSAGE}}, '[generate bindings]')
     runs-on: ubuntu-latest
 
     steps:
