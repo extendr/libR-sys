@@ -261,7 +261,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check_generate_bindings_flag
     steps:
-      - run: echo ${{ $HEAD_COMMIT_MESSAGE }}
+      - run: echo ${{ "$HEAD_COMMIT_MESSAGE" }}
       - run: echo ${{ contains($HEAD_COMMIT_MESSAGE, '[generate bindings]') }}
   
   pr_generated_bindings:
