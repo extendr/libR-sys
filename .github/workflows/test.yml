@@ -19,7 +19,8 @@ on:
   workflow_dispatch: {}
 
 jobs:
-
+  env: 
+    ACTIONS_STEP_DEBUG: 1
   test_with_bindgen:
     # When the event is not issue_comment, always run the tests. When it is,
     # check if (1) the comment is on pull request, (2) the comment author is the
