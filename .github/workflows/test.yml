@@ -250,7 +250,7 @@ jobs:
     env:
       ACTIONS_STEP_DEBUG: 1
     needs: test_with_bindgen
-    if: contains(github.event.head_commit.message, '[generate bindings]')
+    if: ${{ contains(github.event.head_commit.message, '[generate bindings]') }}
     runs-on: ubuntu-latest
 
     steps:
