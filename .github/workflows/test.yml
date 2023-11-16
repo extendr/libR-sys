@@ -247,9 +247,10 @@ jobs:
   
   is_generated_binding_commit:
     name: Debug
-    run: |
-      echo ${{ github.event.head_commit.message }}
-      echo ${{ contains(github.event.head_commit.message, '[generate bindings]') }}
+    steps:
+      run: |
+        echo ${{ github.event.head_commit.message }}
+        echo ${{ contains(github.event.head_commit.message, '[generate bindings]') }}
   
   pr_generated_bindings:
     name: Make PR with generated bindings
