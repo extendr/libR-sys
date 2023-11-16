@@ -465,6 +465,10 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()));
 
+    // Provide manual bindings for `SEXPREC`, that ensures !Send, !Sync, !Pin
+    bindgen_builder = bindgen_builder.blocklist_type("SEXPREC");
+
+    // Don't include layout-tests in the published bindings, only for testing
     if cfg!(feature = "layout_tests") {
         bindgen_builder = bindgen_builder.layout_tests(true);
     } else {

@@ -66,6 +66,12 @@
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
+#[repr(C)]
+pub struct SEXPREC {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
