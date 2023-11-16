@@ -254,34 +254,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v3
 
-      - name: Create branch
-        run: git checkout -b generated-bindings
+    - name: Create branch
+      run: git checkout -b generated-bindings
 
-      - name: Update bindings
-        run: |
-          # Update or add the bindings
-          cp generated_binding-*/*.rs bindings/
+    - name: Update bindings
+      run: |
+        # Update or add the bindings
+        cp generated_binding-*/*.rs bindings/
 
-          # Replace the default bindings
-          cd bindings
-          for x in linux-aarch64 linux-x86_64 macos-aarch64 macos-x86_64 windows-x86_64; do
-            # Choose the newest version except for devel
-            ln --force -s "$(ls -1 ./bindings-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-${x}.rs
-          done
-          cd ..
-      - name: Add generated bindings
-        run: |
-          git add bindings/
-          git config --local user.name "${GITHUB_ACTOR}"
-          git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git commit -m "Update bindings [skip ci]"
-      - name: Make the generated bindings PR to the PR
-        run: |
-          gh pr create --title "Add generated bindings"
+        # Replace the default bindings
+        cd bindings
+        for x in linux-aarch64 linux-x86_64 macos-aarch64 macos-x86_64 windows-x86_64; do
+          # Choose the newest version except for devel
+          ln --force -s "$(ls -1 ./bindings-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-${x}.rs
+        done
+        cd ..
+    - name: Add generated bindings
+      run: |
+        git add bindings/
+        git config --local user.name "${GITHUB_ACTOR}"
+        git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        git commit -m "Update bindings [skip ci]"
+    - name: Make the generated bindings PR to the PR
+      run: |
+        gh pr create --title "Add generated bindings"
   
   # Gather the generated bindings and push them to generated_bindings branch.
   # If we need to update the bindings, create a pull request from that branch.
