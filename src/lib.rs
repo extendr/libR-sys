@@ -68,7 +68,7 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 extern "C" {
     // Return type should match `SEXPTYPE`
-    pub fn TYPEOF(x: SEXP) -> ::std::os::raw::c_uint;
+    pub fn TYPEOF(x: SEXP) -> SEXPTYPE;
 }
 
 #[cfg(test)]
