@@ -61,22 +61,22 @@ jobs:
           - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '42', emit-bindings: 'true'}
 
 
-          # - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
-          # - {os: macOS-latest,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
-          # - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
-          # - {os: macOS-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
-          # - {os: macOS-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
+          - {os: macOS-latest,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
+          - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
+          - {os: macOS-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
 
 
-          # - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
+          - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
           - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
-          # - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
-          # - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', emit-bindings: 'true'}
-          # - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
-          # - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', emit-bindings: 'true'}
-          # - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', emit-bindings: 'true'}
+          - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
     env:
       RSPM: ${{ matrix.config.rspm }}
@@ -268,7 +268,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.event.pull_request.head.ref }}
-    
+
     - uses: actions/download-artifact@v3
 
     - name: Update bindings
@@ -290,12 +290,7 @@ jobs:
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         git commit -m "Update bindings [skip ci]"
     - name: Push to PR branch
-      run: git push ${{ github.event.pull_request }}
-    # - name: Make the generated bindings PR to the PR
-    #   run: |
-    #     gh pr create --title "Add generated bindings" --body "Generated bindings as a result of: ${{ github.event.pull_request.number }}"
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: git push
   
   # Gather the generated bindings and push them to generated_bindings branch.
   # If we need to update the bindings, create a pull request from that branch.
