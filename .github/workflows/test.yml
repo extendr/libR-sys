@@ -290,7 +290,7 @@ jobs:
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         git commit -m "Update bindings [skip ci]"
     - name: Push to PR branch
-      run: git push ${{ github.event.pull_request }}
+      run: git push
     # - name: Make the generated bindings PR to the PR
     #   run: |
     #     gh pr create --title "Add generated bindings" --body "Generated bindings as a result of: ${{ github.event.pull_request.number }}"
