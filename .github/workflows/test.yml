@@ -245,7 +245,7 @@ jobs:
   pr_generated_bindings:
     name: Make PR with generated bindings
     needs: [test_with_bindgen, check_generate_bindings_flag]
-    if: needs.check_generate_bindings_flag.outputs.generate_bindings
+    if: ${{ needs.check_generate_bindings_flag.outputs.generate_bindings }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
