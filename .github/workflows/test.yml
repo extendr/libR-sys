@@ -27,8 +27,8 @@ jobs:
     # ref.
     # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#issue_comment
     if: |
-    github.event_name != 'issue_comment'
-    || (github.event.issue.pull_request && github.event.comment.author_association == 'MEMBER' && startsWith(github.event.comment.body, '/bindings'))
+      github.event_name != 'issue_comment'
+      || (github.event.issue.pull_request && github.event.comment.author_association == 'MEMBER' && startsWith(github.event.comment.body, '/bindings'))
     
     runs-on: ${{ matrix.config.os }}
 
