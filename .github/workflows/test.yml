@@ -233,7 +233,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       head_commit_message: ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}
-      # generate_bindings: ${{ contains(steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}
+      generate_bindings: ${{ contains(steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}
     steps:
     - uses: actions/checkout@v4
       with:
