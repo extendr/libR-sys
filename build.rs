@@ -539,6 +539,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Ensure that `SEXPREC` is opaque to Rust
     let bindgen_builder = bindgen_builder.blocklist_item("SEXPREC");
 
+    // Replace `TYPEOF` definition with one that gives same type as `SEXPTYPE`.
+    let bindgen_builder = bindgen_builder.blocklist_item("TYPEOF");
+
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
         .raw_line(format!(
