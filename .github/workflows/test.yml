@@ -294,7 +294,7 @@ jobs:
         git commit -m "Update bindings [skip ci]"
     - name: Make the generated bindings PR to the PR
       run: |
-        gh pr create --title "Add generated bindings"
+        gh pr create --title "Add generated bindings" --body "Generated bindings as a result of: ${{ github.event.pull_request.number }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
