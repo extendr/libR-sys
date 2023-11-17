@@ -68,8 +68,8 @@ jobs:
           # - {os: macOS-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
 
 
-          - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
-          # - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
+          # - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
+          - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
           # - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
           # - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', emit-bindings: 'true'}
