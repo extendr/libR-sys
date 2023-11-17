@@ -2,6 +2,20 @@
 
 ## Commit newly generated bindings
 
+You last commit must contain `[generate bindings]`. You can make an empty
+commit with this message:
+
+```sh
+git commit -m "[generate bindings]" --allow-empty
+```
+
+Then after successfully running workflows, GitHub Actions will push a commit
+with the updated bindings onto your PR branch.
+
+# GUIDE
+
+## Commit newly generated bindings
+
 Your last commit must contain `[generate bindings]`. You can make an empty
 commit with this message:
 
