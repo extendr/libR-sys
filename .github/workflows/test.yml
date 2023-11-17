@@ -237,12 +237,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        ref: ${{ github.event.pull_request.head.sha }}
+        ref: ${{ github.event.pull_request.head.ref }}
     - name: Get Head Commit Message
       id: get_head_commit_message
       run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
     - name: Show commit message
-      run: echo "${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}"
+      run: |
+        echo "${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}"
+        echo "${{ contains(steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}"
   
   pr_generated_bindings:
     name: Make PR with generated bindings
