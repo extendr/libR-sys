@@ -295,6 +295,8 @@ jobs:
     - name: Make the generated bindings PR to the PR
       run: |
         gh pr create --title "Add generated bindings"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
   # Gather the generated bindings and push them to generated_bindings branch.
   # If we need to update the bindings, create a pull request from that branch.
