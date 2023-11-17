@@ -66,6 +66,11 @@
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
+extern "C" {
+    // Return type should match `SEXPTYPE`
+    pub fn TYPEOF(x: SEXP) -> ::std::os::raw::c_uint;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -139,7 +144,7 @@ mod tests {
         unsafe {
             let val = Rf_protect(R_ParseEvalString(cstr!("1"), R_NilValue));
             Rf_PrintValue(val);
-            assert_eq!(TYPEOF(val) as u32, REALSXP);
+            assert_eq!(TYPEOF(val), REALSXP);
             assert_eq!(*REAL(val), 1.);
             Rf_unprotect(1);
         }
