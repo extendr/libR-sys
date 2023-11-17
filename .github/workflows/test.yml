@@ -259,7 +259,7 @@ jobs:
       id: get_head_commit_message
       run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
     - name: Show commit message
-      run: echo ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}
+      run: echo "${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}"
   
   pr_generated_bindings:
     name: Make PR with generated bindings
