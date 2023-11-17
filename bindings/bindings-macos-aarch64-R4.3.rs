@@ -1301,7 +1301,6 @@ extern "C" {
     pub fn ATTRIB(x: SEXP) -> SEXP;
     pub fn OBJECT(x: SEXP) -> ::std::os::raw::c_int;
     pub fn MARK(x: SEXP) -> ::std::os::raw::c_int;
-    pub fn TYPEOF(x: SEXP) -> ::std::os::raw::c_int;
     pub fn NAMED(x: SEXP) -> ::std::os::raw::c_int;
     pub fn REFCNT(x: SEXP) -> ::std::os::raw::c_int;
     pub fn SET_ATTRIB(x: SEXP, v: SEXP);
