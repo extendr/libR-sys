@@ -271,9 +271,6 @@ jobs:
     
     - uses: actions/download-artifact@v3
 
-    - name: Create branch
-      run: git checkout -b generated-bindings
-
     - name: Update bindings
       run: |
         # Update or add the bindings
