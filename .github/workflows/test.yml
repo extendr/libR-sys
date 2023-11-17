@@ -264,6 +264,7 @@ jobs:
     needs: check_generate_bindings_flag
     steps:
       - run: echo "${{ needs.check_generate_bindings_flag.outputs.head_commit_message }}"
+      - run: echo "${{ contains(needs.check_generate_bindings_flag.outputs.head_commit_message) }}"
   
   pr_generated_bindings:
     name: Make PR with generated bindings
