@@ -250,6 +250,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       head_commit_message: ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}
+      generate_bindings: ${{ contains(steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -261,9 +262,8 @@ jobs:
   pr_generated_bindings:
     name: Make PR with generated bindings
     needs: [test_with_bindgen, check_generate_bindings_flag]
-    if: ${{ contains(needs.check_generate_bindings_flag.outputs.head_commit_message, '[generate bindings]') }}
+    if: needs.check_generate_bindings_flag.outputs.generate_bindings
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
       with:
