@@ -2,7 +2,7 @@
 
 ## Commit newly generated bindings
 
-You last commit must contain `[generate bindings]`. You can make an empty
+Your last commit must contain `[generate bindings]`. You can make an empty
 commit with this message:
 
 ```sh
