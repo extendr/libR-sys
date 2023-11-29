@@ -156,6 +156,7 @@ New-Item -Path libgcc_mock -Type Directory
 
 # create empty libgcc_eh.a and libgcc_s.a
 New-Item -Path libgcc_mock\libgcc_eh.a -Type File
+New-Item -Path libgcc_mock\libgcc_s.a -Type File
 ```
 
 Finally, configure `Rust` compiler and select appropriate linker (see [The Cargo Book]):
