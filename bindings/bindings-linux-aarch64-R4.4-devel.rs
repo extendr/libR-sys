@@ -98,6 +98,7 @@ pub const HAVE_ALLOCA_H: u32 = 1;
 pub const HAVE_UINTPTR_T: u32 = 1;
 pub const R_XLEN_T_MAX: u64 = 4503599627370496;
 pub const R_SHORT_LEN_MAX: u32 = 2147483647;
+pub const R_PRIdXLEN_T: &[u8; 3] = b"td\0";
 pub const NILSXP: u32 = 0;
 pub const SYMSXP: u32 = 1;
 pub const LISTSXP: u32 = 2;
@@ -164,8 +165,8 @@ pub const R_MINOR: &[u8; 4] = b"4.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2023\0";
 pub const R_MONTH: &[u8; 3] = b"11\0";
-pub const R_DAY: &[u8; 3] = b"26\0";
-pub const R_SVN_REVISION: u32 = 85638;
+pub const R_DAY: &[u8; 3] = b"29\0";
+pub const R_SVN_REVISION: u32 = 85646;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1117,6 +1118,10 @@ extern "C" {
     pub fn R_IsNA(arg1: f64) -> ::std::os::raw::c_int;
     pub fn R_IsNaN(arg1: f64) -> ::std::os::raw::c_int;
     pub fn R_finite(arg1: f64) -> ::std::os::raw::c_int;
+    pub fn Rprintf(arg1: *const ::std::os::raw::c_char, ...);
+    pub fn REprintf(arg1: *const ::std::os::raw::c_char, ...);
+    pub fn Rvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
+    pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
     pub fn Rf_error(arg1: *const ::std::os::raw::c_char, ...) -> !;
     pub fn UNIMPLEMENTED(arg1: *const ::std::os::raw::c_char) -> !;
     pub fn WrongArgCount(arg1: *const ::std::os::raw::c_char) -> !;
@@ -1245,10 +1250,6 @@ extern "C" {
         maxes: *mut ::std::os::raw::c_int,
         ties_meth: *mut ::std::os::raw::c_int,
     );
-    pub fn Rprintf(arg1: *const ::std::os::raw::c_char, ...);
-    pub fn REprintf(arg1: *const ::std::os::raw::c_char, ...);
-    pub fn Rvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
-    pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
     pub fn R_registerRoutines(
         info: *mut DllInfo,
         croutines: *const R_CMethodDef,
