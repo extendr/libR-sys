@@ -221,7 +221,7 @@ jobs:
         if:
           steps.build.outcome == 'success' &&
           matrix.config.emit-bindings == 'true'
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
           name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}-${{ matrix.config.target || 'default'}}
           path: generated_bindings
@@ -247,7 +247,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
 
     - name: Switch branch
       if: github.event_name != 'issue_comment'
