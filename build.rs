@@ -21,6 +21,7 @@ use std::os::windows::ffi::OsStringExt;
 // to set manually if we compile libR-sys outside of an R session.
 //
 // c.f., https://stat.ethz.ch/R-manual/R-devel/library/base/html/EnvVar.html
+#[cfg(feature = "use-bindgen")]
 const ENVVAR_R_INCLUDE_DIR: &str = "R_INCLUDE_DIR";
 const ENVVAR_R_HOME: &str = "R_HOME";
 
@@ -46,6 +47,7 @@ const ENVVAR_BINDINGS_OUTPUT_PATH: &str = "LIBRSYS_BINDINGS_OUTPUT_PATH";
 #[derive(Debug)]
 struct InstallationPaths {
     r_home: PathBuf,
+    #[cfg(feature = "use-bindgen")]
     include: PathBuf,
     library: PathBuf,
 }
@@ -161,7 +163,7 @@ fn r_command<S: AsRef<OsStr>>(r_binary: S, script: &str) -> io::Result<OsString>
     // if there are any errors we print them out, helps with debugging
     if !out.stderr.is_empty() {
         println!(
-            "> {}",
+            "cargo:warning={}",
             byte_array_to_os_string(&out.stderr)
                 .as_os_str()
                 .to_string_lossy()
@@ -203,6 +205,7 @@ fn get_r_library(r_home: &Path) -> PathBuf {
 }
 
 // Get the path to the R include directory either from an envvar or by executing the actual R binary.
+#[cfg(feature = "use-bindgen")]
 fn get_r_include(r_home: &Path, library: &Path) -> io::Result<PathBuf> {
     // If the environment variable R_INCLUDE_DIR is set we use it
     if let Some(include) = env::var_os(ENVVAR_R_INCLUDE_DIR) {
@@ -213,6 +216,7 @@ fn get_r_include(r_home: &Path, library: &Path) -> io::Result<PathBuf> {
     // we're using the R home we found earlier, to make sure we're consistent.
     let r_binary = InstallationPaths {
         r_home: r_home.to_path_buf(),
+        #[cfg(feature = "use-bindgen")]
         include: PathBuf::new(), // get_r_binary() doesn't use `include` so fill with an empty PathBuf.
         library: library.to_path_buf(),
     }
@@ -234,10 +238,12 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     let library = get_r_library(&r_home);
 
     // Finally the include location. It may or may not be located under R home
+    #[cfg(feature = "use-bindgen")]
     let include = get_r_include(&r_home, &library)?;
 
     Ok(InstallationPaths {
         r_home,
+        #[cfg(feature = "use-bindgen")]
         include,
         library,
     })
@@ -567,7 +573,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             .unwrap_or_else(|_| panic!("Couldn't write bindings: {}", out_file.display()));
     } else {
         println!(
-            "Warning: Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
+            "cargo:warning=Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
         );
     }
 }
@@ -595,7 +601,7 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
             )
         } else {
             println!(
-                "Warning: using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
+                "cargo:warning=using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
                 target_os, target_arch, version_info.major, version_info.minor, version_info.patch, version_info.devel
             );
         }
@@ -634,7 +640,10 @@ fn main() {
     let r_paths = match r_paths {
         Ok(result) => result,
         Err(error) => {
-            println!("Problem locating local R install: {:?}", error);
+            println!(
+                "cargo:warning=Problem locating local R install: {:?}",
+                error
+            );
             exit(1);
         }
     };
