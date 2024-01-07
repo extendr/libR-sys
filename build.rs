@@ -161,7 +161,7 @@ fn r_command<S: AsRef<OsStr>>(r_binary: S, script: &str) -> io::Result<OsString>
     // if there are any errors we print them out, helps with debugging
     if !out.stderr.is_empty() {
         println!(
-            "> {}",
+            "cargo:warning={}",
             byte_array_to_os_string(&out.stderr)
                 .as_os_str()
                 .to_string_lossy()
@@ -475,10 +475,6 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
 
-    println!(
-        "Generating bindings for target: {target}, os: {target_os}, architecture: {target_arch}"
-    );
-
     // Point to the correct headers
     bindgen_builder = bindgen_builder.clang_args([
         format!("-I{}", r_paths.include.display()),
@@ -567,7 +563,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             .unwrap_or_else(|_| panic!("Couldn't write bindings: {}", out_file.display()));
     } else {
         println!(
-            "Warning: Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
+            "cargo:warning=Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
         );
     }
 }
@@ -595,7 +591,7 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
             )
         } else {
             println!(
-                "Warning: using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
+                "cargo:warning=using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
                 target_os, target_arch, version_info.major, version_info.minor, version_info.patch, version_info.devel
             );
         }
@@ -634,7 +630,10 @@ fn main() {
     let r_paths = match r_paths {
         Ok(result) => result,
         Err(error) => {
-            println!("Problem locating local R install: {:?}", error);
+            println!(
+                "cargo:warning=Problem locating local R install: {:?}",
+                error
+            );
             exit(1);
         }
     };
