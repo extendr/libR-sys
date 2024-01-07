@@ -481,6 +481,10 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
 
+    println!(
+        "Generating bindings for target: {target}, os: {target_os}, architecture: {target_arch}"
+    );
+
     // Point to the correct headers
     bindgen_builder = bindgen_builder.clang_args([
         format!("-I{}", r_paths.include.display()),
