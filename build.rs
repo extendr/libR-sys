@@ -21,6 +21,7 @@ use std::os::windows::ffi::OsStringExt;
 // to set manually if we compile libR-sys outside of an R session.
 //
 // c.f., https://stat.ethz.ch/R-manual/R-devel/library/base/html/EnvVar.html
+#[cfg(feature = "use-bindgen")]
 const ENVVAR_R_INCLUDE_DIR: &str = "R_INCLUDE_DIR";
 const ENVVAR_R_HOME: &str = "R_HOME";
 
@@ -46,6 +47,7 @@ const ENVVAR_BINDINGS_OUTPUT_PATH: &str = "LIBRSYS_BINDINGS_OUTPUT_PATH";
 #[derive(Debug)]
 struct InstallationPaths {
     r_home: PathBuf,
+    #[cfg(feature = "use-bindgen")]
     include: PathBuf,
     library: PathBuf,
 }
@@ -203,6 +205,7 @@ fn get_r_library(r_home: &Path) -> PathBuf {
 }
 
 // Get the path to the R include directory either from an envvar or by executing the actual R binary.
+#[cfg(feature = "use-bindgen")]
 fn get_r_include(r_home: &Path, library: &Path) -> io::Result<PathBuf> {
     // If the environment variable R_INCLUDE_DIR is set we use it
     if let Some(include) = env::var_os(ENVVAR_R_INCLUDE_DIR) {
@@ -213,6 +216,7 @@ fn get_r_include(r_home: &Path, library: &Path) -> io::Result<PathBuf> {
     // we're using the R home we found earlier, to make sure we're consistent.
     let r_binary = InstallationPaths {
         r_home: r_home.to_path_buf(),
+        #[cfg(feature = "use-bindgen")]
         include: PathBuf::new(), // get_r_binary() doesn't use `include` so fill with an empty PathBuf.
         library: library.to_path_buf(),
     }
@@ -234,10 +238,12 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     let library = get_r_library(&r_home);
 
     // Finally the include location. It may or may not be located under R home
+    #[cfg(feature = "use-bindgen")]
     let include = get_r_include(&r_home, &library)?;
 
     Ok(InstallationPaths {
         r_home,
+        #[cfg(feature = "use-bindgen")]
         include,
         library,
     })
