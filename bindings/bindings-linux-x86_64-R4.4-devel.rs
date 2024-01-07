@@ -163,10 +163,10 @@ pub const R_NICK: &[u8; 24] = b"Unsuffered Consequences\0";
 pub const R_MAJOR: &[u8; 2] = b"4\0";
 pub const R_MINOR: &[u8; 4] = b"4.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
-pub const R_YEAR: &[u8; 5] = b"2023\0";
-pub const R_MONTH: &[u8; 3] = b"12\0";
-pub const R_DAY: &[u8; 3] = b"11\0";
-pub const R_SVN_REVISION: u32 = 85667;
+pub const R_YEAR: &[u8; 5] = b"2024\0";
+pub const R_MONTH: &[u8; 3] = b"01\0";
+pub const R_DAY: &[u8; 3] = b"05\0";
+pub const R_SVN_REVISION: u32 = 85782;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -2105,8 +2105,9 @@ extern "C" {
     pub fn Rf_log1pexp(arg1: f64) -> f64;
     pub fn Rf_log1mexp(arg1: f64) -> f64;
     pub fn Rf_lgamma1p(arg1: f64) -> f64;
-    pub fn Rf_logspace_add(arg1: f64, arg2: f64) -> f64;
-    pub fn Rf_logspace_sub(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_pow1p(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_logspace_add(logx: f64, logy: f64) -> f64;
+    pub fn Rf_logspace_sub(logx: f64, logy: f64) -> f64;
     pub fn Rf_logspace_sum(arg1: *const f64, arg2: ::std::os::raw::c_int) -> f64;
     pub fn Rf_dbeta(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pbeta(
