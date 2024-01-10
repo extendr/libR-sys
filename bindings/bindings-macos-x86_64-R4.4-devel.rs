@@ -167,8 +167,8 @@ pub const R_MINOR: &[u8; 4] = b"4.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"01\0";
-pub const R_DAY: &[u8; 3] = b"04\0";
-pub const R_SVN_REVISION: u32 = 85771;
+pub const R_DAY: &[u8; 3] = b"09\0";
+pub const R_SVN_REVISION: u32 = 85796;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -2118,9 +2118,10 @@ extern "C" {
     pub fn Rf_log1pexp(arg1: f64) -> f64;
     pub fn Rf_log1mexp(arg1: f64) -> f64;
     pub fn Rf_lgamma1p(arg1: f64) -> f64;
+    pub fn Rf_pow1p(arg1: f64, arg2: f64) -> f64;
     #[doc = "Compute the log of a sum or difference from logs of terms, i.e.,\n\n     log (exp (logx) + exp (logy))\n or  log (exp (logx) - exp (logy))\n\n without causing overflows or throwing away too much accuracy:"]
-    pub fn Rf_logspace_add(arg1: f64, arg2: f64) -> f64;
-    pub fn Rf_logspace_sub(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_logspace_add(logx: f64, logy: f64) -> f64;
+    pub fn Rf_logspace_sub(logx: f64, logy: f64) -> f64;
     pub fn Rf_logspace_sum(arg1: *const f64, arg2: ::std::os::raw::c_int) -> f64;
     #[doc = "Beta Distribution"]
     pub fn Rf_dbeta(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
