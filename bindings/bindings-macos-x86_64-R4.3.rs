@@ -3,7 +3,7 @@
 /* libR-sys version: 0.6.0 */
 /* bindgen clang version: Homebrew clang version 17.0.6 */
 /* clang-rs version: Homebrew clang version 17.0.6 */
-/* r version: 4.3.2 */
+/* r version: 4.3.3 */
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -144,7 +144,7 @@ pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
 pub const RSTART_VERSION: u32 = 1;
 pub const __STDC_WANT_IEC_60559_FUNCS_EXT__: u32 = 1;
-pub const R_VERSION_STRING: &[u8; 6] = b"4.3.2\0";
+pub const R_VERSION_STRING: &[u8; 6] = b"4.3.3\0";
 pub const HAVE_EXPM1: u32 = 1;
 pub const HAVE_HYPOT: u32 = 1;
 pub const HAVE_LOG1P: u32 = 1;
@@ -158,15 +158,15 @@ pub const M_LN_2PI: f64 = 1.8378770664093456;
 pub const M_LN_SQRT_PI: f64 = 0.5723649429247001;
 pub const M_LN_SQRT_2PI: f64 = 0.9189385332046728;
 pub const M_LN_SQRT_PId2: f64 = 0.22579135264472744;
-pub const R_VERSION: u32 = 262914;
-pub const R_NICK: &[u8; 10] = b"Eye Holes\0";
+pub const R_VERSION: u32 = 262915;
+pub const R_NICK: &[u8; 16] = b"Angel Food Cake\0";
 pub const R_MAJOR: &[u8; 2] = b"4\0";
-pub const R_MINOR: &[u8; 4] = b"3.2\0";
+pub const R_MINOR: &[u8; 4] = b"3.3\0";
 pub const R_STATUS: &[u8; 1] = b"\0";
-pub const R_YEAR: &[u8; 5] = b"2023\0";
-pub const R_MONTH: &[u8; 3] = b"10\0";
-pub const R_DAY: &[u8; 3] = b"31\0";
-pub const R_SVN_REVISION: u32 = 85441;
+pub const R_YEAR: &[u8; 5] = b"2024\0";
+pub const R_MONTH: &[u8; 3] = b"02\0";
+pub const R_DAY: &[u8; 3] = b"29\0";
+pub const R_SVN_REVISION: u32 = 86002;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
