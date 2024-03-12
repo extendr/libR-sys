@@ -66,6 +66,11 @@
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
+#[non_exhaustive]
+#[repr(transparent)]
+#[derive(Debug)]
+pub struct SEXPREC(std::ffi::c_void);
+
 #[cfg(test)]
 mod tests {
     use super::*;

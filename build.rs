@@ -526,6 +526,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Remove all Fortran items, these are items with underscore _ postfix
     let bindgen_builder = bindgen_builder.blocklist_item("[A-Za-z_][A-Za-z0-9_]*[^_]_$");
 
+    // Ensure that `SEXPREC` is opaque to Rust
+    let bindgen_builder = bindgen_builder.blocklist_item("SEXPREC");
+
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
         .raw_line(format!(

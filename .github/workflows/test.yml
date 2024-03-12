@@ -226,14 +226,63 @@ jobs:
           name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}-${{ matrix.config.target || 'default'}}
           path: generated_bindings
 
-      # Run tests again using different bindings
-      - name: Run tests on precomputed bindings shipped with libR-sys
-        if: matrix.config.skip-tests != 'true'
-        run: |
-          . ./ci-cargo.ps1
-          ci-cargo test -vv $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture -ActionName "Running tests for target: $env:RUST_TARGET"
-        env:
-          RUST_TARGET: ${{ matrix.config.target }}
+      # # Run tests again using different bindings
+      # - name: Run tests on precomputed bindings shipped with libR-sys
+      #   if: matrix.config.skip-tests != 'true'
+      #   run: |
+      #     . ./ci-cargo.ps1
+      #     ci-cargo test -vv $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture -ActionName "Running tests for target: $env:RUST_TARGET"
+      #   env:
+      #     RUST_TARGET: ${{ matrix.config.target }}
+  check_generate_bindings_flag:
+    name: Check if [generate bindings] is in latest commit message
+    runs-on: ubuntu-latest
+    outputs:
+      head_commit_message: ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}
+      # generate_bindings: ${{ contains(steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+    - name: Get Head Commit Message
+      id: get_head_commit_message
+      run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
+    - name: Show commit message
+      run: |
+        echo "${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}"
+        echo "${{ contains(steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}"
+  
+  pr_generated_bindings:
+    name: Make PR with generated bindings
+    needs: [test_with_bindgen, check_generate_bindings_flag]
+    if: ${{ contains(needs.check_generate_bindings_flag.outputs.head_commit_message, '[generate bindings]') }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+    - uses: actions/download-artifact@v3
+
+    - name: Update bindings
+      run: |
+        # Update or add the bindings
+        cp generated_binding-*/*.rs bindings/
+
+        # Replace the default bindings
+        cd bindings
+        for x in linux-aarch64 linux-x86_64 macos-aarch64 macos-x86_64 windows-x86_64; do
+          # Choose the newest version except for devel
+          ln --force -s "$(ls -1 ./bindings-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-${x}.rs
+        done
+        cd ..
+    - name: Add generated bindings
+      run: |
+        git add bindings/
+        git config --local user.name "${GITHUB_ACTOR}"
+        git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        git commit -m "Update bindings [skip ci]"
+    - name: Push to PR branch
+      run: git push
 
   # Gather the generated bindings and push them to generated_bindings branch.
   # If we need to update the bindings, create a pull request from that branch.
