@@ -164,8 +164,8 @@ pub const R_MINOR: &[u8; 4] = b"4.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2023\0";
 pub const R_MONTH: &[u8; 3] = b"11\0";
-pub const R_DAY: &[u8; 3] = b"11\0";
-pub const R_SVN_REVISION: u32 = 85510;
+pub const R_DAY: &[u8; 3] = b"14\0";
+pub const R_SVN_REVISION: u32 = 85524;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -291,11 +291,14 @@ pub struct _IO_FILE {
     pub _mode: ::std::os::raw::c_int,
     pub _unused2: [::std::os::raw::c_char; 20usize],
 }
-#[doc = ", MAYBE"]
-pub const Rboolean_FALSE: Rboolean = 0;
-#[doc = ", MAYBE"]
-pub const Rboolean_TRUE: Rboolean = 1;
-pub type Rboolean = u32;
+#[repr(u32)]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum Rboolean {
+    #[doc = ", MAYBE"]
+    FALSE = 0,
+    #[doc = ", MAYBE"]
+    TRUE = 1,
+}
 #[doc = "Called with a variable argument set after casting to a compatible\nfunction pointer."]
 pub type DL_FUNC = ::std::option::Option<unsafe extern "C" fn() -> *mut ::std::os::raw::c_void>;
 pub type R_NativePrimitiveArgType = ::std::os::raw::c_uint;
@@ -330,12 +333,15 @@ pub struct Rf_RegisteredNativeSymbol {
     _unused: [u8; 0],
 }
 pub type R_RegisteredNativeSymbol = Rf_RegisteredNativeSymbol;
-pub const NativeSymbolType_R_ANY_SYM: NativeSymbolType = 0;
-pub const NativeSymbolType_R_C_SYM: NativeSymbolType = 1;
-pub const NativeSymbolType_R_CALL_SYM: NativeSymbolType = 2;
-pub const NativeSymbolType_R_FORTRAN_SYM: NativeSymbolType = 3;
-pub const NativeSymbolType_R_EXTERNAL_SYM: NativeSymbolType = 4;
-pub type NativeSymbolType = u32;
+#[repr(u32)]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum NativeSymbolType {
+    R_ANY_SYM = 0,
+    R_C_SYM = 1,
+    R_CALL_SYM = 2,
+    R_FORTRAN_SYM = 3,
+    R_EXTERNAL_SYM = 4,
+}
 pub type Rbyte = ::std::os::raw::c_uchar;
 #[doc = "type for length of (standard, not long) vectors etc"]
 pub type R_len_t = ::std::os::raw::c_int;
@@ -355,28 +361,37 @@ pub struct R_allocator {
     _unused: [u8; 0],
 }
 pub type R_allocator_t = R_allocator;
-pub const nchar_type_Bytes: nchar_type = 0;
-pub const nchar_type_Chars: nchar_type = 1;
-pub const nchar_type_Width: nchar_type = 2;
+#[repr(u32)]
 #[doc = "../main/character.c :"]
-pub type nchar_type = u32;
-pub const cetype_t_CE_NATIVE: cetype_t = 0;
-pub const cetype_t_CE_UTF8: cetype_t = 1;
-pub const cetype_t_CE_LATIN1: cetype_t = 2;
-pub const cetype_t_CE_BYTES: cetype_t = 3;
-pub const cetype_t_CE_SYMBOL: cetype_t = 5;
-pub const cetype_t_CE_ANY: cetype_t = 99;
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum nchar_type {
+    Bytes = 0,
+    Chars = 1,
+    Width = 2,
+}
+#[repr(u32)]
 #[doc = "cetype_t is an identifier reseved by POSIX, but it is\nwell established as public.  Could remap by a #define though"]
-pub type cetype_t = u32;
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum cetype_t {
+    CE_NATIVE = 0,
+    CE_UTF8 = 1,
+    CE_LATIN1 = 2,
+    CE_BYTES = 3,
+    CE_SYMBOL = 5,
+    CE_ANY = 99,
+}
 #[doc = "Finalization interface"]
 pub type R_CFinalizer_t = ::std::option::Option<unsafe extern "C" fn(arg1: SEXP)>;
 pub type R_pstream_data_t = *mut ::std::os::raw::c_void;
-pub const R_pstream_format_t_R_pstream_any_format: R_pstream_format_t = 0;
-pub const R_pstream_format_t_R_pstream_ascii_format: R_pstream_format_t = 1;
-pub const R_pstream_format_t_R_pstream_binary_format: R_pstream_format_t = 2;
-pub const R_pstream_format_t_R_pstream_xdr_format: R_pstream_format_t = 3;
-pub const R_pstream_format_t_R_pstream_asciihex_format: R_pstream_format_t = 4;
-pub type R_pstream_format_t = u32;
+#[repr(u32)]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum R_pstream_format_t {
+    R_pstream_any_format = 0,
+    R_pstream_ascii_format = 1,
+    R_pstream_binary_format = 2,
+    R_pstream_xdr_format = 3,
+    R_pstream_asciihex_format = 4,
+}
 pub type R_outpstream_t = *mut R_outpstream_st;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -426,17 +441,20 @@ pub struct R_inpstream_st {
 pub struct R_hashtab_type {
     pub cell: SEXP,
 }
-#[doc = "= 0"]
-pub const SA_TYPE_SA_NORESTORE: SA_TYPE = 0;
-pub const SA_TYPE_SA_RESTORE: SA_TYPE = 1;
-#[doc = "was === SA_RESTORE"]
-pub const SA_TYPE_SA_DEFAULT: SA_TYPE = 2;
-pub const SA_TYPE_SA_NOSAVE: SA_TYPE = 3;
-pub const SA_TYPE_SA_SAVE: SA_TYPE = 4;
-pub const SA_TYPE_SA_SAVEASK: SA_TYPE = 5;
-pub const SA_TYPE_SA_SUICIDE: SA_TYPE = 6;
+#[repr(u32)]
 #[doc = "Startup Actions"]
-pub type SA_TYPE = u32;
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum SA_TYPE {
+    #[doc = "= 0"]
+    SA_NORESTORE = 0,
+    SA_RESTORE = 1,
+    #[doc = "was === SA_RESTORE"]
+    SA_DEFAULT = 2,
+    SA_NOSAVE = 3,
+    SA_SAVE = 4,
+    SA_SAVEASK = 5,
+    SA_SUICIDE = 6,
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct structRstart {
@@ -499,13 +517,16 @@ impl structRstart {
     }
 }
 pub type Rstart = *mut structRstart;
-pub const ParseStatus_PARSE_NULL: ParseStatus = 0;
-pub const ParseStatus_PARSE_OK: ParseStatus = 1;
-pub const ParseStatus_PARSE_INCOMPLETE: ParseStatus = 2;
-pub const ParseStatus_PARSE_ERROR: ParseStatus = 3;
-pub const ParseStatus_PARSE_EOF: ParseStatus = 4;
+#[repr(u32)]
 #[doc = "PARSE_NULL will not be returned by R_ParseVector"]
-pub type ParseStatus = u32;
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum ParseStatus {
+    PARSE_NULL = 0,
+    PARSE_OK = 1,
+    PARSE_INCOMPLETE = 2,
+    PARSE_ERROR = 3,
+    PARSE_EOF = 4,
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct R_altrep_class_t {
@@ -635,42 +656,54 @@ pub type R_altlist_Elt_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t) -> SEXP>;
 pub type R_altlist_Set_elt_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t, arg3: SEXP)>;
-#[doc = "native device coordinates (rasters)"]
-pub const GEUnit_GE_DEVICE: GEUnit = 0;
-#[doc = "normalised device coordinates x=(0,1), y=(0,1)"]
-pub const GEUnit_GE_NDC: GEUnit = 1;
-pub const GEUnit_GE_INCHES: GEUnit = 2;
-pub const GEUnit_GE_CM: GEUnit = 3;
+#[repr(u32)]
 #[doc = "The graphics engine will only accept locations and dimensions\n in native device coordinates, but it provides the following functions\n for converting between a couple of simple alternative coordinate\n systems and device coordinates:\n    DEVICE = native units of the device\n    NDC = Normalised device coordinates\n    INCHES = inches (!)\n    CM = centimetres (!!)"]
-pub type GEUnit = u32;
-#[doc = "In response to this event, the registered graphics system\n should allocate and initialise the systemSpecific structure\n\n Should return R_NilValue on failure so that engine\n can tidy up memory allocation"]
-pub const GEevent_GE_InitState: GEevent = 0;
-#[doc = "This event gives the registered system a chance to undo\n anything done in the initialisation."]
-pub const GEevent_GE_FinaliseState: GEevent = 1;
-#[doc = "This is sent by the graphics engine prior to initialising\n the display list.  It give the graphics system the chance\n to squirrel away information it will need for redrawing the\n the display list"]
-pub const GEevent_GE_SaveState: GEevent = 2;
-#[doc = "This is sent by the graphics engine prior to replaying the\n display list.  It gives the graphics system the chance to\n restore any information it saved on the GE_SaveState event"]
-pub const GEevent_GE_RestoreState: GEevent = 6;
-#[doc = "Copy system state information to the current device.\n This is used when copying graphics from one device to another\n so all the graphics system needs to do is to copy across\n the bits required for the display list to draw faithfully\n on the new device."]
-pub const GEevent_GE_CopyState: GEevent = 3;
-#[doc = "Create a snapshot of the system state that is sufficient\n for the current \"image\" to be reproduced"]
-pub const GEevent_GE_SaveSnapshotState: GEevent = 4;
-#[doc = "Restore the system state that is saved by GE_SaveSnapshotState"]
-pub const GEevent_GE_RestoreSnapshotState: GEevent = 5;
-#[doc = "When replaying the display list, the graphics engine\n checks, after each replayed action, that the action\n produced valid output.  This is the graphics system's\n chance to say that the output is crap (in which case the\n graphics engine will abort the display list replay)."]
-pub const GEevent_GE_CheckPlot: GEevent = 7;
-#[doc = "The device wants to scale the current pointsize\n (for scaling an image)\n This is not a nice general solution, but a quick fix for\n the Windows device."]
-pub const GEevent_GE_ScalePS: GEevent = 8;
-pub type GEevent = u32;
-pub const R_GE_lineend_GE_ROUND_CAP: R_GE_lineend = 1;
-pub const R_GE_lineend_GE_BUTT_CAP: R_GE_lineend = 2;
-pub const R_GE_lineend_GE_SQUARE_CAP: R_GE_lineend = 3;
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum GEUnit {
+    #[doc = "native device coordinates (rasters)"]
+    GE_DEVICE = 0,
+    #[doc = "normalised device coordinates x=(0,1), y=(0,1)"]
+    GE_NDC = 1,
+    GE_INCHES = 2,
+    GE_CM = 3,
+}
+#[repr(u32)]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum GEevent {
+    #[doc = "In response to this event, the registered graphics system\n should allocate and initialise the systemSpecific structure\n\n Should return R_NilValue on failure so that engine\n can tidy up memory allocation"]
+    GE_InitState = 0,
+    #[doc = "This event gives the registered system a chance to undo\n anything done in the initialisation."]
+    GE_FinaliseState = 1,
+    #[doc = "This is sent by the graphics engine prior to initialising\n the display list.  It give the graphics system the chance\n to squirrel away information it will need for redrawing the\n the display list"]
+    GE_SaveState = 2,
+    #[doc = "This is sent by the graphics engine prior to replaying the\n display list.  It gives the graphics system the chance to\n restore any information it saved on the GE_SaveState event"]
+    GE_RestoreState = 6,
+    #[doc = "Copy system state information to the current device.\n This is used when copying graphics from one device to another\n so all the graphics system needs to do is to copy across\n the bits required for the display list to draw faithfully\n on the new device."]
+    GE_CopyState = 3,
+    #[doc = "Create a snapshot of the system state that is sufficient\n for the current \"image\" to be reproduced"]
+    GE_SaveSnapshotState = 4,
+    #[doc = "Restore the system state that is saved by GE_SaveSnapshotState"]
+    GE_RestoreSnapshotState = 5,
+    #[doc = "When replaying the display list, the graphics engine\n checks, after each replayed action, that the action\n produced valid output.  This is the graphics system's\n chance to say that the output is crap (in which case the\n graphics engine will abort the display list replay)."]
+    GE_CheckPlot = 7,
+    #[doc = "The device wants to scale the current pointsize\n (for scaling an image)\n This is not a nice general solution, but a quick fix for\n the Windows device."]
+    GE_ScalePS = 8,
+}
+#[repr(u32)]
 #[doc = "Some line end/join constants"]
-pub type R_GE_lineend = u32;
-pub const R_GE_linejoin_GE_ROUND_JOIN: R_GE_linejoin = 1;
-pub const R_GE_linejoin_GE_MITRE_JOIN: R_GE_linejoin = 2;
-pub const R_GE_linejoin_GE_BEVEL_JOIN: R_GE_linejoin = 3;
-pub type R_GE_linejoin = u32;
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum R_GE_lineend {
+    GE_ROUND_CAP = 1,
+    GE_BUTT_CAP = 2,
+    GE_SQUARE_CAP = 3,
+}
+#[repr(u32)]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum R_GE_linejoin {
+    GE_ROUND_JOIN = 1,
+    GE_MITRE_JOIN = 2,
+    GE_BEVEL_JOIN = 3,
+}
 #[doc = "A structure containing graphical parameters\n\n This is how graphical parameters are passed from graphics systems\n to the graphics engine AND from the graphics engine to graphics\n devices.\n\n Devices are not *required* to honour graphical parameters\n (e.g., alpha transparency is going to be tough for some)"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -965,36 +998,42 @@ pub struct _DevDesc {
     #[doc = "Area for future expansion.\nBy zeroing this, devices are more likely to work if loaded\ninto a later version of R than that they were compiled under."]
     pub reserved: [::std::os::raw::c_char; 64usize],
 }
-pub const R_KeyName_knUNKNOWN: R_KeyName = -1;
-pub const R_KeyName_knLEFT: R_KeyName = 0;
-pub const R_KeyName_knUP: R_KeyName = 1;
-pub const R_KeyName_knRIGHT: R_KeyName = 2;
-pub const R_KeyName_knDOWN: R_KeyName = 3;
-pub const R_KeyName_knF1: R_KeyName = 4;
-pub const R_KeyName_knF2: R_KeyName = 5;
-pub const R_KeyName_knF3: R_KeyName = 6;
-pub const R_KeyName_knF4: R_KeyName = 7;
-pub const R_KeyName_knF5: R_KeyName = 8;
-pub const R_KeyName_knF6: R_KeyName = 9;
-pub const R_KeyName_knF7: R_KeyName = 10;
-pub const R_KeyName_knF8: R_KeyName = 11;
-pub const R_KeyName_knF9: R_KeyName = 12;
-pub const R_KeyName_knF10: R_KeyName = 13;
-pub const R_KeyName_knF11: R_KeyName = 14;
-pub const R_KeyName_knF12: R_KeyName = 15;
-pub const R_KeyName_knPGUP: R_KeyName = 16;
-pub const R_KeyName_knPGDN: R_KeyName = 17;
-pub const R_KeyName_knEND: R_KeyName = 18;
-pub const R_KeyName_knHOME: R_KeyName = 19;
-pub const R_KeyName_knINS: R_KeyName = 20;
-pub const R_KeyName_knDEL: R_KeyName = 21;
+#[repr(i32)]
 #[doc = "These give the indices of some known keys"]
-pub type R_KeyName = i32;
-pub const R_MouseEvent_meMouseDown: R_MouseEvent = 0;
-pub const R_MouseEvent_meMouseUp: R_MouseEvent = 1;
-pub const R_MouseEvent_meMouseMove: R_MouseEvent = 2;
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum R_KeyName {
+    knUNKNOWN = -1,
+    knLEFT = 0,
+    knUP = 1,
+    knRIGHT = 2,
+    knDOWN = 3,
+    knF1 = 4,
+    knF2 = 5,
+    knF3 = 6,
+    knF4 = 7,
+    knF5 = 8,
+    knF6 = 9,
+    knF7 = 10,
+    knF8 = 11,
+    knF9 = 12,
+    knF10 = 13,
+    knF11 = 14,
+    knF12 = 15,
+    knPGUP = 16,
+    knPGDN = 17,
+    knEND = 18,
+    knHOME = 19,
+    knINS = 20,
+    knDEL = 21,
+}
+#[repr(u32)]
 #[doc = "These are the three possible mouse events"]
-pub type R_MouseEvent = u32;
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum R_MouseEvent {
+    meMouseDown = 0,
+    meMouseUp = 1,
+    meMouseMove = 2,
+}
 pub type GEDevDesc = _GEDevDesc;
 pub type GEcallback = ::std::option::Option<
     unsafe extern "C" fn(arg1: GEevent, arg2: *mut GEDevDesc, arg3: SEXP) -> SEXP,
@@ -1073,27 +1112,36 @@ pub type d2fcn_p = ::std::option::Option<
         arg5: *mut ::std::os::raw::c_void,
     ),
 >;
-pub const RNGtype_WICHMANN_HILL: RNGtype = 0;
-pub const RNGtype_MARSAGLIA_MULTICARRY: RNGtype = 1;
-pub const RNGtype_SUPER_DUPER: RNGtype = 2;
-pub const RNGtype_MERSENNE_TWISTER: RNGtype = 3;
-pub const RNGtype_KNUTH_TAOCP: RNGtype = 4;
-pub const RNGtype_USER_UNIF: RNGtype = 5;
-pub const RNGtype_KNUTH_TAOCP2: RNGtype = 6;
-pub const RNGtype_LECUYER_CMRG: RNGtype = 7;
-pub type RNGtype = u32;
-pub const N01type_BUGGY_KINDERMAN_RAMAGE: N01type = 0;
-pub const N01type_AHRENS_DIETER: N01type = 1;
-pub const N01type_BOX_MULLER: N01type = 2;
-pub const N01type_USER_NORM: N01type = 3;
-pub const N01type_INVERSION: N01type = 4;
-pub const N01type_KINDERMAN_RAMAGE: N01type = 5;
+#[repr(u32)]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum RNGtype {
+    WICHMANN_HILL = 0,
+    MARSAGLIA_MULTICARRY = 1,
+    SUPER_DUPER = 2,
+    MERSENNE_TWISTER = 3,
+    KNUTH_TAOCP = 4,
+    USER_UNIF = 5,
+    KNUTH_TAOCP2 = 6,
+    LECUYER_CMRG = 7,
+}
+#[repr(u32)]
 #[doc = "Different kinds of \"N(0,1)\" generators :"]
-pub type N01type = u32;
-pub const Sampletype_ROUNDING: Sampletype = 0;
-pub const Sampletype_REJECTION: Sampletype = 1;
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum N01type {
+    BUGGY_KINDERMAN_RAMAGE = 0,
+    AHRENS_DIETER = 1,
+    BOX_MULLER = 2,
+    USER_NORM = 3,
+    INVERSION = 4,
+    KINDERMAN_RAMAGE = 5,
+}
+#[repr(u32)]
 #[doc = "Different ways to generate discrete uniform samples"]
-pub type Sampletype = u32;
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum Sampletype {
+    ROUNDING = 0,
+    REJECTION = 1,
+}
 pub type Int32 = ::std::os::raw::c_uint;
 #[doc = "R 4.3 redefined `Rcomplex` to a union for compatibility with Fortran.\n But the old definition is compatible both the union version\n and the struct version.\n See: <https://github.com/extendr/extendr/issues/524>\n <div rustbindgen replaces=\"Rcomplex\"></div>"]
 #[repr(C)]
