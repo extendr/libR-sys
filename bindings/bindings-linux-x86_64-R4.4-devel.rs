@@ -164,8 +164,8 @@ pub const R_MINOR: &[u8; 4] = b"4.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2023\0";
 pub const R_MONTH: &[u8; 3] = b"11\0";
-pub const R_DAY: &[u8; 3] = b"11\0";
-pub const R_SVN_REVISION: u32 = 85510;
+pub const R_DAY: &[u8; 3] = b"14\0";
+pub const R_SVN_REVISION: u32 = 85524;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1300,7 +1300,6 @@ extern "C" {
     pub fn ATTRIB(x: SEXP) -> SEXP;
     pub fn OBJECT(x: SEXP) -> ::std::os::raw::c_int;
     pub fn MARK(x: SEXP) -> ::std::os::raw::c_int;
-    pub fn TYPEOF(x: SEXP) -> ::std::os::raw::c_int;
     pub fn NAMED(x: SEXP) -> ::std::os::raw::c_int;
     pub fn REFCNT(x: SEXP) -> ::std::os::raw::c_int;
     pub fn SET_ATTRIB(x: SEXP, v: SEXP);
