@@ -139,7 +139,7 @@ mod tests {
         unsafe {
             let val = Rf_protect(R_ParseEvalString(cstr!("1"), R_NilValue));
             Rf_PrintValue(val);
-            assert_eq!(TYPEOF(val) as u32, REALSXP);
+            assert_eq!(TYPEOF(val), SEXPTYPE::REALSXP as _);
             assert_eq!(*REAL(val), 1.);
             Rf_unprotect(1);
         }
