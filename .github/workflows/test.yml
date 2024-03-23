@@ -57,7 +57,7 @@ jobs:
           #     an R version (e.g. Windows and R-release) to emit bindings.
           - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '43', emit-bindings: 'true'}
           - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', target: 'x86_64-pc-windows-gnu', rtools-version: '43'}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '43', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '44', emit-bindings: 'true'}
           - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   target: 'x86_64-pc-windows-gnu', rtools-version: '43'}
           - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '42', emit-bindings: 'true'}
 
@@ -138,7 +138,9 @@ jobs:
           echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
 
           # Add Rtools' GCC to PATH
-          if ($env:RTOOLS_VERSION -eq '43') {
+          if ($env:RTOOLS_VERSION -eq '44') {
+            $mingw_root = "C:\rtools44\x86_64-w64-mingw32.static.posix"
+          } elseif ($env:RTOOLS_VERSION -eq '43') {
             $mingw_root = "C:\rtools43\x86_64-w64-mingw32.static.posix"
           } elseif ($env:RTOOLS_VERSION -eq '42') {
             $mingw_root = "C:\rtools42\x86_64-w64-mingw32.static.posix"
@@ -300,4 +302,3 @@ jobs:
       uses: r-lib/actions/pr-push@v2
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-
