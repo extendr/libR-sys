@@ -158,7 +158,10 @@ fn byte_array_to_os_string(bytes: &[u8]) -> OsString {
 
 // Execute an R script and return the captured output
 fn r_command<S: AsRef<OsStr>>(r_binary: S, script: &str) -> io::Result<OsString> {
-    let out = Command::new(r_binary).args(["-s", "-e", script]).output()?;
+    // we must use --vanilla, 
+    // 1. user Rprofile may contain message into stdout
+    // 2. prevent R startup message
+    let out = Command::new(r_binary).args(["-s", "--vanilla", "-e", script]).output()?;
 
     // if there are any errors we print them out, helps with debugging
     if !out.stderr.is_empty() {
