@@ -165,8 +165,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"04\0";
-pub const R_DAY: &[u8; 3] = b"15\0";
-pub const R_SVN_REVISION: u32 = 86425;
+pub const R_DAY: &[u8; 3] = b"17\0";
+pub const R_SVN_REVISION: u32 = 86441;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1196,7 +1196,7 @@ extern "C" {
     pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
+    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\".  Neither are API."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
         -> f64;

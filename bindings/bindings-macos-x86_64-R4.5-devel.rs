@@ -167,8 +167,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"04\0";
-pub const R_DAY: &[u8; 3] = b"14\0";
-pub const R_SVN_REVISION: u32 = 86421;
+pub const R_DAY: &[u8; 3] = b"18\0";
+pub const R_SVN_REVISION: u32 = 86444;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1206,6 +1206,7 @@ extern "C" {
     );
     #[doc = "../../main/util.c  and others :"]
     pub fn R_ExpandFileName(arg1: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
+    #[doc = "this group is not API"]
     pub fn Rf_setIVector(
         arg1: *mut ::std::os::raw::c_int,
         arg2: ::std::os::raw::c_int,
@@ -1215,7 +1216,7 @@ extern "C" {
     pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
+    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\". Documented since 4.4.0 patched."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
         -> f64;
@@ -1252,6 +1253,7 @@ extern "C" {
         ilo: ::std::os::raw::c_int,
         mflag: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
+    #[doc = "not API"]
     pub fn find_interv_vec(
         xt: *mut f64,
         n: *mut ::std::os::raw::c_int,
