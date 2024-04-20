@@ -227,15 +227,7 @@ jobs:
         with:
           name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}-${{ matrix.config.target || 'default'}}
           path: generated_bindings
-
-      # # Run tests again using different bindings
-      # - name: Run tests on precomputed bindings shipped with libR-sys
-      #   if: matrix.config.skip-tests != 'true'
-      #   run: |
-      #     . ./ci-cargo.ps1
-      #     ci-cargo test -vv $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture -ActionName "Running tests for target: $env:RUST_TARGET"
-      #   env:
-      #     RUST_TARGET: ${{ matrix.config.target }}
+  
   check_generate_bindings_flag:
     name: Check if [generate bindings] is in latest commit message
     runs-on: ubuntu-latest
