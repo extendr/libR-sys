@@ -165,8 +165,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"04\0";
-pub const R_DAY: &[u8; 3] = b"18\0";
-pub const R_SVN_REVISION: u32 = 86444;
+pub const R_DAY: &[u8; 3] = b"19\0";
+pub const R_SVN_REVISION: u32 = 86451;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -342,11 +342,6 @@ pub type Rbyte = ::std::os::raw::c_uchar;
 pub type R_len_t = ::std::os::raw::c_int;
 #[doc = "NOT YET using enum:\n  1)\tThe internal SEXPREC struct has 'SEXPTYPE type : 5'\n\t(making FUNSXP and CLOSXP equivalent in there),\n\tgiving (-Wall only ?) warnings all over the place\n 2)\tMany switch(type) { case ... } statements need a final `default:'\n\tadded in order to avoid warnings like \\[e.g. l.170 of ../main/util.c\\]\n\t  \"enumeration value `FUNSXP' not handled in switch\""]
 pub type SEXPTYPE = ::std::os::raw::c_uint;
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct SEXPREC {
-    _unused: [u8; 0],
-}
 pub type SEXP = *mut SEXPREC;
 #[doc = "We sometimes need to coerce a protected value and place the new\ncoerced value under protection.  For these cases PROTECT_WITH_INDEX\nsaves an index of the protection location that can be used to\nreplace the protected value using REPROTECT."]
 pub type PROTECT_INDEX = ::std::os::raw::c_int;
@@ -1196,12 +1191,6 @@ extern "C" {
     );
     #[doc = "../../main/util.c  and others :"]
     pub fn R_ExpandFileName(arg1: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
-    pub fn Rf_setIVector(
-        arg1: *mut ::std::os::raw::c_int,
-        arg2: ::std::os::raw::c_int,
-        arg3: ::std::os::raw::c_int,
-    );
-    pub fn Rf_setRVector(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: f64);
     pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
@@ -1242,16 +1231,6 @@ extern "C" {
         ilo: ::std::os::raw::c_int,
         mflag: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
-    #[doc = "not API"]
-    pub fn find_interv_vec(
-        xt: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        x: *mut f64,
-        nx: *mut ::std::os::raw::c_int,
-        rightmost_closed: *mut ::std::os::raw::c_int,
-        all_inside: *mut ::std::os::raw::c_int,
-        indx: *mut ::std::os::raw::c_int,
-    );
     #[doc = "../../appl/maxcol.c: also in Applic.h"]
     pub fn R_max_col(
         matrix: *mut f64,
