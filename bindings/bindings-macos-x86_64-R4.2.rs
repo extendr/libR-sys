@@ -2016,7 +2016,6 @@ extern "C" {
     pub fn unif_rand() -> f64;
     pub fn R_unif_index(arg1: f64) -> f64;
     pub fn exp_rand() -> f64;
-    #[doc = "Normal Distribution"]
     pub fn Rf_dnorm4(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pnorm5(
         arg1: f64,
@@ -2040,7 +2039,6 @@ extern "C" {
         arg4: ::std::os::raw::c_int,
         arg5: ::std::os::raw::c_int,
     );
-    #[doc = "Uniform Distribution"]
     pub fn Rf_dunif(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_punif(
         arg1: f64,
@@ -2057,7 +2055,6 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_runif(arg1: f64, arg2: f64) -> f64;
-    #[doc = "Gamma Distribution"]
     pub fn Rf_dgamma(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pgamma(
         arg1: f64,
@@ -2078,11 +2075,9 @@ extern "C" {
     pub fn Rf_log1pexp(arg1: f64) -> f64;
     pub fn Rf_log1mexp(arg1: f64) -> f64;
     pub fn Rf_lgamma1p(arg1: f64) -> f64;
-    #[doc = "Compute the log of a sum or difference from logs of terms, i.e.,\n\n     log (exp (logx) + exp (logy))\n or  log (exp (logx) - exp (logy))\n\n without causing overflows or throwing away too much accuracy:"]
     pub fn Rf_logspace_add(arg1: f64, arg2: f64) -> f64;
     pub fn Rf_logspace_sub(arg1: f64, arg2: f64) -> f64;
     pub fn Rf_logspace_sum(arg1: *const f64, arg2: ::std::os::raw::c_int) -> f64;
-    #[doc = "Beta Distribution"]
     pub fn Rf_dbeta(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pbeta(
         arg1: f64,
@@ -2099,7 +2094,6 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rbeta(arg1: f64, arg2: f64) -> f64;
-    #[doc = "Lognormal Distribution"]
     pub fn Rf_dlnorm(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_plnorm(
         arg1: f64,
@@ -2116,7 +2110,6 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rlnorm(arg1: f64, arg2: f64) -> f64;
-    #[doc = "Chi-squared Distribution"]
     pub fn Rf_dchisq(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pchisq(
         arg1: f64,
@@ -2131,7 +2124,6 @@ extern "C" {
         arg4: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rchisq(arg1: f64) -> f64;
-    #[doc = "Non-central Chi-squared Distribution"]
     pub fn Rf_dnchisq(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pnchisq(
         arg1: f64,
@@ -2148,7 +2140,6 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rnchisq(arg1: f64, arg2: f64) -> f64;
-    #[doc = "F Distibution"]
     pub fn Rf_df(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pf(
         arg1: f64,
@@ -2165,7 +2156,6 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rf(arg1: f64, arg2: f64) -> f64;
-    #[doc = "Student t Distibution"]
     pub fn Rf_dt(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pt(
         arg1: f64,
@@ -2180,7 +2170,6 @@ extern "C" {
         arg4: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rt(arg1: f64) -> f64;
-    #[doc = "Binomial Distribution"]
     pub fn Rf_dbinom_raw(x: f64, n: f64, p: f64, q: f64, give_log: ::std::os::raw::c_int) -> f64;
     pub fn Rf_dbinom(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pbinom(
@@ -2198,14 +2187,12 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rbinom(arg1: f64, arg2: f64) -> f64;
-    #[doc = "Multinomial Distribution"]
     pub fn Rf_rmultinom(
         arg1: ::std::os::raw::c_int,
         arg2: *mut f64,
         arg3: ::std::os::raw::c_int,
         arg4: *mut ::std::os::raw::c_int,
     );
-    #[doc = "Cauchy Distribution"]
     pub fn Rf_dcauchy(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pcauchy(
         arg1: f64,
@@ -2222,7 +2209,6 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rcauchy(arg1: f64, arg2: f64) -> f64;
-    #[doc = "Exponential Distribution"]
     pub fn Rf_dexp(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pexp(
         arg1: f64,
@@ -2237,7 +2223,6 @@ extern "C" {
         arg4: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rexp(arg1: f64) -> f64;
-    #[doc = "Geometric Distribution"]
     pub fn Rf_dgeom(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pgeom(
         arg1: f64,
@@ -2252,7 +2237,6 @@ extern "C" {
         arg4: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rgeom(arg1: f64) -> f64;
-    #[doc = "Hypergeometric Distibution"]
     pub fn Rf_dhyper(
         arg1: f64,
         arg2: f64,
@@ -2277,7 +2261,6 @@ extern "C" {
         arg6: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rhyper(arg1: f64, arg2: f64, arg3: f64) -> f64;
-    #[doc = "Negative Binomial Distribution"]
     pub fn Rf_dnbinom(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pnbinom(
         arg1: f64,
@@ -2310,7 +2293,6 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rnbinom_mu(arg1: f64, arg2: f64) -> f64;
-    #[doc = "Poisson Distribution"]
     pub fn Rf_dpois_raw(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
     pub fn Rf_dpois(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
     pub fn Rf_ppois(
@@ -2326,7 +2308,6 @@ extern "C" {
         arg4: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rpois(arg1: f64) -> f64;
-    #[doc = "Weibull Distribution"]
     pub fn Rf_dweibull(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pweibull(
         arg1: f64,
@@ -2343,7 +2324,6 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rweibull(arg1: f64, arg2: f64) -> f64;
-    #[doc = "Logistic Distribution"]
     pub fn Rf_dlogis(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_plogis(
         arg1: f64,
@@ -2360,7 +2340,6 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rlogis(arg1: f64, arg2: f64) -> f64;
-    #[doc = "Non-central Beta Distribution"]
     pub fn Rf_dnbeta(
         arg1: f64,
         arg2: f64,
@@ -2385,7 +2364,6 @@ extern "C" {
         arg6: ::std::os::raw::c_int,
     ) -> f64;
     pub fn Rf_rnbeta(arg1: f64, arg2: f64, arg3: f64) -> f64;
-    #[doc = "Non-central F Distribution"]
     pub fn Rf_dnf(arg1: f64, arg2: f64, arg3: f64, arg4: f64, arg5: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pnf(
         arg1: f64,
@@ -2403,7 +2381,6 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
         arg6: ::std::os::raw::c_int,
     ) -> f64;
-    #[doc = "Non-central Student t Distribution"]
     pub fn Rf_dnt(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pnt(
         arg1: f64,
@@ -2419,7 +2396,6 @@ extern "C" {
         arg4: ::std::os::raw::c_int,
         arg5: ::std::os::raw::c_int,
     ) -> f64;
-    #[doc = "Studentized Range Distribution"]
     pub fn Rf_ptukey(
         arg1: f64,
         arg2: f64,
@@ -2436,7 +2412,6 @@ extern "C" {
         arg5: ::std::os::raw::c_int,
         arg6: ::std::os::raw::c_int,
     ) -> f64;
-    #[doc = "Wilcoxon Rank Sum Distribution"]
     pub fn Rf_dwilcox(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pwilcox(
         arg1: f64,
@@ -2454,7 +2429,6 @@ extern "C" {
     ) -> f64;
     pub fn Rf_rwilcox(arg1: f64, arg2: f64) -> f64;
     pub fn wilcox_free();
-    #[doc = "Wilcoxon Signed Rank Distribution"]
     pub fn Rf_dsignrank(arg1: f64, arg2: f64, arg3: ::std::os::raw::c_int) -> f64;
     pub fn Rf_psignrank(
         arg1: f64,
@@ -2470,7 +2444,6 @@ extern "C" {
     ) -> f64;
     pub fn Rf_rsignrank(arg1: f64) -> f64;
     pub fn signrank_free();
-    #[doc = "Gamma and Related Functions"]
     pub fn Rf_gammafn(arg1: f64) -> f64;
     pub fn Rf_lgammafn(arg1: f64) -> f64;
     pub fn Rf_lgammafn_sign(arg1: f64, arg2: *mut ::std::os::raw::c_int) -> f64;
@@ -2492,7 +2465,6 @@ extern "C" {
     pub fn Rf_lbeta(arg1: f64, arg2: f64) -> f64;
     pub fn Rf_choose(arg1: f64, arg2: f64) -> f64;
     pub fn Rf_lchoose(arg1: f64, arg2: f64) -> f64;
-    #[doc = "Bessel Functions"]
     pub fn Rf_bessel_i(arg1: f64, arg2: f64, arg3: f64) -> f64;
     pub fn Rf_bessel_j(arg1: f64, arg2: f64) -> f64;
     pub fn Rf_bessel_k(arg1: f64, arg2: f64, arg3: f64) -> f64;
@@ -2501,7 +2473,6 @@ extern "C" {
     pub fn Rf_bessel_j_ex(arg1: f64, arg2: f64, arg3: *mut f64) -> f64;
     pub fn Rf_bessel_k_ex(arg1: f64, arg2: f64, arg3: f64, arg4: *mut f64) -> f64;
     pub fn Rf_bessel_y_ex(arg1: f64, arg2: f64, arg3: *mut f64) -> f64;
-    #[doc = "General Support Functions"]
     pub fn Rf_imax2(
         arg1: ::std::os::raw::c_int,
         arg2: ::std::os::raw::c_int,
@@ -2638,22 +2609,15 @@ extern "C" {
     pub fn R_set_altstring_No_NA_method(cls: R_altrep_class_t, fun: R_altstring_No_NA_method_t);
     pub fn R_GE_getVersion() -> ::std::os::raw::c_int;
     pub fn R_GE_checkVersionOrDie(version: ::std::os::raw::c_int);
-    #[doc = "Properly declared version of devNumber"]
     pub fn Rf_ndevNumber(arg1: pDevDesc) -> ::std::os::raw::c_int;
-    #[doc = "How many devices exist ? (>= 1)"]
     pub fn Rf_NumDevices() -> ::std::os::raw::c_int;
     #[doc = "Check for an available device slot"]
     pub fn R_CheckDeviceAvailable();
     pub fn R_CheckDeviceAvailableBool() -> Rboolean;
-    #[doc = "Return the number of the current device."]
     pub fn Rf_curDevice() -> ::std::os::raw::c_int;
-    #[doc = "Return the number of the next device."]
     pub fn Rf_nextDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-    #[doc = "Return the number of the previous device."]
     pub fn Rf_prevDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-    #[doc = "Make the specified device (specified by number) the current device"]
     pub fn Rf_selectDevice(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-    #[doc = "Kill device which is identified by number."]
     pub fn Rf_killDevice(arg1: ::std::os::raw::c_int);
     pub fn Rf_NoDevices() -> ::std::os::raw::c_int;
     pub fn Rf_NewFrameConfirm(arg1: pDevDesc);
@@ -2670,7 +2634,6 @@ extern "C" {
     pub static mut R_interrupts_suspended: Rboolean;
     pub static mut R_interrupts_pending: ::std::os::raw::c_int;
     pub static mut mbcslocale: Rboolean;
-    #[doc = "Useful for devices: translates Adobe symbol encoding to UTF-8"]
     pub fn Rf_AdobeSymbol2utf8(
         out: *mut ::std::os::raw::c_char,
         in_: *const ::std::os::raw::c_char,
@@ -2688,7 +2651,6 @@ extern "C" {
     ) -> *const ::std::os::raw::c_char;
     #[doc = "Translates Unicode point to UTF-8"]
     pub fn Rf_ucstoutf8(s: *mut ::std::os::raw::c_char, c: ::std::os::raw::c_uint) -> usize;
-    #[doc = "map DevDesc to enclosing GEDevDesc"]
     pub fn Rf_desc2GEDesc(dd: pDevDesc) -> pGEDevDesc;
     pub fn GEdeviceNumber(arg1: pGEDevDesc) -> ::std::os::raw::c_int;
     pub fn GEgetDevice(arg1: ::std::os::raw::c_int) -> pGEDevDesc;
@@ -2718,10 +2680,8 @@ extern "C" {
     pub fn GEtoDeviceWidth(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
     pub fn GEfromDeviceHeight(value: f64, to: GEUnit, dd: pGEDevDesc) -> f64;
     pub fn GEtoDeviceHeight(value: f64, from: GEUnit, dd: pGEDevDesc) -> f64;
-    #[doc = "Convert an element of a R colour specification (which might be a\nnumber or a string) into an internal colour specification."]
     pub fn Rf_RGBpar(arg1: SEXP, arg2: ::std::os::raw::c_int) -> rcolor;
     pub fn Rf_RGBpar3(arg1: SEXP, arg2: ::std::os::raw::c_int, arg3: rcolor) -> rcolor;
-    #[doc = "Convert an internal colour specification to/from a colour name"]
     pub fn Rf_col2name(col: rcolor) -> *const ::std::os::raw::c_char;
     #[doc = "Convert either a name or a #RRGGBB\\[AA\\] string to internal.\nBecause people were using it, it also converts \"1\", \"2\" ...\nto a colour in the palette, and \"0\" to transparent white."]
     pub fn R_GE_str2col(s: *const ::std::os::raw::c_char) -> rcolor;
@@ -3124,6 +3084,34 @@ extern "C" {
         trace: ::std::os::raw::c_int,
         ex: *mut ::std::os::raw::c_void,
     );
+    pub fn dqrqty_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        qty: *mut f64,
+    );
+    pub fn dqrqy_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        qy: *mut f64,
+    );
+    pub fn dqrcf_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        b: *mut f64,
+        info: *mut ::std::os::raw::c_int,
+    );
     #[doc = "appl/pretty.c: for use in engine.c and util.c"]
     pub fn R_pretty(
         lo: *mut f64,
@@ -3164,6 +3152,32 @@ extern "C" {
         a: *mut f64,
         wrk: *mut f64,
         itncnt: *mut ::std::os::raw::c_int,
+    );
+    pub fn dqrdc2_(
+        x: *mut f64,
+        ldx: *mut ::std::os::raw::c_int,
+        n: *mut ::std::os::raw::c_int,
+        p: *mut ::std::os::raw::c_int,
+        tol: *mut f64,
+        rank: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        pivot: *mut ::std::os::raw::c_int,
+        work: *mut f64,
+    );
+    pub fn dqrls_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        p: *mut ::std::os::raw::c_int,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        tol: *mut f64,
+        b: *mut f64,
+        rsd: *mut f64,
+        qty: *mut f64,
+        k: *mut ::std::os::raw::c_int,
+        jpvt: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        work: *mut f64,
     );
     pub fn R_sample_kind() -> Sampletype;
     pub fn GetRNGstate();
