@@ -3,7 +3,7 @@
 /* libR-sys version: 0.7.0 */
 /* bindgen clang version: Ubuntu clang version 15.0.7 */
 /* clang-rs version: Ubuntu clang version 15.0.7 */
-/* r version: 4.2.3 */
+/* r version: 4.5.0-devel */
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -92,11 +92,13 @@ pub const HAVE_VISIBILITY_ATTRIBUTE: u32 = 1;
 pub const SUPPORT_UTF8: u32 = 1;
 pub const SUPPORT_MBCS: u32 = 1;
 pub const ENABLE_NLS: u32 = 1;
+pub const PR18534fixed: u32 = 1;
 pub const SIZEOF_SIZE_T: u32 = 8;
 pub const HAVE_ALLOCA_H: u32 = 1;
 pub const HAVE_UINTPTR_T: u32 = 1;
 pub const R_XLEN_T_MAX: u64 = 4503599627370496;
 pub const R_SHORT_LEN_MAX: u32 = 2147483647;
+pub const R_PRIdXLEN_T: &[u8; 3] = b"td\0";
 pub const TYPE_BITS: u32 = 5;
 pub const MAX_NUM_SEXPTYPE: u32 = 32;
 pub const NAMEDMAX: u32 = 7;
@@ -114,7 +116,7 @@ pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
 pub const RSTART_VERSION: u32 = 1;
 pub const __STDC_WANT_IEC_60559_FUNCS_EXT__: u32 = 1;
-pub const R_VERSION_STRING: &[u8; 6] = b"4.2.3\0";
+pub const R_VERSION_STRING: &[u8; 6] = b"4.5.0\0";
 pub const HAVE_EXPM1: u32 = 1;
 pub const HAVE_HYPOT: u32 = 1;
 pub const HAVE_LOG1P: u32 = 1;
@@ -128,19 +130,20 @@ pub const M_LN_2PI: f64 = 1.8378770664093456;
 pub const M_LN_SQRT_PI: f64 = 0.5723649429247001;
 pub const M_LN_SQRT_2PI: f64 = 0.9189385332046728;
 pub const M_LN_SQRT_PId2: f64 = 0.22579135264472744;
-pub const R_VERSION: u32 = 262659;
-pub const R_NICK: &[u8; 17] = b"Shortstop Beagle\0";
+pub const R_VERSION: u32 = 263424;
+pub const R_NICK: &[u8; 24] = b"Unsuffered Consequences\0";
 pub const R_MAJOR: &[u8; 2] = b"4\0";
-pub const R_MINOR: &[u8; 4] = b"2.3\0";
-pub const R_STATUS: &[u8; 1] = b"\0";
-pub const R_YEAR: &[u8; 5] = b"2023\0";
-pub const R_MONTH: &[u8; 3] = b"03\0";
-pub const R_DAY: &[u8; 3] = b"15\0";
-pub const R_SVN_REVISION: u32 = 83980;
+pub const R_MINOR: &[u8; 4] = b"5.0\0";
+pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
+pub const R_YEAR: &[u8; 5] = b"2024\0";
+pub const R_MONTH: &[u8; 3] = b"04\0";
+pub const R_DAY: &[u8; 3] = b"20\0";
+pub const R_SVN_REVISION: u32 = 86457;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
-pub const R_GE_version: u32 = 15;
+pub const R_GE_glyphs: u32 = 16;
+pub const R_GE_version: u32 = 16;
 pub const MAX_GRAPHICS_SYSTEMS: u32 = 24;
 pub const R_USE_PROTOTYPES: u32 = 1;
 pub const leftButton: u32 = 1;
@@ -202,6 +205,10 @@ pub const R_GE_capability_masks: u32 = 8;
 pub const R_GE_capability_compositing: u32 = 9;
 pub const R_GE_capability_transformations: u32 = 10;
 pub const R_GE_capability_paths: u32 = 11;
+pub const R_GE_capability_glyphs: u32 = 12;
+pub const R_GE_text_style_normal: u32 = 1;
+pub const R_GE_text_style_italic: u32 = 2;
+pub const R_GE_text_style_oblique: u32 = 3;
 #[doc = "R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
 pub type va_list = [u64; 4usize];
@@ -365,8 +372,8 @@ pub enum SEXPTYPE {
     #[doc = "raw bytes"]
     RAWSXP = 24,
     #[doc = "S4 non-vector"]
-    S4SXP = 25,
-    #[doc = "fresh node creaed in new page"]
+    OBJSXP = 25,
+    #[doc = "fresh node created in new page"]
     NEWSXP = 30,
     #[doc = "node released by GC"]
     FREESXP = 31,
@@ -499,7 +506,7 @@ pub struct structRstart {
     pub ppsize: usize,
     pub _bitfield_align_1: [u16; 0],
     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
-    pub __bindgen_padding_0: u32,
+    pub nconnections: ::std::os::raw::c_int,
 }
 impl structRstart {
     #[inline]
@@ -678,6 +685,10 @@ pub type R_altstring_Is_sorted_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
 pub type R_altstring_No_NA_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
+pub type R_altlist_Elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t) -> SEXP>;
+pub type R_altlist_Set_elt_method_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: R_xlen_t, arg3: SEXP)>;
 #[repr(u32)]
 #[non_exhaustive]
 #[doc = "The graphics engine will only accept locations and dimensions\n in native device coordinates, but it provides the following functions\n for converting between a couple of simple alternative coordinate\n systems and device coordinates:\n    DEVICE = native units of the device\n    NDC = Normalised device coordinates\n    INCHES = inches (!)\n    CM = centimetres (!!)"]
@@ -1008,6 +1019,19 @@ pub struct _DevDesc {
         unsafe extern "C" fn(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pDevDesc),
     >,
     pub capabilities: ::std::option::Option<unsafe extern "C" fn(cap: SEXP) -> SEXP>,
+    pub glyph: ::std::option::Option<
+        unsafe extern "C" fn(
+            n: ::std::os::raw::c_int,
+            glyphs: *mut ::std::os::raw::c_int,
+            x: *mut f64,
+            y: *mut f64,
+            font: SEXP,
+            size: f64,
+            colour: ::std::os::raw::c_int,
+            rot: f64,
+            dd: pDevDesc,
+        ),
+    >,
     #[doc = "Area for future expansion.\nBy zeroing this, devices are more likely to work if loaded\ninto a later version of R than that they were compiled under."]
     pub reserved: [::std::os::raw::c_char; 64usize],
 }
@@ -1070,7 +1094,7 @@ pub struct _GEDevDesc {
     pub displayListOn: Rboolean,
     #[doc = "display list"]
     pub displayList: SEXP,
-    #[doc = "A pointer to the end of the display list\nto avoid tranversing pairlists"]
+    #[doc = "A pointer to the end of the display list\nto avoid traversing pairlists"]
     pub DLlastElt: SEXP,
     #[doc = "The last element of the display list\n just prior to when the display list\n was last initialised"]
     pub savedSnapshot: SEXP,
@@ -1183,6 +1207,10 @@ extern "C" {
     pub fn R_IsNA(arg1: f64) -> ::std::os::raw::c_int;
     pub fn R_IsNaN(arg1: f64) -> ::std::os::raw::c_int;
     pub fn R_finite(arg1: f64) -> ::std::os::raw::c_int;
+    pub fn Rprintf(arg1: *const ::std::os::raw::c_char, ...);
+    pub fn REprintf(arg1: *const ::std::os::raw::c_char, ...);
+    pub fn Rvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
+    pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
     pub fn Rf_error(arg1: *const ::std::os::raw::c_char, ...) -> !;
     pub fn UNIMPLEMENTED(arg1: *const ::std::os::raw::c_char) -> !;
     pub fn WrongArgCount(arg1: *const ::std::os::raw::c_char) -> !;
@@ -1248,16 +1276,10 @@ extern "C" {
     );
     #[doc = "../../main/util.c  and others :"]
     pub fn R_ExpandFileName(arg1: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
-    pub fn Rf_setIVector(
-        arg1: *mut ::std::os::raw::c_int,
-        arg2: ::std::os::raw::c_int,
-        arg3: ::std::os::raw::c_int,
-    );
-    pub fn Rf_setRVector(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: f64);
     pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
+    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\". Documented since 4.4.0 patched."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
         -> f64;
@@ -1294,15 +1316,6 @@ extern "C" {
         ilo: ::std::os::raw::c_int,
         mflag: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
-    pub fn find_interv_vec(
-        xt: *mut f64,
-        n: *mut ::std::os::raw::c_int,
-        x: *mut f64,
-        nx: *mut ::std::os::raw::c_int,
-        rightmost_closed: *mut ::std::os::raw::c_int,
-        all_inside: *mut ::std::os::raw::c_int,
-        indx: *mut ::std::os::raw::c_int,
-    );
     #[doc = "../../appl/maxcol.c: also in Applic.h"]
     pub fn R_max_col(
         matrix: *mut f64,
@@ -1311,10 +1324,6 @@ extern "C" {
         maxes: *mut ::std::os::raw::c_int,
         ties_meth: *mut ::std::os::raw::c_int,
     );
-    pub fn Rprintf(arg1: *const ::std::os::raw::c_char, ...);
-    pub fn REprintf(arg1: *const ::std::os::raw::c_char, ...);
-    pub fn Rvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
-    pub fn REvprintf(arg1: *const ::std::os::raw::c_char, arg2: va_list);
     pub fn R_registerRoutines(
         info: *mut DllInfo,
         croutines: *const R_CMethodDef,
@@ -1421,6 +1430,7 @@ extern "C" {
     pub fn CADDR(e: SEXP) -> SEXP;
     pub fn CADDDR(e: SEXP) -> SEXP;
     pub fn CAD4R(e: SEXP) -> SEXP;
+    pub fn CAD5R(e: SEXP) -> SEXP;
     pub fn MISSING(x: SEXP) -> ::std::os::raw::c_int;
     pub fn SET_TAG(x: SEXP, y: SEXP);
     pub fn SETCAR(x: SEXP, y: SEXP) -> SEXP;
@@ -1602,7 +1612,6 @@ extern "C" {
     pub fn Rf_allocVector3(arg1: SEXPTYPE, arg2: R_xlen_t, arg3: *mut R_allocator_t) -> SEXP;
     pub fn Rf_any_duplicated(x: SEXP, from_last: Rboolean) -> R_xlen_t;
     pub fn Rf_any_duplicated3(x: SEXP, incomp: SEXP, from_last: Rboolean) -> R_xlen_t;
-    pub fn Rf_applyClosure(arg1: SEXP, arg2: SEXP, arg3: SEXP, arg4: SEXP, arg5: SEXP) -> SEXP;
     pub fn Rf_classgets(arg1: SEXP, arg2: SEXP) -> SEXP;
     pub fn Rf_cons(arg1: SEXP, arg2: SEXP) -> SEXP;
     pub fn Rf_copyMatrix(arg1: SEXP, arg2: SEXP, arg3: Rboolean);
@@ -1649,6 +1658,7 @@ extern "C" {
     pub fn Rf_isOrdered(arg1: SEXP) -> Rboolean;
     pub fn Rf_isUnordered(arg1: SEXP) -> Rboolean;
     pub fn Rf_isUnsorted(arg1: SEXP, arg2: Rboolean) -> Rboolean;
+    pub fn R_isTRUE(arg1: SEXP) -> Rboolean;
     pub fn Rf_lengthgets(arg1: SEXP, arg2: R_len_t) -> SEXP;
     pub fn Rf_xlengthgets(arg1: SEXP, arg2: R_xlen_t) -> SEXP;
     pub fn R_lsInternal(arg1: SEXP, arg2: Rboolean) -> SEXP;
@@ -1669,6 +1679,7 @@ extern "C" {
         msg_name: *const ::std::os::raw::c_char,
     ) -> ::std::os::raw::c_int;
     pub fn R_ParseEvalString(arg1: *const ::std::os::raw::c_char, arg2: SEXP) -> SEXP;
+    pub fn R_ParseString(arg1: *const ::std::os::raw::c_char) -> SEXP;
     pub fn Rf_PrintValue(arg1: SEXP);
     pub fn Rf_setAttrib(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
     pub fn Rf_setVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);
@@ -1679,6 +1690,7 @@ extern "C" {
     pub fn Rf_translateChar(arg1: SEXP) -> *const ::std::os::raw::c_char;
     pub fn Rf_translateCharUTF8(arg1: SEXP) -> *const ::std::os::raw::c_char;
     pub fn Rf_type2char(arg1: SEXPTYPE) -> *const ::std::os::raw::c_char;
+    pub fn R_typeToChar(arg1: SEXP) -> *const ::std::os::raw::c_char;
     pub fn Rf_type2rstr(arg1: SEXPTYPE) -> SEXP;
     pub fn Rf_type2str(arg1: SEXPTYPE) -> SEXP;
     pub fn Rf_type2str_nowarn(arg1: SEXPTYPE) -> SEXP;
@@ -1701,6 +1713,12 @@ extern "C" {
         x: *const ::std::os::raw::c_char,
         ce_in: cetype_t,
         ce_out: cetype_t,
+        subst: ::std::os::raw::c_int,
+    ) -> *const ::std::os::raw::c_char;
+    pub fn Rf_reEnc3(
+        x: *const ::std::os::raw::c_char,
+        fromcode: *const ::std::os::raw::c_char,
+        tocode: *const ::std::os::raw::c_char,
         subst: ::std::os::raw::c_int,
     ) -> *const ::std::os::raw::c_char;
     #[doc = "Calling a function with arguments evaluated"]
@@ -1803,6 +1821,7 @@ extern "C" {
     pub fn R_BindingIsActive(sym: SEXP, env: SEXP) -> Rboolean;
     pub fn R_ActiveBindingFunction(sym: SEXP, env: SEXP) -> SEXP;
     pub fn R_HasFancyBindings(rho: SEXP) -> Rboolean;
+    #[doc = "../main/errors.c : */\n/* needed for R_load/savehistory handling in front ends"]
     pub fn Rf_errorcall(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...) -> !;
     pub fn Rf_warningcall(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...);
     pub fn Rf_warningcall_immediate(arg1: SEXP, arg2: *const ::std::os::raw::c_char, ...);
@@ -2150,8 +2169,9 @@ extern "C" {
     pub fn Rf_log1pexp(arg1: f64) -> f64;
     pub fn Rf_log1mexp(arg1: f64) -> f64;
     pub fn Rf_lgamma1p(arg1: f64) -> f64;
-    pub fn Rf_logspace_add(arg1: f64, arg2: f64) -> f64;
-    pub fn Rf_logspace_sub(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_pow1p(arg1: f64, arg2: f64) -> f64;
+    pub fn Rf_logspace_add(logx: f64, logy: f64) -> f64;
+    pub fn Rf_logspace_sub(logx: f64, logy: f64) -> f64;
     pub fn Rf_logspace_sum(arg1: *const f64, arg2: ::std::os::raw::c_int) -> f64;
     pub fn Rf_dbeta(arg1: f64, arg2: f64, arg3: f64, arg4: ::std::os::raw::c_int) -> f64;
     pub fn Rf_pbeta(
@@ -2604,6 +2624,11 @@ extern "C" {
         pname: *const ::std::os::raw::c_char,
         info: *mut DllInfo,
     ) -> R_altrep_class_t;
+    pub fn R_make_altlist_class(
+        cname: *const ::std::os::raw::c_char,
+        pname: *const ::std::os::raw::c_char,
+        info: *mut DllInfo,
+    ) -> R_altrep_class_t;
     pub fn R_altrep_inherits(x: SEXP, arg1: R_altrep_class_t) -> Rboolean;
     pub fn R_set_altrep_UnserializeEX_method(
         cls: R_altrep_class_t,
@@ -2682,6 +2707,8 @@ extern "C" {
         fun: R_altstring_Is_sorted_method_t,
     );
     pub fn R_set_altstring_No_NA_method(cls: R_altrep_class_t, fun: R_altstring_No_NA_method_t);
+    pub fn R_set_altlist_Elt_method(cls: R_altrep_class_t, fun: R_altlist_Elt_method_t);
+    pub fn R_set_altlist_Set_elt_method(cls: R_altrep_class_t, fun: R_altlist_Set_elt_method_t);
     pub fn R_GE_getVersion() -> ::std::os::raw::c_int;
     pub fn R_GE_checkVersionOrDie(version: ::std::os::raw::c_int);
     pub fn Rf_ndevNumber(arg1: pDevDesc) -> ::std::os::raw::c_int;
@@ -3034,6 +3061,31 @@ extern "C" {
     pub fn GEFill(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pGEDevDesc);
     pub fn GEFillStroke(path: SEXP, rule: ::std::os::raw::c_int, gc: pGEcontext, dd: pGEDevDesc);
     pub fn R_GE_maskType(mask: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_GE_glyphInfoGlyphs(glyphInfo: SEXP) -> SEXP;
+    pub fn R_GE_glyphInfoFonts(glyphInfo: SEXP) -> SEXP;
+    pub fn R_GE_glyphID(glyphs: SEXP) -> SEXP;
+    pub fn R_GE_glyphX(glyphs: SEXP) -> SEXP;
+    pub fn R_GE_glyphY(glyphs: SEXP) -> SEXP;
+    pub fn R_GE_glyphFont(glyphs: SEXP) -> SEXP;
+    pub fn R_GE_glyphSize(glyphs: SEXP) -> SEXP;
+    pub fn R_GE_glyphColour(glyphs: SEXP) -> SEXP;
+    pub fn R_GE_glyphFontFile(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
+    pub fn R_GE_glyphFontIndex(glyphFont: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_GE_glyphFontFamily(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
+    pub fn R_GE_glyphFontWeight(glyphFont: SEXP) -> f64;
+    pub fn R_GE_glyphFontStyle(glyphFont: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_GE_glyphFontPSname(glyphFont: SEXP) -> *const ::std::os::raw::c_char;
+    pub fn GEGlyph(
+        n: ::std::os::raw::c_int,
+        glyphs: *mut ::std::os::raw::c_int,
+        x: *mut f64,
+        y: *mut f64,
+        font: SEXP,
+        size: f64,
+        colour: ::std::os::raw::c_int,
+        rot: f64,
+        dd: pGEDevDesc,
+    );
     #[doc = "S Like Memory Management"]
     pub fn R_chk_calloc(arg1: usize, arg2: usize) -> *mut ::std::os::raw::c_void;
     pub fn R_chk_realloc(
