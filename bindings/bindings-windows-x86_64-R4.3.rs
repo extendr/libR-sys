@@ -1057,9 +1057,6 @@ extern "C" {
         arg3: ::std::os::raw::c_int,
     );
     pub fn Rf_setRVector(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: f64);
-    pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-    pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-    pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
@@ -1851,31 +1848,7 @@ extern "C" {
     #[doc = "stuff that probably shouldn't be in the API but is getting used"]
     pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
-    pub fn SET_S4_OBJECT(x: SEXP);
-    pub fn UNSET_S4_OBJECT(x: SEXP);
-    pub fn R_curErrorBuf() -> *const ::std::os::raw::c_char;
-    pub fn IS_SCALAR(x: SEXP, type_: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-    pub fn Rf_psmatch(
-        arg1: *const ::std::os::raw::c_char,
-        arg2: *const ::std::os::raw::c_char,
-        arg3: Rboolean,
-    ) -> Rboolean;
-    pub fn SETLENGTH(x: SEXP, v: R_xlen_t);
-    pub fn SET_TRUELENGTH(x: SEXP, v: R_xlen_t);
-    pub fn SETLEVELS(x: SEXP, v: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-    pub fn SET_ENVFLAGS(x: SEXP, v: ::std::os::raw::c_int);
-    pub fn SET_FRAME(x: SEXP, v: SEXP);
-    pub fn SET_ENCLOS(x: SEXP, v: SEXP);
-    pub fn SET_HASHTAB(x: SEXP, v: SEXP);
-    pub fn SET_PRENV(x: SEXP, v: SEXP);
-    pub fn SET_PRVALUE(x: SEXP, v: SEXP);
-    pub fn SET_PRCODE(x: SEXP, v: SEXP);
-    pub fn STDVEC_DATAPTR(x: SEXP) -> *mut ::std::os::raw::c_void;
-    pub fn IS_GROWABLE(x: SEXP) -> ::std::os::raw::c_int;
     pub fn SET_GROWABLE_BIT(x: SEXP);
-    pub fn SET_NAMED(x: SEXP, v: ::std::os::raw::c_int);
-    #[doc = "used by BIOC::matter; mightbe reasonable to include in API"]
-    pub fn R_tryWrap(arg1: SEXP) -> SEXP;
     #[doc = "C stack limit"]
     pub static mut R_CStackLimit: usize;
     pub fn Rf_endEmbeddedR(fatal: ::std::os::raw::c_int);
