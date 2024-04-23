@@ -56,8 +56,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"04\0";
-pub const R_DAY: &[u8; 3] = b"21\0";
-pub const R_SVN_REVISION: u32 = 86458;
+pub const R_DAY: &[u8; 3] = b"22\0";
+pub const R_SVN_REVISION: u32 = 86468;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1094,7 +1094,7 @@ extern "C" {
     pub fn R_CheckUserInterrupt();
     pub fn R_CheckStack();
     pub fn R_CheckStack2(arg1: usize);
-    #[doc = "../../appl/interv.c: also in Applic.h"]
+    #[doc = "../../appl/interv.c: first also in Applic.h"]
     pub fn findInterval(
         xt: *mut f64,
         n: ::std::os::raw::c_int,
@@ -1114,7 +1114,7 @@ extern "C" {
         ilo: ::std::os::raw::c_int,
         mflag: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
-    #[doc = "../../appl/maxcol.c: also in Applic.h"]
+    #[doc = "../../appl/maxcol.c"]
     pub fn R_max_col(
         matrix: *mut f64,
         nr: *mut ::std::os::raw::c_int,
@@ -1870,12 +1870,12 @@ extern "C" {
     pub fn SETLENGTH(x: SEXP, v: R_xlen_t);
     pub fn SET_TRUELENGTH(x: SEXP, v: R_xlen_t);
     pub fn SETLEVELS(x: SEXP, v: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-    #[doc = "used by BMA R6 admisc box collapse declared drake rlang this.path"]
+    #[doc = "used by admisc arcpbf b64 box clarabel collapse declared drake fcl rlang this.path"]
     pub fn SET_ENVFLAGS(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_FRAME(x: SEXP, v: SEXP);
     pub fn SET_ENCLOS(x: SEXP, v: SEXP);
     pub fn SET_HASHTAB(x: SEXP, v: SEXP);
-    #[doc = "used by dplyr magrittr nseval quotedargs this.path"]
+    #[doc = "used by S7 arcpbf b64 clarabel dplyr fcl magrittr nseval quotedargs this.path"]
     pub fn SET_PRENV(x: SEXP, v: SEXP);
     pub fn SET_PRVALUE(x: SEXP, v: SEXP);
     pub fn SET_PRCODE(x: SEXP, v: SEXP);
