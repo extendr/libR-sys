@@ -137,8 +137,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"04\0";
-pub const R_DAY: &[u8; 3] = b"20\0";
-pub const R_SVN_REVISION: u32 = 86457;
+pub const R_DAY: &[u8; 3] = b"21\0";
+pub const R_SVN_REVISION: u32 = 86458;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -2056,8 +2056,9 @@ extern "C" {
         data: *mut ::std::os::raw::c_void,
     );
     pub fn R_clrhash(h: R_hashtab_type);
-    #[doc = "stuff that probably shouldn't be in the API but is getting used"]
+    #[doc = "Rest of this file\nStuff that is not API and probably should not be but is getting used."]
     pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
+    #[doc = "used by Rcpp (not?), Matrix and more and in an example in R-exts."]
     pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_S4_OBJECT(x: SEXP);
     pub fn UNSET_S4_OBJECT(x: SEXP);
@@ -2071,10 +2072,12 @@ extern "C" {
     pub fn SETLENGTH(x: SEXP, v: R_xlen_t);
     pub fn SET_TRUELENGTH(x: SEXP, v: R_xlen_t);
     pub fn SETLEVELS(x: SEXP, v: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    #[doc = "used by BMA R6 admisc box collapse declared drake rlang this.path"]
     pub fn SET_ENVFLAGS(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_FRAME(x: SEXP, v: SEXP);
     pub fn SET_ENCLOS(x: SEXP, v: SEXP);
     pub fn SET_HASHTAB(x: SEXP, v: SEXP);
+    #[doc = "used by dplyr magrittr nseval quotedargs this.path"]
     pub fn SET_PRENV(x: SEXP, v: SEXP);
     pub fn SET_PRVALUE(x: SEXP, v: SEXP);
     pub fn SET_PRCODE(x: SEXP, v: SEXP);
@@ -2082,7 +2085,7 @@ extern "C" {
     pub fn IS_GROWABLE(x: SEXP) -> ::std::os::raw::c_int;
     pub fn SET_GROWABLE_BIT(x: SEXP);
     pub fn SET_NAMED(x: SEXP, v: ::std::os::raw::c_int);
-    #[doc = "used by BIOC::matter; mightbe reasonable to include in API"]
+    #[doc = "used by BioC::matter; might be reasonable to include in API"]
     pub fn R_tryWrap(arg1: SEXP) -> SEXP;
     pub fn R_FlushConsole();
     pub fn Rf_onintr();
