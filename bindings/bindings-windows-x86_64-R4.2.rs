@@ -1523,8 +1523,6 @@ extern "C" {
     pub fn R_WeakRefKey(w: SEXP) -> SEXP;
     pub fn R_WeakRefValue(w: SEXP) -> SEXP;
     pub fn R_RunWeakRefFinalizer(w: SEXP);
-    pub fn R_PromiseExpr(arg1: SEXP) -> SEXP;
-    pub fn R_ClosureExpr(arg1: SEXP) -> SEXP;
     pub fn R_BytecodeExpr(e: SEXP) -> SEXP;
     #[doc = "Protected evaluation"]
     pub fn R_ToplevelExec(
