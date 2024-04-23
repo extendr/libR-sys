@@ -12,6 +12,7 @@ R_CStackLimit
 R_CStackStart
 R_CleanTempDir
 R_ClearerrConsole
+R_ClosureExpr
 R_CollectFromIndex
 R_CompiledFileName
 R_Consolefile
@@ -45,6 +46,7 @@ R_ParseContextLine
 R_ParseError
 R_ParseErrorMsg
 R_PolledEvents
+R_PromiseExpr
 R_ReadConnection
 R_ReplDLLdo1
 R_ReplDLLinit
