@@ -138,12 +138,12 @@ jobs:
           # Add Rtools' GCC to PATH
           # Source: https://github.com/r-lib/actions/blob/b7e68d63e51bdf225997973e2add36d551f60f02/setup-r/lib/installer.js#L471
           $directories = @(
-            "C:\rtools44-aarch64\aarch64-w64-mingw32.static.posix"
+            "C:\rtools44-aarch64\aarch64-w64-mingw32.static.posix",
             "C:\rtools44\x86_64-w64-mingw32.static.posix",
             "C:\rtools43\x86_64-w64-mingw32.static.posix",
             "C:\rtools42\x86_64-w64-mingw32.static.posix",
             "C:\rtools40\ucrt64",
-            "C:\Rtools\mingw_64",
+            "C:\Rtools\mingw_64"
           )
 
           $mingw_root = $null
