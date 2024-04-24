@@ -172,4 +172,30 @@ mod tests {
             Rf_unprotect(1);
         }
     }
+
+    extern "C" {
+        #[allow(clashing_extern_declarations)]
+        #[link_name = "Rf_isS4"]
+        pub fn Rf_isS4_old(arg1: SEXP) -> u32;
+    }
+    /// There is one pathological example of `Rf_is*` where `TRUE` is not 1,
+    /// but 16. We show here that the casting is done as intended
+    #[test]
+    fn from_large_rboolean() {
+        start_R();
+        unsafe {
+            let sexp = R_ParseEvalString(cstr!(r#"new("factor")"#), R_GlobalEnv);
+            Rf_protect(sexp);
+            // Rf_PrintValue(sexp);
+            assert!(
+                Rf_isS4_old(sexp) > 1,
+                "maybe R fixed this, and this test can be removed."
+            );
+            assert!(<Rboolean as Into<bool>>::into(Rf_isS4(sexp)));
+            assert!((Rboolean::FALSE == Rf_isS4(sexp)) || (Rboolean::TRUE == Rf_isS4(sexp)), "partialeq implementation is broken");
+            assert!(Rboolean::TRUE == Rf_isS4(sexp));
+            assert_eq!(Rf_isS4(sexp), Rboolean::TRUE);
+            Rf_unprotect(1);
+        }
+    }
 }
