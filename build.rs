@@ -545,6 +545,8 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Replace `TYPEOF` definition with one that gives same type as `SEXPTYPE`.
     let bindgen_builder = bindgen_builder.blocklist_item("TYPEOF");
 
+    let bindgen_builder = bindgen_builder.blocklist_item("Rf_isS4");
+
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
         .raw_line(format!(

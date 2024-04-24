@@ -76,6 +76,24 @@ extern "C" {
     pub fn TYPEOF(x: SEXP) -> SEXPTYPE;
 }
 
+pub unsafe fn Rf_isS4(arg1: SEXP) -> Rboolean {
+    unsafe {
+        if secret::Rf_isS4_original(arg1) == 0 {
+            Rboolean::FALSE
+        } else {
+            Rboolean::TRUE
+        }
+    }
+}
+
+mod secret {
+    use super::*;
+    extern "C" {
+        #[link_name = "Rf_isS4"]
+        pub fn Rf_isS4_original(arg1: SEXP) -> u32;
+    }
+}
+
 impl From<Rboolean> for bool {
     fn from(value: Rboolean) -> Self {
         match value {
@@ -171,28 +189,22 @@ mod tests {
             assert_eq!(*REAL(val), 1.);
             Rf_unprotect(1);
         }
-    }
-
-    extern "C" {
-        #[allow(clashing_extern_declarations)]
-        #[link_name = "Rf_isS4"]
-        pub fn Rf_isS4_old(arg1: SEXP) -> u32;
-    }
-    /// There is one pathological example of `Rf_is*` where `TRUE` is not 1,
-    /// but 16. We show here that the casting is done as intended
-    #[test]
-    fn from_large_rboolean() {
-        start_R();
+        // There is one pathological example of `Rf_is*` where `TRUE` is not 1,
+        // but 16. We show here that the casting is done as intended
         unsafe {
             let sexp = R_ParseEvalString(cstr!(r#"new("factor")"#), R_GlobalEnv);
             Rf_protect(sexp);
-            // Rf_PrintValue(sexp);
-            assert!(
-                Rf_isS4_old(sexp) > 1,
-                "maybe R fixed this, and this test can be removed."
+            Rf_PrintValue(sexp);
+
+            assert_eq!(
+                std::mem::discriminant(&Rf_isS4(sexp)),
+                std::mem::discriminant(&Rboolean::TRUE),
             );
             assert!(<Rboolean as Into<bool>>::into(Rf_isS4(sexp)));
-            assert!((Rboolean::FALSE == Rf_isS4(sexp)) || (Rboolean::TRUE == Rf_isS4(sexp)), "partialeq implementation is broken");
+            assert!(
+                (Rboolean::FALSE == Rf_isS4(sexp)) || (Rboolean::TRUE == Rf_isS4(sexp)),
+                "PartialEq implementation is broken"
+            );
             assert!(Rboolean::TRUE == Rf_isS4(sexp));
             assert_eq!(Rf_isS4(sexp), Rboolean::TRUE);
             Rf_unprotect(1);
