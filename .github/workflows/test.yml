@@ -110,13 +110,13 @@ jobs:
           use-public-rspm: true
       - name: Print out paths for R
         run: |
-          $r_home = rscript -e "R.home()" | Out-String
+          $r_home = Rscript -e "R.home()" | Out-String
           Write-Output "R home directory: $r_home"
 
-          $r_bin = rscript -e "R.home('bin')" | Out-String
+          $r_bin = Rscript -e "R.home('bin')" | Out-String
           Write-Output "R bin directory: $r_bin"
 
-          $r_include = rscript -e "R.home('include')" | Out-String
+          $r_include = Rscript -e "R.home('include')" | Out-String
           Write-Output "R include directory: $r_include"
 
       - name: Set up Rust
