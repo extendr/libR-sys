@@ -76,6 +76,24 @@ extern "C" {
     pub fn TYPEOF(x: SEXP) -> SEXPTYPE;
 }
 
+impl From<Rboolean> for bool {
+    fn from(value: Rboolean) -> Self {
+        match value {
+            Rboolean::FALSE => false,
+            Rboolean::TRUE => true,
+        }
+    }
+}
+
+impl From<bool> for Rboolean {
+    fn from(value: bool) -> Self {
+        match value {
+            true => Rboolean::TRUE,
+            false => Rboolean::FALSE,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
