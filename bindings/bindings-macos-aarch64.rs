@@ -1,1 +1,1 @@
-./bindings-macos-aarch64-R4.3.rs
+./bindings-macos-aarch64-R4.4.rs

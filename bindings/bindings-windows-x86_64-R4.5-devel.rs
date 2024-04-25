@@ -56,8 +56,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"04\0";
-pub const R_DAY: &[u8; 3] = b"22\0";
-pub const R_SVN_REVISION: u32 = 86468;
+pub const R_DAY: &[u8; 3] = b"24\0";
+pub const R_SVN_REVISION: u32 = 86483;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1496,7 +1496,6 @@ extern "C" {
     pub fn R_tryEval(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_int) -> SEXP;
     pub fn R_tryEvalSilent(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_int) -> SEXP;
     pub fn R_GetCurrentEnv() -> SEXP;
-    pub fn Rf_isS4(arg1: SEXP) -> Rboolean;
     pub fn Rf_asS4(arg1: SEXP, arg2: Rboolean, arg3: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_S3Class(arg1: SEXP) -> SEXP;
     pub fn Rf_isBasicClass(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
@@ -3012,7 +3011,7 @@ extern "C" {
         trace: ::std::os::raw::c_int,
         ex: *mut ::std::os::raw::c_void,
     );
-    #[doc = "appl/pretty.c: for use in engine.c and util.c"]
+    #[doc = "appl/pretty.c: for use in engine.c and util.c\nFIXME: move out of this header"]
     pub fn R_pretty(
         lo: *mut f64,
         up: *mut f64,
@@ -3023,7 +3022,7 @@ extern "C" {
         eps_correction: ::std::os::raw::c_int,
         return_bounds: ::std::os::raw::c_int,
     ) -> f64;
-    #[doc = "Also used in packages nlme, pcaPP"]
+    #[doc = "Foremerly used in package nlme, still used by pcaPP"]
     pub fn optif9(
         nr: ::std::os::raw::c_int,
         n: ::std::os::raw::c_int,
