@@ -3,7 +3,7 @@
 /* libR-sys version: 0.7.0 */
 /* bindgen clang version: clang version 16.0.6 */
 /* clang-rs version: clang version 16.0.6 */
-/* r version: 4.5.0-devel */
+/* r version: 4.4.0 */
 
 pub const INT_MIN: i32 = -2147483648;
 pub const SINGLESXP: u32 = 302;
@@ -35,7 +35,7 @@ pub const IDENT_EXTPTR_AS_REF: u32 = 64;
 pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
 pub const __STDC_WANT_IEC_60559_FUNCS_EXT__: u32 = 1;
-pub const R_VERSION_STRING: &[u8; 6] = b"4.5.0\0";
+pub const R_VERSION_STRING: &[u8; 6] = b"4.4.0\0";
 pub const HAVE_EXPM1: u32 = 1;
 pub const HAVE_HYPOT: u32 = 1;
 pub const HAVE_LOG1P: u32 = 1;
@@ -49,15 +49,15 @@ pub const M_LN_2PI: f64 = 1.8378770664093456;
 pub const M_LN_SQRT_PI: f64 = 0.5723649429247001;
 pub const M_LN_SQRT_2PI: f64 = 0.9189385332046728;
 pub const M_LN_SQRT_PId2: f64 = 0.22579135264472744;
-pub const R_VERSION: u32 = 263424;
-pub const R_NICK: &[u8; 24] = b"Unsuffered Consequences\0";
+pub const R_VERSION: u32 = 263168;
+pub const R_NICK: &[u8; 10] = b"Puppy Cup\0";
 pub const R_MAJOR: &[u8; 2] = b"4\0";
-pub const R_MINOR: &[u8; 4] = b"5.0\0";
-pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
+pub const R_MINOR: &[u8; 4] = b"4.0\0";
+pub const R_STATUS: &[u8; 1] = b"\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"04\0";
 pub const R_DAY: &[u8; 3] = b"24\0";
-pub const R_SVN_REVISION: u32 = 86483;
+pub const R_SVN_REVISION: u32 = 86474;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1074,10 +1074,16 @@ extern "C" {
     );
     #[doc = "../../main/util.c  and others :"]
     pub fn R_ExpandFileName(arg1: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
+    pub fn Rf_setIVector(
+        arg1: *mut ::std::os::raw::c_int,
+        arg2: ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+    );
+    pub fn Rf_setRVector(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: f64);
     pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\". Documented since 4.4.0 patched."]
+    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
         -> f64;
@@ -1094,7 +1100,7 @@ extern "C" {
     pub fn R_CheckUserInterrupt();
     pub fn R_CheckStack();
     pub fn R_CheckStack2(arg1: usize);
-    #[doc = "../../appl/interv.c: first also in Applic.h"]
+    #[doc = "../../appl/interv.c: also in Applic.h"]
     pub fn findInterval(
         xt: *mut f64,
         n: ::std::os::raw::c_int,
@@ -1114,7 +1120,16 @@ extern "C" {
         ilo: ::std::os::raw::c_int,
         mflag: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
-    #[doc = "../../appl/maxcol.c"]
+    pub fn find_interv_vec(
+        xt: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        x: *mut f64,
+        nx: *mut ::std::os::raw::c_int,
+        rightmost_closed: *mut ::std::os::raw::c_int,
+        all_inside: *mut ::std::os::raw::c_int,
+        indx: *mut ::std::os::raw::c_int,
+    );
+    #[doc = "../../appl/maxcol.c: also in Applic.h"]
     pub fn R_max_col(
         matrix: *mut f64,
         nr: *mut ::std::os::raw::c_int,
@@ -1854,9 +1869,8 @@ extern "C" {
         data: *mut ::std::os::raw::c_void,
     );
     pub fn R_clrhash(h: R_hashtab_type);
-    #[doc = "Rest of this file\nStuff that is not API and probably should not be but is getting used."]
+    #[doc = "stuff that probably shouldn't be in the API but is getting used"]
     pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
-    #[doc = "used by Rcpp (not?), Matrix and more and in an example in R-exts."]
     pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_S4_OBJECT(x: SEXP);
     pub fn UNSET_S4_OBJECT(x: SEXP);
@@ -1870,12 +1884,10 @@ extern "C" {
     pub fn SETLENGTH(x: SEXP, v: R_xlen_t);
     pub fn SET_TRUELENGTH(x: SEXP, v: R_xlen_t);
     pub fn SETLEVELS(x: SEXP, v: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-    #[doc = "used by admisc arcpbf b64 box clarabel collapse declared drake fcl rlang this.path"]
     pub fn SET_ENVFLAGS(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_FRAME(x: SEXP, v: SEXP);
     pub fn SET_ENCLOS(x: SEXP, v: SEXP);
     pub fn SET_HASHTAB(x: SEXP, v: SEXP);
-    #[doc = "used by S7 arcpbf b64 clarabel dplyr fcl magrittr nseval quotedargs this.path"]
     pub fn SET_PRENV(x: SEXP, v: SEXP);
     pub fn SET_PRVALUE(x: SEXP, v: SEXP);
     pub fn SET_PRCODE(x: SEXP, v: SEXP);
@@ -1883,7 +1895,7 @@ extern "C" {
     pub fn IS_GROWABLE(x: SEXP) -> ::std::os::raw::c_int;
     pub fn SET_GROWABLE_BIT(x: SEXP);
     pub fn SET_NAMED(x: SEXP, v: ::std::os::raw::c_int);
-    #[doc = "used by BioC::matter; might be reasonable to include in API"]
+    #[doc = "used by BIOC::matter; mightbe reasonable to include in API"]
     pub fn R_tryWrap(arg1: SEXP) -> SEXP;
     #[doc = "C stack limit"]
     pub static mut R_CStackLimit: usize;
@@ -3012,7 +3024,7 @@ extern "C" {
         trace: ::std::os::raw::c_int,
         ex: *mut ::std::os::raw::c_void,
     );
-    #[doc = "appl/pretty.c: for use in engine.c and util.c\nFIXME: move out of this header"]
+    #[doc = "appl/pretty.c: for use in engine.c and util.c"]
     pub fn R_pretty(
         lo: *mut f64,
         up: *mut f64,
@@ -3023,7 +3035,7 @@ extern "C" {
         eps_correction: ::std::os::raw::c_int,
         return_bounds: ::std::os::raw::c_int,
     ) -> f64;
-    #[doc = "Foremerly used in package nlme, still used by pcaPP"]
+    #[doc = "Also used in packages nlme, pcaPP"]
     pub fn optif9(
         nr: ::std::os::raw::c_int,
         n: ::std::os::raw::c_int,
