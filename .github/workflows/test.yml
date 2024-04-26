@@ -150,7 +150,7 @@ jobs:
           foreach ($dir in $directories) {
               if (Test-Path $dir) {
                   $mingw_root = $dir
-                  Write-Host "Found Rtools at directory at: $mingw_root"
+                  Write-Host "Found Rtools directory at: $mingw_root"
                   break
               }
           }
