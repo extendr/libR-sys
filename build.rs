@@ -484,6 +484,10 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         non_exhaustive: true,
     });
 
+    bindgen_builder = bindgen_builder
+        .blocklist_type("Rboolean")
+        .blocklist_type("SEXPTYPE");
+
     if cfg!(feature = "layout_tests") {
         bindgen_builder = bindgen_builder.layout_tests(true);
     } else {
@@ -549,7 +553,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let bindgen_builder = bindgen_builder.blocklist_item("Rf_isS4");
 
     // Replace second arg with SEXPTYPE, see lib.rs
-    let bindgen_builder =  bindgen_builder.blocklist_type("R_altrep_Coerce_method_t");
+    let bindgen_builder = bindgen_builder.blocklist_type("R_altrep_Coerce_method_t");
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder
