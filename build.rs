@@ -481,7 +481,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
     // Collect C-enums into idiomatic Rust-style enums
     bindgen_builder = bindgen_builder.default_enum_style(bindgen::EnumVariation::Rust {
-        non_exhaustive: true,
+        non_exhaustive: false,
     });
 
     bindgen_builder = bindgen_builder

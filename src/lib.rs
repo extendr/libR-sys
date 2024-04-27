@@ -72,7 +72,6 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 pub struct SEXPREC(std::ffi::c_void);
 
 #[repr(C)]
-#[non_exhaustive]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum Rboolean {
     FALSE = 0,
@@ -80,7 +79,6 @@ pub enum Rboolean {
 }
 
 #[repr(C)]
-#[non_exhaustive]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum SEXPTYPE {
     #[doc = "nil = NULL"]
