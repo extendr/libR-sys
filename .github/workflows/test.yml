@@ -55,20 +55,22 @@ jobs:
           #   - emit-bindings: If 'true', emit bindings. In principle, we choose
           #     only one stable Rust toolchain per combination of a platform and
           #     an R version (e.g. Windows and R-release) to emit bindings.
-          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '43', emit-bindings: 'true'}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', target: 'x86_64-pc-windows-gnu', rtools-version: '43'}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '44', emit-bindings: 'true'}
-          - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   target: 'x86_64-pc-windows-gnu', rtools-version: '43'}
-          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', rtools-version: '42', emit-bindings: 'true'}
-
+          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', target: 'x86_64-pc-windows-gnu'}
+          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   target: 'x86_64-pc-windows-gnu'}
+          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
 
           - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
           - {os: macOS-latest,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
           - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
           - {os: macOS-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
           - {os: macOS-latest,   r: 'release', rust-version: 'stable', target: 'x86_64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
-
-
+          - {os: windows-latest, r: 'release', rust-version: 'nightly', target: 'aarch64-pc-windows-gnullvm', skip-tests: 'true', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'release', rust-version: 'nightly', target: 'x86_64-pc-windows-gnullvm',  skip-tests: 'true', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'devel',   rust-version: 'nightly', target: 'aarch64-pc-windows-gnullvm', skip-tests: 'true', emit-bindings: 'true'}
+          - {os: windows-latest, r: 'devel',   rust-version: 'nightly', target: 'x86_64-pc-windows-gnullvm',  skip-tests: 'true', emit-bindings: 'true'}
+          
           - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
           - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
           - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
@@ -106,7 +108,16 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
           use-public-rspm: true
-          rtools-version: ${{ matrix.config.rtools-version }}
+      - name: Print out paths for R
+        run: |
+          $r_home = Rscript -e "R.home()" | Out-String
+          Write-Output "R home directory: $r_home"
+
+          $r_bin = Rscript -e "R.home('bin')" | Out-String
+          Write-Output "R bin directory: $r_bin"
+
+          $r_include = Rscript -e "R.home('include')" | Out-String
+          Write-Output "R include directory: $r_include"
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@master
@@ -135,15 +146,33 @@ jobs:
           echo "LIBRARY_PATH=${pwd_slash}/libgcc_mock" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
           # Add R bin path to PATH
-          echo "$(Rscript.exe -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+          echo "$(Rscript.exe --vanilla -e 'cat(normalizePath(R.home()))')\bin\x64"  | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
 
           # Add Rtools' GCC to PATH
-          if ($env:RTOOLS_VERSION -eq '44') {
-            $mingw_root = "C:\rtools44\x86_64-w64-mingw32.static.posix"
-          } elseif ($env:RTOOLS_VERSION -eq '43') {
-            $mingw_root = "C:\rtools43\x86_64-w64-mingw32.static.posix"
-          } elseif ($env:RTOOLS_VERSION -eq '42') {
-            $mingw_root = "C:\rtools42\x86_64-w64-mingw32.static.posix"
+          # Source: https://github.com/r-lib/actions/blob/b7e68d63e51bdf225997973e2add36d551f60f02/setup-r/lib/installer.js#L471
+          $directories = @(
+            "C:\rtools44-aarch64\aarch64-w64-mingw32.static.posix",
+            "C:\rtools44\x86_64-w64-mingw32.static.posix",
+            "C:\rtools43\x86_64-w64-mingw32.static.posix",
+            "C:\rtools42\x86_64-w64-mingw32.static.posix",
+            "C:\rtools40\ucrt64",
+            "C:\Rtools\mingw_64"
+          )
+
+          $mingw_root = $null
+          foreach ($dir in $directories) {
+              if (Test-Path $dir) {
+                  $mingw_root = $dir
+                  Write-Host "Found Rtools at directory at: $mingw_root"
+                  break
+              }
+          }
+          echo "MINGW_ROOT=$mingw_root" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          if ($null -eq $mingw_root) {
+              Write-Host "No Rtools directory found."
+          } else {
+              Write-Host "Mingw root set to: $mingw_root"
           }
           echo "$mingw_root\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
@@ -151,8 +180,6 @@ jobs:
           echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$mingw_root\include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           RUST_TARGET: ${{ matrix.config.target }}
-          RTOOLS_VERSION: ${{ matrix.config.rtools-version }}
-
 
       # macOS configurations, mainly llvm and path to libclang
       # Because of this R installation issue on macOS-11.0 
