@@ -545,7 +545,11 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // Replace `TYPEOF` definition with one that gives same type as `SEXPTYPE`.
     let bindgen_builder = bindgen_builder.blocklist_item("TYPEOF");
 
+    // Replace this with a function that handles enum-version of SEXPTYPE correctly
     let bindgen_builder = bindgen_builder.blocklist_item("Rf_isS4");
+
+    // Replace second arg with SEXPTYPE, see lib.rs
+    let bindgen_builder =  bindgen_builder.blocklist_type("R_altrep_Coerce_method_t");
 
     // Finish the builder and generate the bindings.
     let bindings = bindgen_builder

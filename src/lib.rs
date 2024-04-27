@@ -76,6 +76,9 @@ extern "C" {
     pub fn TYPEOF(x: SEXP) -> SEXPTYPE;
 }
 
+pub type R_altrep_Coerce_method_t =
+::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXPTYPE) -> SEXP>;
+
 pub unsafe fn Rf_isS4(arg1: SEXP) -> Rboolean {
     unsafe {
         if secret::Rf_isS4_original(arg1) == 0 {
