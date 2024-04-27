@@ -591,8 +591,6 @@ pub type R_altrep_DuplicateEX_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
 pub type R_altrep_Duplicate_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
-pub type R_altrep_Coerce_method_t =
-    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP>;
 pub type R_altrep_Inspect_method_t = ::std::option::Option<
     unsafe extern "C" fn(
         arg1: SEXP,

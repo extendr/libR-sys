@@ -140,7 +140,7 @@ pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"04\0";
 pub const R_DAY: &[u8; 3] = b"24\0";
-pub const R_SVN_REVISION: u32 = 86482;
+pub const R_SVN_REVISION: u32 = 86484;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -592,8 +592,6 @@ pub type R_altrep_DuplicateEX_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
 pub type R_altrep_Duplicate_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
-pub type R_altrep_Coerce_method_t =
-    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP>;
 pub type R_altrep_Inspect_method_t = ::std::option::Option<
     unsafe extern "C" fn(
         arg1: SEXP,
