@@ -484,10 +484,6 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         non_exhaustive: false,
     });
 
-    bindgen_builder = bindgen_builder
-        .blocklist_type("Rboolean")
-        .blocklist_type("SEXPTYPE");
-
     if cfg!(feature = "layout_tests") {
         bindgen_builder = bindgen_builder.layout_tests(true);
     } else {
