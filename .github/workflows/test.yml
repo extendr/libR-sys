@@ -335,6 +335,12 @@ jobs:
           # Choose the newest version except for devel
           ln --force -s "$(ls -1 ./bindings-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-${x}.rs
         done
+
+        # Copy linux-x86_64 bindings to emscripten-wasm32
+        for file in ./bindings-linux-x86_64-*.rs; do
+          cp "$file" "${file/linux-x86_64/emscripten-wasm32}"
+        done
+
         cd ..
 
         # detect changes (the code is derived from https://stackoverflow.com/a/3879077)
