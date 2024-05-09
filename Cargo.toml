@@ -28,7 +28,11 @@ default = ["runtime"]
 # Turn on the 'use-bindgen' feature to generate bindings on the fly for your platform.
 use-bindgen = ["bindgen", "regex"]
 
+# retain non-API bindings from R (requires build-time generation of bindings)
+non-api = ["use-bindgen"]
+
 runtime = ["bindgen/runtime"]
+
 # Enables generation of layout-tests in bindgen
 layout_tests = ["use-bindgen"]
 
