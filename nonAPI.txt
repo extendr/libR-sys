@@ -1,5 +1,7 @@
 AllDevicesKilled
 Brent_fmin
+IS_GROWABLE
+IS_SCALAR
 OutDec
 PRIMOFFSET
 RC_fopen
@@ -7,6 +9,7 @@ R_CStackLimit
 R_CStackStart
 R_CleanTempDir
 R_ClearerrConsole
+R_ClosureExpr
 R_CollectFromIndex
 R_CompiledFileName
 R_Consolefile
@@ -40,6 +43,8 @@ R_ParseContextLine
 R_ParseError
 R_ParseErrorMsg
 R_PolledEvents
+R_Pretty
+R_PromiseExpr
 R_ReadConnection
 R_ReplDLLdo1
 R_ReplDLLinit
@@ -65,6 +70,7 @@ R_cairoCdynload
 R_checkActivity
 R_checkActivityEx
 R_closedir
+R_curErrorBuf
 R_data_class
 R_deferred_default_method
 R_execMethod
@@ -103,6 +109,7 @@ R_subassign3_dflt
 R_taskCallbackRoutine
 R_timeout_handler
 R_timeout_val
+R_tryWrap
 R_wait_usec
 Rconn_fgetc
 Rconn_printf
@@ -121,6 +128,8 @@ Rf_NewEnvironment
 Rf_PrintDefaults
 Rf_ReplIteration
 Rf_Seql
+Rf_StringFalse
+Rf_StringTrue
 Rf_addTaskCallback
 Rf_begincontext
 Rf_callToplevelHandlers
@@ -140,6 +149,7 @@ Rf_formatReal
 Rf_initEmbeddedR
 Rf_init_con
 Rf_initialize_R
+Rf_isBlankString
 Rf_isProtected
 Rf_jump_to_toplevel
 Rf_mainloop
@@ -148,8 +158,10 @@ Rf_mkFalse
 Rf_printNamedVector
 Rf_printRealVector
 Rf_printVector
+Rf_psmatch
 Rf_removeTaskCallbackByIndex
 Rf_removeTaskCallbackByName
+Rf_setSVector
 Rf_set_iconv
 Rf_sortVector
 Rf_strIsASCII
@@ -172,8 +184,23 @@ Rsockopen
 Rsockread
 Rsockwrite
 Runzip
+SETLENGTH
+SETLEVELS
+SET_ENCLOS
+SET_ENVFLAGS
+SET_FRAME
+SET_GROWABLE
+SET_HASHTAB
+SET_NAMED
+SET_PRCODE
+SET_PRENV
+SET_PRVALUE
+SET_S4_OBJECT
+SET_TRUELENGTH
+STDVEC_DATAPTR
 SaveAction
 UNIMPLEMENTED_TYPE
+UNSET_S4_OBJECT
 addInputHandler
 baseRegisterIndex
 call_R
