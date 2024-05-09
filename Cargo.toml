@@ -19,16 +19,15 @@ repository = "https://github.com/extendr/libR-sys"
 [dependencies]
 
 [build-dependencies]
-bindgen = { version = "0.69.1", optional = true, features = ["experimental"] }
-clang = { version = "2", optional = true, features = ["clang_3_7"] }
+bindgen = { version = "0.69.4", optional = true, features = ["experimental"] }
 
 [features]
 default = ["runtime"]
 # By default, we use pre-computed bindings that ship with the library. This may fail!
 # Turn on the 'use-bindgen' feature to generate bindings on the fly for your platform.
-use-bindgen = ["bindgen", "clang"]
+use-bindgen = ["bindgen"]
 
-runtime = ["clang/runtime", "bindgen/runtime"]
+runtime = ["bindgen/runtime"]
 # Enables generation of layout-tests in bindgen
 layout_tests = ["use-bindgen"]
 
