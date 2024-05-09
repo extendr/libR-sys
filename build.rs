@@ -453,7 +453,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     bindgen_builder = bindgen_builder.clang_args([
         format!(
             "-I{r_include_path_raw}",
-            r_include_path_raw = r_paths.include.display()
+            r_include_path_raw = r_include_path
         ),
         format!("--target={target}"),
     ]);
