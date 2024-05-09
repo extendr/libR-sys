@@ -450,7 +450,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         format!("--target={target}"),
     ]);
 
-    let base_include_path = &r_paths.include.display();
+    // WINDOWS:
+    //   0 |     ^(^C:\R\include.*)$
+    let base_include_path = &r_paths.include.display().to_string().replace(r"\", "\\");
     let base_include_path = format!("^{base_include_path}.*");
 
     // this effectively ignores all non-R headers from sneaking in
