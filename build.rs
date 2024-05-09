@@ -453,6 +453,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let base_include_path = &r_paths.include.display().to_string();
     let base_include_path = regex::escape(&base_include_path);
     let base_include_path = format!("^{base_include_path}.*");
+    println!("cargo:warning=regex matching {base_include_path}");
 
     // this effectively ignores all non-R headers from sneaking in
     bindgen_builder = bindgen_builder.allowlist_file(base_include_path);
