@@ -443,21 +443,17 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     println!(
         "Generating bindings for target: {target}, os: {target_os}, architecture: {target_arch}"
     );
-
-    let base_include_path = &r_paths.include.display().to_string();
-    let base_include_path = base_include_path.replace(r"\", r"/");
-    let base_include_path = regex::escape(&base_include_path);
-    let base_include_path = format!("{base_include_path}.*");
-    println!("cargo::warning=regex matching {base_include_path}");
+    let r_include_path = r_paths.include.display().to_string();
+    let r_include_path_escaped = regex::escape(&r_include_path);
+    let r_include_path_escaped = format!("{r_include_path_escaped}.*");
+    println!("cargo::warning=regex matching {r_include_path} \t {r_include_path_escaped}");
 
     // Point to the correct headers
-    bindgen_builder = bindgen_builder.clang_args([
-        format!("-I{base_include_path}"),
-        format!("--target={target}"),
-    ]);
+    bindgen_builder =
+        bindgen_builder.clang_args([format!("-I{r_include_path}"), format!("--target={target}")]);
 
     // this effectively ignores all non-R headers from sneaking in
-    bindgen_builder = bindgen_builder.allowlist_file(base_include_path);
+    bindgen_builder = bindgen_builder.allowlist_file(r_include_path_escaped);
 
     // stops warning about ignored attributes,
     // e.g. ignores `__format__` attributes caused by `stdio.h`
