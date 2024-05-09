@@ -20,12 +20,13 @@ repository = "https://github.com/extendr/libR-sys"
 
 [build-dependencies]
 bindgen = { version = "0.69.4", optional = true, features = ["experimental"] }
+regex = { version = "*", optional = true, default-features = false }
 
 [features]
 default = ["runtime"]
 # By default, we use pre-computed bindings that ship with the library. This may fail!
 # Turn on the 'use-bindgen' feature to generate bindings on the fly for your platform.
-use-bindgen = ["bindgen"]
+use-bindgen = ["bindgen", "regex"]
 
 runtime = ["bindgen/runtime"]
 # Enables generation of layout-tests in bindgen
