@@ -443,7 +443,12 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     println!(
         "Generating bindings for target: {target}, os: {target_os}, architecture: {target_arch}"
     );
-    let r_include_path = r_paths.include.display().to_string();
+    let r_include_path = r_paths
+        .include
+        .canonicalize()
+        .unwrap()
+        .display()
+        .to_string();
     let r_include_path_escaped = regex::escape(&r_include_path);
     let r_include_path_escaped = format!("{r_include_path_escaped}.*");
     println!("cargo::warning=regex matching {r_include_path} \t {r_include_path_escaped}");
