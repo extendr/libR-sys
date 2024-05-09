@@ -443,14 +443,20 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     println!(
         "Generating bindings for target: {target}, os: {target_os}, architecture: {target_arch}"
     );
+
     let r_include_path = r_paths.include.display().to_string().replace(r"\", r"/");
     let r_include_path_escaped = regex::escape(&r_include_path);
     let r_include_path_escaped = format!("{r_include_path_escaped}.*");
     println!("cargo::warning=regex matching {r_include_path} \t {r_include_path_escaped}");
 
     // Point to the correct headers
-    bindgen_builder =
-        bindgen_builder.clang_args([format!("-I{r_include_path}"), format!("--target={target}")]);
+    bindgen_builder = bindgen_builder.clang_args([
+        format!(
+            "-I{r_include_path_raw}",
+            r_include_path_raw = r_paths.include.display()
+        ),
+        format!("--target={target}"),
+    ]);
 
     // this effectively ignores all non-R headers from sneaking in
     bindgen_builder = bindgen_builder.allowlist_file(r_include_path_escaped);
