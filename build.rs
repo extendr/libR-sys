@@ -459,7 +459,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     ]);
 
     // this effectively ignores all non-R headers from sneaking in
-    bindgen_builder = bindgen_builder.allowlist_file(r_include_path_escaped);
+    bindgen_builder = bindgen_builder
+        .allowlist_file(r_include_path_escaped)
+        .allowlist_file(".*wrapper\\.h$");
 
     // stops warning about ignored attributes,
     // e.g. ignores `__format__` attributes caused by `stdio.h`
