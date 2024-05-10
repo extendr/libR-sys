@@ -137,8 +137,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"05\0";
-pub const R_DAY: &[u8; 3] = b"06\0";
-pub const R_SVN_REVISION: u32 = 86526;
+pub const R_DAY: &[u8; 3] = b"08\0";
+pub const R_SVN_REVISION: u32 = 86528;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1266,9 +1266,6 @@ extern "C" {
     );
     #[doc = "../../main/util.c  and others :"]
     pub fn R_ExpandFileName(arg1: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
-    pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-    pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-    pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\". Documented since 4.4.0 patched."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
@@ -1738,8 +1735,6 @@ extern "C" {
     pub fn R_WeakRefKey(w: SEXP) -> SEXP;
     pub fn R_WeakRefValue(w: SEXP) -> SEXP;
     pub fn R_RunWeakRefFinalizer(w: SEXP);
-    pub fn R_PromiseExpr(arg1: SEXP) -> SEXP;
-    pub fn R_ClosureExpr(arg1: SEXP) -> SEXP;
     pub fn R_BytecodeExpr(e: SEXP) -> SEXP;
     #[doc = "Protected evaluation"]
     pub fn R_ToplevelExec(
@@ -2052,33 +2047,7 @@ extern "C" {
     pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
     #[doc = "used by Rcpp (not?), Matrix and more and in an example in R-exts."]
     pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
-    pub fn SET_S4_OBJECT(x: SEXP);
-    pub fn UNSET_S4_OBJECT(x: SEXP);
-    pub fn R_curErrorBuf() -> *const ::std::os::raw::c_char;
-    pub fn IS_SCALAR(x: SEXP, type_: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-    pub fn Rf_psmatch(
-        arg1: *const ::std::os::raw::c_char,
-        arg2: *const ::std::os::raw::c_char,
-        arg3: Rboolean,
-    ) -> Rboolean;
-    pub fn SETLENGTH(x: SEXP, v: R_xlen_t);
-    pub fn SET_TRUELENGTH(x: SEXP, v: R_xlen_t);
-    pub fn SETLEVELS(x: SEXP, v: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-    #[doc = "used by admisc arcpbf b64 box clarabel collapse declared drake fcl rlang this.path"]
-    pub fn SET_ENVFLAGS(x: SEXP, v: ::std::os::raw::c_int);
-    pub fn SET_FRAME(x: SEXP, v: SEXP);
-    pub fn SET_ENCLOS(x: SEXP, v: SEXP);
-    pub fn SET_HASHTAB(x: SEXP, v: SEXP);
-    #[doc = "used by S7 arcpbf b64 clarabel dplyr fcl magrittr nseval quotedargs this.path"]
-    pub fn SET_PRENV(x: SEXP, v: SEXP);
-    pub fn SET_PRVALUE(x: SEXP, v: SEXP);
-    pub fn SET_PRCODE(x: SEXP, v: SEXP);
-    pub fn STDVEC_DATAPTR(x: SEXP) -> *mut ::std::os::raw::c_void;
-    pub fn IS_GROWABLE(x: SEXP) -> ::std::os::raw::c_int;
     pub fn SET_GROWABLE_BIT(x: SEXP);
-    pub fn SET_NAMED(x: SEXP, v: ::std::os::raw::c_int);
-    #[doc = "used by BioC::matter; might be reasonable to include in API"]
-    pub fn R_tryWrap(arg1: SEXP) -> SEXP;
     pub fn R_FlushConsole();
     pub fn Rf_onintr();
     pub fn Rf_onintrNoResume();
