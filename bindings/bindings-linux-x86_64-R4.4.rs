@@ -2,7 +2,6 @@
 
 /* libR-sys version: 0.7.0 */
 /* bindgen clang version: Ubuntu clang version 15.0.7 */
-/* clang-rs version: Ubuntu clang version 15.0.7 */
 /* r version: 4.4.0 */
 
 #[repr(C)]
@@ -459,6 +458,24 @@ pub struct R_inpstream_st {
     pub native_encoding: [::std::os::raw::c_char; 64usize],
     pub nat2nat_obj: *mut ::std::os::raw::c_void,
     pub nat2utf8_obj: *mut ::std::os::raw::c_void,
+}
+pub const SORTED_DECR_NA_1ST: _bindgen_ty_2 = _bindgen_ty_2::SORTED_DECR_NA_1ST;
+pub const SORTED_DECR: _bindgen_ty_2 = _bindgen_ty_2::SORTED_DECR;
+pub const UNKNOWN_SORTEDNESS: _bindgen_ty_2 = _bindgen_ty_2::UNKNOWN_SORTEDNESS;
+pub const SORTED_INCR: _bindgen_ty_2 = _bindgen_ty_2::SORTED_INCR;
+pub const SORTED_INCR_NA_1ST: _bindgen_ty_2 = _bindgen_ty_2::SORTED_INCR_NA_1ST;
+pub const KNOWN_UNSORTED: _bindgen_ty_2 = _bindgen_ty_2::KNOWN_UNSORTED;
+#[repr(i32)]
+#[doc = "ALTREP sorting support"]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum _bindgen_ty_2 {
+    SORTED_DECR_NA_1ST = -2,
+    SORTED_DECR = -1,
+    #[doc = "INT_MIN is NA_INTEGER!"]
+    UNKNOWN_SORTEDNESS = -2147483648,
+    SORTED_INCR = 1,
+    SORTED_INCR_NA_1ST = 2,
+    KNOWN_UNSORTED = 0,
 }
 #[doc = "try to allow some type checking"]
 #[repr(C)]
