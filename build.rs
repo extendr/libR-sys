@@ -168,7 +168,7 @@ fn r_command<S: AsRef<OsStr>>(r_binary: S, script: &str) -> io::Result<OsString>
     // if there are any errors we print them out, helps with debugging
     if !out.stderr.is_empty() {
         println!(
-            "cargo::warning={}",
+            "cargo:warning={}",
             byte_array_to_os_string(&out.stderr)
                 .as_os_str()
                 .to_string_lossy()
@@ -371,10 +371,10 @@ fn get_r_version(
 }
 
 fn set_r_version_vars(ver: &RVersionInfo) {
-    println!("cargo::metadata=r_version_major={}", ver.major); // Becomes DEP_R_R_VERSION_MAJOR for clients
-    println!("cargo::metadata=r_version_minor={}", ver.minor); // Becomes DEP_R_R_VERSION_MINOR for clients
-    println!("cargo::metadata=r_version_patch={}", ver.patch); // Becomes DEP_R_R_VERSION_PATCH for clients
-    println!("cargo::metadata=r_version_devel={}", ver.devel); // Becomes DEP_R_R_VERSION_DEVEL for clients
+    println!("cargo:r_version_major={}", ver.major); // Becomes DEP_R_R_VERSION_MAJOR for clients
+    println!("cargo:r_version_minor={}", ver.minor); // Becomes DEP_R_R_VERSION_MINOR for clients
+    println!("cargo:r_version_patch={}", ver.patch); // Becomes DEP_R_R_VERSION_PATCH for clients
+    println!("cargo:r_version_devel={}", ver.devel); // Becomes DEP_R_R_VERSION_DEVEL for clients
 }
 
 #[cfg(feature = "use-bindgen")]
@@ -447,13 +447,12 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let r_include_path = r_paths.include.display().to_string().replace(r"\", r"/");
     let r_include_path_escaped = regex::escape(&r_include_path);
     let r_include_path_escaped = format!("{r_include_path_escaped}.*");
-    println!("cargo::warning=regex matching {r_include_path} \t {r_include_path_escaped}");
+    println!("cargo:warning=regex matching {r_include_path} \t {r_include_path_escaped}");
 
     // Point to the correct headers
     bindgen_builder = bindgen_builder.clang_args([
         format!(
-            "-I{r_include_path_raw}",
-            r_include_path_raw = r_include_path
+            "-I{r_include_path}",
         ),
         format!("--target={target}"),
     ]);
@@ -556,7 +555,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             .unwrap_or_else(|_| panic!("Couldn't write bindings: {}", out_file.display()));
     } else {
         println!(
-            "cargo::warning=Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
+            "cargo:warning=Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
         );
     }
 }
@@ -584,7 +583,7 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
             )
         } else {
             println!(
-                "cargo::warning=using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
+                "cargo:warning=using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
                 target_os, target_arch, version_info.major, version_info.minor, version_info.patch, version_info.devel
             );
         }
@@ -595,7 +594,7 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
         PathBuf::from(env::var_os("OUT_DIR").unwrap()).join("bindings.rs"),
     )
     .expect("No precomputed bindings available!");
-    println!("cargo::rerun-if-changed={}", from.display());
+    println!("cargo:rerun-if-changed={}", from.display());
 }
 
 /// Provide extra cleaning of the processed elements in the headers.
@@ -624,27 +623,27 @@ fn main() {
         Ok(result) => result,
         Err(error) => {
             println!(
-                "cargo::warning=Problem locating local R install: {:?}",
+                "cargo:warning=Problem locating local R install: {:?}",
                 error
             );
             exit(1);
         }
     };
 
-    println!("cargo::rustc-env=R_HOME={}", r_paths.r_home.display());
-    println!("cargo::metadata=r_home={}", r_paths.r_home.display()); // Becomes DEP_R_R_HOME for clients
+    println!("cargo:rustc-env=R_HOME={}", r_paths.r_home.display());
+    println!("cargo:r_home={}", r_paths.r_home.display()); // Becomes DEP_R_R_HOME for clients
 
     // TODO: r_library might not exist in some types of installation that
     // doesn't provide libR, R's shared library; in such a situation, just skip
     // setting `rustc-link-search`. Probably this setting itself is not used at
     // all except when compiled for testing, but we are not sure at the moment.
     if let Ok(r_library) = r_paths.library.canonicalize() {
-        println!("cargo::rustc-link-search={}", r_library.display());
+        println!("cargo:rustc-link-search={}", r_library.display());
     }
-    println!("cargo::rustc-link-lib=dylib=R");
+    println!("cargo:rustc-link-lib=dylib=R");
 
-    println!("cargo::rerun-if-changed=build.rs");
-    println!("cargo::rerun-if-changed=wrapper.h");
+    println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=wrapper.h");
 
     // extract version info from R and output for use by downstream crates
     let version_info =
