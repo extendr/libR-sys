@@ -144,12 +144,6 @@ pub enum Rboolean {
     #[doc = ", MAYBE"]
     TRUE = 1,
 }
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct Rcomplex__bindgen_ty_1 {
-    pub r: f64,
-    pub i: f64,
-}
 #[doc = "Called with a variable argument set after casting to a compatible\nfunction pointer."]
 pub type DL_FUNC = ::std::option::Option<unsafe extern "C" fn() -> *mut ::std::os::raw::c_void>;
 pub type R_NativePrimitiveArgType = ::std::os::raw::c_uint;
