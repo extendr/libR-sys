@@ -220,6 +220,7 @@ jobs:
         run: |
           . ./ci-cargo.ps1
           ci-cargo test -vv --features use-bindgen,layout_tests $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture -ActionName "Running bindgen tests for target: $env:RUST_TARGET"
+          ci-cargo test -vv --features use-bindgen,non-api,layout_tests $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture -ActionName "Running bindgen tests for target: $env:RUST_TARGET (with non-API)"
         env:
           RUST_TARGET: ${{ matrix.config.target }}
 
