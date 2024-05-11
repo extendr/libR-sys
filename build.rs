@@ -401,21 +401,21 @@ fn get_non_api() -> std::collections::HashSet<String> {
     std::collections::HashSet::from_iter(non_api)
 }
 
-#[cfg(all(feature = "use-bindgen", feature = "non-api"))]
-fn get_non_api() -> std::collections::HashSet<String> {
-    Default::default()
-}
-
 #[cfg(feature = "use-bindgen")]
 /// Generate bindings by calling bindgen.
 fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
-    let blocklist = get_non_api().into_iter().collect::<Vec<_>>().join("|");
-
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
-    let mut bindgen_builder = bindgen::Builder::default()
-        .blocklist_item(blocklist)
+    let mut bindgen_builder = bindgen::Builder::default();
+
+    #[cfg(all(feature = "use-bindgen", not(feature = "non-api")))]
+    {
+        let blocklist = get_non_api().into_iter().collect::<Vec<_>>().join("|");
+        bindgen_builder = bindgen_builder.blocklist_item(blocklist);
+    }
+
+    bindgen_builder = bindgen_builder
         .emit_diagnostics()
         .translate_enum_integer_types(true)
         .merge_extern_blocks(true)
