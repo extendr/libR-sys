@@ -54,8 +54,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"05\0";
-pub const R_DAY: &[u8; 3] = b"24\0";
-pub const R_SVN_REVISION: u32 = 86611;
+pub const R_DAY: &[u8; 3] = b"27\0";
+pub const R_SVN_REVISION: u32 = 86634;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1157,6 +1157,8 @@ extern "C" {
     pub fn Rf_isEnvironment(s: SEXP) -> Rboolean;
     pub fn Rf_isString(s: SEXP) -> Rboolean;
     pub fn Rf_isObject(s: SEXP) -> Rboolean;
+    pub fn MAYBE_SHARED(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn NO_REFERENCES(x: SEXP) -> ::std::os::raw::c_int;
     #[doc = "General Cons Cell Attributes"]
     pub fn ATTRIB(x: SEXP) -> SEXP;
     pub fn OBJECT(x: SEXP) -> ::std::os::raw::c_int;
@@ -1401,6 +1403,7 @@ extern "C" {
         arg2: ::std::os::raw::c_int,
         arg3: ::std::os::raw::c_int,
     ) -> SEXP;
+    pub fn Rf_allocLang(arg1: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_allocList(arg1: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_allocS4Object() -> SEXP;
     pub fn Rf_allocSExp(arg1: SEXPTYPE) -> SEXP;
