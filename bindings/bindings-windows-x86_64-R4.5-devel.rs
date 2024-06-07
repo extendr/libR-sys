@@ -54,8 +54,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"06\0";
-pub const R_DAY: &[u8; 3] = b"03\0";
-pub const R_SVN_REVISION: u32 = 86679;
+pub const R_DAY: &[u8; 3] = b"06\0";
+pub const R_SVN_REVISION: u32 = 86701;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1193,6 +1193,7 @@ extern "C" {
     pub fn SET_VECTOR_ELT(x: SEXP, i: R_xlen_t, v: SEXP) -> SEXP;
     pub fn STRING_PTR(x: SEXP) -> *mut SEXP;
     pub fn STRING_PTR_RO(x: SEXP) -> *const SEXP;
+    pub fn VECTOR_PTR_RO(x: SEXP) -> *const SEXP;
     pub fn INTEGER_GET_REGION(
         sx: SEXP,
         i: R_xlen_t,
