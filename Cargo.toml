@@ -36,6 +36,109 @@ runtime = ["bindgen/runtime"]
 # Enables generation of layout-tests in bindgen
 layout_tests = ["use-bindgen"]
 
+# TODO:?!
+# stamp-h.in
+# Makefile = []
+# config.in = []
+# Makefile.in = []
+# Makefile.win = []
+
+# internal headers, not installed
+# Rgraphics = []
+# Internal.h 
+# Print = []
+# Parse = []
+# Errormsg = []
+# Startup = []
+# Rconnections = []
+# rlocale = []
+# Fileio = []
+# Graphics = []
+# Rmodules/RX11
+# Rmodules/Rlapack
+# Rmodules/Rinternet // doesn't state that is internal...but it is...
+# Rmath0.in = []
+# Rinlinedfuns = []
+# Defn = []
+# IOStuff = []
+Rinternals = []
+GraphicsEngine = []
+Error = []
+Itermacros = []
+Utils = []
+stats_stubs = []
+GetX11Image = []
+GraphicsDevice = []
+Callbacks = []
+Rdynload = []
+RS = []
+BLAS = []
+Arith = []
+Boolean = []
+Applic = []
+Linpack = []
+Constants = []
+Riconv = []
+RStartup = []
+QuartzDevice = []
+libextern = []
+MathThreads = []
+Memory = []
+Connections = []
+PrtUtil = []
+Altrep = []
+Rallocators = []
+Visibility = []
+stats_package = []
+Complex = []
+Lapack = []
+Random = []
+eventloop = []
+R_ext = [
+    "GraphicsEngine",
+    "Error",
+    "Itermacros",
+    "Utils",
+    "stats_stubs",
+    "GetX11Image",
+    "GraphicsDevice",
+    "Callbacks",
+    "Rdynload",
+    "Parse",
+    "RS",
+    "BLAS",
+    "Arith",
+    "Boolean",
+    "Applic",
+    "Linpack",
+    "Constants",
+    "Riconv",
+    "RStartup",
+    "Print",
+    "QuartzDevice",
+    "libextern",
+    "MathThreads",
+    "Memory",
+    "Connections",
+    "PrtUtil",
+    "Altrep",
+    "Rallocators",
+    "Visibility",
+    "stats_package",
+    # "Makefile",
+    "Complex",
+    "Lapack",
+    "Random",
+    "eventloop",
+]
+GraphicsBase = []
+Rembedded = []
+Rdynpriv = []
+Rdefines = []
+R = []
+Rinterface = []
+
+
 [lib]
 # Some code comments on R's source code might be accidentally treated as Rust's
 # doc test. See https://github.com/extendr/libR-sys/issues/194 for the details.
