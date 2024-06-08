@@ -58,7 +58,6 @@
 //!     }
 //! }
 //! ```
-
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -72,14 +71,19 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 pub struct SEXPREC(std::ffi::c_void);
 
 extern "C" {
+    #[cfg(feature = "Boolean")] // FIXME: maybe remove?
+    #[cfg(feature = "Rinternals")]
     // Return type should match `SEXPTYPE`
     pub fn TYPEOF(x: SEXP) -> SEXPTYPE;
 }
 
+#[cfg(feaature = "Altrep")]
 #[allow(non_camel_case_types)]
 pub type R_altrep_Coerce_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXPTYPE) -> SEXP>;
 
+    
+#[cfg(feature = "Boolean")]
 pub unsafe fn Rf_isS4(arg1: SEXP) -> Rboolean {
     unsafe {
         if secret::Rf_isS4_original(arg1) == 0 {
@@ -93,11 +97,14 @@ pub unsafe fn Rf_isS4(arg1: SEXP) -> Rboolean {
 mod secret {
     use super::*;
     extern "C" {
+        #[cfg(feature = "Rinternals")]
         #[link_name = "Rf_isS4"]
         pub fn Rf_isS4_original(arg1: SEXP) -> u32;
     }
 }
 
+
+#[cfg(feature = "Boolean")]
 impl From<Rboolean> for bool {
     fn from(value: Rboolean) -> Self {
         match value {
@@ -107,6 +114,7 @@ impl From<Rboolean> for bool {
     }
 }
 
+#[cfg(feature = "Boolean")]
 impl From<bool> for Rboolean {
     fn from(value: bool) -> Self {
         match value {

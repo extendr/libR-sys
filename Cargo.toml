@@ -36,6 +36,8 @@ runtime = ["bindgen/runtime"]
 # Enables generation of layout-tests in bindgen
 layout_tests = ["use-bindgen"]
 
+# TODO: include default headers...
+
 # TODO:?!
 # stamp-h.in
 # Makefile = []
@@ -61,7 +63,10 @@ layout_tests = ["use-bindgen"]
 # Rinlinedfuns = []
 # Defn = []
 # IOStuff = []
-Rinternals = []
+
+# R_ext/*
+Print = []
+Parse = []
 GraphicsEngine = []
 Error = []
 Itermacros = []
@@ -131,13 +136,17 @@ R_ext = [
     "Random",
     "eventloop",
 ]
-GraphicsBase = []
-Rembedded = []
-Rdynpriv = []
-Rdefines = []
+# R_INCLUDES/* (in root)
+libintl = []
 R = []
+Rconfig = []
+Rdefines = []
+Rembedded = []
 Rinterface = []
-
+Rinternals = []
+Rmath = []
+# GraphicsBase = [] # private
+Rdynpriv = [] # ??
 
 [lib]
 # Some code comments on R's source code might be accidentally treated as Rust's
