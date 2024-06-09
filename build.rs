@@ -634,38 +634,38 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 #[cfg(not(feature = "use-bindgen"))]
 /// Retrieve bindings from cache, if available. Errors out otherwise.
 fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
-    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
-    let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-    let bindings_path = PathBuf::from(
-        env::var_os(ENVVAR_BINDINGS_PATH).unwrap_or_else(|| OsString::from("bindings")),
-    );
+    // let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
+    // let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+    // let bindings_path = PathBuf::from(
+    //     env::var_os(ENVVAR_BINDINGS_PATH).unwrap_or_else(|| OsString::from("src/bindings")),
+    // );
 
-    // we try a few different file names, from more specific to less specific
-    let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
-    let bindings_file_novers = PathBuf::from(format!("bindings-{target_os}-{target_arch}.rs"));
+    // // we try a few different file names, from more specific to less specific
+    // let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
+    // let bindings_file_novers = PathBuf::from(format!("bindings-{target_os}-{target_arch}.rs"));
 
-    let mut from = bindings_path.join(bindings_file_full);
-    if !from.exists() {
-        from = bindings_path.join(bindings_file_novers);
-        if !from.exists() {
-            panic!(
-                "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with --features use-bindgen.",
-                version_info.major, version_info.minor, version_info.patch, version_info.devel, target_os, bindings_path.display()
-            )
-        } else {
-            println!(
-                "cargo:warning=using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
-                target_os, target_arch, version_info.major, version_info.minor, version_info.patch, version_info.devel
-            );
-        }
-    }
+    // let mut from = bindings_path.join(bindings_file_full);
+    // if !from.exists() {
+    //     from = bindings_path.join(bindings_file_novers);
+    //     if !from.exists() {
+    //         panic!(
+    //             "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with --features use-bindgen.",
+    //             version_info.major, version_info.minor, version_info.patch, version_info.devel, target_os, bindings_path.display()
+    //         )
+    //     } else {
+    //         println!(
+    //             "cargo:warning=using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
+    //             target_os, target_arch, version_info.major, version_info.minor, version_info.patch, version_info.devel
+    //         );
+    //     }
+    // }
 
-    fs::copy(
-        &from,
-        PathBuf::from(env::var_os("OUT_DIR").unwrap()).join("bindings.rs"),
-    )
-    .expect("No precomputed bindings available!");
-    println!("cargo:rerun-if-changed={}", from.display());
+    // fs::copy(
+    //     &from,
+    //     PathBuf::from(env::var_os("OUT_DIR").unwrap()).join("bindings.rs"),
+    // )
+    // .expect("No precomputed bindings available!");
+    // println!("cargo:rerun-if-changed={}", from.display());
 }
 
 /// Provide extra cleaning of the processed elements in the headers.

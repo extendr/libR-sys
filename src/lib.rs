@@ -63,8 +63,6 @@
 #![allow(non_snake_case)]
 #![allow(improper_ctypes)]
 
-include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-
 #[non_exhaustive]
 #[repr(transparent)]
 #[derive(Debug)]
@@ -77,12 +75,11 @@ extern "C" {
     pub fn TYPEOF(x: SEXP) -> SEXPTYPE;
 }
 
-#[cfg(feaature = "Altrep")]
+#[cfg(feature = "Altrep")]
 #[allow(non_camel_case_types)]
 pub type R_altrep_Coerce_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXPTYPE) -> SEXP>;
 
-    
 #[cfg(feature = "Boolean")]
 pub unsafe fn Rf_isS4(arg1: SEXP) -> Rboolean {
     unsafe {
@@ -103,7 +100,6 @@ mod secret {
     }
 }
 
-
 #[cfg(feature = "Boolean")]
 impl From<Rboolean> for bool {
     fn from(value: Rboolean) -> Self {
@@ -122,6 +118,179 @@ impl From<bool> for Rboolean {
             false => Rboolean::FALSE,
         }
     }
+}
+
+pub mod bindings {
+    #[cfg(target_os = "macos")]
+    #[path = "bindings-R-macos-aarch64.rs"]
+    pub mod r;
+
+    pub mod r_internals {
+        use super::r_ext::boolean::Rboolean;
+        use super::r_ext::complex::Rcomplex;
+        use super::r_ext::r_dynload::DL_FUNC;
+        use crate::SEXPREC;
+        #[cfg(target_os = "macos")]
+        include!("bindings/bindings-Rinternals-macos-aarch64.rs");
+    }
+
+    #[cfg(target_os = "macos")]
+    #[path = "bindings-Rmath-macos-aarch64.rs"]
+    pub mod r_math;
+
+    #[cfg(target_os = "macos")]
+    #[path = "bindings-Rversion-macos-aarch64.rs"]
+    pub mod r_version;
+
+    #[cfg(target_os = "windows")]
+    #[path = "bindings-Rversion-windows-x86_64.rs"]
+    pub mod r_version;
+
+    #[cfg(target_os = "macos")]
+    #[path = "bindings-Rinterface-macos-aarch64.rs"]
+    pub mod r_interface;
+
+    // pub mod r_embedded {
+    //     use super::r_ext::boolean::Rboolean;
+
+    //     include!("bindings/Rembedded.rs");
+    // }
+
+    #[path = ""]
+    pub mod r_ext {
+        //     pub mod applic {
+        //         use super::boolean::Rboolean;
+        //         include!("bindings/R_ext/Applic.rs");
+        //     }
+
+        //     pub mod blas {
+        //         use super::complex::Rcomplex;
+        //         include!("bindings/R_ext/BLAS.rs");
+        //     }
+
+        //     // #[path = "Callbacks.rs"]
+        //     pub mod callbacks {
+        //         use super::super::r_internals::SEXP;
+        //         use super::boolean::Rboolean;
+
+        //         include!("bindings/R_ext/Callbacks.rs");
+        //     }
+
+        //     //TODO: another platform?
+
+        #[cfg(target_os = "macos")]
+        // #[cfg(feature = "Boolean")]
+        pub mod GetX11Image {
+            use super::boolean::Rboolean;
+
+            include!("bindings/bindings-GetX11Image-macos-aarch64.rs");
+        }
+
+        //     // #[path ="Lapack.rs"]
+        //     pub mod lapack {
+        //         use super::complex::Rcomplex;
+        //         include!("bindings/R_ext/Lapack.rs");
+        //     }
+
+        //     #[path = "Linpack.rs"]
+        //     pub mod linpack;
+
+        //     #[path = "Parse.rs"]
+        //     pub mod parse {
+        //         use super::super::r_internals::SEXP;
+        //         include!("bindings/R_ext/Parse.rs");
+        //     }
+
+        //     pub mod r_startup {
+        //         use super::boolean::Rboolean;
+        //         include!("bindings/R_ext/RStartup.rs");
+        //     }
+
+        pub mod r_dynload {
+            use super::boolean::Rboolean;
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-Rdynload-macos-aarch64.rs");
+        }
+
+        //     #[path = "Riconv.rs"]
+        //     pub mod r_iconv;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Visibility-macos-aarch64.rs"]
+        pub mod visibility;
+
+        //     // TODO: another platform?
+        //     // #[path ="eventloop.rs"]
+        //     // pub mod event_loop;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Boolean-macos-aarch64.rs"]
+        pub mod boolean;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Complex-macos-aarch64.rs"]
+        pub mod complex;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Arith-macos-aarch64.rs"]
+        pub mod arith;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Constants-macos-aarch64.rs"]
+        pub mod constants;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Error-macos-aarch64.rs"]
+        pub mod error;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Memory-macos-aarch64.rs"]
+        pub mod memory;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Print-macos-aarch64.rs"]
+        pub mod print;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-RS-macos-aarch64.rs"]
+        pub mod rs;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Random-macos-aarch64.rs"]
+        pub mod random;
+
+        #[path = "Utils.rs"]
+        pub mod utils {
+            use super::boolean::Rboolean;
+            use super::complex::Rcomplex;
+
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-Utils-macos-aarch64.rs");
+        }
+
+        //     //TODO: this is windows specific.
+        //     #[path = "libextern.rs"]
+        //     pub mod libextern;
+    }
+
+    #[cfg(target_os = "macos")]
+    #[path = "bindings-Rconfig-macos-aarch64.rs"]
+    pub mod r_config;
+
+    // pub mod r_prelude {
+    //     pub use super::r_config::*;
+    //     pub use super::r_ext::arith::*;
+    //     pub use super::r_ext::boolean::*;
+    //     pub use super::r_ext::complex::*;
+    //     pub use super::r_ext::constants::*;
+    //     pub use super::r_ext::error::*;
+    //     pub use super::r_ext::libextern::*;
+    //     pub use super::r_ext::memory::*;
+    //     pub use super::r_ext::print::*;
+    //     pub use super::r_ext::random::*;
+    //     pub use super::r_ext::rs::*;
+    //     pub use super::r_ext::utils::*;
+    // }
 }
 
 #[cfg(test)]
