@@ -530,7 +530,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let r_headers = fs_extra::dir::get_dir_content(r_include_path)
         .unwrap()
         .files;
-    let r_headers = r_headers
+    let r_headers: Vec<_> = r_headers
         .into_iter()
         .map(|x| {
             let r_header_path = x.replace(r"\", r"/");
