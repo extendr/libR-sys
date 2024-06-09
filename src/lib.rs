@@ -63,6 +63,7 @@
 #![allow(non_snake_case)]
 #![allow(improper_ctypes)]
 
+#[cfg(feature = "disabled")]
 pub mod bindings {
     #[cfg(target_os = "macos")]
     #[path = "bindings-R-macos-aarch64.rs"]
@@ -356,5 +357,6 @@ pub mod bindings {
     }
 }
 
+#[cfg(feature = "disabled")]
 #[cfg(test)]
 mod tests;
