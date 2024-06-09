@@ -90,6 +90,12 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
   PATH=/usr/local/opt/llvm/bin:$PATH
   ```
 
+  Alternatively, one may merely set
+
+  ```shell
+  export LIBCLANG_PATH=$(brew --prefix llvm)/lib
+  ```
+  
   Build & test using
   
   ```shell
