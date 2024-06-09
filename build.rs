@@ -407,6 +407,8 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
+
+    use std::collections::HashMap;
     let mut bindgen_builder = bindgen::Builder::default();
 
     #[cfg(all(feature = "use-bindgen", not(feature = "non-api")))]
@@ -459,7 +461,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // this effectively ignores all non-R headers from sneaking in
     bindgen_builder = bindgen_builder
         .allowlist_file(r_include_path_escaped)
-        .allowlist_file(".*wrapper\\.h$");
+        .allowlist_file(".*mini_wrapper\\.h$");
 
     // stops warning about ignored attributes,
     // e.g. ignores `__format__` attributes caused by `stdio.h`
@@ -512,7 +514,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let bindgen_builder = bindgen_builder.blocklist_item("Rcomplex__bindgen_ty_1");
 
     // Finish the builder and generate the bindings.
-    let bindings = bindgen_builder
+    let bindgen_builder = bindgen_builder
         .raw_line(format!(
             "/* libR-sys version: {} */",
             env!("CARGO_PKG_VERSION")
@@ -524,42 +526,91 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .raw_line(format!("/* r version: {} */", version_info.full))
         .generate_comments(true)
         .parse_callbacks(Box::new(TrimCommentsCallbacks))
-        .clang_arg("-fparse-all-comments")
-        .generate()
-        // Unwrap the Result and panic on failure.
-        .expect("Unable to generate bindings");
+        .clang_arg("-fparse-all-comments");
+
+    // generate a bindings file for each available header file
+    let r_headers = fs_extra::dir::get_dir_content(r_include_path)
+        .unwrap()
+        .files;
+    dbg!(&r_headers);
+
+    // name to path 
+    let r_headers_to_path = r_headers.iter().map(|r_header_path|
+        (Path::new(r_header_path).file_stem().unwrap().to_str().unwrap(),
+        r_header_path)
+    ).collect::<HashMap<_,_>>();
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
+    dbg!(&out_path);
+    for r_header in &r_headers {
+        let r_header_name = Path::new(r_header).file_stem().unwrap().to_str().unwrap();
+        dbg!(r_header_name);
+        let mut bindings = bindgen_builder.clone();
+        match r_header_name {
+            r"Complex" => {
+                // bindings = bindings.header("wrapper_head_Rcomplex.h");
+            }
+            "Parse" => {
+                bindings = bindings.header(r_headers_to_path["Rinternals"]);
+            }
+            "Altrep" => {
+                bindings = bindings.header(r_headers_to_path["Rinternals"]);
+            }
 
-    bindings
-        .write_to_file(out_path.join("bindings.rs"))
-        .expect("Couldn't write bindings to default output path!");
+            "GraphicsEngine" => {
+                bindings = bindings.header(r_headers_to_path["Rinternals"]);
+            }
 
-    // Also write the bindings to a folder specified by `LIBRSYS_BINDINGS_OUTPUT_PATH`, if defined
-    if let Some(alt_target) = env::var_os(ENVVAR_BINDINGS_OUTPUT_PATH) {
-        let out_path = PathBuf::from(alt_target);
-        // if folder doesn't exist, try to create it
-        if !out_path.exists() {
-            fs::create_dir(&out_path).unwrap_or_else(|_| {
-                panic!(
-                    "Couldn't create output directory for bindings: {}",
-                    out_path.display()
-                )
-            });
+            "GraphicsDevice" => {
+                bindings = bindings.header(r_headers_to_path["Rinternals"]);
+                bindings = bindings.header(r_headers_to_path["GraphicsEngine"]);
+            }
+            "Connections" => {
+                bindings = bindings.header(r_headers_to_path["Rinternals"]);
+            }
+            "GetX11Image" => {
+                bindings = bindings.header(r_headers_to_path["Boolean"]);
+            }
+            _ => {}
         }
+        bindings = bindings.header(r_header);
 
-        let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
-        let out_file = out_path.join(bindings_file_full);
+        let bindings = bindings
+            .generate()
+            // Unwrap the Result and panic on failure.
+            .expect("Unable to generate bindings");
 
+        let binding_name = format!("bindings-{r_header_name}-{target_os}-{target_arch}.rs");
         bindings
-            .write_to_file(&out_file)
-            .unwrap_or_else(|_| panic!("Couldn't write bindings: {}", out_file.display()));
-    } else {
-        println!(
-            "cargo:warning=Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
-        );
+            .write_to_file(out_path.join(binding_name))
+            .expect("Couldn't write bindings to default output path!");
     }
+
+    // // Also write the bindings to a folder specified by `LIBRSYS_BINDINGS_OUTPUT_PATH`, if defined
+    // if let Some(alt_target) = env::var_os(ENVVAR_BINDINGS_OUTPUT_PATH) {
+    //     let out_path = PathBuf::from(alt_target);
+    //     // if folder doesn't exist, try to create it
+    //     if !out_path.exists() {
+    //         fs::create_dir(&out_path).unwrap_or_else(|_| {
+    //             panic!(
+    //                 "Couldn't create output directory for bindings: {}",
+    //                 out_path.display()
+    //             )
+    //         });
+    //     }
+
+    //     let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
+    //     let out_file = out_path.join(bindings_file_full);
+
+    //     bindings
+    //         .write_to_file(&out_file)
+    //         .unwrap_or_else(|_| panic!("Couldn't write bindings: {}", out_file.display()));
+    // } else {
+    //     println!(
+    //         "cargo:warning=Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
+    //     );
+    // }
 }
 
 #[cfg(not(feature = "use-bindgen"))]

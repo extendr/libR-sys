@@ -21,6 +21,7 @@ repository = "https://github.com/extendr/libR-sys"
 [build-dependencies]
 bindgen = { version = "0.69.4", optional = true, features = ["experimental"] }
 regex = { version = "*", optional = true, default-features = false }
+fs_extra = "1.3"
 
 [features]
 default = ["runtime"]
