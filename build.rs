@@ -530,6 +530,15 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let r_headers = fs_extra::dir::get_dir_content(r_include_path)
         .unwrap()
         .files;
+    let r_headers = r_headers
+        .into_iter()
+        .map(|x| {
+            let r_header_path = x.replace(r"\", r"/");
+            let r_header_path_escaped = regex::escape(&r_header_path);
+            let r_header_path_escaped = format!("{r_header_path_escaped}.*");
+            r_header_path_escaped
+        })
+        .collect();
     dbg!(&r_headers);
 
     // name to path
@@ -589,14 +598,10 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
                 // don't block current header being processed
                 continue;
             }
-            // println!("blocking_the_rest: {}", &r_header);
             bindings = bindings.blocklist_file(other_r_header);
         }
 
-        let bindings = bindings
-            .generate()
-            // Unwrap the Result and panic on failure.
-            .expect("Unable to generate bindings");
+        let bindings = bindings.generate().expect("Unable to generate bindings");
 
         let binding_name =
             version_info.get_r_bindings_filename(&r_header_name, &target_os, &target_arch);
