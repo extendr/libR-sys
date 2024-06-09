@@ -148,7 +148,7 @@ Rinterface = []
 Rinternals = ["Boolean", "Complex", "Rdynload"]
 Rmath = []
 # GraphicsBase = [] # private
-Rdynpriv = [] # ??
+# Rdynpriv = [] # ?? maybe private?
 
 [lib]
 # Some code comments on R's source code might be accidentally treated as Rust's
