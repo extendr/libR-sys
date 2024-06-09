@@ -586,6 +586,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             "GetX11Image" => {
                 bindings = bindings.header(r_headers_to_path["Boolean"]);
             }
+            "Rinterface" => {
+                bindings = bindings.clang_arg("-DR_INTERFACE_PTRS")
+            }
             _ => {}
         }
         bindings = bindings.header(r_header);
