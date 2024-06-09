@@ -531,6 +531,14 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .unwrap()
         .files;
 
+    let r_headers: Vec<_> = r_headers
+        .into_iter()
+        .map(|x| {
+            let r_header_path = x.replace(r"\", r"/");
+            r_header_path
+        })
+        .collect();
+
     // name to path
     let r_headers_to_path = r_headers
         .iter()
