@@ -1,3 +1,14 @@
+use bindings::{
+    r_embedded::Rf_initialize_R,
+    r_ext::r_startup::setup_Rmainloop,
+    r_interface::R_CStackLimit,
+    r_internals::{
+        R_GlobalEnv, R_NilValue, R_ParseEvalString, Rf_PrintValue, Rf_isS4, Rf_protect,
+        Rf_unprotect, REAL, SEXPTYPE, TYPEOF,
+    },
+    r_prelude::Rboolean,
+};
+
 use super::*;
 use std::os::raw;
 
