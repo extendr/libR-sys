@@ -174,6 +174,34 @@ extern "C" {
         ilo: ::std::os::raw::c_int,
         mflag: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
+    pub fn dqrqty_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        qty: *mut f64,
+    );
+    pub fn dqrqy_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        qy: *mut f64,
+    );
+    pub fn dqrcf_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        k: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        b: *mut f64,
+        info: *mut ::std::os::raw::c_int,
+    );
     #[doc = "appl/pretty.c: for use in engine.c and util.c\nFIXME: move out of this header"]
     pub fn R_pretty(
         lo: *mut f64,
@@ -214,5 +242,31 @@ extern "C" {
         a: *mut f64,
         wrk: *mut f64,
         itncnt: *mut ::std::os::raw::c_int,
+    );
+    pub fn dqrdc2_(
+        x: *mut f64,
+        ldx: *mut ::std::os::raw::c_int,
+        n: *mut ::std::os::raw::c_int,
+        p: *mut ::std::os::raw::c_int,
+        tol: *mut f64,
+        rank: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        pivot: *mut ::std::os::raw::c_int,
+        work: *mut f64,
+    );
+    pub fn dqrls_(
+        x: *mut f64,
+        n: *mut ::std::os::raw::c_int,
+        p: *mut ::std::os::raw::c_int,
+        y: *mut f64,
+        ny: *mut ::std::os::raw::c_int,
+        tol: *mut f64,
+        b: *mut f64,
+        rsd: *mut f64,
+        qty: *mut f64,
+        k: *mut ::std::os::raw::c_int,
+        jpvt: *mut ::std::os::raw::c_int,
+        qraux: *mut f64,
+        work: *mut f64,
     );
 }

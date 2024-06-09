@@ -496,7 +496,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let bindgen_builder = bindgen_builder.blocklist_item("VECTOR_PTR");
 
     // Remove all Fortran items, these are items with underscore _ postfix
-    let bindgen_builder = bindgen_builder.blocklist_item("[A-Za-z_][A-Za-z0-9_]*[^_]_$");
+    // let bindgen_builder = bindgen_builder.blocklist_item("[A-Za-z_][A-Za-z0-9_]*[^_]_$");
 
     // Ensure that `SEXPREC` is opaque to Rust
     let bindgen_builder = bindgen_builder.blocklist_item("SEXPREC");
