@@ -75,13 +75,11 @@ struct RVersionInfo {
 impl RVersionInfo {
     /// Returns the name for precompiled bindings, given R version and targets.
     /// e.g. `bindings-windows-x86_64-R4.4-devel.rs`
-    fn get_r_bindings_filename(&self, target_os: &str, target_arch: &str) -> PathBuf {
+    fn get_r_bindings_filename(&self, name: &str, target_os: &str, target_arch: &str) -> String {
         let devel_suffix = if self.devel { "-devel" } else { "" };
         let major = &self.major;
         let minor = &self.minor;
-        PathBuf::from(format!(
-            "bindings-{target_os}-{target_arch}-R{major}.{minor}{devel_suffix}.rs"
-        ))
+        format!("bindings-{name}-{target_os}-{target_arch}-R{major}.{minor}{devel_suffix}.rs")
     }
 }
 
@@ -551,10 +549,10 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
-    dbg!(&out_path);
+    // dbg!(&out_path);
     for r_header in &r_headers {
         let r_header_name = Path::new(r_header).file_stem().unwrap().to_str().unwrap();
-        dbg!(r_header_name);
+        // dbg!(r_header_name);
         let mut bindings = bindgen_builder.clone();
         match r_header_name {
             r"Complex" => {
@@ -600,7 +598,9 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             // Unwrap the Result and panic on failure.
             .expect("Unable to generate bindings");
 
-        let binding_name = format!("bindings-{r_header_name}-{target_os}-{target_arch}.rs");
+        let binding_name =
+            version_info.get_r_bindings_filename(&r_header_name, &target_os, &target_arch);
+
         bindings
             .write_to_file(out_path.join(&binding_name))
             .expect("Couldn't write bindings to default output path!");
@@ -617,7 +617,6 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
                 });
             }
 
-            // let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
             let out_file = out_path.join(&binding_name);
 
             bindings
