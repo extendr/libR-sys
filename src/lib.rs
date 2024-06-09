@@ -197,6 +197,9 @@ pub mod bindings {
         #[path = "bindings-eventloop-macos-aarch64.rs"]
         pub mod event_loop;
 
+        #[path = "bindings-libintl-macos-aarch64.rs"]
+        pub mod libintl;
+
         #[cfg(target_os = "macos")]
         #[path = "bindings-Boolean-macos-aarch64.rs"]
         mod boolean_bindings;
