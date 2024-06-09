@@ -63,7 +63,6 @@
 #![allow(non_snake_case)]
 #![allow(improper_ctypes)]
 
-
 pub mod bindings {
     #[cfg(target_os = "macos")]
     #[path = "bindings-R-macos-aarch64.rs"]
@@ -91,7 +90,7 @@ pub mod bindings {
                 pub fn Rf_isS4_original(arg1: SEXP) -> u32;
             }
         }
-        
+
         pub unsafe fn Rf_isS4(arg1: SEXP) -> Rboolean {
             unsafe {
                 if secret::Rf_isS4_original(arg1) == 0 {
@@ -123,8 +122,6 @@ pub mod bindings {
     pub mod r_interface;
 
     pub mod r_embedded {
-        use super::r_ext::boolean::Rboolean;
-
         #[cfg(target_os = "macos")]
         include!("bindings/bindings-Rembedded-macos-aarch64.rs");
     }
