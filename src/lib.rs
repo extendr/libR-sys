@@ -63,37 +63,6 @@
 #![allow(non_snake_case)]
 #![allow(improper_ctypes)]
 
-#[non_exhaustive]
-#[repr(transparent)]
-#[derive(Debug)]
-pub struct SEXPREC(std::ffi::c_void);
-
-extern "C" {
-    #[cfg(feature = "Boolean")] // FIXME: maybe remove?
-    #[cfg(feature = "Rinternals")]
-    // Return type should match `SEXPTYPE`
-    pub fn TYPEOF(x: SEXP) -> SEXPTYPE;
-}
-
-#[cfg(feature = "Boolean")]
-pub unsafe fn Rf_isS4(arg1: SEXP) -> Rboolean {
-    unsafe {
-        if secret::Rf_isS4_original(arg1) == 0 {
-            Rboolean::FALSE
-        } else {
-            Rboolean::TRUE
-        }
-    }
-}
-
-mod secret {
-    use super::*;
-    extern "C" {
-        #[cfg(feature = "Rinternals")]
-        #[link_name = "Rf_isS4"]
-        pub fn Rf_isS4_original(arg1: SEXP) -> u32;
-    }
-}
 
 pub mod bindings {
     #[cfg(target_os = "macos")]
@@ -104,7 +73,35 @@ pub mod bindings {
         use super::r_ext::boolean::Rboolean;
         use super::r_ext::complex::Rcomplex;
         use super::r_ext::r_dynload::DL_FUNC;
-        use crate::SEXPREC;
+
+        #[non_exhaustive]
+        #[repr(transparent)]
+        #[derive(Debug)]
+        pub struct SEXPREC(std::ffi::c_void);
+
+        extern "C" {
+            // Return type should match `SEXPTYPE`
+            pub fn TYPEOF(x: SEXP) -> SEXPTYPE;
+        }
+
+        mod secret {
+            use super::*;
+            extern "C" {
+                #[link_name = "Rf_isS4"]
+                pub fn Rf_isS4_original(arg1: SEXP) -> u32;
+            }
+        }
+        
+        pub unsafe fn Rf_isS4(arg1: SEXP) -> Rboolean {
+            unsafe {
+                if secret::Rf_isS4_original(arg1) == 0 {
+                    Rboolean::FALSE
+                } else {
+                    Rboolean::TRUE
+                }
+            }
+        }
+
         #[cfg(target_os = "macos")]
         include!("bindings/bindings-Rinternals-macos-aarch64.rs");
     }
@@ -308,7 +305,7 @@ pub mod bindings {
 
             include!("bindings/bindings-Connections-macos-aarch64.rs");
         }
-        
+
         pub mod prt_util {
             use super::super::r_internals::SEXP;
             use super::complex::Rcomplex;
