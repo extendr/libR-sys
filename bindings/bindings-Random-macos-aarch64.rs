@@ -8,14 +8,6 @@
 pub type R_xlen_t = isize;
 #[repr(u32)]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
-pub enum Rboolean {
-    #[doc = ", MAYBE"]
-    FALSE = 0,
-    #[doc = ", MAYBE"]
-    TRUE = 1,
-}
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum RNGtype {
     WICHMANN_HILL = 0,
     MARSAGLIA_MULTICARRY = 1,

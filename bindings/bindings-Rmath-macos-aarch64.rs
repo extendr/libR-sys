@@ -21,14 +21,6 @@ pub const M_LN_SQRT_2PI: f64 = 0.9189385332046728;
 pub const M_LN_SQRT_PId2: f64 = 0.22579135264472744;
 #[doc = "R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
-pub enum Rboolean {
-    #[doc = ", MAYBE"]
-    FALSE = 0,
-    #[doc = ", MAYBE"]
-    TRUE = 1,
-}
 extern "C" {
     #[doc = "R's versions with !R_FINITE checks"]
     pub fn R_pow(x: f64, y: f64) -> f64;

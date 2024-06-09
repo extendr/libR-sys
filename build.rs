@@ -585,6 +585,16 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         }
         bindings = bindings.header(r_header);
 
+        // block all the other r-headers
+        for other_r_header in &r_headers {
+            if other_r_header == r_header {
+                // don't block current header being processed
+                continue;
+            }
+            // println!("blocking_the_rest: {}", &r_header);
+            bindings = bindings.blocklist_file(other_r_header);
+        }
+
         let bindings = bindings
             .generate()
             // Unwrap the Result and panic on failure.
