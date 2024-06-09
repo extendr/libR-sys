@@ -18,8 +18,10 @@ on:
   # This can also manually run
   workflow_dispatch: {}
 
-jobs:
+env:
+  LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
 
+jobs:
   test_with_bindgen:
     # When the event is not issue_comment, always run the tests. When it is,
     # check if (1) the comment is on pull request, (2) the comment author is the
@@ -175,6 +177,8 @@ jobs:
       # https://github.com/r-lib/ps/commit/a24f2c4d1bdba63be14e7729b9ab81d0ed9f719e
       # Environment variables are required fir Mac-OS-11.0, see
       # https://github.com/extendr/libR-sys/issues/35
+
+      # TODO: remove everything except `LIBCLANG_PATH`
       - name: Configure macOS
         if: runner.os == 'macOS'
         run: |
@@ -231,7 +235,6 @@ jobs:
           . ./ci-cargo.ps1
           ci-cargo build -vv --features use-bindgen $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) -ActionName "Building for target: $env:RUST_TARGET"
         env:
-          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
           RUST_TARGET: ${{ matrix.config.target }}
 
       - name: Upload generated bindings
@@ -241,14 +244,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}-${{ matrix.config.target || 'default'}}
-          path: generated_bindings
+          path: ${{ env.LIBRSYS_BINDINGS_OUTPUT_PATH }}
   
   check_generate_bindings_flag:
     name: Check if [generate bindings] is in latest commit message
     runs-on: ubuntu-latest
     outputs:
       head_commit_message: ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}
-      # generate_bindings: ${{ contains(steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -261,8 +263,8 @@ jobs:
         echo "${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}"
         echo "${{ contains(steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}"
   
-  pr_generated_bindings:
-    name: Make PR with generated bindings
+  commit_generated_bindings:
+    name: Commit generated bindings
     needs: [test_with_bindgen, check_generate_bindings_flag]
     if: ${{ contains(needs.check_generate_bindings_flag.outputs.head_commit_message, '[generate bindings]') }}
     runs-on: ubuntu-latest
@@ -275,86 +277,21 @@ jobs:
     - name: Update bindings
       run: |
         # Update or add the bindings
-        cp generated_binding-*/*.rs bindings/
+        cp generated_binding-*/*.rs src/bindings/
 
         # Replace the default bindings
-        cd bindings
-        for x in linux-aarch64 linux-x86_64 macos-aarch64 macos-x86_64 windows-x86_64; do
-          # Choose the newest version except for devel
-          ln --force -s "$(ls -1 ./bindings-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-${x}.rs
-        done
+        cd src/bindings
+        # TODO: this needs adjustment for the new output files...
+        # for x in linux-aarch64 linux-x86_64 macos-aarch64 macos-x86_64 windows-x86_64; do
+        #   # Choose the newest version except for devel
+        #   ln --force -s "$(ls -1 ./bindings-*-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-*-${x}.rs
+        # done
         cd ..
     - name: Add generated bindings
       run: |
-        git add bindings/
+        git add src/bindings/
         git config --local user.name "${GITHUB_ACTOR}"
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         git commit -m "Update bindings [skip ci]"
     - name: Push to PR branch
       run: git push
-
-  # Gather the generated bindings and push them to generated_bindings branch.
-  # If we need to update the bindings, create a pull request from that branch.
-  commit_generated_bindings:
-    needs: test_with_bindgen
-    runs-on: ubuntu-latest
-    # In the case of /bindings command, we don't need to check anything else
-    # because it should have checked in test_with_bindings job. In the other
-    # cases, we only want to invoke this on the master branch.
-    if: github.event_name == 'issue_comment' || github.ref == 'refs/heads/master'
-    steps:
-    - uses: actions/checkout@v4
-
-    - uses: actions/download-artifact@v4
-
-    - name: Switch branch
-      if: github.event_name != 'issue_comment'
-      run: |
-        # 1) If there's already generated_bindings branch, checkout it.
-        # 2) If generated_binding branch is not created, create it from the default branch.
-        if git ls-remote --exit-code --heads origin generated_bindings 2>&1 >/dev/null; then
-          git fetch origin --no-tags --prune --depth=1 generated_bindings
-          git checkout generated_bindings
-        else
-          git switch -c generated_bindings
-        fi
-
-    - name: Switch branch (/bindings command)
-      if: github.event_name == 'issue_comment'
-      uses: r-lib/actions/pr-fetch@v2
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Commit the generated bindings
-      run: |
-        # Update or add the bindings
-        cp generated_binding-*/*.rs bindings/
-
-        # Replace the default bindings
-        cd bindings
-        for x in linux-aarch64 linux-x86_64 macos-aarch64 macos-x86_64 windows-x86_64; do
-          # Choose the newest version except for devel
-          ln --force -s "$(ls -1 ./bindings-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-${x}.rs
-        done
-        cd ..
-
-        # detect changes (the code is derived from https://stackoverflow.com/a/3879077)
-        git add bindings/
-        git update-index --refresh
-        if ! git diff-index --quiet HEAD -- bindings/; then
-          git config --local user.name "${GITHUB_ACTOR}"
-          git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git commit -m "Update bindings [skip ci]"
-        else
-          echo "No changes"
-        fi
-
-    - name: Push
-      if: github.event_name != 'issue_comment'
-      run: git push origin generated_bindings
-
-    - name: Push (/bindings command)
-      if: github.event_name == 'issue_comment'
-      uses: r-lib/actions/pr-push@v2
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
