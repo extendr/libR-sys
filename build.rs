@@ -530,16 +530,6 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let r_headers = fs_extra::dir::get_dir_content(r_include_path)
         .unwrap()
         .files;
-    let r_headers: Vec<_> = r_headers
-        .into_iter()
-        .map(|x| {
-            let r_header_path = x.replace(r"\", r"/");
-            let r_header_path_escaped = regex::escape(&r_header_path);
-            let r_header_path_escaped = format!("{r_header_path_escaped}.*");
-            r_header_path_escaped
-        })
-        .collect();
-    dbg!(&r_headers);
 
     // name to path
     let r_headers_to_path = r_headers
@@ -598,6 +588,10 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
                 // don't block current header being processed
                 continue;
             }
+
+            let other_r_header = other_r_header.replace(r"\", r"/");
+            let other_r_header = regex::escape(&other_r_header);
+
             bindings = bindings.blocklist_file(other_r_header);
         }
 
