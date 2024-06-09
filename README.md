@@ -58,7 +58,7 @@ The bindings can be generated using [`bindgen`](https://github.com/rust-lang/rus
 `bindgen` requires [`libclang`](https://clang.llvm.org/docs/Tooling.html), which should be installed first.
 This library relies on `LIBCLANG_PATH` environment variable to determine path to the appropriate version of `libclang`.
 
-The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_PATH` environment variable, thus make sure it is set to e.g `bindings`.
+The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_PATH` environment variable, thus make sure it is set to e.g `src/bindings`.
 
 - **Linux**
 
@@ -90,6 +90,12 @@ The output folder for bindings can be configured using `LIBRSYS_BINDINGS_OUTPUT_
   PATH=/usr/local/opt/llvm/bin:$PATH
   ```
 
+  Alternatively, one may merely set
+
+  ```shell
+  export LIBCLANG_PATH=$(brew --prefix llvm)/lib
+  ```
+  
   Build & test using
   
   ```shell

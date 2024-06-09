@@ -58,160 +58,305 @@
 //!     }
 //! }
 //! ```
-
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 #![allow(improper_ctypes)]
 
-include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+#[cfg(feature = "disabled")]
+pub mod bindings {
+    #[cfg(target_os = "macos")]
+    #[path = "bindings-R-macos-aarch64.rs"]
+    pub mod r;
 
-#[non_exhaustive]
-#[repr(transparent)]
-#[derive(Debug)]
-pub struct SEXPREC(std::ffi::c_void);
+    pub mod r_internals {
+        use super::r_ext::boolean::Rboolean;
+        use super::r_ext::complex::Rcomplex;
+        use super::r_ext::r_dynload::DL_FUNC;
 
-extern "C" {
-    // Return type should match `SEXPTYPE`
-    pub fn TYPEOF(x: SEXP) -> SEXPTYPE;
-}
+        #[non_exhaustive]
+        #[repr(transparent)]
+        #[derive(Debug)]
+        pub struct SEXPREC(std::ffi::c_void);
 
-#[allow(non_camel_case_types)]
-pub type R_altrep_Coerce_method_t =
-    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXPTYPE) -> SEXP>;
-
-pub unsafe fn Rf_isS4(arg1: SEXP) -> Rboolean {
-    unsafe {
-        if secret::Rf_isS4_original(arg1) == 0 {
-            Rboolean::FALSE
-        } else {
-            Rboolean::TRUE
+        extern "C" {
+            // Return type should match `SEXPTYPE`
+            pub fn TYPEOF(x: SEXP) -> SEXPTYPE;
         }
-    }
-}
 
-mod secret {
-    use super::*;
-    extern "C" {
-        #[link_name = "Rf_isS4"]
-        pub fn Rf_isS4_original(arg1: SEXP) -> u32;
-    }
-}
-
-impl From<Rboolean> for bool {
-    fn from(value: Rboolean) -> Self {
-        match value {
-            Rboolean::FALSE => false,
-            Rboolean::TRUE => true,
+        mod secret {
+            use super::*;
+            extern "C" {
+                #[link_name = "Rf_isS4"]
+                pub fn Rf_isS4_original(arg1: SEXP) -> u32;
+            }
         }
-    }
-}
 
-impl From<bool> for Rboolean {
-    fn from(value: bool) -> Self {
-        match value {
-            true => Rboolean::TRUE,
-            false => Rboolean::FALSE,
+        pub unsafe fn Rf_isS4(arg1: SEXP) -> Rboolean {
+            unsafe {
+                if secret::Rf_isS4_original(arg1) == 0 {
+                    Rboolean::FALSE
+                } else {
+                    Rboolean::TRUE
+                }
+            }
         }
+
+        #[cfg(target_os = "macos")]
+        include!("bindings/bindings-Rinternals-macos-aarch64.rs");
+    }
+
+    #[cfg(target_os = "macos")]
+    #[path = "bindings-Rmath-macos-aarch64.rs"]
+    pub mod r_math;
+
+    #[cfg(target_os = "macos")]
+    #[path = "bindings-Rversion-macos-aarch64.rs"]
+    pub mod r_version;
+
+    #[cfg(target_os = "windows")]
+    #[path = "bindings-Rversion-windows-x86_64.rs"]
+    pub mod r_version;
+
+    #[cfg(target_os = "macos")]
+    #[path = "bindings-Rinterface-macos-aarch64.rs"]
+    pub mod r_interface;
+
+    pub mod r_embedded {
+        #[cfg(target_os = "macos")]
+        include!("bindings/bindings-Rembedded-macos-aarch64.rs");
+    }
+
+    #[path = ""]
+    pub mod r_ext {
+        pub mod applic {
+            use super::boolean::Rboolean;
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-Applic-macos-aarch64.rs");
+        }
+
+        pub mod blas {
+            use super::complex::Rcomplex;
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-BLAS-macos-aarch64.rs");
+        }
+
+        pub mod callbacks {
+            use super::super::r_internals::SEXP;
+            use super::boolean::Rboolean;
+
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-Callbacks-macos-aarch64.rs");
+        }
+
+        pub mod GetX11Image {
+            use super::boolean::Rboolean;
+
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-GetX11Image-macos-aarch64.rs");
+        }
+
+        pub mod lapack {
+            use super::complex::Rcomplex;
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-Lapack-macos-aarch64.rs");
+        }
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Linpack-macos-aarch64.rs"]
+        pub mod linpack;
+
+        pub mod parse {
+            use super::super::r_internals::SEXP;
+
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-Parse-macos-aarch64.rs");
+        }
+
+        pub mod r_startup {
+            use super::boolean::Rboolean;
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-RStartup-macos-aarch64.rs");
+        }
+
+        pub mod r_dynload {
+            use super::boolean::Rboolean;
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-Rdynload-macos-aarch64.rs");
+        }
+
+        #[path = "bindings-Riconv-macos-aarch64.rs"]
+        pub mod r_iconv;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Visibility-macos-aarch64.rs"]
+        pub mod visibility;
+
+        #[path = "bindings-eventloop-macos-aarch64.rs"]
+        pub mod event_loop;
+
+        #[path = "bindings-libintl-macos-aarch64.rs"]
+        pub mod libintl;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Boolean-macos-aarch64.rs"]
+        mod boolean_bindings;
+
+        pub mod boolean {
+            pub use super::boolean_bindings::*;
+
+            impl From<Rboolean> for bool {
+                fn from(value: Rboolean) -> Self {
+                    match value {
+                        Rboolean::FALSE => false,
+                        Rboolean::TRUE => true,
+                    }
+                }
+            }
+
+            impl From<bool> for Rboolean {
+                fn from(value: bool) -> Self {
+                    match value {
+                        true => Rboolean::TRUE,
+                        false => Rboolean::FALSE,
+                    }
+                }
+            }
+        }
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Complex-macos-aarch64.rs"]
+        pub mod complex;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Arith-macos-aarch64.rs"]
+        pub mod arith;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Constants-macos-aarch64.rs"]
+        pub mod constants;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Error-macos-aarch64.rs"]
+        pub mod error;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Memory-macos-aarch64.rs"]
+        pub mod memory;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Print-macos-aarch64.rs"]
+        pub mod print;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-RS-macos-aarch64.rs"]
+        pub mod rs;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Random-macos-aarch64.rs"]
+        pub mod random;
+
+        #[path = "Utils.rs"]
+        pub mod utils {
+            use super::boolean::Rboolean;
+            use super::complex::Rcomplex;
+
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-Utils-macos-aarch64.rs");
+        }
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Itermacros-macos-aarch64.rs"]
+        pub mod itermacros;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-stats_stubs-macos-aarch64.rs"]
+        pub mod stats_stubs;
+
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-stats_package-macos-aarch64.rs"]
+        pub mod stats_package;
+
+        pub mod graphics_engine {
+            use super::super::r_internals::cetype_t;
+            use super::super::r_internals::SEXP;
+            use super::boolean::Rboolean;
+            use super::graphics_device::pDevDesc;
+
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-GraphicsEngine-macos-aarch64.rs");
+        }
+
+        pub mod graphics_device {
+            use super::super::r_internals::SEXP;
+            use super::boolean::Rboolean;
+            use super::graphics_engine::pGEcontext;
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-GraphicsDevice-macos-aarch64.rs");
+        }
+
+        #[path = "bindings-QuartzDevice-macos-aarch64.rs"]
+        pub mod quartz_device;
+
+        #[path = "bindings-MathThreads-macos-aarch64.rs"]
+        pub mod math_threads;
+
+        pub mod connections {
+            use super::boolean::Rboolean;
+
+            include!("bindings/bindings-Connections-macos-aarch64.rs");
+        }
+
+        pub mod prt_util {
+            use super::super::r_internals::SEXP;
+            use super::complex::Rcomplex;
+
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-PrtUtil-macos-aarch64.rs");
+        }
+
+        pub mod altrep {
+            use super::super::r_internals::{Rbyte, SEXP, SEXPTYPE};
+            use super::boolean::Rboolean;
+            use super::complex::Rcomplex;
+            use super::r_dynload::DllInfo;
+
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-Altrep-macos-aarch64.rs");
+
+            #[allow(non_camel_case_types)]
+            pub type R_altrep_Coerce_method_t =
+                ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXPTYPE) -> SEXP>;
+        }
+
+        #[path = "bindings-Rallocators-macos-aarch64.rs"]
+        pub mod r_allocators;
+
+        //     //TODO: this is windows specific.
+        #[path = "bindings-libextern-macos-aarch64.rs"]
+        pub mod libextern;
+    }
+
+    #[cfg(target_os = "macos")]
+    #[path = "bindings-Rconfig-macos-aarch64.rs"]
+    pub mod r_config;
+
+    pub mod r_prelude {
+        pub use super::r_config::*;
+        pub use super::r_ext::arith::*;
+        pub use super::r_ext::boolean::*;
+        pub use super::r_ext::complex::*;
+        pub use super::r_ext::constants::*;
+        pub use super::r_ext::error::*;
+        pub use super::r_ext::libextern::*;
+        pub use super::r_ext::memory::*;
+        pub use super::r_ext::print::*;
+        pub use super::r_ext::random::*;
+        pub use super::r_ext::rs::*;
+        pub use super::r_ext::utils::*;
     }
 }
 
+#[cfg(feature = "disabled")]
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use std::os::raw;
-
-    // Generate constant static strings.
-    // Much more efficient than CString.
-    // Generates asciiz.
-    macro_rules! cstr {
-        ($s: expr) => {
-            concat!($s, "\0").as_ptr() as *const raw::c_char
-        };
-    }
-
-    // Generate mutable static strings.
-    // Much more efficient than CString.
-    // Generates asciiz.
-    macro_rules! cstr_mut {
-        ($s: expr) => {
-            concat!($s, "\0").as_ptr() as *mut raw::c_char
-        };
-    }
-
-    // Thanks to @qinwf and @scottmmjackson for showing the way here.
-    fn start_R() {
-        unsafe {
-            if std::env::var("R_HOME").is_err() {
-                // env! gets the build-time R_HOME made in build.rs
-                std::env::set_var("R_HOME", env!("R_HOME"));
-            }
-
-            // Due to Rf_initEmbeddedR using __libc_stack_end
-            // We can't call Rf_initEmbeddedR.
-            // Instead we must follow rustr's example and call the parts.
-
-            //let res = unsafe { Rf_initEmbeddedR(1, args.as_mut_ptr()) };
-            if cfg!(target_os = "windows") && cfg!(target_arch = "x86") {
-                Rf_initialize_R(
-                    4,
-                    [
-                        cstr_mut!("R"),
-                        cstr_mut!("--arch=i386"),
-                        cstr_mut!("--slave"),
-                        cstr_mut!("--no-save"),
-                    ]
-                    .as_mut_ptr(),
-                );
-            } else {
-                Rf_initialize_R(
-                    3,
-                    [cstr_mut!("R"), cstr_mut!("--slave"), cstr_mut!("--no-save")].as_mut_ptr(),
-                );
-            }
-
-            // In case you are curious.
-            // Maybe 8MB is a bit small.
-            // eprintln!("R_CStackLimit={:016x}", R_CStackLimit);
-
-            if cfg!(not(target_os = "windows")) {
-                R_CStackLimit = usize::max_value();
-            }
-
-            setup_Rmainloop();
-        }
-    }
-
-    // Run some R code. Check the result.
-    #[test]
-    fn test_eval() {
-        start_R();
-        unsafe {
-            let val = Rf_protect(R_ParseEvalString(cstr!("1"), R_NilValue));
-            Rf_PrintValue(val);
-            assert_eq!(TYPEOF(val), SEXPTYPE::REALSXP);
-            assert_eq!(*REAL(val), 1.);
-            Rf_unprotect(1);
-        }
-        // There is one pathological example of `Rf_is*` where `TRUE` is not 1,
-        // but 16. We show here that the casting is done as intended
-        unsafe {
-            let sexp = R_ParseEvalString(cstr!(r#"new("factor")"#), R_GlobalEnv);
-            Rf_protect(sexp);
-            Rf_PrintValue(sexp);
-
-            assert_eq!(
-                std::mem::discriminant(&Rf_isS4(sexp)),
-                std::mem::discriminant(&Rboolean::TRUE),
-            );
-            assert!(<Rboolean as Into<bool>>::into(Rf_isS4(sexp)));
-            assert!(
-                (Rboolean::FALSE == Rf_isS4(sexp)) || (Rboolean::TRUE == Rf_isS4(sexp)),
-                "PartialEq implementation is broken"
-            );
-            assert!(Rboolean::TRUE == Rf_isS4(sexp));
-            assert_eq!(Rf_isS4(sexp), Rboolean::TRUE);
-            Rf_unprotect(1);
-        }
-    }
-}
+mod tests;

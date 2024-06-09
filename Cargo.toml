@@ -21,6 +21,7 @@ repository = "https://github.com/extendr/libR-sys"
 [build-dependencies]
 bindgen = { version = "0.69.4", optional = true, features = ["experimental"] }
 regex = { version = "*", optional = true, default-features = false }
+fs_extra = "1.3"
 
 [features]
 default = ["runtime"]
@@ -35,6 +36,120 @@ runtime = ["bindgen/runtime"]
 
 # Enables generation of layout-tests in bindgen
 layout_tests = ["use-bindgen"]
+
+disabled = []
+# TODO: include default headers...
+
+# TODO:?!
+# stamp-h.in
+# Makefile = []
+# config.in = []
+# Makefile.in = []
+# Makefile.win = []
+
+# internal headers, not installed
+# Rgraphics = []
+# Internal.h 
+# Print = []
+# Parse = []
+# Errormsg = []
+# Startup = []
+# Rconnections = []
+# rlocale = []
+# Fileio = []
+# Graphics = []
+# Rmodules/RX11
+# Rmodules/Rlapack
+# Rmodules/Rinternet // doesn't state that is internal...but it is...
+# Rmath0.in = []
+# Rinlinedfuns = []
+# Defn = []
+# IOStuff = []
+
+# R_ext/*
+Print = []
+Parse = ["Rinternals"]
+Error = []
+Itermacros = []
+Utils = ["Boolean", "Complex"]
+stats_stubs = []
+GetX11Image = ["Boolean"]
+# TODO: combine them?
+GraphicsEngine = ["GraphicsDevice", "Rinternals", "Boolean"]
+GraphicsDevice = ["GraphicsEngine", "Rinternals", "Boolean"]
+Callbacks = ["Rinternals", "Boolean"]
+Rdynload = ["Boolean"]
+RS = []
+BLAS = ["Complex"]
+Arith = []
+Boolean = []
+Applic = ["Boolean"]
+Linpack = []
+Constants = []
+Riconv = []
+RStartup = ["Boolean"]
+QuartzDevice = []
+libextern = []
+MathThreads = []
+Memory = []
+Connections = ["Boolean"]
+PrtUtil = ["Rinternals", "Complex"]
+Altrep = ["Rinternals", "Boolean", "Complex", "Rdynload"]
+Rallocators = []
+Visibility = []
+stats_package = []
+Complex = []
+Lapack = ["Complex"]
+Random = []
+eventloop = []
+R_ext = [
+    "GraphicsEngine",
+    "Error",
+    "Itermacros",
+    "Utils",
+    "stats_stubs",
+    "GetX11Image",
+    "GraphicsDevice",
+    "Callbacks",
+    "Rdynload",
+    "Parse",
+    "RS",
+    "BLAS",
+    "Arith",
+    "Boolean",
+    "Applic",
+    "Linpack",
+    "Constants",
+    "Riconv",
+    "RStartup",
+    "Print",
+    "QuartzDevice",
+    "libextern",
+    "MathThreads",
+    "Memory",
+    "Connections",
+    "PrtUtil",
+    "Altrep",
+    "Rallocators",
+    "Visibility",
+    "stats_package",
+    # "Makefile",
+    "Complex",
+    "Lapack",
+    "Random",
+    "eventloop",
+]
+# R_INCLUDES/* (in root)
+libintl = []
+R = []
+Rconfig = []
+Rdefines = []
+Rembedded = ["Boolean"]
+Rinterface = []
+Rinternals = ["Boolean", "Complex", "Rdynload"]
+Rmath = []
+# GraphicsBase = [] # private
+# Rdynpriv = [] # ?? maybe private?
 
 [lib]
 # Some code comments on R's source code might be accidentally treated as Rust's

@@ -75,13 +75,11 @@ struct RVersionInfo {
 impl RVersionInfo {
     /// Returns the name for precompiled bindings, given R version and targets.
     /// e.g. `bindings-windows-x86_64-R4.4-devel.rs`
-    fn get_r_bindings_filename(&self, target_os: &str, target_arch: &str) -> PathBuf {
+    fn get_r_bindings_filename(&self, name: &str, target_os: &str, target_arch: &str) -> String {
         let devel_suffix = if self.devel { "-devel" } else { "" };
         let major = &self.major;
         let minor = &self.minor;
-        PathBuf::from(format!(
-            "bindings-{target_os}-{target_arch}-R{major}.{minor}{devel_suffix}.rs"
-        ))
+        format!("bindings-{name}-{target_os}-{target_arch}-R{major}.{minor}{devel_suffix}.rs")
     }
 }
 
@@ -407,6 +405,8 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
+
+    use std::collections::HashMap;
     let mut bindgen_builder = bindgen::Builder::default();
 
     #[cfg(all(feature = "use-bindgen", not(feature = "non-api")))]
@@ -421,7 +421,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .merge_extern_blocks(true)
         // The input header we would like to generate
         // bindings for.
-        .header("wrapper.h")
+        .header("mini_wrapper.h")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()));
@@ -459,7 +459,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     // this effectively ignores all non-R headers from sneaking in
     bindgen_builder = bindgen_builder
         .allowlist_file(r_include_path_escaped)
-        .allowlist_file(".*wrapper\\.h$");
+        .allowlist_file(".*mini_wrapper\\.h$");
 
     // stops warning about ignored attributes,
     // e.g. ignores `__format__` attributes caused by `stdio.h`
@@ -494,7 +494,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let bindgen_builder = bindgen_builder.blocklist_item("VECTOR_PTR");
 
     // Remove all Fortran items, these are items with underscore _ postfix
-    let bindgen_builder = bindgen_builder.blocklist_item("[A-Za-z_][A-Za-z0-9_]*[^_]_$");
+    // let bindgen_builder = bindgen_builder.blocklist_item("[A-Za-z_][A-Za-z0-9_]*[^_]_$");
 
     // Ensure that `SEXPREC` is opaque to Rust
     let bindgen_builder = bindgen_builder.blocklist_item("SEXPREC");
@@ -512,7 +512,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let bindgen_builder = bindgen_builder.blocklist_item("Rcomplex__bindgen_ty_1");
 
     // Finish the builder and generate the bindings.
-    let bindings = bindgen_builder
+    let bindgen_builder = bindgen_builder
         .raw_line(format!(
             "/* libR-sys version: {} */",
             env!("CARGO_PKG_VERSION")
@@ -524,79 +524,157 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .raw_line(format!("/* r version: {} */", version_info.full))
         .generate_comments(true)
         .parse_callbacks(Box::new(TrimCommentsCallbacks))
-        .clang_arg("-fparse-all-comments")
-        .generate()
-        // Unwrap the Result and panic on failure.
-        .expect("Unable to generate bindings");
+        .clang_arg("-fparse-all-comments");
+
+    // generate a bindings file for each available header file
+    let r_headers = fs_extra::dir::get_dir_content(r_include_path)
+        .unwrap()
+        .files;
+
+    let r_headers: Vec<_> = r_headers
+        .into_iter()
+        .map(|x| {
+            let r_header_path = x.replace(r"\", r"/");
+            r_header_path
+        })
+        .collect();
+
+    // name to path
+    let r_headers_to_path = r_headers
+        .iter()
+        .map(|r_header_path| {
+            (
+                Path::new(r_header_path)
+                    .file_stem()
+                    .unwrap()
+                    .to_str()
+                    .unwrap(),
+                r_header_path,
+            )
+        })
+        .collect::<HashMap<_, _>>();
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
+    // dbg!(&out_path);
+    for r_header in &r_headers {
+        let r_header_name = Path::new(r_header).file_stem().unwrap().to_str().unwrap();
+        // dbg!(r_header_name);
+        let mut bindings = bindgen_builder.clone();
+        match r_header_name {
+            r"Complex" => {
+                bindings = bindings.header("mini_Rcomplex.h");
+            }
+            "Parse" => {
+                bindings = bindings.header(r_headers_to_path["Rinternals"]);
+            }
+            "Altrep" => {
+                bindings = bindings.header(r_headers_to_path["Rinternals"]);
+            }
 
-    bindings
-        .write_to_file(out_path.join("bindings.rs"))
-        .expect("Couldn't write bindings to default output path!");
+            "GraphicsEngine" => {
+                bindings = bindings.header(r_headers_to_path["Rinternals"]);
+            }
 
-    // Also write the bindings to a folder specified by `LIBRSYS_BINDINGS_OUTPUT_PATH`, if defined
-    if let Some(alt_target) = env::var_os(ENVVAR_BINDINGS_OUTPUT_PATH) {
-        let out_path = PathBuf::from(alt_target);
-        // if folder doesn't exist, try to create it
-        if !out_path.exists() {
-            fs::create_dir(&out_path).unwrap_or_else(|_| {
-                panic!(
-                    "Couldn't create output directory for bindings: {}",
-                    out_path.display()
-                )
-            });
+            "GraphicsDevice" => {
+                bindings = bindings.header(r_headers_to_path["Rinternals"]);
+                bindings = bindings.header(r_headers_to_path["GraphicsEngine"]);
+            }
+            "Connections" => {
+                bindings = bindings.header(r_headers_to_path["Rinternals"]);
+            }
+            "GetX11Image" => {
+                bindings = bindings.header(r_headers_to_path["Boolean"]);
+            }
+            "Rinterface" => {
+                bindings = bindings.clang_arg("-DR_INTERFACE_PTRS")
+            }
+            _ => {}
+        }
+        bindings = bindings.header(r_header);
+
+        // block all the other r-headers
+        for other_r_header in &r_headers {
+            if other_r_header == r_header {
+                // don't block current header being processed
+                continue;
+            }
+
+            let other_r_header = other_r_header.replace(r"\", r"/");
+            let other_r_header = regex::escape(&other_r_header);
+
+            bindings = bindings.blocklist_file(other_r_header);
         }
 
-        let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
-        let out_file = out_path.join(bindings_file_full);
+        let bindings = bindings.generate().expect("Unable to generate bindings");
+
+        let binding_name =
+            version_info.get_r_bindings_filename(&r_header_name, &target_os, &target_arch);
 
         bindings
-            .write_to_file(&out_file)
-            .unwrap_or_else(|_| panic!("Couldn't write bindings: {}", out_file.display()));
-    } else {
-        println!(
+            .write_to_file(out_path.join(&binding_name))
+            .expect("Couldn't write bindings to default output path!");
+
+        if let Some(alt_target) = env::var_os(ENVVAR_BINDINGS_OUTPUT_PATH) {
+            let out_path = PathBuf::from(alt_target);
+            // if folder doesn't exist, try to create it
+            if !out_path.exists() {
+                fs::create_dir(&out_path).unwrap_or_else(|_| {
+                    panic!(
+                        "Couldn't create output directory for bindings: {}",
+                        out_path.display()
+                    )
+                });
+            }
+
+            let out_file = out_path.join(&binding_name);
+
+            bindings
+                .write_to_file(&out_file)
+                .unwrap_or_else(|_| panic!("Couldn't write bindings: {}", out_file.display()));
+        } else {
+            println!(
             "cargo:warning=Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
         );
+        }
     }
 }
 
 #[cfg(not(feature = "use-bindgen"))]
 /// Retrieve bindings from cache, if available. Errors out otherwise.
 fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
-    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
-    let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-    let bindings_path = PathBuf::from(
-        env::var_os(ENVVAR_BINDINGS_PATH).unwrap_or_else(|| OsString::from("bindings")),
-    );
+    // let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
+    // let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+    // let bindings_path = PathBuf::from(
+    //     env::var_os(ENVVAR_BINDINGS_PATH).unwrap_or_else(|| OsString::from("src/bindings")),
+    // );
 
-    // we try a few different file names, from more specific to less specific
-    let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
-    let bindings_file_novers = PathBuf::from(format!("bindings-{target_os}-{target_arch}.rs"));
+    // // we try a few different file names, from more specific to less specific
+    // let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
+    // let bindings_file_novers = PathBuf::from(format!("bindings-{target_os}-{target_arch}.rs"));
 
-    let mut from = bindings_path.join(bindings_file_full);
-    if !from.exists() {
-        from = bindings_path.join(bindings_file_novers);
-        if !from.exists() {
-            panic!(
-                "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with --features use-bindgen.",
-                version_info.major, version_info.minor, version_info.patch, version_info.devel, target_os, bindings_path.display()
-            )
-        } else {
-            println!(
-                "cargo:warning=using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
-                target_os, target_arch, version_info.major, version_info.minor, version_info.patch, version_info.devel
-            );
-        }
-    }
+    // let mut from = bindings_path.join(bindings_file_full);
+    // if !from.exists() {
+    //     from = bindings_path.join(bindings_file_novers);
+    //     if !from.exists() {
+    //         panic!(
+    //             "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with --features use-bindgen.",
+    //             version_info.major, version_info.minor, version_info.patch, version_info.devel, target_os, bindings_path.display()
+    //         )
+    //     } else {
+    //         println!(
+    //             "cargo:warning=using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
+    //             target_os, target_arch, version_info.major, version_info.minor, version_info.patch, version_info.devel
+    //         );
+    //     }
+    // }
 
-    fs::copy(
-        &from,
-        PathBuf::from(env::var_os("OUT_DIR").unwrap()).join("bindings.rs"),
-    )
-    .expect("No precomputed bindings available!");
-    println!("cargo:rerun-if-changed={}", from.display());
+    // fs::copy(
+    //     &from,
+    //     PathBuf::from(env::var_os("OUT_DIR").unwrap()).join("bindings.rs"),
+    // )
+    // .expect("No precomputed bindings available!");
+    // println!("cargo:rerun-if-changed={}", from.display());
 }
 
 /// Provide extra cleaning of the processed elements in the headers.
