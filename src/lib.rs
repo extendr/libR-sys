@@ -75,11 +75,6 @@ extern "C" {
     pub fn TYPEOF(x: SEXP) -> SEXPTYPE;
 }
 
-#[cfg(feature = "Altrep")]
-#[allow(non_camel_case_types)]
-pub type R_altrep_Coerce_method_t =
-    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXPTYPE) -> SEXP>;
-
 #[cfg(feature = "Boolean")]
 pub unsafe fn Rf_isS4(arg1: SEXP) -> Rboolean {
     unsafe {
@@ -150,7 +145,7 @@ pub mod bindings {
             #[cfg(target_os = "macos")]
             include!("bindings/bindings-BLAS-macos-aarch64.rs");
         }
-        
+
         pub mod callbacks {
             use super::super::r_internals::SEXP;
             use super::boolean::Rboolean;
@@ -166,14 +161,15 @@ pub mod bindings {
             include!("bindings/bindings-GetX11Image-macos-aarch64.rs");
         }
 
-        //     // #[path ="Lapack.rs"]
-        //     pub mod lapack {
-        //         use super::complex::Rcomplex;
-        //         include!("bindings/R_ext/Lapack.rs");
-        //     }
+        pub mod lapack {
+            use super::complex::Rcomplex;
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-Lapack-macos-aarch64.rs");
+        }
 
-        //     #[path = "Linpack.rs"]
-        //     pub mod linpack;
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-Linpack-macos-aarch64.rs"]
+        pub mod linpack;
 
         pub mod parse {
             use super::super::r_internals::SEXP;
@@ -279,6 +275,10 @@ pub mod bindings {
         #[path = "bindings-stats_stubs-macos-aarch64.rs"]
         pub mod stats_stubs;
 
+        #[cfg(target_os = "macos")]
+        #[path = "bindings-stats_package-macos-aarch64.rs"]
+        pub mod stats_package;
+
         pub mod graphics_engine {
             use super::super::r_internals::cetype_t;
             use super::super::r_internals::SEXP;
@@ -297,56 +297,66 @@ pub mod bindings {
             include!("bindings/bindings-GraphicsDevice-macos-aarch64.rs");
         }
 
-        // R_ext/Parse.h
-        // R_ext/RS.h
-        // R_ext/BLAS.h
-        // R_ext/Arith.h
-        // R_ext/Boolean.h
-        // R_ext/Applic.h
-        // R_ext/Linpack.h
-        // R_ext/Constants.h
-        // R_ext/Riconv.h
-        // R_ext/RStartup.h
-        // R_ext/Print.h
-        // R_ext/QuartzDevice.h
-        // R_ext/libextern.h
-        // R_ext/MathThreads.h
-        // R_ext/Memory.h
-        // R_ext/Connections.h
-        // R_ext/PrtUtil.h
-        // R_ext/Altrep.h
-        // R_ext/Rallocators.h
-        // R_ext/Visibility.h
-        // R_ext/stats_package.h
-        // R_ext/Makefile.in
-        // R_ext/Complex.h
-        // R_ext/Lapack.h
-        // R_ext/Random.h
-        // R_ext/eventloop.h
+        #[path = "bindings-QuartzDevice-macos-aarch64.rs"]
+        pub mod quartz_device;
+
+        #[path = "bindings-MathThreads-macos-aarch64.rs"]
+        pub mod math_threads;
+
+        pub mod connections {
+            use super::boolean::Rboolean;
+
+            include!("bindings/bindings-Connections-macos-aarch64.rs");
+        }
+        
+        pub mod prt_util {
+            use super::super::r_internals::SEXP;
+            use super::complex::Rcomplex;
+
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-PrtUtil-macos-aarch64.rs");
+        }
+
+        pub mod altrep {
+            use super::super::r_internals::{Rbyte, SEXP, SEXPTYPE};
+            use super::boolean::Rboolean;
+            use super::complex::Rcomplex;
+            use super::r_dynload::DllInfo;
+
+            #[cfg(target_os = "macos")]
+            include!("bindings/bindings-Altrep-macos-aarch64.rs");
+
+            #[allow(non_camel_case_types)]
+            pub type R_altrep_Coerce_method_t =
+                ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: SEXPTYPE) -> SEXP>;
+        }
+
+        #[path = "bindings-Rallocators-macos-aarch64.rs"]
+        pub mod r_allocators;
 
         //     //TODO: this is windows specific.
-        //     #[path = "libextern.rs"]
-        //     pub mod libextern;
+        #[path = "bindings-libextern-macos-aarch64.rs"]
+        pub mod libextern;
     }
 
     #[cfg(target_os = "macos")]
     #[path = "bindings-Rconfig-macos-aarch64.rs"]
     pub mod r_config;
 
-    // pub mod r_prelude {
-    //     pub use super::r_config::*;
-    //     pub use super::r_ext::arith::*;
-    //     pub use super::r_ext::boolean::*;
-    //     pub use super::r_ext::complex::*;
-    //     pub use super::r_ext::constants::*;
-    //     pub use super::r_ext::error::*;
-    //     pub use super::r_ext::libextern::*;
-    //     pub use super::r_ext::memory::*;
-    //     pub use super::r_ext::print::*;
-    //     pub use super::r_ext::random::*;
-    //     pub use super::r_ext::rs::*;
-    //     pub use super::r_ext::utils::*;
-    // }
+    pub mod r_prelude {
+        pub use super::r_config::*;
+        pub use super::r_ext::arith::*;
+        pub use super::r_ext::boolean::*;
+        pub use super::r_ext::complex::*;
+        pub use super::r_ext::constants::*;
+        pub use super::r_ext::error::*;
+        pub use super::r_ext::libextern::*;
+        pub use super::r_ext::memory::*;
+        pub use super::r_ext::print::*;
+        pub use super::r_ext::random::*;
+        pub use super::r_ext::rs::*;
+        pub use super::r_ext::utils::*;
+    }
 }
 
 #[cfg(test)]
