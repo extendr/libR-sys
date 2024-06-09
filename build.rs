@@ -534,11 +534,20 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .files;
     dbg!(&r_headers);
 
-    // name to path 
-    let r_headers_to_path = r_headers.iter().map(|r_header_path|
-        (Path::new(r_header_path).file_stem().unwrap().to_str().unwrap(),
-        r_header_path)
-    ).collect::<HashMap<_,_>>();
+    // name to path
+    let r_headers_to_path = r_headers
+        .iter()
+        .map(|r_header_path| {
+            (
+                Path::new(r_header_path)
+                    .file_stem()
+                    .unwrap()
+                    .to_str()
+                    .unwrap(),
+                r_header_path,
+            )
+        })
+        .collect::<HashMap<_, _>>();
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
@@ -549,7 +558,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         let mut bindings = bindgen_builder.clone();
         match r_header_name {
             r"Complex" => {
-                // bindings = bindings.header("wrapper_head_Rcomplex.h");
+                bindings = bindings.header("mini_Rcomplex.h");
             }
             "Parse" => {
                 bindings = bindings.header(r_headers_to_path["Rinternals"]);
@@ -583,34 +592,33 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
         let binding_name = format!("bindings-{r_header_name}-{target_os}-{target_arch}.rs");
         bindings
-            .write_to_file(out_path.join(binding_name))
+            .write_to_file(out_path.join(&binding_name))
             .expect("Couldn't write bindings to default output path!");
+
+        if let Some(alt_target) = env::var_os(ENVVAR_BINDINGS_OUTPUT_PATH) {
+            let out_path = PathBuf::from(alt_target);
+            // if folder doesn't exist, try to create it
+            if !out_path.exists() {
+                fs::create_dir(&out_path).unwrap_or_else(|_| {
+                    panic!(
+                        "Couldn't create output directory for bindings: {}",
+                        out_path.display()
+                    )
+                });
+            }
+
+            // let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
+            let out_file = out_path.join(&binding_name);
+
+            bindings
+                .write_to_file(&out_file)
+                .unwrap_or_else(|_| panic!("Couldn't write bindings: {}", out_file.display()));
+        } else {
+            println!(
+            "cargo:warning=Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
+        );
+        }
     }
-
-    // // Also write the bindings to a folder specified by `LIBRSYS_BINDINGS_OUTPUT_PATH`, if defined
-    // if let Some(alt_target) = env::var_os(ENVVAR_BINDINGS_OUTPUT_PATH) {
-    //     let out_path = PathBuf::from(alt_target);
-    //     // if folder doesn't exist, try to create it
-    //     if !out_path.exists() {
-    //         fs::create_dir(&out_path).unwrap_or_else(|_| {
-    //             panic!(
-    //                 "Couldn't create output directory for bindings: {}",
-    //                 out_path.display()
-    //             )
-    //         });
-    //     }
-
-    //     let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
-    //     let out_file = out_path.join(bindings_file_full);
-
-    //     bindings
-    //         .write_to_file(&out_file)
-    //         .unwrap_or_else(|_| panic!("Couldn't write bindings: {}", out_file.display()));
-    // } else {
-    //     println!(
-    //         "cargo:warning=Couldn't write the bindings since `LIBRSYS_BINDINGS_OUTPUT_PATH` is not set."
-    //     );
-    // }
 }
 
 #[cfg(not(feature = "use-bindgen"))]
