@@ -54,8 +54,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"06\0";
-pub const R_DAY: &[u8; 3] = b"06\0";
-pub const R_SVN_REVISION: u32 = 86701;
+pub const R_DAY: &[u8; 3] = b"09\0";
+pub const R_SVN_REVISION: u32 = 86713;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1250,6 +1250,10 @@ extern "C" {
     pub fn SET_FORMALS(x: SEXP, v: SEXP);
     pub fn SET_BODY(x: SEXP, v: SEXP);
     pub fn SET_CLOENV(x: SEXP, v: SEXP);
+    pub fn R_mkClosure(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
+    pub fn R_ClosureFormals(arg1: SEXP) -> SEXP;
+    pub fn R_ClosureBody(arg1: SEXP) -> SEXP;
+    pub fn R_ClosureEnv(arg1: SEXP) -> SEXP;
     #[doc = "Symbol Access Functions"]
     pub fn PRINTNAME(x: SEXP) -> SEXP;
     pub fn SYMVALUE(x: SEXP) -> SEXP;
@@ -1730,6 +1734,7 @@ extern "C" {
     pub fn Rf_elt(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_inherits(arg1: SEXP, arg2: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_isArray(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isDataFrame(arg1: SEXP) -> Rboolean;
     pub fn Rf_isFactor(arg1: SEXP) -> Rboolean;
     pub fn Rf_isFrame(arg1: SEXP) -> Rboolean;
     pub fn Rf_isFunction(arg1: SEXP) -> Rboolean;
