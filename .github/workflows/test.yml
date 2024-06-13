@@ -55,30 +55,30 @@ jobs:
           #   - emit-bindings: If 'true', emit bindings. In principle, we choose
           #     only one stable Rust toolchain per combination of a platform and
           #     an R version (e.g. Windows and R-release) to emit bindings.
-          - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
-          - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', target: 'x86_64-pc-windows-gnu'}
-          - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
-          - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   target: 'x86_64-pc-windows-gnu'}
-          - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
-          - {os: windows-latest, r: '4.2',     rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true' }
+          # - {os: windows-latest, r: 'release', rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
+          # - {os: windows-latest, r: 'release', rust-version: 'nightly-msvc', target: 'x86_64-pc-windows-gnu'}
+          # - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
+          # - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   target: 'x86_64-pc-windows-gnu'}
+          # - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
+          # - {os: windows-latest, r: '4.2',     rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true' }
 
-          - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
-          - {os: macOS-latest,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
-          - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
-          - {os: macOS-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
-          - {os: macOS-latest,   r: 'release', rust-version: 'stable', target: 'x86_64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
-          - {os: macOS-latest,   r: '4.2',     rust-version: 'stable', emit-bindings: 'true' }
-          - {os: macOS-latest,   r: '4.2',     rust-version: 'stable', target: 'x86_64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
+          # - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
+          # - {os: macOS-latest,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
+          # - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
+          # - {os: macOS-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
+          # - {os: macOS-latest,   r: 'release', rust-version: 'stable', target: 'x86_64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
+          # - {os: macOS-latest,   r: '4.2',     rust-version: 'stable', emit-bindings: 'true' }
+          # - {os: macOS-latest,   r: '4.2',     rust-version: 'stable', target: 'x86_64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
 
-          - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
-          - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
-          - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
+          # - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
+          # - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
+          # - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
-          - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', emit-bindings: 'true'}
-          - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
+          # - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', emit-bindings: 'true'}
+          # - {os: ubuntu-latest,   r: 'devel',   rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
-          - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', emit-bindings: 'true'}
-          - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
+          # - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', emit-bindings: 'true'}
+          # - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
           - {os: ubuntu-latest,   r: '4.2',     rust-version: 'stable', emit-bindings: 'true' }
           - {os: ubuntu-latest,   r: '4.2',     rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
