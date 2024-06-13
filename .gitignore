@@ -11,3 +11,5 @@ Cargo.lock
 
 # Windows users need to add some settings to let rust-analyzer work.
 /.vscode/settings.json
+
+/bindings/
