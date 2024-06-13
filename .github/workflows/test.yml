@@ -252,7 +252,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       head_commit_message: ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}
-      # generate_bindings: ${{ contains(steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -265,8 +264,8 @@ jobs:
         echo "${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}"
         echo "${{ contains(steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE, '[generate bindings]') }}"
   
-  pr_generated_bindings:
-    name: Make PR with generated bindings
+  commit_generated_bindings_to_pr:
+    name: Commit generated bindings to PR
     needs: [test_with_bindgen, check_generate_bindings_flag]
     if: ${{ contains(needs.check_generate_bindings_flag.outputs.head_commit_message, '[generate bindings]') }}
     runs-on: ubuntu-latest
@@ -274,8 +273,8 @@ jobs:
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.event.pull_request.head.ref }}
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
     - uses: actions/download-artifact@v4
-
     - name: Update bindings
       run: |
         # Update or add the bindings
