@@ -295,7 +295,9 @@ jobs:
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         git commit -m "Update bindings [skip ci]"
     - name: Push to PR branch
-      run: git push origin ${{ github.event.pull_request.head.sha }}
+      run: git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Gather the generated bindings and push them to generated_bindings branch.
   # If we need to update the bindings, create a pull request from that branch.
