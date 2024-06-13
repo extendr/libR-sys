@@ -269,8 +269,7 @@ jobs:
     needs: [test_with_bindgen, check_generate_bindings_flag]
     if: ${{ contains(needs.check_generate_bindings_flag.outputs.head_commit_message, '[generate bindings]') }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: "write"
+    permissions: write-all
     steps:
     - uses: actions/checkout@v4
       with:
@@ -296,7 +295,7 @@ jobs:
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         git commit -m "Update bindings [skip ci]"
     - name: Push to PR branch
-      run: git push
+      run: git push origin ${{ github.event.pull_request.head.sha }}
 
   # Gather the generated bindings and push them to generated_bindings branch.
   # If we need to update the bindings, create a pull request from that branch.
