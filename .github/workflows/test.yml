@@ -80,11 +80,6 @@ jobs:
           - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
           - {os: ubuntu-latest,   r: '4.2',     rust-version: 'stable', emit-bindings: 'true' }
-
-          # Test on specific R versions
-
-
-
     env:
       RSPM: ${{ matrix.config.rspm }}
 
@@ -259,7 +254,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        ref: ${{ github.event.pull_request.head.ref }}
+        ref: ${{ github.event.pull_request.head.sha }}
     - name: Get Head Commit Message
       id: get_head_commit_message
       run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
