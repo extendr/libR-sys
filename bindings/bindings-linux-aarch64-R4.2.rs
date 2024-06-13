@@ -2,7 +2,6 @@
 
 /* libR-sys version: 0.7.0 */
 /* bindgen clang version: Ubuntu clang version 15.0.7 */
-/* clang-rs version: Ubuntu clang version 15.0.7 */
 /* r version: 4.2.3 */
 
 #[repr(C)]
@@ -258,7 +257,6 @@ pub struct _IO_FILE {
     pub _unused2: [::std::os::raw::c_char; 20usize],
 }
 #[repr(u32)]
-#[non_exhaustive]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum Rboolean {
     #[doc = ", MAYBE"]
@@ -301,7 +299,6 @@ pub struct Rf_RegisteredNativeSymbol {
 }
 pub type R_RegisteredNativeSymbol = Rf_RegisteredNativeSymbol;
 #[repr(u32)]
-#[non_exhaustive]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum NativeSymbolType {
     R_ANY_SYM = 0,
@@ -314,7 +311,6 @@ pub type Rbyte = ::std::os::raw::c_uchar;
 #[doc = "type for length of (standard, not long) vectors etc"]
 pub type R_len_t = ::std::os::raw::c_int;
 #[repr(u32)]
-#[non_exhaustive]
 #[doc = "------ enum_SEXPTYPE -----"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum SEXPTYPE {
@@ -383,7 +379,6 @@ pub struct R_allocator {
 }
 pub type R_allocator_t = R_allocator;
 #[repr(u32)]
-#[non_exhaustive]
 #[doc = "../main/character.c :"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum nchar_type {
@@ -392,7 +387,6 @@ pub enum nchar_type {
     Width = 2,
 }
 #[repr(u32)]
-#[non_exhaustive]
 #[doc = "cetype_t is an identifier reseved by POSIX, but it is\nwell established as public.  Could remap by a #define though"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum cetype_t {
@@ -407,7 +401,6 @@ pub enum cetype_t {
 pub type R_CFinalizer_t = ::std::option::Option<unsafe extern "C" fn(arg1: SEXP)>;
 pub type R_pstream_data_t = *mut ::std::os::raw::c_void;
 #[repr(u32)]
-#[non_exhaustive]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum R_pstream_format_t {
     R_pstream_any_format = 0,
@@ -459,6 +452,24 @@ pub struct R_inpstream_st {
     pub nat2nat_obj: *mut ::std::os::raw::c_void,
     pub nat2utf8_obj: *mut ::std::os::raw::c_void,
 }
+pub const SORTED_DECR_NA_1ST: _bindgen_ty_2 = _bindgen_ty_2::SORTED_DECR_NA_1ST;
+pub const SORTED_DECR: _bindgen_ty_2 = _bindgen_ty_2::SORTED_DECR;
+pub const UNKNOWN_SORTEDNESS: _bindgen_ty_2 = _bindgen_ty_2::UNKNOWN_SORTEDNESS;
+pub const SORTED_INCR: _bindgen_ty_2 = _bindgen_ty_2::SORTED_INCR;
+pub const SORTED_INCR_NA_1ST: _bindgen_ty_2 = _bindgen_ty_2::SORTED_INCR_NA_1ST;
+pub const KNOWN_UNSORTED: _bindgen_ty_2 = _bindgen_ty_2::KNOWN_UNSORTED;
+#[repr(i32)]
+#[doc = "ALTREP sorting support"]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum _bindgen_ty_2 {
+    SORTED_DECR_NA_1ST = -2,
+    SORTED_DECR = -1,
+    #[doc = "INT_MIN is NA_INTEGER!"]
+    UNKNOWN_SORTEDNESS = -2147483648,
+    SORTED_INCR = 1,
+    SORTED_INCR_NA_1ST = 2,
+    KNOWN_UNSORTED = 0,
+}
 #[doc = "try to allow some type checking"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -466,7 +477,6 @@ pub struct R_hashtab_type {
     pub cell: SEXP,
 }
 #[repr(u32)]
-#[non_exhaustive]
 #[doc = "Startup Actions"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum SA_TYPE {
@@ -543,7 +553,6 @@ impl structRstart {
 }
 pub type Rstart = *mut structRstart;
 #[repr(u32)]
-#[non_exhaustive]
 #[doc = "PARSE_NULL will not be returned by R_ParseVector"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum ParseStatus {
@@ -575,8 +584,6 @@ pub type R_altrep_DuplicateEX_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
 pub type R_altrep_Duplicate_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: Rboolean) -> SEXP>;
-pub type R_altrep_Coerce_method_t =
-    ::std::option::Option<unsafe extern "C" fn(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP>;
 pub type R_altrep_Inspect_method_t = ::std::option::Option<
     unsafe extern "C" fn(
         arg1: SEXP,
@@ -679,7 +686,6 @@ pub type R_altstring_Is_sorted_method_t =
 pub type R_altstring_No_NA_method_t =
     ::std::option::Option<unsafe extern "C" fn(arg1: SEXP) -> ::std::os::raw::c_int>;
 #[repr(u32)]
-#[non_exhaustive]
 #[doc = "The graphics engine will only accept locations and dimensions\n in native device coordinates, but it provides the following functions\n for converting between a couple of simple alternative coordinate\n systems and device coordinates:\n    DEVICE = native units of the device\n    NDC = Normalised device coordinates\n    INCHES = inches (!)\n    CM = centimetres (!!)"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum GEUnit {
@@ -691,7 +697,6 @@ pub enum GEUnit {
     GE_CM = 3,
 }
 #[repr(u32)]
-#[non_exhaustive]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum GEevent {
     #[doc = "In response to this event, the registered graphics system\n should allocate and initialise the systemSpecific structure\n\n Should return R_NilValue on failure so that engine\n can tidy up memory allocation"]
@@ -714,7 +719,6 @@ pub enum GEevent {
     GE_ScalePS = 8,
 }
 #[repr(u32)]
-#[non_exhaustive]
 #[doc = "Some line end/join constants"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum R_GE_lineend {
@@ -723,7 +727,6 @@ pub enum R_GE_lineend {
     GE_SQUARE_CAP = 3,
 }
 #[repr(u32)]
-#[non_exhaustive]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum R_GE_linejoin {
     GE_ROUND_JOIN = 1,
@@ -1012,7 +1015,6 @@ pub struct _DevDesc {
     pub reserved: [::std::os::raw::c_char; 64usize],
 }
 #[repr(i32)]
-#[non_exhaustive]
 #[doc = "These give the indices of some known keys"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum R_KeyName {
@@ -1041,7 +1043,6 @@ pub enum R_KeyName {
     knDEL = 21,
 }
 #[repr(u32)]
-#[non_exhaustive]
 #[doc = "These are the three possible mouse events"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum R_MouseEvent {
@@ -1128,7 +1129,6 @@ pub type d2fcn_p = ::std::option::Option<
     ),
 >;
 #[repr(u32)]
-#[non_exhaustive]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum RNGtype {
     WICHMANN_HILL = 0,
@@ -1141,7 +1141,6 @@ pub enum RNGtype {
     LECUYER_CMRG = 7,
 }
 #[repr(u32)]
-#[non_exhaustive]
 #[doc = "Different kinds of \"N(0,1)\" generators :"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum N01type {
@@ -1153,7 +1152,6 @@ pub enum N01type {
     KINDERMAN_RAMAGE = 5,
 }
 #[repr(u32)]
-#[non_exhaustive]
 #[doc = "Different ways to generate discrete uniform samples"]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum Sampletype {
@@ -1254,9 +1252,6 @@ extern "C" {
         arg3: ::std::os::raw::c_int,
     );
     pub fn Rf_setRVector(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: f64);
-    pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-    pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
-    pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
@@ -1686,7 +1681,6 @@ extern "C" {
     pub fn R_tryEval(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_int) -> SEXP;
     pub fn R_tryEvalSilent(arg1: SEXP, arg2: SEXP, arg3: *mut ::std::os::raw::c_int) -> SEXP;
     pub fn R_GetCurrentEnv() -> SEXP;
-    pub fn Rf_isS4(arg1: SEXP) -> Rboolean;
     pub fn Rf_asS4(arg1: SEXP, arg2: Rboolean, arg3: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_S3Class(arg1: SEXP) -> SEXP;
     pub fn Rf_isBasicClass(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
@@ -1728,8 +1722,6 @@ extern "C" {
     pub fn R_WeakRefKey(w: SEXP) -> SEXP;
     pub fn R_WeakRefValue(w: SEXP) -> SEXP;
     pub fn R_RunWeakRefFinalizer(w: SEXP);
-    pub fn R_PromiseExpr(arg1: SEXP) -> SEXP;
-    pub fn R_ClosureExpr(arg1: SEXP) -> SEXP;
     pub fn R_BytecodeExpr(e: SEXP) -> SEXP;
     #[doc = "Protected evaluation"]
     pub fn R_ToplevelExec(
@@ -2040,31 +2032,7 @@ extern "C" {
     #[doc = "stuff that probably shouldn't be in the API but is getting used"]
     pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
-    pub fn SET_S4_OBJECT(x: SEXP);
-    pub fn UNSET_S4_OBJECT(x: SEXP);
-    pub fn R_curErrorBuf() -> *const ::std::os::raw::c_char;
-    pub fn IS_SCALAR(x: SEXP, type_: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-    pub fn Rf_psmatch(
-        arg1: *const ::std::os::raw::c_char,
-        arg2: *const ::std::os::raw::c_char,
-        arg3: Rboolean,
-    ) -> Rboolean;
-    pub fn SETLENGTH(x: SEXP, v: R_xlen_t);
-    pub fn SET_TRUELENGTH(x: SEXP, v: R_xlen_t);
-    pub fn SETLEVELS(x: SEXP, v: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-    pub fn SET_ENVFLAGS(x: SEXP, v: ::std::os::raw::c_int);
-    pub fn SET_FRAME(x: SEXP, v: SEXP);
-    pub fn SET_ENCLOS(x: SEXP, v: SEXP);
-    pub fn SET_HASHTAB(x: SEXP, v: SEXP);
-    pub fn SET_PRENV(x: SEXP, v: SEXP);
-    pub fn SET_PRVALUE(x: SEXP, v: SEXP);
-    pub fn SET_PRCODE(x: SEXP, v: SEXP);
-    pub fn STDVEC_DATAPTR(x: SEXP) -> *mut ::std::os::raw::c_void;
-    pub fn IS_GROWABLE(x: SEXP) -> ::std::os::raw::c_int;
     pub fn SET_GROWABLE_BIT(x: SEXP);
-    pub fn SET_NAMED(x: SEXP, v: ::std::os::raw::c_int);
-    #[doc = "used by BIOC::matter; mightbe reasonable to include in API"]
-    pub fn R_tryWrap(arg1: SEXP) -> SEXP;
     pub fn R_FlushConsole();
     pub fn Rf_onintr();
     pub fn Rf_onintrNoResume();
