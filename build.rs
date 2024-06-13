@@ -567,6 +567,20 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+
+    let mut bindings_path_txz =
+        env::var_os(ENVVAR_BINDINGS_PATH).unwrap_or_else(|| OsString::from("bindings"));
+
+    bindings_path_txz.push(".tar.xz");
+
+    // `tar` is a requirement for building R packages
+    // in general. This should not be a problem
+    std::process::Command::new("tar")
+        .arg("xf")
+        .arg(bindings_path_txz)
+        .output()
+        .expect("Unable to un tar the bindings. GNU tar may not be installed.");
+
     let bindings_path = PathBuf::from(
         env::var_os(ENVVAR_BINDINGS_PATH).unwrap_or_else(|| OsString::from("bindings")),
     );
@@ -596,6 +610,9 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
         PathBuf::from(env::var_os("OUT_DIR").unwrap()).join("bindings.rs"),
     )
     .expect("No precomputed bindings available!");
+
+    fs::remove_dir_all(bindings_path).expect("Unable to delete uncompressed bindings");
+
     println!("cargo:rerun-if-changed={}", from.display());
 }
 
