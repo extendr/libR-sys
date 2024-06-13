@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - master
-  pull_request:
+  pull_request_target:
     branches:
       - main
       - master
@@ -273,7 +273,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        token: ${{ secrets.WORKFLOW_GIT_ACCESS_TOKEN }}
         ref: ${{ github.event.pull_request.head.ref }}
         repository: ${{ github.event.pull_request.head.repo.full_name }}
     - uses: actions/download-artifact@v4
