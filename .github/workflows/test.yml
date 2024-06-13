@@ -286,7 +286,7 @@ jobs:
         cd ..
     - name: Compress bindings tar ball
       run: |
-        tar cJf bindings.tar.xz bindings/
+        tar cJfh bindings.tar.xz bindings/
     - name: Add generated bindings
       run: |
         git add bindings.tar.xz
@@ -342,7 +342,7 @@ jobs:
         cd ..
 
         # detect changes (the code is derived from https://stackoverflow.com/a/3879077)
-        tar cJf bindings.tar.xz bindings/
+        tar cJfh bindings.tar.xz bindings/
         git add bindings.tar.xz
         git update-index --refresh
         if ! git diff-index --quiet HEAD -- bindings.tar.xz; then
