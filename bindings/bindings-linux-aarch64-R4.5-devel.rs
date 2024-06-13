@@ -136,8 +136,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"06\0";
-pub const R_DAY: &[u8; 3] = b"09\0";
-pub const R_SVN_REVISION: u32 = 86713;
+pub const R_DAY: &[u8; 3] = b"11\0";
+pub const R_SVN_REVISION: u32 = 86723;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1466,6 +1466,7 @@ extern "C" {
     pub fn ENCLOS(x: SEXP) -> SEXP;
     pub fn HASHTAB(x: SEXP) -> SEXP;
     pub fn ENVFLAGS(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_ParentEnv(arg1: SEXP) -> SEXP;
     #[doc = "Promise Access Functions"]
     pub fn PRCODE(x: SEXP) -> SEXP;
     pub fn PRENV(x: SEXP) -> SEXP;
