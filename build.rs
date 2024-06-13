@@ -610,6 +610,9 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
         PathBuf::from(env::var_os("OUT_DIR").unwrap()).join("bindings.rs"),
     )
     .expect("No precomputed bindings available!");
+
+    fs::remove_dir_all(bindings_path).expect("Unable to delete uncompressed bindings");
+
     println!("cargo:rerun-if-changed={}", from.display());
 }
 
