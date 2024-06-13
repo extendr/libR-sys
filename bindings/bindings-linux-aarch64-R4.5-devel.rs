@@ -135,9 +135,9 @@ pub const R_MAJOR: &[u8; 2] = b"4\0";
 pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
-pub const R_MONTH: &[u8; 3] = b"05\0";
-pub const R_DAY: &[u8; 3] = b"08\0";
-pub const R_SVN_REVISION: u32 = 86528;
+pub const R_MONTH: &[u8; 3] = b"06\0";
+pub const R_DAY: &[u8; 3] = b"11\0";
+pub const R_SVN_REVISION: u32 = 86723;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1359,6 +1359,8 @@ extern "C" {
     pub fn Rf_isEnvironment(s: SEXP) -> Rboolean;
     pub fn Rf_isString(s: SEXP) -> Rboolean;
     pub fn Rf_isObject(s: SEXP) -> Rboolean;
+    pub fn MAYBE_SHARED(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn NO_REFERENCES(x: SEXP) -> ::std::os::raw::c_int;
     #[doc = "General Cons Cell Attributes"]
     pub fn ATTRIB(x: SEXP) -> SEXP;
     pub fn OBJECT(x: SEXP) -> ::std::os::raw::c_int;
@@ -1393,6 +1395,7 @@ extern "C" {
     pub fn SET_VECTOR_ELT(x: SEXP, i: R_xlen_t, v: SEXP) -> SEXP;
     pub fn STRING_PTR(x: SEXP) -> *mut SEXP;
     pub fn STRING_PTR_RO(x: SEXP) -> *const SEXP;
+    pub fn VECTOR_PTR_RO(x: SEXP) -> *const SEXP;
     pub fn INTEGER_GET_REGION(
         sx: SEXP,
         i: R_xlen_t,
@@ -1449,6 +1452,10 @@ extern "C" {
     pub fn SET_FORMALS(x: SEXP, v: SEXP);
     pub fn SET_BODY(x: SEXP, v: SEXP);
     pub fn SET_CLOENV(x: SEXP, v: SEXP);
+    pub fn R_mkClosure(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
+    pub fn R_ClosureFormals(arg1: SEXP) -> SEXP;
+    pub fn R_ClosureBody(arg1: SEXP) -> SEXP;
+    pub fn R_ClosureEnv(arg1: SEXP) -> SEXP;
     #[doc = "Symbol Access Functions"]
     pub fn PRINTNAME(x: SEXP) -> SEXP;
     pub fn SYMVALUE(x: SEXP) -> SEXP;
@@ -1459,6 +1466,7 @@ extern "C" {
     pub fn ENCLOS(x: SEXP) -> SEXP;
     pub fn HASHTAB(x: SEXP) -> SEXP;
     pub fn ENVFLAGS(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_ParentEnv(arg1: SEXP) -> SEXP;
     #[doc = "Promise Access Functions"]
     pub fn PRCODE(x: SEXP) -> SEXP;
     pub fn PRENV(x: SEXP) -> SEXP;
@@ -1603,6 +1611,7 @@ extern "C" {
         arg2: ::std::os::raw::c_int,
         arg3: ::std::os::raw::c_int,
     ) -> SEXP;
+    pub fn Rf_allocLang(arg1: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_allocList(arg1: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_allocS4Object() -> SEXP;
     pub fn Rf_allocSExp(arg1: SEXPTYPE) -> SEXP;
@@ -1710,12 +1719,6 @@ extern "C" {
         x: *const ::std::os::raw::c_char,
         ce_in: cetype_t,
         ce_out: cetype_t,
-        subst: ::std::os::raw::c_int,
-    ) -> *const ::std::os::raw::c_char;
-    pub fn Rf_reEnc3(
-        x: *const ::std::os::raw::c_char,
-        fromcode: *const ::std::os::raw::c_char,
-        tocode: *const ::std::os::raw::c_char,
         subst: ::std::os::raw::c_int,
     ) -> *const ::std::os::raw::c_char;
     #[doc = "Calling a function with arguments evaluated"]
@@ -1876,7 +1879,6 @@ extern "C" {
     );
     pub fn R_Serialize(s: SEXP, ops: R_outpstream_t);
     pub fn R_Unserialize(ips: R_inpstream_t) -> SEXP;
-    pub fn R_SerializeInfo(ips: R_inpstream_t) -> SEXP;
     #[doc = "slot management (in attrib.c)"]
     pub fn R_do_slot(obj: SEXP, name: SEXP) -> SEXP;
     pub fn R_do_slot_assign(obj: SEXP, name: SEXP, value: SEXP) -> SEXP;
@@ -1907,7 +1909,6 @@ extern "C" {
     pub fn R_NewPreciousMSet(arg1: ::std::os::raw::c_int) -> SEXP;
     pub fn R_PreserveInMSet(x: SEXP, mset: SEXP);
     pub fn R_ReleaseFromMSet(x: SEXP, mset: SEXP);
-    pub fn R_ReleaseMSet(mset: SEXP, keepSize: ::std::os::raw::c_int);
     #[doc = "Shutdown actions"]
     pub fn R_dot_Last();
     pub fn R_RunExitFinalizers();
@@ -1936,6 +1937,7 @@ extern "C" {
     pub fn Rf_elt(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_inherits(arg1: SEXP, arg2: *const ::std::os::raw::c_char) -> Rboolean;
     pub fn Rf_isArray(arg1: SEXP) -> Rboolean;
+    pub fn Rf_isDataFrame(arg1: SEXP) -> Rboolean;
     pub fn Rf_isFactor(arg1: SEXP) -> Rboolean;
     pub fn Rf_isFrame(arg1: SEXP) -> Rboolean;
     pub fn Rf_isFunction(arg1: SEXP) -> Rboolean;

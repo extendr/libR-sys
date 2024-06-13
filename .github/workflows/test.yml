@@ -60,13 +60,15 @@ jobs:
           - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
           - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   target: 'x86_64-pc-windows-gnu'}
           - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
+          - {os: windows-latest, r: '4.2',     rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true' }
 
           - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
           - {os: macOS-latest,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
           - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
           - {os: macOS-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
           - {os: macOS-latest,   r: 'release', rust-version: 'stable', target: 'x86_64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
-
+          - {os: macOS-latest,   r: '4.2',     rust-version: 'stable', emit-bindings: 'true' }
+          - {os: macOS-latest,   r: '4.2',     rust-version: 'stable', target: 'x86_64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
 
           - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
           - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
@@ -78,6 +80,8 @@ jobs:
           - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', emit-bindings: 'true'}
           - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
+          - {os: ubuntu-latest,   r: '4.2',     rust-version: 'stable', emit-bindings: 'true' }
+          - {os: ubuntu-latest,   r: '4.2',     rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
     env:
       RSPM: ${{ matrix.config.rspm }}
 
@@ -252,7 +256,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        ref: ${{ github.event.pull_request.head.ref }}
+        ref: ${{ github.event.pull_request.head.sha }}
     - name: Get Head Commit Message
       id: get_head_commit_message
       run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
