@@ -579,7 +579,7 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
         .arg("xf")
         .arg(bindings_path_txz)
         .output()
-        .expect("Unable to un tar the bindings");
+        .expect("Unable to un tar the bindings. GNU tar may not be installed.");
 
     let bindings_path = PathBuf::from(
         env::var_os(ENVVAR_BINDINGS_PATH).unwrap_or_else(|| OsString::from("bindings")),

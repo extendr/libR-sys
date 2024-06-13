@@ -284,9 +284,12 @@ jobs:
           ln --force -s "$(ls -1 ./bindings-${x}-*.rs | grep -v devel | sort | tail -1)" ./bindings-${x}.rs
         done
         cd ..
+    - name: Compress bindings tar ball
+      run: |
+        tar cJf bindings.tar.xz bindings/
     - name: Add generated bindings
       run: |
-        git add bindings/
+        git add bindings.tar.xz
         git config --local user.name "${GITHUB_ACTOR}"
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         git commit -m "Update bindings [skip ci]"
@@ -339,9 +342,10 @@ jobs:
         cd ..
 
         # detect changes (the code is derived from https://stackoverflow.com/a/3879077)
-        git add bindings/
+        tar cJf bindings.tar.xz bindings/
+        git add bindings.tar.xz
         git update-index --refresh
-        if ! git diff-index --quiet HEAD -- bindings/; then
+        if ! git diff-index --quiet HEAD -- bindings.tar.xz; then
           git config --local user.name "${GITHUB_ACTOR}"
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git commit -m "Update bindings [skip ci]"
