@@ -2,7 +2,7 @@
 
 /* libR-sys version: 0.7.0 */
 /* bindgen clang version: Homebrew clang version 18.1.7 */
-/* r version: 4.4.0 */
+/* r version: 4.4.1 */
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -116,7 +116,7 @@ pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
 pub const RSTART_VERSION: u32 = 1;
 pub const __STDC_WANT_IEC_60559_FUNCS_EXT__: u32 = 1;
-pub const R_VERSION_STRING: &[u8; 6] = b"4.4.0\0";
+pub const R_VERSION_STRING: &[u8; 6] = b"4.4.1\0";
 pub const HAVE_EXPM1: u32 = 1;
 pub const HAVE_HYPOT: u32 = 1;
 pub const HAVE_LOG1P: u32 = 1;
@@ -130,15 +130,15 @@ pub const M_LN_2PI: f64 = 1.8378770664093456;
 pub const M_LN_SQRT_PI: f64 = 0.5723649429247001;
 pub const M_LN_SQRT_2PI: f64 = 0.9189385332046728;
 pub const M_LN_SQRT_PId2: f64 = 0.22579135264472744;
-pub const R_VERSION: u32 = 263168;
-pub const R_NICK: &[u8; 10] = b"Puppy Cup\0";
+pub const R_VERSION: u32 = 263169;
+pub const R_NICK: &[u8; 19] = b"Race for Your Life\0";
 pub const R_MAJOR: &[u8; 2] = b"4\0";
-pub const R_MINOR: &[u8; 4] = b"4.0\0";
+pub const R_MINOR: &[u8; 4] = b"4.1\0";
 pub const R_STATUS: &[u8; 1] = b"\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
-pub const R_MONTH: &[u8; 3] = b"04\0";
-pub const R_DAY: &[u8; 3] = b"24\0";
-pub const R_SVN_REVISION: u32 = 86474;
+pub const R_MONTH: &[u8; 3] = b"06\0";
+pub const R_DAY: &[u8; 3] = b"14\0";
+pub const R_SVN_REVISION: u32 = 86737;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1292,13 +1292,14 @@ extern "C" {
     );
     #[doc = "../../main/util.c  and others :"]
     pub fn R_ExpandFileName(arg1: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
+    #[doc = "Non-API, attribute_hidden and no longer used.  Will be removed in R 4.5.0."]
     pub fn Rf_setIVector(
         arg1: *mut ::std::os::raw::c_int,
         arg2: ::std::os::raw::c_int,
         arg3: ::std::os::raw::c_int,
     );
     pub fn Rf_setRVector(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: f64);
-    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
+    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\". Documented since 4.4.0 patched."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
         -> f64;
@@ -1315,7 +1316,7 @@ extern "C" {
     pub fn R_CheckUserInterrupt();
     pub fn R_CheckStack();
     pub fn R_CheckStack2(arg1: usize);
-    #[doc = "../../appl/interv.c: also in Applic.h"]
+    #[doc = "../../appl/interv.c: first also in Applic.h"]
     pub fn findInterval(
         xt: *mut f64,
         n: ::std::os::raw::c_int,
@@ -1335,6 +1336,7 @@ extern "C" {
         ilo: ::std::os::raw::c_int,
         mflag: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
+    #[doc = "not API, entry point no longer exists"]
     pub fn find_interv_vec(
         xt: *mut f64,
         n: *mut ::std::os::raw::c_int,
@@ -1344,7 +1346,7 @@ extern "C" {
         all_inside: *mut ::std::os::raw::c_int,
         indx: *mut ::std::os::raw::c_int,
     );
-    #[doc = "../../appl/maxcol.c: also in Applic.h"]
+    #[doc = "../../appl/maxcol.c"]
     pub fn R_max_col(
         matrix: *mut f64,
         nr: *mut ::std::os::raw::c_int,
@@ -1634,6 +1636,7 @@ extern "C" {
         arg2: ::std::os::raw::c_int,
         arg3: ::std::os::raw::c_int,
     ) -> SEXP;
+    pub fn Rf_allocLang(arg1: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_allocList(arg1: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_allocS4Object() -> SEXP;
     pub fn Rf_allocSExp(arg1: SEXPTYPE) -> SEXP;
@@ -2081,7 +2084,7 @@ extern "C" {
         data: *mut ::std::os::raw::c_void,
     );
     pub fn R_clrhash(h: R_hashtab_type);
-    #[doc = "stuff that probably shouldn't be in the API but is getting used"]
+    #[doc = "Rest of this file\nStuff that is not API and probably should not be but is getting used."]
     pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_GROWABLE_BIT(x: SEXP);
