@@ -54,8 +54,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"06\0";
-pub const R_DAY: &[u8; 3] = b"18\0";
-pub const R_SVN_REVISION: u32 = 86781;
+pub const R_DAY: &[u8; 3] = b"20\0";
+pub const R_SVN_REVISION: u32 = 86796;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1509,6 +1509,9 @@ extern "C" {
     pub fn Rf_S3Class(arg1: SEXP) -> SEXP;
     pub fn Rf_isBasicClass(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
     pub fn Rf_getCharCE(arg1: SEXP) -> cetype_t;
+    pub fn Rf_charIsASCII(arg1: SEXP) -> Rboolean;
+    pub fn Rf_charIsUTF8(arg1: SEXP) -> Rboolean;
+    pub fn Rf_charIsLatin1(arg1: SEXP) -> Rboolean;
     pub fn Rf_mkCharCE(arg1: *const ::std::os::raw::c_char, arg2: cetype_t) -> SEXP;
     pub fn Rf_mkCharLenCE(
         arg1: *const ::std::os::raw::c_char,

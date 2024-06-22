@@ -137,8 +137,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"06\0";
-pub const R_DAY: &[u8; 3] = b"17\0";
-pub const R_SVN_REVISION: u32 = 86768;
+pub const R_DAY: &[u8; 3] = b"21\0";
+pub const R_SVN_REVISION: u32 = 86805;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1651,6 +1651,8 @@ extern "C" {
     pub fn Rf_findVarInFrame(arg1: SEXP, arg2: SEXP) -> SEXP;
     pub fn Rf_findVarInFrame3(arg1: SEXP, arg2: SEXP, arg3: Rboolean) -> SEXP;
     pub fn R_existsVarInFrame(arg1: SEXP, arg2: SEXP) -> Rboolean;
+    pub fn R_getVar(arg1: SEXP, arg2: SEXP, arg3: Rboolean) -> SEXP;
+    pub fn R_getVarEx(arg1: SEXP, arg2: SEXP, arg3: Rboolean, arg4: SEXP) -> SEXP;
     pub fn R_removeVarFromFrame(arg1: SEXP, arg2: SEXP);
     pub fn Rf_getAttrib(arg1: SEXP, arg2: SEXP) -> SEXP;
     pub fn Rf_GetArrayDimnames(arg1: SEXP) -> SEXP;
@@ -1719,6 +1721,9 @@ extern "C" {
     pub fn Rf_S3Class(arg1: SEXP) -> SEXP;
     pub fn Rf_isBasicClass(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
     pub fn Rf_getCharCE(arg1: SEXP) -> cetype_t;
+    pub fn Rf_charIsASCII(arg1: SEXP) -> Rboolean;
+    pub fn Rf_charIsUTF8(arg1: SEXP) -> Rboolean;
+    pub fn Rf_charIsLatin1(arg1: SEXP) -> Rboolean;
     pub fn Rf_mkCharCE(arg1: *const ::std::os::raw::c_char, arg2: cetype_t) -> SEXP;
     pub fn Rf_mkCharLenCE(
         arg1: *const ::std::os::raw::c_char,
