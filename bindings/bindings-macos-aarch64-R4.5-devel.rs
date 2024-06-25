@@ -137,8 +137,8 @@ pub const R_MINOR: &[u8; 4] = b"5.0\0";
 pub const R_STATUS: &[u8; 29] = b"Under development (unstable)\0";
 pub const R_YEAR: &[u8; 5] = b"2024\0";
 pub const R_MONTH: &[u8; 3] = b"06\0";
-pub const R_DAY: &[u8; 3] = b"21\0";
-pub const R_SVN_REVISION: u32 = 86805;
+pub const R_DAY: &[u8; 3] = b"22\0";
+pub const R_SVN_REVISION: u32 = 86814;
 pub const R_GE_definitions: u32 = 13;
 pub const R_GE_deviceClip: u32 = 14;
 pub const R_GE_group: u32 = 15;
@@ -1284,6 +1284,10 @@ extern "C" {
     );
     #[doc = "../../main/util.c  and others :"]
     pub fn R_ExpandFileName(arg1: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
+    #[doc = "attribute_hidden and no longer used.\nvoid\tsetIVector(int*, int, int);\nvoid\tsetRVector(double*, int, double);\n/\n/* Not API"]
+    pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
+    pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
+    pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\". Documented since 4.4.0 patched."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
@@ -1375,7 +1379,6 @@ extern "C" {
     pub fn ATTRIB(x: SEXP) -> SEXP;
     pub fn OBJECT(x: SEXP) -> ::std::os::raw::c_int;
     pub fn MARK(x: SEXP) -> ::std::os::raw::c_int;
-    pub fn NAMED(x: SEXP) -> ::std::os::raw::c_int;
     pub fn REFCNT(x: SEXP) -> ::std::os::raw::c_int;
     pub fn SET_ATTRIB(x: SEXP, v: SEXP);
     pub fn DUPLICATE_ATTRIB(to: SEXP, from: SEXP);
@@ -1386,9 +1389,7 @@ extern "C" {
     #[doc = "Vector Access Functions"]
     pub fn LENGTH(x: SEXP) -> ::std::os::raw::c_int;
     pub fn XLENGTH(x: SEXP) -> R_xlen_t;
-    pub fn TRUELENGTH(x: SEXP) -> R_xlen_t;
     pub fn IS_LONG_VEC(x: SEXP) -> ::std::os::raw::c_int;
-    pub fn LEVELS(x: SEXP) -> ::std::os::raw::c_int;
     pub fn LOGICAL(x: SEXP) -> *mut ::std::os::raw::c_int;
     pub fn INTEGER(x: SEXP) -> *mut ::std::os::raw::c_int;
     pub fn RAW(x: SEXP) -> *mut Rbyte;
@@ -1403,7 +1404,6 @@ extern "C" {
     pub fn VECTOR_ELT(x: SEXP, i: R_xlen_t) -> SEXP;
     pub fn SET_STRING_ELT(x: SEXP, i: R_xlen_t, v: SEXP);
     pub fn SET_VECTOR_ELT(x: SEXP, i: R_xlen_t, v: SEXP) -> SEXP;
-    pub fn STRING_PTR(x: SEXP) -> *mut SEXP;
     pub fn STRING_PTR_RO(x: SEXP) -> *const SEXP;
     pub fn VECTOR_PTR_RO(x: SEXP) -> *const SEXP;
     pub fn INTEGER_GET_REGION(
@@ -1453,35 +1453,18 @@ extern "C" {
     pub fn FORMALS(x: SEXP) -> SEXP;
     pub fn BODY(x: SEXP) -> SEXP;
     pub fn CLOENV(x: SEXP) -> SEXP;
-    pub fn RDEBUG(x: SEXP) -> ::std::os::raw::c_int;
     pub fn RSTEP(x: SEXP) -> ::std::os::raw::c_int;
     pub fn RTRACE(x: SEXP) -> ::std::os::raw::c_int;
-    pub fn SET_RDEBUG(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_RSTEP(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_RTRACE(x: SEXP, v: ::std::os::raw::c_int);
-    pub fn SET_FORMALS(x: SEXP, v: SEXP);
-    pub fn SET_BODY(x: SEXP, v: SEXP);
-    pub fn SET_CLOENV(x: SEXP, v: SEXP);
     pub fn R_mkClosure(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
     pub fn R_ClosureFormals(arg1: SEXP) -> SEXP;
     pub fn R_ClosureBody(arg1: SEXP) -> SEXP;
     pub fn R_ClosureEnv(arg1: SEXP) -> SEXP;
     #[doc = "Symbol Access Functions"]
     pub fn PRINTNAME(x: SEXP) -> SEXP;
-    pub fn SYMVALUE(x: SEXP) -> SEXP;
-    pub fn INTERNAL(x: SEXP) -> SEXP;
-    pub fn DDVAL(x: SEXP) -> ::std::os::raw::c_int;
-    #[doc = "Environment Access Functions"]
-    pub fn FRAME(x: SEXP) -> SEXP;
     pub fn ENCLOS(x: SEXP) -> SEXP;
-    pub fn HASHTAB(x: SEXP) -> SEXP;
-    pub fn ENVFLAGS(x: SEXP) -> ::std::os::raw::c_int;
     pub fn R_ParentEnv(arg1: SEXP) -> SEXP;
-    #[doc = "Promise Access Functions"]
-    pub fn PRCODE(x: SEXP) -> SEXP;
-    pub fn PRENV(x: SEXP) -> SEXP;
-    pub fn PRVALUE(x: SEXP) -> SEXP;
-    pub fn PRSEEN(x: SEXP) -> ::std::os::raw::c_int;
     #[doc = "External pointer access macros"]
     pub fn EXTPTR_PROT(arg1: SEXP) -> SEXP;
     pub fn EXTPTR_TAG(arg1: SEXP) -> SEXP;
@@ -1649,7 +1632,6 @@ extern "C" {
     pub fn Rf_findFun(arg1: SEXP, arg2: SEXP) -> SEXP;
     pub fn Rf_findVar(arg1: SEXP, arg2: SEXP) -> SEXP;
     pub fn Rf_findVarInFrame(arg1: SEXP, arg2: SEXP) -> SEXP;
-    pub fn Rf_findVarInFrame3(arg1: SEXP, arg2: SEXP, arg3: Rboolean) -> SEXP;
     pub fn R_existsVarInFrame(arg1: SEXP, arg2: SEXP) -> Rboolean;
     pub fn R_getVar(arg1: SEXP, arg2: SEXP, arg3: Rboolean) -> SEXP;
     pub fn R_getVarEx(arg1: SEXP, arg2: SEXP, arg3: Rboolean, arg4: SEXP) -> SEXP;
@@ -1686,17 +1668,9 @@ extern "C" {
     pub fn Rf_namesgets(arg1: SEXP, arg2: SEXP) -> SEXP;
     pub fn Rf_mkChar(arg1: *const ::std::os::raw::c_char) -> SEXP;
     pub fn Rf_mkCharLen(arg1: *const ::std::os::raw::c_char, arg2: ::std::os::raw::c_int) -> SEXP;
-    pub fn Rf_NonNullStringMatch(arg1: SEXP, arg2: SEXP) -> Rboolean;
     pub fn Rf_ncols(arg1: SEXP) -> ::std::os::raw::c_int;
     pub fn Rf_nrows(arg1: SEXP) -> ::std::os::raw::c_int;
     pub fn Rf_nthcdr(arg1: SEXP, arg2: ::std::os::raw::c_int) -> SEXP;
-    pub fn R_nchar(
-        string: SEXP,
-        type_: nchar_type,
-        allowNA: Rboolean,
-        keepNA: Rboolean,
-        msg_name: *const ::std::os::raw::c_char,
-    ) -> ::std::os::raw::c_int;
     pub fn R_ParseEvalString(arg1: *const ::std::os::raw::c_char, arg2: SEXP) -> SEXP;
     pub fn R_ParseString(arg1: *const ::std::os::raw::c_char) -> SEXP;
     pub fn Rf_PrintValue(arg1: SEXP);
@@ -1761,6 +1735,7 @@ extern "C" {
     pub fn R_WeakRefKey(w: SEXP) -> SEXP;
     pub fn R_WeakRefValue(w: SEXP) -> SEXP;
     pub fn R_RunWeakRefFinalizer(w: SEXP);
+    pub fn R_ClosureExpr(arg1: SEXP) -> SEXP;
     pub fn R_BytecodeExpr(e: SEXP) -> SEXP;
     #[doc = "Protected evaluation"]
     pub fn R_ToplevelExec(
@@ -2005,13 +1980,11 @@ extern "C" {
     pub fn Rf_ScalarReal(arg1: f64) -> SEXP;
     pub fn Rf_ScalarString(arg1: SEXP) -> SEXP;
     pub fn Rf_xlength(arg1: SEXP) -> R_xlen_t;
-    pub fn XTRUELENGTH(x: SEXP) -> R_xlen_t;
     pub fn LENGTH_EX(
         x: SEXP,
         file: *const ::std::os::raw::c_char,
         line: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
-    pub fn XLENGTH_EX(x: SEXP) -> R_xlen_t;
     pub fn Rf_protect(arg1: SEXP) -> SEXP;
     pub fn Rf_unprotect(arg1: ::std::os::raw::c_int);
     pub fn R_ProtectWithIndex(arg1: SEXP, arg2: *mut PROTECT_INDEX);
@@ -2044,8 +2017,6 @@ extern "C" {
     pub fn R_set_altrep_data2(x: SEXP, v: SEXP);
     pub fn LOGICAL0(x: SEXP) -> *mut ::std::os::raw::c_int;
     pub fn INTEGER0(x: SEXP) -> *mut ::std::os::raw::c_int;
-    pub fn REAL0(x: SEXP) -> *mut f64;
-    pub fn COMPLEX0(x: SEXP) -> *mut Rcomplex;
     pub fn RAW0(x: SEXP) -> *mut Rbyte;
     pub fn ALTREP(x: SEXP) -> ::std::os::raw::c_int;
     #[doc = "public C interface"]
@@ -2068,11 +2039,14 @@ extern "C" {
         data: *mut ::std::os::raw::c_void,
     );
     pub fn R_clrhash(h: R_hashtab_type);
-    #[doc = "Rest of this file\nStuff that is not API and probably should not be but is getting used."]
-    pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
     #[doc = "used by Rcpp (not?), Matrix and more and in an example in R-exts."]
     pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
-    pub fn SET_GROWABLE_BIT(x: SEXP);
+    pub fn IS_SCALAR(x: SEXP, type_: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn Rf_psmatch(
+        arg1: *const ::std::os::raw::c_char,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: Rboolean,
+    ) -> Rboolean;
     pub fn R_FlushConsole();
     pub fn Rf_onintr();
     pub fn Rf_onintrNoResume();
