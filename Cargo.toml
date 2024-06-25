@@ -15,6 +15,7 @@ license = "MIT"
 links = "R"
 documentation = "https://docs.rs/libR-sys/latest/libR_sys/"
 repository = "https://github.com/extendr/libR-sys"
+rust-version = "1.67"
 
 [dependencies]
 
