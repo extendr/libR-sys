@@ -16,26 +16,6 @@ links = "R"
 documentation = "https://docs.rs/libR-sys/latest/libR_sys/"
 repository = "https://github.com/extendr/libR-sys"
 
-[dependencies]
-
-[build-dependencies]
-bindgen = { version = "0.69.4", optional = true, features = ["experimental"] }
-regex = { version = "*", optional = true, default-features = false }
-
-[features]
-default = ["runtime"]
-# By default, we use pre-computed bindings that ship with the library. This may fail!
-# Turn on the 'use-bindgen' feature to generate bindings on the fly for your platform.
-use-bindgen = ["bindgen", "regex"]
-
-# retain non-API bindings from R (requires build-time generation of bindings)
-non-api = ["use-bindgen"]
-
-runtime = ["bindgen/runtime"]
-
-# Enables generation of layout-tests in bindgen
-layout_tests = ["use-bindgen"]
-
 [lib]
 # Some code comments on R's source code might be accidentally treated as Rust's
 # doc test. See https://github.com/extendr/libR-sys/issues/194 for the details.

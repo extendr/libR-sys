@@ -223,8 +223,9 @@ jobs:
         if: matrix.config.skip-tests != 'true'
         run: |
           . ./ci-cargo.ps1
-          ci-cargo test -vv --features use-bindgen,layout_tests $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture -ActionName "Running bindgen tests for target: $env:RUST_TARGET"
-          ci-cargo test -vv --features use-bindgen,non-api,layout_tests $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture -ActionName "Running bindgen tests for target: $env:RUST_TARGET (with non-API)"
+          # ci-cargo test -vv --features use-bindgen,layout_tests $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture -ActionName "Running bindgen tests for target: $env:RUST_TARGET"
+          # ci-cargo test -vv --features use-bindgen,non-api,layout_tests $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture -ActionName "Running bindgen tests for target: $env:RUST_TARGET (with non-API)"
+          ci-cargo test -vv $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture -ActionName "Running bindgen tests for target: $env:RUST_TARGET"
         env:
           RUST_TARGET: ${{ matrix.config.target }}
 
@@ -233,7 +234,7 @@ jobs:
         id: build
         run: |
           . ./ci-cargo.ps1
-          ci-cargo build -vv --features use-bindgen $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) -ActionName "Building for target: $env:RUST_TARGET"
+          # ci-cargo build -vv --features use-bindgen $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) -ActionName "Building for target: $env:RUST_TARGET"
         env:
           LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
           RUST_TARGET: ${{ matrix.config.target }}
