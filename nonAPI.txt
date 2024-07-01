@@ -120,6 +120,7 @@ R_set_prim_method
 R_set_quick_method_check
 R_set_standardGeneric_ptr
 R_setupHistory
+R_shallow_duplicate_attr
 R_strtod4
 R_subassign3_dflt
 R_taskCallbackRoutine
@@ -162,10 +163,13 @@ Rf_formatComplex
 Rf_formatInteger
 Rf_formatLogical
 Rf_formatReal
+Rf_gsetVar
 Rf_initEmbeddedR
 Rf_init_con
 Rf_initialize_R
 Rf_isProtected
+Rf_isValidString
+Rf_isValidStringF
 Rf_jump_to_toplevel
 Rf_mainloop
 Rf_mbrtowc
