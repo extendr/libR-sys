@@ -1938,8 +1938,6 @@ extern "C" {
     pub fn Rf_isPrimitive(arg1: SEXP) -> Rboolean;
     pub fn Rf_isTs(arg1: SEXP) -> Rboolean;
     pub fn Rf_isUserBinop(arg1: SEXP) -> Rboolean;
-    pub fn Rf_isValidString(arg1: SEXP) -> Rboolean;
-    pub fn Rf_isValidStringF(arg1: SEXP) -> Rboolean;
     pub fn Rf_isVector(arg1: SEXP) -> Rboolean;
     pub fn Rf_isVectorAtomic(arg1: SEXP) -> Rboolean;
     pub fn Rf_isVectorList(arg1: SEXP) -> Rboolean;
