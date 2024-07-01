@@ -1610,7 +1610,6 @@ extern "C" {
     pub fn Rf_duplicate(arg1: SEXP) -> SEXP;
     pub fn Rf_shallow_duplicate(arg1: SEXP) -> SEXP;
     pub fn R_duplicate_attr(arg1: SEXP) -> SEXP;
-    pub fn R_shallow_duplicate_attr(arg1: SEXP) -> SEXP;
     pub fn Rf_lazy_duplicate(arg1: SEXP) -> SEXP;
     #[doc = "the next really should not be here and is also in Defn.h"]
     pub fn Rf_duplicated(arg1: SEXP, arg2: Rboolean) -> SEXP;
