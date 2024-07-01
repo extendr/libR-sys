@@ -1634,7 +1634,6 @@ extern "C" {
     pub fn Rf_GetOptionDigits() -> ::std::os::raw::c_int;
     pub fn Rf_GetOptionWidth() -> ::std::os::raw::c_int;
     pub fn Rf_GetRowNames(arg1: SEXP) -> SEXP;
-    pub fn Rf_gsetVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);
     pub fn Rf_install(arg1: *const ::std::os::raw::c_char) -> SEXP;
     pub fn Rf_installChar(arg1: SEXP) -> SEXP;
     pub fn Rf_installNoTrChar(arg1: SEXP) -> SEXP;
