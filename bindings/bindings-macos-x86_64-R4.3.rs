@@ -1499,7 +1499,6 @@ extern "C" {
     pub fn PRCODE(x: SEXP) -> SEXP;
     pub fn PRENV(x: SEXP) -> SEXP;
     pub fn PRVALUE(x: SEXP) -> SEXP;
-    pub fn PRSEEN(x: SEXP) -> ::std::os::raw::c_int;
     #[doc = "External pointer access macros"]
     pub fn EXTPTR_PROT(arg1: SEXP) -> SEXP;
     pub fn EXTPTR_TAG(arg1: SEXP) -> SEXP;
