@@ -1423,7 +1423,6 @@ extern "C" {
     pub fn SET_CLOENV(x: SEXP, v: SEXP);
     #[doc = "Symbol Access Functions"]
     pub fn PRINTNAME(x: SEXP) -> SEXP;
-    pub fn SYMVALUE(x: SEXP) -> SEXP;
     pub fn INTERNAL(x: SEXP) -> SEXP;
     pub fn DDVAL(x: SEXP) -> ::std::os::raw::c_int;
     #[doc = "Environment Access Functions"]
