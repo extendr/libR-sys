@@ -1602,7 +1602,6 @@ extern "C" {
     pub fn Rf_duplicate(arg1: SEXP) -> SEXP;
     pub fn Rf_shallow_duplicate(arg1: SEXP) -> SEXP;
     pub fn R_duplicate_attr(arg1: SEXP) -> SEXP;
-    pub fn R_shallow_duplicate_attr(arg1: SEXP) -> SEXP;
     pub fn Rf_lazy_duplicate(arg1: SEXP) -> SEXP;
     #[doc = "the next really should not be here and is also in Defn.h"]
     pub fn Rf_duplicated(arg1: SEXP, arg2: Rboolean) -> SEXP;
@@ -1627,7 +1626,6 @@ extern "C" {
     pub fn Rf_GetOptionDigits() -> ::std::os::raw::c_int;
     pub fn Rf_GetOptionWidth() -> ::std::os::raw::c_int;
     pub fn Rf_GetRowNames(arg1: SEXP) -> SEXP;
-    pub fn Rf_gsetVar(arg1: SEXP, arg2: SEXP, arg3: SEXP);
     pub fn Rf_install(arg1: *const ::std::os::raw::c_char) -> SEXP;
     pub fn Rf_installChar(arg1: SEXP) -> SEXP;
     pub fn Rf_installNoTrChar(arg1: SEXP) -> SEXP;
@@ -1912,8 +1910,6 @@ extern "C" {
     pub fn Rf_isPrimitive(arg1: SEXP) -> Rboolean;
     pub fn Rf_isTs(arg1: SEXP) -> Rboolean;
     pub fn Rf_isUserBinop(arg1: SEXP) -> Rboolean;
-    pub fn Rf_isValidString(arg1: SEXP) -> Rboolean;
-    pub fn Rf_isValidStringF(arg1: SEXP) -> Rboolean;
     pub fn Rf_isVector(arg1: SEXP) -> Rboolean;
     pub fn Rf_isVectorAtomic(arg1: SEXP) -> Rboolean;
     pub fn Rf_isVectorList(arg1: SEXP) -> Rboolean;
