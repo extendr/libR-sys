@@ -44,7 +44,6 @@ R_HistoryFile
 R_HistorySize
 R_Home
 R_HomeDir
-R_InputHandlers
 R_Interactive
 R_MethodsNamespace
 R_NewHashedEnv
