@@ -458,7 +458,6 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
     // this effectively ignores all non-R headers from sneaking in
     bindgen_builder = bindgen_builder
-        .allowlist_file(r_include_path_escaped)
         .allowlist_file(".*mini_wrapper\\.h$");
 
     // stops warning about ignored attributes,
@@ -513,6 +512,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
     // Finish the builder and generate the bindings.
     let bindgen_builder = bindgen_builder
+        .detect_include_paths(true)
         .raw_line(format!(
             "/* libR-sys version: {} */",
             env!("CARGO_PKG_VERSION")
@@ -554,13 +554,25 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         })
         .collect::<HashMap<_, _>>();
 
+    let mut bindgen_builder = bindgen_builder;
+    #[cfg(windows)]
+    {
+        bindgen_builder = bindgen_builder.clang_args(["-DWin32", "-D_Win32"]);
+    }
+    let bindgen_builder = bindgen_builder;
+
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var_os("OUT_DIR").unwrap());
     // dbg!(&out_path);
     for r_header in &r_headers {
         let r_header_name = Path::new(r_header).file_stem().unwrap().to_str().unwrap();
+
+        let r_header_regex = r_header.replace(r"\", r"/");
+        let r_header_regex = regex::escape(&r_header_regex);
+        println!("cargo:warning=allowing {}", r_header_regex);
         // dbg!(r_header_name);
         let mut bindings = bindgen_builder.clone();
+        bindings = bindings.allowlist_file(r_header_regex);
         match r_header_name {
             r"Complex" => {
                 bindings = bindings.header("mini_Rcomplex.h");
@@ -586,9 +598,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
             "GetX11Image" => {
                 bindings = bindings.header(r_headers_to_path["Boolean"]);
             }
-            "Rinterface" => {
-                bindings = bindings.clang_arg("-DR_INTERFACE_PTRS")
-            }
+            "Rinterface" => bindings = bindings.clang_arg("-DR_INTERFACE_PTRS"),
             _ => {}
         }
         bindings = bindings.header(r_header);
@@ -602,15 +612,14 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
             let other_r_header = other_r_header.replace(r"\", r"/");
             let other_r_header = regex::escape(&other_r_header);
-
+            // println!("cargo:warning=blocking {}", other_r_header);
             bindings = bindings.blocklist_file(other_r_header);
         }
 
-        let bindings = bindings.generate().expect("Unable to generate bindings");
-
         let binding_name =
             version_info.get_r_bindings_filename(&r_header_name, &target_os, &target_arch);
-
+        // println!("cargo:warning=binding_name {}", &binding_name);
+        let bindings = bindings.generate().expect("Unable to generate bindings");
         bindings
             .write_to_file(out_path.join(&binding_name))
             .expect("Couldn't write bindings to default output path!");
