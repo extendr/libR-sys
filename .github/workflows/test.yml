@@ -64,13 +64,15 @@ jobs:
           - {os: windows-latest, r: 'devel',   rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
           # - {os: windows-latest, r: 'release', rust-version: 'stable-gnu',   target: 'x86_64-pc-windows-gnu'}
           - {os: windows-latest, r: 'oldrel',  rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true'}
+          - {os: windows-latest, r: '4.2',     rust-version: 'stable-msvc',  target: 'x86_64-pc-windows-gnu', emit-bindings: 'true' }
 
           # - {os: macOS-latest,   r: 'release', rust-version: 'nightly'}
           - {os: macOS-latest,   r: 'devel',   rust-version: 'stable',  emit-bindings: 'true'}
           - {os: macOS-latest,   r: 'oldrel',  rust-version: 'stable',  emit-bindings: 'true'}
           - {os: macOS-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
           - {os: macOS-latest,   r: 'release', rust-version: 'stable', target: 'x86_64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
-
+          - {os: macOS-latest,   r: '4.2',     rust-version: 'stable', emit-bindings: 'true' }
+          - {os: macOS-latest,   r: '4.2',     rust-version: 'stable', target: 'x86_64-apple-darwin', skip-tests: 'true', emit-bindings: 'true'}
 
           # - {os: ubuntu-latest,   r: 'release', rust-version: 'nightly'}
           - {os: ubuntu-latest,   r: 'release', rust-version: 'stable', emit-bindings: 'true'}
@@ -81,6 +83,9 @@ jobs:
 
           - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', emit-bindings: 'true'}
           - {os: ubuntu-latest,   r: 'oldrel',  rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
+
+          - {os: ubuntu-latest,   r: '4.2',     rust-version: 'stable', emit-bindings: 'true' }
+          - {os: ubuntu-latest,   r: '4.2',     rust-version: 'stable', target: 'aarch64-unknown-linux-gnu', skip-tests: 'true', emit-bindings: 'true'}
 
     env:
       RSPM: ${{ matrix.config.rspm }}
@@ -279,10 +284,10 @@ jobs:
     - name: Update bindings
       run: |
         # Update or add the bindings
-        cp generated_binding-*/*.rs src/bindings/
+        cp generated_binding-*/*.rs bindings/
 
         # Replace the default bindings
-        cd src/bindings
+        cd bindings
         # TODO: this needs adjustment for the new output files...
         # for x in linux-aarch64 linux-x86_64 macos-aarch64 macos-x86_64 windows-x86_64; do
         #   # Choose the newest version except for devel
@@ -291,7 +296,7 @@ jobs:
         cd ..
     - name: Add generated bindings
       run: |
-        git add src/bindings/
+        git add bindings/
         git config --local user.name "${GITHUB_ACTOR}"
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         git commit -m "Update bindings [skip ci]"
