@@ -518,8 +518,11 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
     let r_headers: Vec<_> = r_headers
         .into_iter()
         .map(|x| {
-            let r_header_path = x.replace(r"\", r"/");
-let r_header_path = r_header_path.replace(r"/R_ext", r"\R_ext");
+            let mut r_header_path = x.replace(r"\", r"/");
+            if cfg!(windows) {
+                r_header_path = r_header_path.replace(r"/R_ext", r"\R_ext");
+            }
+            let r_header_path = r_header_path;
             r_header_path
         })
         .collect();
