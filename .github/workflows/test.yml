@@ -5,10 +5,12 @@ on:
     branches:
       - main
       - master
+      - full_bindings
   pull_request:
     branches:
       - main
       - master
+      - full_bindings
   issue_comment:
     types:
       - created
@@ -125,7 +127,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           # Configure linker
-          echo "RUSTFLAGS=-C linker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "RUSTFLAGS=-Clinker=x86_64-w64-mingw32.static.posix-gcc.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
           # Create libgcc_eh mock
           New-Item -Path libgcc_mock -Type Directory
