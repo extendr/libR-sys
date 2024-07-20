@@ -457,7 +457,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         bindgen_builder.clang_args([format!("-I{r_include_path}",), format!("--target={target}")]);
 
     // this effectively ignores all non-R headers from sneaking in
-    bindgen_builder = bindgen_builder.allowlist_file(".*mini_wrapper\\.h$");
+    bindgen_builder = bindgen_builder.allowlist_file(r".*mini_wrapper\.h$");
 
     // stops warning about ignored attributes,
     // e.g. ignores `__format__` attributes caused by `stdio.h`
@@ -534,6 +534,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         .into_iter()
         .map(|x| {
             let r_header_path = x.replace(r"\", r"/");
+let r_header_path = r_header_path.replace(r"/R_ext", r"\R_ext");
             r_header_path
         })
         .collect();
@@ -573,7 +574,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         let mut bindings = bindgen_builder.clone();
         bindings = bindings.allowlist_file(r_header_regex);
         match r_header_name {
-            r"Complex" => {
+            "Complex" => {
                 bindings = bindings.header("mini_Rcomplex.h");
             }
             "Parse" => {
@@ -609,8 +610,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
                 continue;
             }
 
-            let other_r_header = other_r_header.replace(r"\", r"/");
-            let other_r_header = regex::escape(&other_r_header);
+                        let other_r_header = regex::escape(&other_r_header);
             // println!("cargo:warning=blocking {}", other_r_header);
             bindings = bindings.blocklist_file(other_r_header);
         }
