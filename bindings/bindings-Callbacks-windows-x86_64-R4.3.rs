@@ -6,14 +6,6 @@
 
 #[doc = "R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
-pub enum Rboolean {
-    #[doc = ", MAYBE"]
-    FALSE = 0,
-    #[doc = ", MAYBE"]
-    TRUE = 1,
-}
 pub type SEXP = *mut SEXPREC;
 #[doc = "The signature of the C routine that a callback must implement.\nexpr - the expression for the top-level task that was evaluated.\nvalue - the result of the top-level task, i.e. evaluating expr.\nsucceeded - a logical value indicating whether the task completed properly.\nvisible - a logical value indicating whether the result was printed to the R ``console''/stdout.\ndata - user-level data passed to the registration routine."]
 pub type R_ToplevelCallback = ::std::option::Option<
@@ -80,7 +72,6 @@ pub type Rdb_canCache = ::std::option::Option<
 pub type Rdb_onDetach = ::std::option::Option<unsafe extern "C" fn(arg1: *mut R_ObjectTable)>;
 pub type Rdb_onAttach = ::std::option::Option<unsafe extern "C" fn(arg1: *mut R_ObjectTable)>;
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
 pub struct _R_ObjectTable {
     pub type_: ::std::os::raw::c_int,
     pub cachedNames: *mut *mut ::std::os::raw::c_char,

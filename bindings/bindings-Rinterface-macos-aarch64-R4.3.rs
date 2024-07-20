@@ -69,6 +69,4 @@ extern "C" {
     pub fn R_FlushConsole();
     pub fn Rf_onintr();
     pub fn Rf_onintrNoResume();
-    #[doc = "C stack limit"]
-    pub static mut R_CStackLimit: usize;
 }

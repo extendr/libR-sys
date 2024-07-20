@@ -30,22 +30,6 @@ pub struct _iobuf {
     pub _Placeholder: *mut ::std::os::raw::c_void,
 }
 pub type FILE = _iobuf;
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
-pub enum Rboolean {
-    #[doc = ", MAYBE"]
-    FALSE = 0,
-    #[doc = ", MAYBE"]
-    TRUE = 1,
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct Rcomplex {
-    pub r: f64,
-    pub i: f64,
-}
-#[doc = "Called with a variable argument set after casting to a compatible\nfunction pointer."]
-pub type DL_FUNC = ::std::option::Option<unsafe extern "C" fn() -> *mut ::std::os::raw::c_void>;
 pub type Rbyte = ::std::os::raw::c_uchar;
 #[doc = "type for length of (standard, not long) vectors etc"]
 pub type R_len_t = ::std::os::raw::c_int;
@@ -738,7 +722,6 @@ extern "C" {
     pub fn R_ReleaseMSet(mset: SEXP, keepSize: ::std::os::raw::c_int);
     #[doc = "Shutdown actions"]
     pub fn R_dot_Last();
-    pub fn R_RunExitFinalizers();
     pub fn R_system(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
     pub fn R_compute_identical(arg1: SEXP, arg2: SEXP, arg3: ::std::os::raw::c_int) -> Rboolean;
     pub fn R_body_no_src(x: SEXP) -> SEXP;

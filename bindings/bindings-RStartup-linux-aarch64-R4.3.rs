@@ -168,5 +168,4 @@ extern "C" {
         arg2: *mut *mut ::std::os::raw::c_char,
         arg3: Rstart,
     );
-    pub fn setup_Rmainloop();
 }

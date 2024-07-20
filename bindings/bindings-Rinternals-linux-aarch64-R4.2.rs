@@ -767,7 +767,6 @@ extern "C" {
     pub fn R_ReleaseMSet(mset: SEXP, keepSize: ::std::os::raw::c_int);
     #[doc = "Shutdown actions"]
     pub fn R_dot_Last();
-    pub fn R_RunExitFinalizers();
     pub fn R_system(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
     pub fn R_compute_identical(arg1: SEXP, arg2: SEXP, arg3: ::std::os::raw::c_int) -> Rboolean;
     pub fn R_body_no_src(x: SEXP) -> SEXP;

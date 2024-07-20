@@ -89,14 +89,6 @@ pub const RSTART_VERSION: u32 = 1;
 pub type R_xlen_t = isize;
 #[repr(u32)]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
-pub enum Rboolean {
-    #[doc = ", MAYBE"]
-    FALSE = 0,
-    #[doc = ", MAYBE"]
-    TRUE = 1,
-}
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum UImode {
     RGui = 0,
     RTerm = 1,
@@ -117,7 +109,6 @@ pub enum SA_TYPE {
     SA_SUICIDE = 6,
 }
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
 pub struct structRstart {
     pub R_Quiet: Rboolean,
     pub R_NoEcho: Rboolean,
@@ -230,5 +221,4 @@ extern "C" {
         arg2: *mut *mut ::std::os::raw::c_char,
         arg3: Rstart,
     );
-    pub fn setup_Rmainloop();
 }
