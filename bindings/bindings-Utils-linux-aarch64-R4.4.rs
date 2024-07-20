@@ -51,6 +51,9 @@ extern "C" {
         arg3: ::std::os::raw::c_int,
     );
     pub fn Rf_setRVector(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: f64);
+    pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
+    pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
+    pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\". Documented since 4.4.0 patched."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)

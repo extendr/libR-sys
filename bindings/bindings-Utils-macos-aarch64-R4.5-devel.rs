@@ -45,6 +45,10 @@ extern "C" {
     );
     #[doc = "../../main/util.c  and others :"]
     pub fn R_ExpandFileName(arg1: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
+    #[doc = "attribute_hidden and no longer used.\nvoid\tsetIVector(int*, int, int);\nvoid\tsetRVector(double*, int, double);\n/\n/* Not API"]
+    pub fn Rf_StringFalse(arg1: *const ::std::os::raw::c_char) -> Rboolean;
+    pub fn Rf_StringTrue(arg1: *const ::std::os::raw::c_char) -> Rboolean;
+    pub fn Rf_isBlankString(arg1: *const ::std::os::raw::c_char) -> Rboolean;
     #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\". Documented since 4.4.0 patched."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)

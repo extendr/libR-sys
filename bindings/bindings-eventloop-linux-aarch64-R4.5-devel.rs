@@ -39,4 +39,18 @@ pub struct _InputHandler {
 pub type InputHandler = _InputHandler;
 extern "C" {
     pub fn consoleInputHandler(buf: *mut ::std::os::raw::c_uchar, len: ::std::os::raw::c_int);
+    pub fn addInputHandler(
+        handlers: *mut InputHandler,
+        fd: ::std::os::raw::c_int,
+        handler: InputHandlerProc,
+        activity: ::std::os::raw::c_int,
+    ) -> *mut InputHandler;
+    pub fn getInputHandler(
+        handlers: *mut InputHandler,
+        fd: ::std::os::raw::c_int,
+    ) -> *mut InputHandler;
+    pub fn removeInputHandler(
+        handlers: *mut *mut InputHandler,
+        it: *mut InputHandler,
+    ) -> ::std::os::raw::c_int;
 }
