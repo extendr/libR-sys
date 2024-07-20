@@ -2,7 +2,7 @@
 
 /* libR-sys version: 0.7.0 */
 /* bindgen clang version: Ubuntu clang version 15.0.7 */
-/* r version: 4.4.0 */
+/* r version: 4.4.1 */
 
 pub const R_XLEN_T_MAX: u64 = 4503599627370496;
 pub const R_SHORT_LEN_MAX: u32 = 2147483647;
@@ -24,7 +24,6 @@ pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
 #[doc = "R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
-pub type va_list = __builtin_va_list;
 pub type __off_t = ::std::os::raw::c_long;
 pub type __off64_t = ::std::os::raw::c_long;
 pub type FILE = _IO_FILE;
@@ -245,15 +244,6 @@ pub enum _bindgen_ty_2 {
 #[derive(Debug, Copy, Clone)]
 pub struct R_hashtab_type {
     pub cell: SEXP,
-}
-pub type __builtin_va_list = [__va_list_tag; 1usize];
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct __va_list_tag {
-    pub gp_offset: ::std::os::raw::c_uint,
-    pub fp_offset: ::std::os::raw::c_uint,
-    pub overflow_arg_area: *mut ::std::os::raw::c_void,
-    pub reg_save_area: *mut ::std::os::raw::c_void,
 }
 extern "C" {
     pub fn R_CHAR(x: SEXP) -> *const ::std::os::raw::c_char;
@@ -511,6 +501,7 @@ extern "C" {
         arg2: ::std::os::raw::c_int,
         arg3: ::std::os::raw::c_int,
     ) -> SEXP;
+    pub fn Rf_allocLang(arg1: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_allocList(arg1: ::std::os::raw::c_int) -> SEXP;
     pub fn Rf_allocS4Object() -> SEXP;
     pub fn Rf_allocSExp(arg1: SEXPTYPE) -> SEXP;
@@ -958,7 +949,7 @@ extern "C" {
         data: *mut ::std::os::raw::c_void,
     );
     pub fn R_clrhash(h: R_hashtab_type);
-    #[doc = "stuff that probably shouldn't be in the API but is getting used"]
+    #[doc = "Rest of this file\nStuff that is not API and probably should not be but is getting used."]
     pub fn SET_TYPEOF(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_OBJECT(x: SEXP, v: ::std::os::raw::c_int);
     pub fn SET_GROWABLE_BIT(x: SEXP);

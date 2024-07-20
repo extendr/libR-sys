@@ -2,7 +2,7 @@
 
 /* libR-sys version: 0.7.0 */
 /* bindgen clang version: Ubuntu clang version 15.0.7 */
-/* r version: 4.4.0 */
+/* r version: 4.4.1 */
 
 #[doc = "R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
@@ -51,7 +51,7 @@ extern "C" {
         arg3: ::std::os::raw::c_int,
     );
     pub fn Rf_setRVector(arg1: *mut f64, arg2: ::std::os::raw::c_int, arg3: f64);
-    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\"."]
+    #[doc = "These two are guaranteed to use '.' as the decimal point,\nand to accept \"NA\". Documented since 4.4.0 patched."]
     pub fn R_atof(str_: *const ::std::os::raw::c_char) -> f64;
     pub fn R_strtod(c: *const ::std::os::raw::c_char, end: *mut *mut ::std::os::raw::c_char)
         -> f64;
@@ -68,7 +68,7 @@ extern "C" {
     pub fn R_CheckUserInterrupt();
     pub fn R_CheckStack();
     pub fn R_CheckStack2(arg1: usize);
-    #[doc = "../../appl/interv.c: also in Applic.h"]
+    #[doc = "../../appl/interv.c: first also in Applic.h"]
     pub fn findInterval(
         xt: *mut f64,
         n: ::std::os::raw::c_int,
@@ -88,6 +88,7 @@ extern "C" {
         ilo: ::std::os::raw::c_int,
         mflag: *mut ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
+    #[doc = "not API, entry point no longer exists"]
     pub fn find_interv_vec(
         xt: *mut f64,
         n: *mut ::std::os::raw::c_int,
@@ -97,7 +98,7 @@ extern "C" {
         all_inside: *mut ::std::os::raw::c_int,
         indx: *mut ::std::os::raw::c_int,
     );
-    #[doc = "../../appl/maxcol.c: also in Applic.h"]
+    #[doc = "../../appl/maxcol.c"]
     pub fn R_max_col(
         matrix: *mut f64,
         nr: *mut ::std::os::raw::c_int,

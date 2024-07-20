@@ -24,7 +24,6 @@ pub const HT_TYPE_IDENTICAL: u32 = 0;
 pub const HT_TYPE_ADDRESS: u32 = 1;
 #[doc = "R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
-pub type va_list = [u64; 4usize];
 pub type __off_t = ::std::os::raw::c_long;
 pub type __off64_t = ::std::os::raw::c_long;
 pub type FILE = _IO_FILE;
@@ -270,6 +269,8 @@ extern "C" {
     pub fn DUPLICATE_ATTRIB(to: SEXP, from: SEXP);
     pub fn SHALLOW_DUPLICATE_ATTRIB(to: SEXP, from: SEXP);
     pub fn MARK_NOT_MUTABLE(x: SEXP);
+    pub fn CLEAR_ATTRIB(x: SEXP);
+    pub fn ANY_ATTRIB(x: SEXP) -> ::std::os::raw::c_int;
     #[doc = "S4 object testing"]
     pub fn IS_S4_OBJECT(x: SEXP) -> ::std::os::raw::c_int;
     #[doc = "Vector Access Functions"]
@@ -351,6 +352,10 @@ extern "C" {
     pub fn SET_FORMALS(x: SEXP, v: SEXP);
     pub fn SET_BODY(x: SEXP, v: SEXP);
     pub fn SET_CLOENV(x: SEXP, v: SEXP);
+    pub fn R_mkClosure(arg1: SEXP, arg2: SEXP, arg3: SEXP) -> SEXP;
+    pub fn R_ClosureFormals(arg1: SEXP) -> SEXP;
+    pub fn R_ClosureBody(arg1: SEXP) -> SEXP;
+    pub fn R_ClosureEnv(arg1: SEXP) -> SEXP;
     #[doc = "Symbol Access Functions"]
     pub fn PRINTNAME(x: SEXP) -> SEXP;
     pub fn SYMVALUE(x: SEXP) -> SEXP;
@@ -361,6 +366,7 @@ extern "C" {
     pub fn ENCLOS(x: SEXP) -> SEXP;
     pub fn HASHTAB(x: SEXP) -> SEXP;
     pub fn ENVFLAGS(x: SEXP) -> ::std::os::raw::c_int;
+    pub fn R_ParentEnv(arg1: SEXP) -> SEXP;
     #[doc = "Promise Access Functions"]
     pub fn PRCODE(x: SEXP) -> SEXP;
     pub fn PRENV(x: SEXP) -> SEXP;
@@ -535,6 +541,8 @@ extern "C" {
     pub fn Rf_findVarInFrame(arg1: SEXP, arg2: SEXP) -> SEXP;
     pub fn Rf_findVarInFrame3(arg1: SEXP, arg2: SEXP, arg3: Rboolean) -> SEXP;
     pub fn R_existsVarInFrame(arg1: SEXP, arg2: SEXP) -> Rboolean;
+    pub fn R_getVar(arg1: SEXP, arg2: SEXP, arg3: Rboolean) -> SEXP;
+    pub fn R_getVarEx(arg1: SEXP, arg2: SEXP, arg3: Rboolean, arg4: SEXP) -> SEXP;
     pub fn R_removeVarFromFrame(arg1: SEXP, arg2: SEXP);
     pub fn Rf_getAttrib(arg1: SEXP, arg2: SEXP) -> SEXP;
     pub fn Rf_GetArrayDimnames(arg1: SEXP) -> SEXP;
@@ -603,6 +611,9 @@ extern "C" {
     pub fn Rf_S3Class(arg1: SEXP) -> SEXP;
     pub fn Rf_isBasicClass(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
     pub fn Rf_getCharCE(arg1: SEXP) -> cetype_t;
+    pub fn Rf_charIsASCII(arg1: SEXP) -> Rboolean;
+    pub fn Rf_charIsUTF8(arg1: SEXP) -> Rboolean;
+    pub fn Rf_charIsLatin1(arg1: SEXP) -> Rboolean;
     pub fn Rf_mkCharCE(arg1: *const ::std::os::raw::c_char, arg2: cetype_t) -> SEXP;
     pub fn Rf_mkCharLenCE(
         arg1: *const ::std::os::raw::c_char,

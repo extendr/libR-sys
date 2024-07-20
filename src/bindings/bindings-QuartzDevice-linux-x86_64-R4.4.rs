@@ -2,7 +2,7 @@
 
 /* libR-sys version: 0.7.0 */
 /* bindgen clang version: Ubuntu clang version 15.0.7 */
-/* r version: 4.4.0 */
+/* r version: 4.4.1 */
 
 pub const QNPF_REDRAW: u32 = 1;
 pub const QDFLAG_DISPLAY_LIST: u32 = 1;

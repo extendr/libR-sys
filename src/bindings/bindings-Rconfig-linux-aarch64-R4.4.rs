@@ -2,7 +2,7 @@
 
 /* libR-sys version: 0.7.0 */
 /* bindgen clang version: Ubuntu clang version 15.0.7 */
-/* r version: 4.4.0 */
+/* r version: 4.4.1 */
 
 pub const HAVE_F77_UNDERSCORE: u32 = 1;
 pub const IEEE_754: u32 = 1;
