@@ -10,14 +10,6 @@ pub const middleButton: u32 = 2;
 pub const rightButton: u32 = 4;
 #[doc = "R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
-pub enum Rboolean {
-    #[doc = ", MAYBE"]
-    FALSE = 0,
-    #[doc = ", MAYBE"]
-    TRUE = 1,
-}
 #[doc = "--------- New (in 1.4.0) device driver structure ---------\n NOTES:\n 1. All locations and dimensions are in device coordinates.\n 2. I found this comment in the doc for dev_Open -- looks nasty\n    Any known instances of such a thing happening?  Should be\n    replaced by a function to query the device for preferred gpars\n    settings? (to be called when the device is initialised)\n\n NOTE that it is perfectly acceptable for this\n function to set generic graphics parameters too\n (i.e., override the generic parameter settings\n which GInit sets up) all at the author's own risk\n of course :)\n\n 3. Do we really need dev_StrWidth as well as dev_MetricInfo?\n    I can see the difference between the two -- its just a\n    question of whether dev_MetricInfo should just return\n    what dev_StrWidth would give if font metric information is\n    not available.  I guess having both allows the developer\n    to decide when to ask for which sort of value, and to decide\n    what to do when font metric information is not available.\n    And why not a dev_StrHeight?\n 4. Should \"ipr\", \"asp\", and \"cra\" be in the device description?\n    If not, then where?\n    I guess they don't need to be if no device makes use of them.\n    On the other hand, they would need to be replaced by a device\n    call that R base graphics could use to get enough information\n    to figure them out.  (e.g., some sort of dpi() function to\n    complement the size() function.)"]
 pub type DevDesc = _DevDesc;
 pub type pDevDesc = *mut DevDesc;

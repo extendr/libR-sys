@@ -4,63 +4,8 @@
 /* bindgen clang version: clang version 18.1.6 */
 /* r version: 4.4.1 */
 
-#[derive(PartialEq, Copy, Clone, Hash, Debug, Default)]
-#[repr(C)]
-pub struct __BindgenComplex<T> {
-    pub re: T,
-    pub im: T,
-}
-#[repr(C)]
-pub struct __BindgenUnionField<T>(::std::marker::PhantomData<T>);
-impl<T> __BindgenUnionField<T> {
-    #[inline]
-    pub const fn new() -> Self {
-        __BindgenUnionField(::std::marker::PhantomData)
-    }
-    #[inline]
-    pub unsafe fn as_ref(&self) -> &T {
-        ::std::mem::transmute(self)
-    }
-    #[inline]
-    pub unsafe fn as_mut(&mut self) -> &mut T {
-        ::std::mem::transmute(self)
-    }
-}
-impl<T> ::std::default::Default for __BindgenUnionField<T> {
-    #[inline]
-    fn default() -> Self {
-        Self::new()
-    }
-}
-impl<T> ::std::clone::Clone for __BindgenUnionField<T> {
-    #[inline]
-    fn clone(&self) -> Self {
-        *self
-    }
-}
-impl<T> ::std::marker::Copy for __BindgenUnionField<T> {}
-impl<T> ::std::fmt::Debug for __BindgenUnionField<T> {
-    fn fmt(&self, fmt: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        fmt.write_str("__BindgenUnionField")
-    }
-}
-impl<T> ::std::hash::Hash for __BindgenUnionField<T> {
-    fn hash<H: ::std::hash::Hasher>(&self, _state: &mut H) {}
-}
-impl<T> ::std::cmp::PartialEq for __BindgenUnionField<T> {
-    fn eq(&self, _other: &__BindgenUnionField<T>) -> bool {
-        true
-    }
-}
-impl<T> ::std::cmp::Eq for __BindgenUnionField<T> {}
 #[doc = "R_xlen_t is defined as int on 32-bit platforms, and\n that confuses Rust. Keeping it always as ptrdiff_t works\n fine even on 32-bit.\n <div rustbindgen replaces=\"R_xlen_t\"></div>"]
 pub type R_xlen_t = isize;
-#[repr(C)]
-pub struct Rcomplex {
-    pub __bindgen_anon_1: __BindgenUnionField<Rcomplex__bindgen_ty_1>,
-    pub private_data_c: __BindgenUnionField<__BindgenComplex<f64>>,
-    pub bindgen_union_field: [u64; 2usize],
-}
 pub type SEXP = *mut SEXPREC;
 extern "C" {
     pub fn formatLogicalS(arg1: SEXP, arg2: R_xlen_t, arg3: *mut ::std::os::raw::c_int);

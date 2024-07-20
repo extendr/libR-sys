@@ -4,55 +4,6 @@
 /* bindgen clang version: clang version 18.1.6 */
 /* r version: 4.4.1 */
 
-#[derive(PartialEq, Copy, Clone, Hash, Debug, Default)]
-#[repr(C)]
-pub struct __BindgenComplex<T> {
-    pub re: T,
-    pub im: T,
-}
-#[repr(C)]
-pub struct __BindgenUnionField<T>(::std::marker::PhantomData<T>);
-impl<T> __BindgenUnionField<T> {
-    #[inline]
-    pub const fn new() -> Self {
-        __BindgenUnionField(::std::marker::PhantomData)
-    }
-    #[inline]
-    pub unsafe fn as_ref(&self) -> &T {
-        ::std::mem::transmute(self)
-    }
-    #[inline]
-    pub unsafe fn as_mut(&mut self) -> &mut T {
-        ::std::mem::transmute(self)
-    }
-}
-impl<T> ::std::default::Default for __BindgenUnionField<T> {
-    #[inline]
-    fn default() -> Self {
-        Self::new()
-    }
-}
-impl<T> ::std::clone::Clone for __BindgenUnionField<T> {
-    #[inline]
-    fn clone(&self) -> Self {
-        *self
-    }
-}
-impl<T> ::std::marker::Copy for __BindgenUnionField<T> {}
-impl<T> ::std::fmt::Debug for __BindgenUnionField<T> {
-    fn fmt(&self, fmt: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        fmt.write_str("__BindgenUnionField")
-    }
-}
-impl<T> ::std::hash::Hash for __BindgenUnionField<T> {
-    fn hash<H: ::std::hash::Hasher>(&self, _state: &mut H) {}
-}
-impl<T> ::std::cmp::PartialEq for __BindgenUnionField<T> {
-    fn eq(&self, _other: &__BindgenUnionField<T>) -> bool {
-        true
-    }
-}
-impl<T> ::std::cmp::Eq for __BindgenUnionField<T> {}
 pub const R_LEN_T_MAX: u32 = 2147483647;
 pub const R_XLEN_T_MAX: u64 = 4503599627370496;
 pub const R_SHORT_LEN_MAX: u32 = 2147483647;
@@ -80,22 +31,6 @@ pub struct _iobuf {
     pub _Placeholder: *mut ::std::os::raw::c_void,
 }
 pub type FILE = _iobuf;
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
-pub enum Rboolean {
-    #[doc = ", MAYBE"]
-    FALSE = 0,
-    #[doc = ", MAYBE"]
-    TRUE = 1,
-}
-#[repr(C)]
-pub struct Rcomplex {
-    pub __bindgen_anon_1: __BindgenUnionField<Rcomplex__bindgen_ty_1>,
-    pub private_data_c: __BindgenUnionField<__BindgenComplex<f64>>,
-    pub bindgen_union_field: [u64; 2usize],
-}
-#[doc = "Called with a variable argument set after casting to a compatible\nfunction pointer."]
-pub type DL_FUNC = ::std::option::Option<unsafe extern "C" fn() -> *mut ::std::os::raw::c_void>;
 pub type Rbyte = ::std::os::raw::c_uchar;
 #[doc = "type for length of (standard, not long) vectors etc"]
 pub type R_len_t = ::std::os::raw::c_int;
@@ -799,7 +734,6 @@ extern "C" {
     pub fn R_ReleaseMSet(mset: SEXP, keepSize: ::std::os::raw::c_int);
     #[doc = "Shutdown actions"]
     pub fn R_dot_Last();
-    pub fn R_RunExitFinalizers();
     pub fn R_system(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
     pub fn R_compute_identical(arg1: SEXP, arg2: SEXP, arg3: ::std::os::raw::c_int) -> Rboolean;
     pub fn R_body_no_src(x: SEXP) -> SEXP;
