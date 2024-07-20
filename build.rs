@@ -569,7 +569,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
 
         let r_header_regex = r_header.replace(r"\", r"/");
         let r_header_regex = regex::escape(&r_header_regex);
-        println!("cargo:warning=allowing {}", r_header_regex);
+        // println!("cargo:warning=allowing {}", r_header_regex);
         // dbg!(r_header_name);
         let mut bindings = bindgen_builder.clone();
         bindings = bindings.allowlist_file(r_header_regex);
