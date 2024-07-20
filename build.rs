@@ -457,8 +457,7 @@ fn generate_bindings(r_paths: &InstallationPaths, version_info: &RVersionInfo) {
         bindgen_builder.clang_args([format!("-I{r_include_path}",), format!("--target={target}")]);
 
     // this effectively ignores all non-R headers from sneaking in
-    bindgen_builder = bindgen_builder
-        .allowlist_file(".*mini_wrapper\\.h$");
+    bindgen_builder = bindgen_builder.allowlist_file(".*mini_wrapper\\.h$");
 
     // stops warning about ignored attributes,
     // e.g. ignores `__format__` attributes caused by `stdio.h`
