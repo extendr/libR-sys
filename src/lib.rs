@@ -358,5 +358,9 @@ pub mod bindings {
 }
 
 #[cfg(feature = "disabled")]
+use bindings::*;
+
+
+#[cfg(feature = "disabled")]
 #[cfg(test)]
 mod tests;
