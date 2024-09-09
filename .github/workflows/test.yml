@@ -12,9 +12,6 @@ on:
   issue_comment:
     types:
       - created
-  # Run this once per three days
-  schedule:
-    - cron: '29 17 */3 * *'
   # This can also manually run
   workflow_dispatch: {}
 
@@ -228,25 +225,6 @@ jobs:
           ci-cargo test -vv $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) '--' --nocapture -ActionName "Running bindgen tests for target: $env:RUST_TARGET"
         env:
           RUST_TARGET: ${{ matrix.config.target }}
-
-      # Build and emit bindings to './generated_bindings'
-      - name: Build & Emit bindings
-        id: build
-        run: |
-          . ./ci-cargo.ps1
-          # ci-cargo build -vv --features use-bindgen $(if ($env:RUST_TARGET -ne '') {"--target=$env:RUST_TARGET"} ) -ActionName "Building for target: $env:RUST_TARGET"
-        env:
-          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
-          RUST_TARGET: ${{ matrix.config.target }}
-
-      - name: Upload generated bindings
-        if:
-          steps.build.outcome == 'success' &&
-          matrix.config.emit-bindings == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: generated_binding-${{ matrix.config.os }}-R-${{ matrix.config.r }}-rust-${{ matrix.config.rust-version }}-${{ matrix.config.target || 'default'}}
-          path: generated_bindings
   
   check_generate_bindings_flag:
     name: Check if [generate bindings] is in latest commit message
