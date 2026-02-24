@@ -1,5 +1,12 @@
 # libR-sys
 
+> [!WARNING]
+> extendr-ffi has replaced libR-sys as the primary bindings to R's C-API, so you
+> should not rely on libR-sys to write R packages. If you are hoping to 
+> contribute to extend, first of all, thank you, but also, you should make PRs 
+> to the main extendr repo: [extendr/extendr](https://github.com/extendr/extendr).
+> Date: 2026-02-23
+
 Low-level R library bindings
 
 [![Github Actions Build Status](https://github.com/extendr/libR-sys/workflows/Tests/badge.svg)](https://github.com/extendr/libR-sys/actions)
