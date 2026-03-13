@@ -197,10 +197,7 @@ fn probe_r_paths() -> io::Result<InstallationPaths> {
     // Now the library location. On Windows, it depends on the target architecture
     let library = get_r_library(&r_home);
 
-    Ok(InstallationPaths {
-        r_home,
-        library,
-    })
+    Ok(InstallationPaths { r_home, library })
 }
 
 // Parse an R version (e.g. "4.1.2" and "4.2.0-devel") and return the RVersionInfo.
@@ -294,13 +291,12 @@ fn get_r_version_from_r(r_paths: &InstallationPaths) -> Result<RVersionInfo, Env
         .map_err(EnvVarError::RInvocationError)?;
 
     let out = out.as_os_str().to_string_lossy().into_owned();
-    let mut lines = out.lines();
 
     // Process the first line of the output
-    match lines.next() {
-        Some(v) => parse_r_version(v.to_string()),
-        None => Err(EnvVarError::InvalidROutput("Cannot find R version")),
-    }
+    out.lines()
+        .map(|v| parse_r_version(v.to_string()))
+        .find(|r| r.is_ok())
+        .ok_or_else(|| EnvVarError::InvalidROutput("Cannot find R version"))?
 }
 
 fn get_r_version(
