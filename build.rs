@@ -338,18 +338,19 @@ fn retrieve_prebuild_bindings(version_info: &RVersionInfo) {
     let bindings_file_full = version_info.get_r_bindings_filename(&target_os, &target_arch);
     let bindings_file_novers = PathBuf::from(format!("bindings-{target_os}-{target_arch}.rs"));
 
+    let devel_suffix = if version_info.devel { "-devel" } else { "" };
     let mut from = bindings_path.join(bindings_file_full);
     if !from.exists() {
         from = bindings_path.join(bindings_file_novers);
         if !from.exists() {
             panic!(
                 "Cannot find libR-sys bindings file for R {}.{}.{}{} on {} in {}. Consider compiling with --features use-bindgen.",
-                version_info.major, version_info.minor, version_info.patch, version_info.devel, target_os, bindings_path.display()
+                version_info.major, version_info.minor, version_info.patch, devel_suffix, target_os, bindings_path.display()
             )
         } else {
             println!(
                 "cargo:warning=using generic {}-{} libR-sys bindings. These may not work for R {}.{}.{}{}.",
-                target_os, target_arch, version_info.major, version_info.minor, version_info.patch, version_info.devel
+                target_os, target_arch, version_info.major, version_info.minor, version_info.patch, devel_suffix
             );
         }
     }
