@@ -1,0 +1,86 @@
+name: Check R API symbols
+
+on:
+  # Run weekly (offset from non-api-call.yml's schedule)
+  schedule:
+    - cron: '17 4 * * 1'
+  # This can also be run manually
+  workflow_dispatch: {}
+
+# Since in-tree bindgen was removed (#250), the per-version bindings under
+# bindings/ are maintained by hand and nothing notices when R's C API surface
+# shifts, so they can silently go stale (e.g. no R 4.5 / 4.6 bindings). This
+# workflow snapshots the symbols exported by R-devel's shared library and opens
+# a PR whenever they change, as an early warning that the bindings may need
+# updating. It does not generate bindings; it only flags drift.
+
+jobs:
+  extract_r_symbols:
+    runs-on: ${{ matrix.config.os }}
+    name: Extract R symbols on ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macOS-latest}
+          - {os: ubuntu-latest}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'devel'
+
+      - name: Extract exported R symbols
+        run: bash tools/r-symbols.sh | tee r-symbols.txt
+        shell: bash
+
+      - name: Upload r-symbols.txt
+        uses: actions/upload-artifact@v4
+        with:
+          name: r-symbols-${{ matrix.config.os }}
+          path: r-symbols.txt
+
+  commit_r_symbols:
+    needs: extract_r_symbols
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/download-artifact@v4
+
+    - name: Switch branch
+      run: |
+        # 1) If there's already a check_r_api branch, check it out.
+        # 2) Otherwise create it from the default branch.
+        if git ls-remote --exit-code --heads origin check_r_api 2>&1 >/dev/null; then
+          git fetch origin --no-tags --prune --depth=1 check_r_api
+          git checkout check_r_api
+        else
+          git switch -c check_r_api
+        fi
+
+    - name: Commit and create a pull request
+      run: |
+        # Union the per-OS lists: a symbol exported on any platform counts.
+        # (On the first run r-symbols.txt does not exist yet, so this PR just
+        # establishes the baseline snapshot.)
+        cat r-symbols-*/r-symbols.txt | tr -d '\r' | sort -u | tee r-symbols.txt
+
+        # detect changes (derived from https://stackoverflow.com/a/3879077)
+        git add r-symbols.txt
+        git update-index --refresh
+        if ! git diff-index --quiet HEAD -- r-symbols.txt; then
+          git config --local user.name "${GITHUB_ACTOR}"
+          git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git commit -m "R API symbols changed [skip ci]"
+          git push origin check_r_api
+          gh pr create --title "R's exported C symbols changed" --body "R-devel's exported symbols differ from the committed snapshot. Review the diff in \`r-symbols.txt\`: added symbols may be new C API the hand-maintained \`bindings/\` should expose (cross-check against \`nonAPI.txt\` to tell API from non-API); removed symbols may break existing bindings. Snapshot produced by \`tools/r-symbols.sh\`."
+        else
+          echo "No changes"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
