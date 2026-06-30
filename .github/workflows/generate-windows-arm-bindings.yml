@@ -1,0 +1,82 @@
+name: Generate Windows ARM bindings
+
+# Windows-on-ARM (aarch64-pc-windows-gnullvm) bindings don't ship yet, and
+# bindgen was detached from the crate in #250 so build.rs can no longer generate
+# them. This workflow regenerates them on demand:
+#
+#   * runs natively on a windows-11-arm runner (GA 2025-08-07, free for public
+#     repos) so there is no cross-compile / sysroot wrangling, and
+#   * temporarily restores the last pre-detach generator (build.rs) to drive
+#     bindgen, then validates the result with the layout tests.
+#
+# Run it from the Actions tab ("Run workflow"), download the artifact, commit the
+# file into bindings/, and add the bindings-windows-aarch64.rs symlink.
+#
+# ponytail: workflow_dispatch only — no point running this on every push for a
+# target whose bindings change about once per R release.
+
+on:
+  workflow_dispatch:
+    inputs:
+      r-version:
+        description: "R version to generate bindings for"
+        default: "release"
+      generator-ref:
+        description: "Commit with the pre-detach bindgen generator (build.rs)"
+        default: "975af4e5"
+
+jobs:
+  generate:
+    runs-on: windows-11-arm
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up R (aarch64)
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ inputs.r-version }}
+          use-public-rspm: true
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: nightly
+          targets: aarch64-pc-windows-gnullvm
+
+      - name: Restore pre-detach bindgen generator
+        # build.rs lost generate_bindings in #250. Pull just the generator back in
+        # from the pinned commit; wrapper.h is unchanged from current master.
+        run: git checkout ${{ inputs.generator-ref }} -- build.rs Cargo.toml
+
+      - name: Configure aarch64 Rtools toolchain
+        run: |
+          # LLVM 17 + MinGW aarch64 toolchain shipped by Rtools44-aarch64 — the
+          # sysroot the gnullvm target needs.
+          $directories = @(
+            "C:\rtools44-aarch64\aarch64-w64-mingw32.static.posix",
+            "C:\rtools44\aarch64-w64-mingw32.static.posix"
+          )
+          $mingw_root = $null
+          foreach ($dir in $directories) { if (Test-Path $dir) { $mingw_root = $dir; break } }
+          if ($null -eq $mingw_root) { throw "No aarch64 Rtools toolchain found" }
+          Write-Host "Using Rtools toolchain: $mingw_root"
+          echo "$mingw_root\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "LIBRSYS_LIBCLANG_INCLUDE_PATH=$mingw_root\include" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "$(Rscript.exe --vanilla -e 'cat(normalizePath(R.home()))')\bin\x64" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Generate bindings
+        run: cargo build -vv --features use-bindgen --target aarch64-pc-windows-gnullvm
+        env:
+          LIBRSYS_BINDINGS_OUTPUT_PATH: generated_bindings
+
+      - name: Validate with layout tests (native ARM)
+        run: cargo test --features use-bindgen,layout_tests --target aarch64-pc-windows-gnullvm -- --nocapture
+
+      - name: Upload generated bindings
+        uses: actions/upload-artifact@v4
+        with:
+          name: bindings-windows-aarch64
+          path: generated_bindings
