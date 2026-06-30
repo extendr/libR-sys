@@ -324,6 +324,19 @@ fn set_r_version_vars(ver: &RVersionInfo) {
     println!("cargo:r_version_minor={}", ver.minor); // Becomes DEP_R_R_VERSION_MINOR for clients
     println!("cargo:r_version_patch={}", ver.patch); // Becomes DEP_R_R_VERSION_PATCH for clients
     println!("cargo:r_version_devel={}", ver.devel); // Becomes DEP_R_R_VERSION_DEVEL for clients
+
+    // Version cfg flags, for use inside this crate (e.g. the `backports`
+    // module, which needs to pick the right entry point per R version).
+    println!("cargo:rustc-check-cfg=cfg(r_4_4)");
+    println!("cargo:rustc-check-cfg=cfg(r_4_5)");
+    let major: u32 = ver.major.parse().unwrap_or(0);
+    let minor: u32 = ver.minor.parse().unwrap_or(0);
+    if (major, minor) >= (4, 4) {
+        println!("cargo:rustc-cfg=r_4_4");
+    }
+    if (major, minor) >= (4, 5) {
+        println!("cargo:rustc-cfg=r_4_5");
+    }
 }
 
 /// Retrieve bindings from cache, if available. Errors out otherwise.
