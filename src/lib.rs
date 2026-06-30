@@ -66,6 +66,9 @@
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
+#[cfg(feature = "non-api")]
+pub mod non_api;
+
 #[non_exhaustive]
 #[repr(transparent)]
 #[derive(Debug)]

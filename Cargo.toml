@@ -16,6 +16,13 @@ links = "R"
 documentation = "https://docs.rs/libR-sys/latest/libR_sys/"
 repository = "https://github.com/extendr/libR-sys"
 
+[features]
+default = []
+# Expose a small set of R "non-API" entry points (promise/environment/closure
+# accessors) in the `non_api` module. Off by default: these are not part of R's
+# stable C API and may not be available on every R version.
+non-api = []
+
 [lib]
 # Some code comments on R's source code might be accidentally treated as Rust's
 # doc test. See https://github.com/extendr/libR-sys/issues/194 for the details.
