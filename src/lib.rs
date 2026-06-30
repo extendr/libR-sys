@@ -66,6 +66,8 @@
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
+pub mod backports;
+
 #[non_exhaustive]
 #[repr(transparent)]
 #[derive(Debug)]
